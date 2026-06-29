@@ -161,6 +161,131 @@
         }
 
         /* ============================================================ */
+        /* ===== МОДАЛЬНОЕ ОКНО "ВВЕДИТЕ ДАННЫЕ" ===== */
+        /* ============================================================ */
+        .auth-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.50);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 450;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-modal-overlay.open {
+            display: flex;
+        }
+
+        .auth-modal-content {
+            background: #FFFFFF;
+            border-radius: 28px;
+            max-width: 420px;
+            width: 100%;
+            padding: 28px 24px 24px;
+            position: relative;
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.20);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.90) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .auth-modal-content .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: #F5F0EB;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-modal-content .modal-close:active {
+            transform: scale(0.90);
+            background: #E8E0D8;
+        }
+
+        .auth-modal-content .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .auth-modal-content .modal-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .auth-modal-content .auth-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .auth-modal-content .auth-row input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E8F0F5;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #FFFFFF;
+            outline: none;
+            transition: var(--transition);
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .auth-modal-content .auth-row input:focus {
+            border-color: #006064;
+            box-shadow: 0 0 0 4px rgba(0, 96, 100, 0.08);
+        }
+
+        .auth-modal-content .auth-row input::placeholder {
+            color: #B0BEC5;
+            font-weight: 400;
+        }
+
+        .auth-modal-content .confirm-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.30);
+            font-family: inherit;
+        }
+
+        .auth-modal-content .confirm-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ============================================================ */
         /* ===== ТЕХНИЧЕСКИЙ ПЕРЕРЫВ ===== */
         /* ============================================================ */
         .tech-break-message {
@@ -510,11 +635,6 @@
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.20);
-        }
-
-        @keyframes modalPop {
-            from { transform: scale(0.90) translateY(20px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         .topping-modal-content .modal-close {
@@ -1785,6 +1905,8 @@
             .payment-btn .payment-name { font-size: 11px; }
             .badge.romantic { font-size: 7px; padding: 1px 8px; right: 70px; }
             .online-indicator { font-size: 12px; padding: 6px 12px; }
+            .auth-modal-content { padding: 20px 16px 16px; }
+            .auth-modal-content .modal-title { font-size: 20px; }
         }
 
         @media (max-width: 380px) {
@@ -1814,6 +1936,9 @@
             .payment-btn .payment-name { font-size: 10px; }
             .online-indicator { font-size: 11px; padding: 4px 10px; }
             .online-indicator .dot { width: 8px; height: 8px; }
+            .auth-modal-content { padding: 16px 14px 14px; }
+            .auth-modal-content .modal-title { font-size: 18px; }
+            .auth-modal-content .auth-row input { font-size: 14px; padding: 10px 12px; }
         }
     </style>
 </head>
@@ -1824,6 +1949,20 @@
 
     <!-- ===== ОВЕРЛЕЙ ===== -->
     <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО "ВВЕДИТЕ ДАННЫЕ" ===== -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal-content">
+            <button class="modal-close" onclick="closeAuthModal()">✕</button>
+            <div class="modal-title">📝 Введите ваши данные</div>
+            <div class="modal-subtitle">Чтобы мы могли связаться с вами и доставить заказ</div>
+            <div class="auth-row">
+                <input type="text" id="authName" placeholder="Ваше имя">
+                <input type="tel" id="authPhone" placeholder="Номер телефона">
+            </div>
+            <button class="confirm-btn" onclick="confirmAuth()">✅ Продолжить</button>
+        </div>
+    </div>
 
     <!-- ===== МОДАЛЬНОЕ ОКНО ВЫБОРА ПРИСЫПКИ ===== -->
     <div class="topping-modal-overlay" id="toppingModal">
@@ -2254,6 +2393,72 @@
         }
 
         // ================================================================
+        // ===== МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ =====
+        // ================================================================
+
+        let pendingProduct = null;
+
+        function openAuthModal(product) {
+            pendingProduct = product;
+            document.getElementById('authName').value = '';
+            document.getElementById('authPhone').value = '';
+            document.getElementById('authModal').classList.add('open');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('open');
+            pendingProduct = null;
+        }
+
+        function confirmAuth() {
+            const name = document.getElementById('authName').value.trim();
+            const phone = document.getElementById('authPhone').value.trim();
+
+            if (!name) {
+                showNotification('⚠️ Введите ваше имя!', 'error');
+                document.getElementById('authName').focus();
+                return;
+            }
+
+            if (!phone) {
+                showNotification('⚠️ Введите номер телефона!', 'error');
+                document.getElementById('authPhone').focus();
+                return;
+            }
+
+            // Сохраняем данные в существующие поля на странице
+            document.getElementById('customerName').value = name;
+            document.getElementById('customerPhone').value = phone;
+
+            // Закрываем окно
+            closeAuthModal();
+
+            // Открываем выбор присыпки
+            if (pendingProduct) {
+                openToppingModal(pendingProduct);
+                pendingProduct = null;
+            }
+        }
+
+        // Закрытие по клику на оверлей
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAuthModal();
+            }
+        });
+
+        // Закрытие по ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+                closeToppingModal();
+                closeCart();
+                closeOrdersModal();
+                closeImageModal();
+            }
+        });
+
+        // ================================================================
         // ===== ЗАГРУЗКА НАСТРОЕК =====
         // ================================================================
         async function loadSettings() {
@@ -2376,6 +2581,11 @@
 
         function handleSelectClick(e) {
             e.stopPropagation();
+
+            // Проверяем, введены ли имя и телефон
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
             const item = this.closest('.menu-item');
             if (!item) return;
 
@@ -2389,22 +2599,40 @@
                 originalPrice: item.dataset.originalPrice ? parseInt(item.dataset.originalPrice) : null
             };
 
+            // Если имя или телефон не введены → показываем всплывающее окно
+            if (!name || !phone) {
+                openAuthModal(product);
+                return;
+            }
+
+            // Иначе открываем выбор присыпки
             openToppingModal(product);
         }
 
         function handleDrinkAdd(e) {
             e.stopPropagation();
+
+            // Проверяем, введены ли имя и телефон
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null);
+                return;
+            }
+
             const item = this.closest('.drink-item');
             if (!item) return;
 
             const id = parseInt(item.dataset.id);
-            const name = item.dataset.name;
+            const nameDrink = item.dataset.name;
             const price = parseInt(item.dataset.price);
             const category = item.dataset.category || 'напиток';
 
             addToCart({
                 id: id,
-                name: name,
+                name: nameDrink,
                 price: price,
                 quantity: 1,
                 category: category,
@@ -2412,7 +2640,7 @@
                 toppingName: ''
             });
 
-            showNotification(`✅ ${name} добавлен!`);
+            showNotification(`✅ ${nameDrink} добавлен!`);
         }
 
         // ================================================================
@@ -2734,6 +2962,16 @@
         }
 
         function openCart() {
+            // Проверяем, введены ли имя и телефон
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null);
+                return;
+            }
+
             cartModal.classList.add('open');
             cartOverlay.classList.add('open');
         }
@@ -2829,8 +3067,7 @@
                         showNotification('🎉 Заказ отправлен! Ждите доставку!');
                         state.cart = [];
                         updateCart();
-                        customerName.value = '';
-                        customerPhone.value = '';
+                        // Не очищаем имя и телефон!
                         selectPayment('cash');
                         closeCart();
                         setTimeout(updateOrdersBadge, 1000);
@@ -3070,6 +3307,7 @@
         console.log(`💳 Оплата: Наличными / Переводом / СБП (скоро)`);
         console.log(`❤️ Добавлена романтическая позиция "Для влюбленных" со скидкой -9%!`);
         console.log(`🌐 Проверка интернета подключена!`);
+        console.log(`📝 При выборе товара - обязательный ввод имени и телефона!`);
     </script>
 
 </body>
