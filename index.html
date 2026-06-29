@@ -1201,29 +1201,23 @@
             box-shadow: 0 2px 8px rgba(233, 30, 99, 0.20) !important;
         }
 
-        .menu-item.romantic-item .item-icon i {
-            color: #E91E63 !important;
-        }
-
         .item-icon {
             width: 56px;
             height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             flex-shrink: 0;
             margin-right: 14px;
             border-radius: 14px;
-            background: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            font-size: 32px;
-            color: var(--primary);
+            background: #F5F0EB;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .item-icon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
             border-radius: 14px;
         }
 
@@ -1370,17 +1364,12 @@
         .drink-item .drink-icon {
             width: 40px;
             height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             flex-shrink: 0;
             border-radius: 50%;
-            background: #FFFFFF;
-            margin-right: 12px;
-            font-size: 22px;
-            color: #006064;
-            cursor: pointer;
             overflow: hidden;
+            margin-right: 12px;
+            background: #FFFFFF;
+            cursor: pointer;
         }
 
         .drink-item .drink-icon img {
@@ -1470,10 +1459,6 @@
         .drink-item.shaurma .drink-add {
             background: linear-gradient(135deg, #E65100, #BF360C);
             box-shadow: 0 4px 12px rgba(230, 81, 0, 0.30);
-        }
-
-        .drink-item.shaurma .drink-icon {
-            color: #E65100;
         }
 
         /* ============================================================ */
@@ -2019,7 +2004,7 @@
             body { padding: 8px; }
             .app-container { padding: 16px 14px 24px; border-radius: 24px; }
             .header h1 { font-size: 28px; }
-            .item-icon { width: 48px; height: 48px; font-size: 26px; margin-right: 10px; }
+            .item-icon { width: 48px; height: 48px; margin-right: 10px; }
             .menu-item { padding: 10px 12px; }
             .contact-row input { font-size: 14px; padding: 8px 12px; min-width: 100px; }
             .float-buttons { bottom: 16px; right: 16px; gap: 10px; }
@@ -2034,7 +2019,7 @@
             .map-btn-top { font-size: 13px; padding: 8px 14px; }
             .topping-modal-content { padding: 20px 16px 16px; }
             .topping-modal-content .modal-title { font-size: 20px; }
-            .drink-item .drink-icon { width: 34px; height: 34px; font-size: 18px; margin-right: 10px; }
+            .drink-item .drink-icon { width: 34px; height: 34px; margin-right: 10px; }
             .closed-message h2 { font-size: 20px; }
             .closed-message .closed-icon { font-size: 48px; }
             .orders-modal-content { max-width: 100%; margin: 10px; border-radius: 20px; }
@@ -2057,7 +2042,7 @@
             .header h1 { font-size: 24px; }
             .item-info h3 { font-size: 13px; }
             .item-info .price { font-size: 15px; }
-            .item-icon { width: 42px; height: 42px; font-size: 22px; margin-right: 8px; }
+            .item-icon { width: 42px; height: 42px; margin-right: 8px; }
             .select-btn { font-size: 12px; padding: 6px 14px; }
             .contact-row input { font-size: 13px; padding: 6px 10px; min-width: 80px; }
             .cart-item .item-actions button { width: 24px; height: 24px; font-size: 12px; }
@@ -2066,7 +2051,7 @@
             .beach-message h2 { font-size: 20px; }
             .topping-option .option-name { font-size: 13px; }
             .topping-option .option-icon { font-size: 20px; }
-            .drink-item .drink-icon { width: 30px; height: 30px; font-size: 16px; margin-right: 8px; }
+            .drink-item .drink-icon { width: 30px; height: 30px; margin-right: 8px; }
             .drink-item .drink-price { font-size: 14px; }
             .closed-message h2 { font-size: 18px; }
             .closed-message .closed-icon { font-size: 40px; }
@@ -2390,16 +2375,16 @@
         // ===== ДАННЫЕ О МЕНЮ =====
         // ================================================================
         const MENU_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, icon: 'fas fa-chocolate-bar',
-                badge: 'hit', badgeText: '🔥 Хит' },
-            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380,
-                icon: 'fas fa-chocolate-bar', iconColor: '#f5f5f5', badge: 'popular', badgeText: '⭐ Популярное' },
-            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, icon: 'fas fa-gem',
-                iconColor: '#8DD0D0', badge: 'new', badgeText: '✨ Новинка' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, icon: 'fas fa-banana',
-                badge: '', badgeText: '' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, icon: 'fas fa-banana',
-                badge: '', badgeText: '' }
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, badge: 'hit',
+            badgeText: '🔥 Хит' },
+            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, badge: 'popular',
+                badgeText: '⭐ Популярное' },
+            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, badge: 'new',
+            badgeText: '✨ Новинка' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, badge: '',
+            badgeText: '' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, badge: '',
+            badgeText: '' }
         ];
 
         const ROMANTIC_ITEM = {
@@ -2418,14 +2403,11 @@
         // ===== НАПИТКИ / ПЕРЕКУС =====
         // ================================================================
         const DRINK_ITEMS = [
-            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, icon: 'fas fa-lemon',
-                image: 'limonad.jpg' },
-            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, icon: 'fas fa-wine-bottle',
-                image: 'kola.jpg' },
-            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, icon: 'fas fa-beer-mug-empty',
-                image: 'pivo.jpg' },
+            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'limonad.jpg' },
+            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'kola.jpg' },
+            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'pivo.jpg' },
             { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350,
-                icon: 'fas fa-burrito', image: 'shaurma.jpg', shaurma: true }
+                image: 'shaurma.jpg', shaurma: true }
         ];
 
         // ================================================================
@@ -2652,8 +2634,8 @@
                          data-original-price="${ROMANTIC_ITEM.originalPrice}"
                          data-is-romantic="true">
                         ${romanticBadgeHtml}
-                        <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/tiffani.jpg', 'Для влюбленных')` : ''}" style="color:${ROMANTIC_ITEM.iconColor || '#E91E63'}">
-                            <i class="${ROMANTIC_ITEM.icon}"></i>
+                        <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/romantic.jpg', 'Для влюбленных')` : ''}">
+                            <img src="images/tiffani.jpg" alt="Для влюбленных" ${!romanticAvailable ? 'style="filter: grayscale(1);"' : ''}>
                             <span class="zoom-hint">🔍</span>
                         </div>
                         <div class="item-info">
@@ -2675,13 +2657,12 @@
                 const badgeHtml = item.badge ? `<span class="badge ${item.badge}">${item.badgeText}</span>` : '';
                 const imagePath =
                     `images/${item.id === '1' ? 'klassika' : item.id === '2' ? 'belyy-shokolad' : item.id === '3' ? 'tiffani' : item.id === '4' ? 'miks' : 'banan'}.jpg`;
-                const iconColor = item.iconColor || 'var(--primary)';
 
                 html += `
-                        <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-icon="${item.icon}" data-icon-color="${iconColor}" data-category="стаканчик">
+                        <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="стаканчик">
                             ${badgeHtml}
-                            <div class="item-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}" style="color:${iconColor}">
-                                <i class="${item.icon}"></i>
+                            <div class="item-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
+                                <img src="${imagePath}" alt="${item.name}" ${!available ? 'style="filter: grayscale(1);"' : ''}>
                                 <span class="zoom-hint">🔍</span>
                             </div>
                             <div class="item-info">
@@ -2708,10 +2689,10 @@
                 return `
                         <div class="drink-item ${unavailableClass} ${shaurmaClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
                             <div class="drink-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
-                                <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\'${item.icon}\\'></i>'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
+                                <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.image === 'limonad.jpg' ? '🍋' : item.image === 'kola.jpg' ? '🥤' : item.image === 'pivo.jpg' ? '🍺' : '🌯'}'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
                             </div>
                             <div class="drink-info">
-                                <h4><i class="${item.icon}" style="margin-right:4px;"></i> ${item.name}</h4>
+                                <h4>${item.name}</h4>
                                 <div class="drink-desc">${item.desc}</div>
                             </div>
                             ${available ? `<span class="drink-price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
@@ -3469,6 +3450,7 @@
         console.log(`📝 При выборе товара - обязательный ввод имени и телефона!`);
         console.log(`🌯 Добавлен раздел "Напитки / Перекус" с шаурмой!`);
         console.log(`🎨 Все эмодзи заменены на иконки Font Awesome!`);
+        console.log(`🖼️ У клубники (стаканчиков) теперь картинки!`);
     </script>
 
 </body>
