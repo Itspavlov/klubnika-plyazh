@@ -26,6 +26,7 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --romantic: #E91E63;
             --romantic-light: #FCE4EC;
+            --tab-height: 64px;
         }
 
         /* ============================================================ */
@@ -42,7 +43,7 @@
             background: var(--bg);
             min-height: 100vh;
             padding: 12px;
-            padding-bottom: 20px;
+            padding-bottom: calc(var(--tab-height) + 16px);
             background-image: radial-gradient(circle at 10% 20%, rgba(247, 201, 72, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 90% 80%, rgba(212, 56, 13, 0.06) 0%, transparent 50%);
         }
@@ -1442,11 +1443,11 @@
             box-shadow: none;
         }
 
-        /* Шаурма отдельный стиль с отступом */
+        /* Шаурма отдельный стиль */
         .drink-item.shaurma {
             background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
             border-color: #FF8F00;
-            margin-bottom: 70px;
+            margin-bottom: 0px;
         }
 
         .drink-item.shaurma .drink-price {
@@ -1463,101 +1464,87 @@
         }
 
         /* ============================================================ */
-        /* ===== ПЛАВАЮЩИЕ КНОПКИ (компактные) ===== */
+        /* ===== НИЖНЯЯ ПАНЕЛЬ (TAB BAR) ===== */
         /* ============================================================ */
-        .float-buttons {
+        .bottom-tab-bar {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-top: 1px solid #E8E0D8;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            justify-content: space-around;
+            align-items: center;
+            padding: 6px 0 12px;
             z-index: 100;
-            align-items: flex-end;
+            max-width: 480px;
+            margin: 0 auto;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
         }
 
-        .orders-float-btn {
-            background: linear-gradient(135deg, #006064, #004D50);
-            color: #FFFFFF;
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            font-size: 18px;
-            box-shadow: 0 4px 16px rgba(0, 96, 100, 0.30);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            opacity: 0.5;
-        }
-
-        .orders-float-btn.active { opacity: 1; }
-        .orders-float-btn:active { transform: scale(0.90); }
-
-        .orders-float-btn .orders-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #F7C948;
-            color: var(--text-dark);
-            font-size: 10px;
-            font-weight: 800;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .tab-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .cart-float-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            font-size: 20px;
-            box-shadow: 0 6px 24px rgba(212, 56, 13, 0.30);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 4px 16px;
+            border: none;
+            background: none;
+            font-family: inherit;
+            transition: all 0.2s ease;
             position: relative;
+            gap: 2px;
+            flex: 1;
         }
 
-        .cart-float-btn:active { transform: scale(0.90); }
+        .tab-item .tab-icon {
+            font-size: 22px;
+            color: #BFA58A;
+            transition: all 0.2s ease;
+        }
 
-        .cart-float-btn .cart-badge {
+        .tab-item .tab-label {
+            font-size: 10px;
+            color: #BFA58A;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .tab-item.active .tab-icon {
+            color: var(--primary);
+        }
+
+        .tab-item.active .tab-label {
+            color: var(--primary);
+        }
+
+        .tab-item .tab-badge {
             position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--secondary);
-            color: var(--text-dark);
-            font-size: 11px;
-            font-weight: 800;
-            width: 22px;
-            height: 22px;
+            top: 0px;
+            right: 8px;
+            background: #D32F2F;
+            color: #FFFFFF;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            padding: 0 4px;
         }
 
-        .cart-float-btn .cart-total-badge {
+        .tab-item .tab-badge.hidden {
+            display: none;
+        }
+
+        .tab-item .tab-total {
             font-size: 9px;
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.20);
-            padding: 1px 8px;
-            border-radius: 10px;
-            margin-top: 1px;
+            color: var(--primary);
         }
 
         /* ============================================================ */
@@ -1577,6 +1564,7 @@
             animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             max-width: 480px;
             margin: 0 auto;
+            padding-bottom: 70px;
         }
 
         .cart-modal.open { display: block; }
@@ -2002,16 +1990,18 @@
         /* ===== АДАПТИВ ===== */
         /* ============================================================ */
         @media (max-width: 500px) {
-            body { padding: 8px; }
+            body { padding: 8px; padding-bottom: calc(var(--tab-height) + 8px); }
             .app-container { padding: 16px 14px 24px; border-radius: 24px; }
             .header h1 { font-size: 28px; }
             .item-icon { width: 48px; height: 48px; margin-right: 10px; }
             .menu-item { padding: 10px 12px; }
             .contact-row input { font-size: 14px; padding: 8px 12px; min-width: 100px; }
-            .float-buttons { bottom: 16px; right: 16px; gap: 8px; }
-            .orders-float-btn { width: 42px; height: 42px; font-size: 16px; }
-            .cart-float-btn { width: 50px; height: 50px; font-size: 18px; }
-            .cart-float-btn .cart-total-badge { font-size: 8px; }
+            .bottom-tab-bar { padding: 4px 0 8px; }
+            .tab-item .tab-icon { font-size: 20px; }
+            .tab-item .tab-label { font-size: 9px; }
+            .tab-item { padding: 2px 8px; }
+            .tab-item .tab-badge { min-width: 16px; height: 16px; font-size: 8px; right: 4px; top: -2px; }
+            .cart-modal { padding-bottom: 60px; }
             .cart-modal .cart-content { padding: 12px 16px 20px; }
             .cart-item .item-info-cart .item-name-cart { font-size: 13px; }
             .map-modal-content { padding: 16px; margin: 10px; }
@@ -2037,10 +2027,11 @@
             .auth-modal-content .modal-title { font-size: 20px; }
             .badge { font-size: 7px; padding: 1px 8px; right: 65px; }
             .badge i { font-size: 7px; }
-            .drink-item.shaurma { margin-bottom: 60px; }
+            .drink-item.shaurma { margin-bottom: 0px; }
         }
 
         @media (max-width: 380px) {
+            body { padding-bottom: calc(var(--tab-height) + 4px); }
             .header h1 { font-size: 24px; }
             .item-info h3 { font-size: 13px; }
             .item-info .price { font-size: 15px; }
@@ -2058,8 +2049,10 @@
             .closed-message h2 { font-size: 18px; }
             .closed-message .closed-icon { font-size: 40px; }
             .closed-message .work-time { font-size: 13px; padding: 8px 14px; }
-            .orders-float-btn { width: 38px; height: 38px; font-size: 14px; }
-            .cart-float-btn { width: 44px; height: 44px; font-size: 16px; }
+            .bottom-tab-bar { padding: 2px 0 6px; }
+            .tab-item .tab-icon { font-size: 18px; }
+            .tab-item .tab-label { font-size: 8px; }
+            .cart-modal { padding-bottom: 50px; }
             .tech-break-message .break-icon { font-size: 40px; }
             .tech-break-message h2 { font-size: 18px; }
             .payment-btn { min-width: 50px; padding: 6px 8px; }
@@ -2072,7 +2065,7 @@
             .auth-modal-content .auth-row input { font-size: 14px; padding: 10px 12px; }
             .badge { font-size: 6px; padding: 1px 6px; right: 55px; }
             .badge i { font-size: 6px; }
-            .drink-item.shaurma { margin-bottom: 50px; }
+            .drink-item.shaurma { margin-bottom: 0px; }
         }
     </style>
 </head>
@@ -2289,17 +2282,28 @@
     <!-- ===== КОНЕЦ КОНТЕЙНЕРА ===== -->
 
     <!-- ============================================================ -->
-    <!-- ===== ПЛАВАЮЩИЕ КНОПКИ ===== -->
+    <!-- ===== НИЖНЯЯ ПАНЕЛЬ (TAB BAR) ===== -->
     <!-- ============================================================ -->
-    <div class="float-buttons">
-        <button class="orders-float-btn" id="ordersFloatBtn" onclick="openOrdersModal()">
-            <i class="fas fa-list-alt"></i>
-            <span class="orders-badge" id="ordersBadge">0</span>
+    <div class="bottom-tab-bar" id="bottomTabBar">
+        <!-- Вкладка "Меню" -->
+        <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
+            <span class="tab-icon"><i class="fas fa-home"></i></span>
+            <span class="tab-label">Меню</span>
         </button>
-        <button class="cart-float-btn" id="cartFloatBtn" style="display:none;">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-badge" id="cartBadge">0</span>
-            <span class="cart-total-badge" id="cartTotalBadge">0 ₽</span>
+        
+        <!-- Вкладка "Мои заказы" -->
+        <button class="tab-item" id="tabOrders" onclick="openOrdersModal()">
+            <span class="tab-icon"><i class="fas fa-list-alt"></i></span>
+            <span class="tab-label">Заказы</span>
+            <span class="tab-badge hidden" id="tabOrdersBadge">0</span>
+        </button>
+        
+        <!-- Вкладка "Корзина" -->
+        <button class="tab-item" id="tabCart" onclick="openCart()">
+            <span class="tab-icon"><i class="fas fa-shopping-cart"></i></span>
+            <span class="tab-label">Корзина</span>
+            <span class="tab-badge hidden" id="tabCartBadge">0</span>
+            <span class="tab-total" id="tabCartTotal">0 ₽</span>
         </button>
     </div>
 
@@ -2836,15 +2840,30 @@
         // ===== МОИ ЗАКАЗЫ =====
         // ================================================================
         function openOrdersModal() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null);
+                return;
+            }
+
             ordersModal.classList.add('open');
             ordersPhoneInput.value = customerPhone.value || '';
             if (customerPhone.value) {
                 loadMyOrders();
             }
+            // Подсвечиваем вкладку
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabOrders').classList.add('active');
         }
 
         function closeOrdersModal() {
             ordersModal.classList.remove('open');
+            // Возвращаем подсветку на меню
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabMenu').classList.add('active');
         }
 
         function loadMyOrders() {
@@ -2941,9 +2960,9 @@
 
         function updateOrdersBadge() {
             const phone = customerPhone.value.trim();
+            const badge = document.getElementById('tabOrdersBadge');
             if (!phone) {
-                ordersBadge.textContent = '0';
-                ordersFloatBtn.classList.remove('active');
+                badge.classList.add('hidden');
                 return;
             }
 
@@ -2956,8 +2975,12 @@
                 .then(data => {
                     if (data.success) {
                         const activeOrders = data.orders.filter(o => o.status === 'ожидает').length;
-                        ordersBadge.textContent = activeOrders;
-                        ordersFloatBtn.classList.add('active');
+                        if (activeOrders > 0) {
+                            badge.textContent = activeOrders;
+                            badge.classList.remove('hidden');
+                        } else {
+                            badge.classList.add('hidden');
+                        }
                     }
                 })
                 .catch(() => {});
@@ -3055,8 +3078,33 @@
             const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            cartBadge.textContent = totalItems;
-            cartTotalBadge.textContent = totalPrice + ' ₽';
+            // Обновляем бейджи
+            const cartBadge = document.getElementById('tabCartBadge');
+            const cartTotalBadge = document.getElementById('tabCartTotal');
+            const cartBadgeFloat = document.getElementById('cartBadge');
+            const cartTotalBadgeFloat = document.getElementById('cartTotalBadge');
+
+            if (cartBadge) {
+                if (totalItems > 0) {
+                    cartBadge.textContent = totalItems;
+                    cartBadge.classList.remove('hidden');
+                } else {
+                    cartBadge.classList.add('hidden');
+                }
+            }
+
+            if (cartTotalBadge) {
+                cartTotalBadge.textContent = totalPrice + ' ₽';
+            }
+
+            if (cartBadgeFloat) {
+                cartBadgeFloat.textContent = totalItems;
+            }
+
+            if (cartTotalBadgeFloat) {
+                cartTotalBadgeFloat.textContent = totalPrice + ' ₽';
+            }
+
             cartTotal.textContent = totalPrice + ' ₽';
 
             if (state.cart.length === 0) {
@@ -3120,11 +3168,32 @@
 
             cartModal.classList.add('open');
             cartOverlay.classList.add('open');
+            // Подсвечиваем вкладку
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabCart').classList.add('active');
         }
 
         function closeCart() {
             cartModal.classList.remove('open');
             cartOverlay.classList.remove('open');
+            // Возвращаем подсветку на меню
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabMenu').classList.add('active');
+        }
+
+        // ================================================================
+        // ===== НИЖНЯЯ ПАНЕЛЬ =====
+        // ================================================================
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+
+            if (tab === 'menu') {
+                document.getElementById('tabMenu').classList.add('active');
+                closeCart();
+                closeOrdersModal();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         // ================================================================
@@ -3296,8 +3365,8 @@
                 beachMode.style.display = 'none';
                 closedMode.style.display = 'none';
                 techBreakMode.style.display = 'block';
-                cartFloatBtn.style.display = 'none';
                 ordersFloatBtn.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'none';
                 showNotification('🔧 Технический перерыв! Скоро всё заработает.', 'error');
                 return;
             }
@@ -3311,8 +3380,8 @@
                 beachMode.style.display = 'none';
                 closedMode.style.display = 'block';
                 techBreakMode.style.display = 'none';
-                cartFloatBtn.style.display = 'none';
                 ordersFloatBtn.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'none';
                 showNotification('🔒 Прием заказов с 9:00 до 1:00 ночи (МСК)', 'error');
                 return;
             }
@@ -3324,8 +3393,8 @@
                 beachMode.style.display = 'none';
                 closedMode.style.display = 'none';
                 techBreakMode.style.display = 'none';
-                cartFloatBtn.style.display = 'flex';
                 ordersFloatBtn.style.display = 'flex';
+                document.getElementById('bottomTabBar').style.display = 'flex';
                 window.bungaloNumber = bungaloNumber;
 
                 renderMenu(settings || state.settings);
@@ -3335,11 +3404,7 @@
 
                 customerPhone.addEventListener('input', function() {
                     if (this.value.trim().length >= 5) {
-                        ordersFloatBtn.classList.add('active');
                         updateOrdersBadge();
-                    } else {
-                        ordersFloatBtn.classList.remove('active');
-                        ordersBadge.textContent = '0';
                     }
                 });
 
@@ -3349,8 +3414,8 @@
                 beachMode.style.display = 'block';
                 closedMode.style.display = 'none';
                 techBreakMode.style.display = 'none';
-                cartFloatBtn.style.display = 'none';
                 ordersFloatBtn.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
                 document.getElementById('beachLandmarkText').textContent = `Наш киоск: ${MY_LOCATION.landmark}`;
                 showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
             }
@@ -3454,7 +3519,7 @@
         console.log(`🌯 Добавлен раздел "Напитки / Перекус" с шаурмой!`);
         console.log(`🎨 Все эмодзи заменены на иконки Font Awesome!`);
         console.log(`🖼️ У клубники (стаканчиков) теперь картинки!`);
-        console.log(`📱 Плавающие кнопки стали компактнее, шаурма не перекрывается!`);
+        console.log(`📱 Добавлена нижняя панель (Tab Bar) как в мобильных приложениях!`);
     </script>
 
 </body>
