@@ -1264,7 +1264,7 @@
         }
 
         /* ============================================================ */
-        /* ===== НАПИТКИ ===== */
+        /* ===== НАПИТКИ / ПЕРЕКУС ===== */
         /* ============================================================ */
         .drinks-grid {
             display: flex;
@@ -1368,6 +1368,25 @@
             opacity: 0.4;
             cursor: not-allowed;
             box-shadow: none;
+        }
+
+        /* Шаурма отдельный стиль */
+        .drink-item.shaurma {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-color: #FF8F00;
+        }
+
+        .drink-item.shaurma .drink-price {
+            color: #E65100;
+        }
+
+        .drink-item.shaurma .drink-info h4 {
+            color: #E65100;
+        }
+
+        .drink-item.shaurma .drink-add {
+            background: linear-gradient(135deg, #E65100, #BF360C);
+            box-shadow: 0 4px 12px rgba(230, 81, 0, 0.30);
         }
 
         /* ============================================================ */
@@ -2133,10 +2152,10 @@
             </div>
 
             <!-- ============================================================ -->
-            <!-- ===== НАПИТКИ ===== -->
+            <!-- ===== НАПИТКИ / ПЕРЕКУС ===== -->
             <!-- ============================================================ -->
-            <div class="section-title" style="margin-top: 20px;">
-                <span class="emoji">🥤</span> Напитки
+            <div class="section-title">
+                <span class="emoji">🥤</span> Напитки / Перекус
             </div>
 
             <div class="drinks-grid" id="drinksGrid">
@@ -2261,10 +2280,16 @@
             badgeText: '❤️ Романтика'
         };
 
+        // ================================================================
+        // ===== НАПИТКИ / ПЕРЕКУС =====
+        // ================================================================
         const DRINK_ITEMS = [
-            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад со льдом', price: 150, emoji: '🍋', image: 'limonad.jpg' },
+            { id: '6', name: 'Лимонад Горячий Ключ', desc: 'Заводской лимонад, охлажденный в бутылке', price: 150, emoji: '🍋',
+            image: 'limonad.jpg' },
             { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, emoji: '🥤', image: 'kola.jpg' },
-            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, emoji: '🍺', image: 'pivo.jpg' }
+            { id: '8', name: 'Пиво Хадыженское', desc: 'Охлажденное 0.5 л', price: 200, emoji: '🍺', image: 'pivo.jpg' },
+            { id: '10', name: '🌯 Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, emoji: '🌯',
+                image: 'shaurma.jpg', shaurma: true }
         ];
 
         // ================================================================
@@ -2539,15 +2564,17 @@
 
             menuGrid.innerHTML = html;
 
-            // Напитки
+            // Напитки / Перекус
             const drinksGrid = document.getElementById('drinksGrid');
             drinksGrid.innerHTML = DRINK_ITEMS.map(item => {
                 const available = settings.menuItems[item.id] !== false;
                 const unavailableClass = available ? '' : 'unavailable';
+                const isShaurma = item.shaurma || false;
+                const shaurmaClass = isShaurma ? 'shaurma' : '';
                 const imagePath = `images/${item.image}`;
 
                 return `
-                        <div class="drink-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
+                        <div class="drink-item ${unavailableClass} ${shaurmaClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
                             <div class="drink-image" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
                                 <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
                             </div>
@@ -3308,6 +3335,8 @@
         console.log(`❤️ Добавлена романтическая позиция "Для влюбленных" со скидкой -9%!`);
         console.log(`🌐 Проверка интернета подключена!`);
         console.log(`📝 При выборе товара - обязательный ввод имени и телефона!`);
+        console.log(`🌯 Добавлен раздел "Напитки / Перекус" с шаурмой!`);
+        console.log(`🖼️ Все картинки добавлены: лимонад, кока-кола, шаурма!`);
     </script>
 
 </body>
