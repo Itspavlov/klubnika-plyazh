@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🍓 Клубника на пляже</title>
     <link rel="manifest" href="manifest.json">
+    <!-- Font Awesome 6 (бесплатные иконки) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* ============================================================ */
         /* ===== ROOT ПЕРЕМЕННЫЕ ===== */
@@ -91,6 +93,10 @@
             margin-bottom: 6px;
         }
 
+        .header-badge i {
+            margin-right: 4px;
+        }
+
         .header h1 {
             font-size: 32px;
             color: var(--text-dark);
@@ -115,6 +121,11 @@
         .header .subtitle span {
             font-weight: 700;
             color: var(--primary);
+        }
+
+        .header .subtitle i {
+            margin-right: 4px;
+            color: var(--primary-light);
         }
 
         /* ============================================================ */
@@ -229,6 +240,11 @@
             text-align: center;
         }
 
+        .auth-modal-content .modal-title i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
         .auth-modal-content .modal-subtitle {
             text-align: center;
             font-size: 14px;
@@ -279,6 +295,10 @@
             transition: var(--transition);
             box-shadow: 0 4px 20px rgba(212, 56, 13, 0.30);
             font-family: inherit;
+        }
+
+        .auth-modal-content .confirm-btn i {
+            margin-right: 8px;
         }
 
         .auth-modal-content .confirm-btn:active {
@@ -418,7 +438,7 @@
         }
 
         .map-btn-top .icon {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .map-btn-top .arrow {
@@ -667,6 +687,11 @@
             text-align: center;
         }
 
+        .topping-modal-content .modal-title i {
+            color: var(--secondary);
+            margin-right: 8px;
+        }
+
         .topping-modal-content .modal-subtitle {
             text-align: center;
             font-size: 14px;
@@ -685,8 +710,10 @@
             border: 1.5px solid #F0E0D0;
         }
 
-        .topping-modal-content .modal-product .product-emoji {
-            font-size: 36px;
+        .topping-modal-content .modal-product .product-icon {
+            font-size: 32px;
+            width: 40px;
+            text-align: center;
         }
 
         .topping-modal-content .modal-product .product-name {
@@ -735,23 +762,31 @@
             gap: 12px;
         }
 
-        .topping-option .option-emoji { font-size: 24px; }
+        .topping-option .option-icon {
+            font-size: 24px;
+            width: 32px;
+            text-align: center;
+        }
+
         .topping-option .option-name {
             font-weight: 600;
             font-size: 15px;
             color: var(--text-dark);
         }
+
         .topping-option .option-price {
             font-weight: 600;
             color: var(--primary);
             font-size: 14px;
         }
+
         .topping-option .option-check {
             display: none;
             color: var(--primary);
             font-size: 20px;
             font-weight: 700;
         }
+
         .topping-option.selected .option-check { display: block; }
 
         .topping-modal-content .confirm-btn {
@@ -767,6 +802,10 @@
             transition: var(--transition);
             box-shadow: 0 4px 20px rgba(212, 56, 13, 0.30);
             font-family: inherit;
+        }
+
+        .topping-modal-content .confirm-btn i {
+            margin-right: 8px;
         }
 
         .topping-modal-content .confirm-btn:active { transform: scale(0.97); }
@@ -825,6 +864,11 @@
             font-weight: 800;
         }
 
+        .orders-modal-content .modal-header h2 i {
+            color: #006064;
+            margin-right: 8px;
+        }
+
         .orders-modal-content .modal-header .close-btn {
             background: #F5F0EB;
             border: none;
@@ -852,6 +896,13 @@
             font-size: 16px;
             text-align: center;
             padding: 30px 0;
+        }
+
+        .orders-content .orders-empty i {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+            color: #BFA58A;
         }
 
         .orders-content .order-history-item {
@@ -917,6 +968,10 @@
             margin-top: 4px;
         }
 
+        .orders-content .order-history-item .oh-cancel-btn i {
+            margin-right: 4px;
+        }
+
         .orders-content .order-history-item .oh-cancel-btn:active { transform: scale(0.95); }
         .orders-content .order-history-item .oh-cancel-btn:disabled {
             opacity: 0.4;
@@ -958,6 +1013,10 @@
             transition: var(--transition);
             font-family: inherit;
             white-space: nowrap;
+        }
+
+        .orders-load-btn i {
+            margin-right: 6px;
         }
 
         .orders-load-btn:active { transform: scale(0.95); }
@@ -1076,7 +1135,11 @@
         }
 
         .section-title:first-of-type { margin-top: 0; }
-        .section-title .emoji { font-size: 24px; }
+
+        .section-title i {
+            font-size: 24px;
+            color: var(--primary);
+        }
 
         /* ============================================================ */
         /* ===== КАРТОЧКИ ТОВАРОВ ===== */
@@ -1138,29 +1201,33 @@
             box-shadow: 0 2px 8px rgba(233, 30, 99, 0.20) !important;
         }
 
-        .item-image {
+        .menu-item.romantic-item .item-icon i {
+            color: #E91E63 !important;
+        }
+
+        .item-icon {
             width: 56px;
             height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
             margin-right: 14px;
             border-radius: 14px;
-            overflow: hidden;
-            background: #F5F0EB;
-            cursor: pointer;
-            position: relative;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            font-size: 32px;
+            color: var(--primary);
         }
 
-        .item-image img {
+        .item-icon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
-            transition: transform 0.2s ease;
+            border-radius: 14px;
         }
 
-        .item-image:active img { transform: scale(0.95); }
-
-        .item-image .zoom-hint {
+        .item-icon .zoom-hint {
             position: absolute;
             bottom: 4px;
             right: 4px;
@@ -1230,6 +1297,10 @@
             box-shadow: 0 4px 12px rgba(212, 56, 13, 0.20);
         }
 
+        .select-btn i {
+            margin-right: 4px;
+        }
+
         .select-btn:active {
             transform: scale(0.95);
             box-shadow: 0 2px 8px rgba(212, 56, 13, 0.15);
@@ -1253,6 +1324,13 @@
             border-radius: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge i {
+            font-size: 8px;
         }
 
         .badge.hit { background: linear-gradient(135deg, #D32F2F, #B71C1C); }
@@ -1289,18 +1367,23 @@
             background: #FFF5F5;
         }
 
-        .drink-item .drink-image {
+        .drink-item .drink-icon {
             width: 40px;
             height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
             border-radius: 50%;
-            overflow: hidden;
-            margin-right: 12px;
             background: #FFFFFF;
+            margin-right: 12px;
+            font-size: 22px;
+            color: #006064;
             cursor: pointer;
+            overflow: hidden;
         }
 
-        .drink-item .drink-image img {
+        .drink-item .drink-icon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -1389,6 +1472,10 @@
             box-shadow: 0 4px 12px rgba(230, 81, 0, 0.30);
         }
 
+        .drink-item.shaurma .drink-icon {
+            color: #E65100;
+        }
+
         /* ============================================================ */
         /* ===== ПЛАВАЮЩИЕ КНОПКИ ===== */
         /* ============================================================ */
@@ -1410,7 +1497,7 @@
             width: 56px;
             height: 56px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 22px;
             box-shadow: 0 4px 20px rgba(0, 96, 100, 0.35);
             cursor: pointer;
             transition: var(--transition);
@@ -1448,7 +1535,7 @@
             width: 64px;
             height: 64px;
             border-radius: 50%;
-            font-size: 28px;
+            font-size: 24px;
             box-shadow: 0 8px 40px rgba(212, 56, 13, 0.35);
             cursor: pointer;
             transition: var(--transition);
@@ -1525,6 +1612,11 @@
             font-size: 20px;
             color: var(--text-dark);
             font-weight: 800;
+        }
+
+        .cart-modal .modal-header h2 i {
+            color: var(--primary);
+            margin-right: 8px;
         }
 
         .cart-modal .modal-header .close-btn {
@@ -1619,6 +1711,13 @@
             padding: 30px 0;
         }
 
+        .cart-modal .cart-empty i {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+            color: #BFA58A;
+        }
+
         .cart-modal .cart-total {
             display: flex;
             justify-content: space-between;
@@ -1647,6 +1746,10 @@
             font-family: inherit;
         }
 
+        .cart-modal .order-btn i {
+            margin-right: 8px;
+        }
+
         .cart-modal .order-btn:active { transform: scale(0.97); }
         .cart-modal .order-btn:disabled {
             opacity: 0.40;
@@ -1662,6 +1765,10 @@
             cursor: pointer;
             font-weight: 600;
             padding: 4px 8px;
+        }
+
+        .cart-modal .clear-cart-btn i {
+            margin-right: 4px;
         }
 
         /* ============================================================ */
@@ -1680,6 +1787,10 @@
             font-size: 14px;
             color: #006064;
             margin-bottom: 10px;
+        }
+
+        .payment-title i {
+            margin-right: 6px;
         }
 
         .payment-options {
@@ -1834,6 +1945,11 @@
             text-align: center;
         }
 
+        .map-modal-content .modal-title i {
+            color: #006064;
+            margin-right: 8px;
+        }
+
         .map-modal-content .map-container {
             border-radius: var(--radius-sm);
             overflow: hidden;
@@ -1854,6 +1970,10 @@
             font-size: 14px;
             color: var(--text-muted);
             line-height: 1.6;
+        }
+
+        .map-modal-content .map-hint i {
+            margin-right: 4px;
         }
 
         .map-modal-content .map-hint strong { color: var(--text-dark); }
@@ -1880,6 +2000,10 @@
             animation: slideDown 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
+        .notification i {
+            margin-right: 8px;
+        }
+
         .notification.error { background: #D32F2F; }
         .notification.show { display: block; }
 
@@ -1895,12 +2019,12 @@
             body { padding: 8px; }
             .app-container { padding: 16px 14px 24px; border-radius: 24px; }
             .header h1 { font-size: 28px; }
-            .item-image { width: 48px; height: 48px; margin-right: 10px; }
+            .item-icon { width: 48px; height: 48px; font-size: 26px; margin-right: 10px; }
             .menu-item { padding: 10px 12px; }
             .contact-row input { font-size: 14px; padding: 8px 12px; min-width: 100px; }
             .float-buttons { bottom: 16px; right: 16px; gap: 10px; }
-            .orders-float-btn { width: 48px; height: 48px; font-size: 20px; }
-            .cart-float-btn { width: 56px; height: 56px; font-size: 24px; }
+            .orders-float-btn { width: 48px; height: 48px; font-size: 18px; }
+            .cart-float-btn { width: 56px; height: 56px; font-size: 20px; }
             .cart-float-btn .cart-total-badge { font-size: 9px; }
             .cart-modal .cart-content { padding: 12px 16px 20px; }
             .cart-item .item-info-cart .item-name-cart { font-size: 13px; }
@@ -1910,10 +2034,9 @@
             .map-btn-top { font-size: 13px; padding: 8px 14px; }
             .topping-modal-content { padding: 20px 16px 16px; }
             .topping-modal-content .modal-title { font-size: 20px; }
-            .drink-item .drink-image { width: 34px; height: 34px; margin-right: 10px; }
+            .drink-item .drink-icon { width: 34px; height: 34px; font-size: 18px; margin-right: 10px; }
             .closed-message h2 { font-size: 20px; }
             .closed-message .closed-icon { font-size: 48px; }
-            .item-image .zoom-hint { font-size: 8px; padding: 1px 6px; }
             .orders-modal-content { max-width: 100%; margin: 10px; border-radius: 20px; }
             .orders-modal-content .orders-footer { flex-direction: column; }
             .orders-load-btn { width: 100%; justify-content: center; }
@@ -1926,13 +2049,15 @@
             .online-indicator { font-size: 12px; padding: 6px 12px; }
             .auth-modal-content { padding: 20px 16px 16px; }
             .auth-modal-content .modal-title { font-size: 20px; }
+            .badge { font-size: 7px; padding: 1px 8px; right: 65px; }
+            .badge i { font-size: 7px; }
         }
 
         @media (max-width: 380px) {
             .header h1 { font-size: 24px; }
             .item-info h3 { font-size: 13px; }
             .item-info .price { font-size: 15px; }
-            .item-image { width: 42px; height: 42px; margin-right: 8px; }
+            .item-icon { width: 42px; height: 42px; font-size: 22px; margin-right: 8px; }
             .select-btn { font-size: 12px; padding: 6px 14px; }
             .contact-row input { font-size: 13px; padding: 6px 10px; min-width: 80px; }
             .cart-item .item-actions button { width: 24px; height: 24px; font-size: 12px; }
@@ -1940,14 +2065,14 @@
             .bungalo-display .number { font-size: 28px; }
             .beach-message h2 { font-size: 20px; }
             .topping-option .option-name { font-size: 13px; }
-            .topping-option .option-emoji { font-size: 20px; }
-            .drink-item .drink-image { width: 30px; height: 30px; margin-right: 8px; }
+            .topping-option .option-icon { font-size: 20px; }
+            .drink-item .drink-icon { width: 30px; height: 30px; font-size: 16px; margin-right: 8px; }
             .drink-item .drink-price { font-size: 14px; }
             .closed-message h2 { font-size: 18px; }
             .closed-message .closed-icon { font-size: 40px; }
             .closed-message .work-time { font-size: 13px; padding: 8px 14px; }
-            .orders-float-btn { width: 42px; height: 42px; font-size: 18px; }
-            .cart-float-btn { width: 50px; height: 50px; font-size: 20px; }
+            .orders-float-btn { width: 42px; height: 42px; font-size: 16px; }
+            .cart-float-btn { width: 50px; height: 50px; font-size: 18px; }
             .tech-break-message .break-icon { font-size: 40px; }
             .tech-break-message h2 { font-size: 18px; }
             .payment-btn { min-width: 50px; padding: 6px 8px; }
@@ -1958,6 +2083,8 @@
             .auth-modal-content { padding: 16px 14px 14px; }
             .auth-modal-content .modal-title { font-size: 18px; }
             .auth-modal-content .auth-row input { font-size: 14px; padding: 10px 12px; }
+            .badge { font-size: 6px; padding: 1px 6px; right: 55px; }
+            .badge i { font-size: 6px; }
         }
     </style>
 </head>
@@ -1973,13 +2100,13 @@
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">✕</button>
-            <div class="modal-title">📝 Введите ваши данные</div>
+            <div class="modal-title"><i class="fas fa-pen"></i> Введите ваши данные</div>
             <div class="modal-subtitle">Чтобы мы могли связаться с вами и доставить заказ</div>
             <div class="auth-row">
                 <input type="text" id="authName" placeholder="Ваше имя">
                 <input type="tel" id="authPhone" placeholder="Номер телефона">
             </div>
-            <button class="confirm-btn" onclick="confirmAuth()">✅ Продолжить</button>
+            <button class="confirm-btn" onclick="confirmAuth()"><i class="fas fa-check-circle"></i> Продолжить</button>
         </div>
     </div>
 
@@ -1987,15 +2114,15 @@
     <div class="topping-modal-overlay" id="toppingModal">
         <div class="topping-modal-content">
             <button class="modal-close" onclick="closeToppingModal()">✕</button>
-            <div class="modal-title">✨ Выберите присыпку</div>
+            <div class="modal-title"><i class="fas fa-sparkles"></i> Выберите присыпку</div>
             <div class="modal-subtitle">Добавьте изюминку к вашему стаканчику</div>
             <div class="modal-product" id="selectedProductDisplay">
-                <span class="product-emoji" id="productEmoji">🍫</span>
+                <span class="product-icon" id="productIcon"><i class="fas fa-chocolate-bar"></i></span>
                 <span class="product-name" id="productName">Классика</span>
                 <span class="product-price" id="productPrice">350 ₽</span>
             </div>
             <div class="topping-options" id="toppingOptions"></div>
-            <button class="confirm-btn" id="confirmToppingBtn" disabled>✅ Добавить в корзину</button>
+            <button class="confirm-btn" id="confirmToppingBtn" disabled><i class="fas fa-plus-circle"></i> Добавить в корзину</button>
         </div>
     </div>
 
@@ -2003,15 +2130,18 @@
     <div class="orders-modal-overlay" id="ordersModal">
         <div class="orders-modal-content">
             <div class="modal-header">
-                <h2>📋 Мои заказы</h2>
+                <h2><i class="fas fa-list-alt"></i> Мои заказы</h2>
                 <button class="close-btn" onclick="closeOrdersModal()">✕</button>
             </div>
             <div class="orders-content" id="ordersContent">
-                <div class="orders-empty">Введите телефон, чтобы увидеть заказы</div>
+                <div class="orders-empty">
+                    <i class="fas fa-inbox"></i>
+                    Введите телефон, чтобы увидеть заказы
+                </div>
             </div>
             <div class="orders-footer">
                 <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон">
-                <button class="orders-load-btn" onclick="loadMyOrders()">📋 Показать</button>
+                <button class="orders-load-btn" onclick="loadMyOrders()"><i class="fas fa-search"></i> Показать</button>
             </div>
         </div>
     </div>
@@ -2032,15 +2162,15 @@
 
         <!-- ===== ШАПКА ===== -->
         <header class="header">
-            <div class="header-badge">🌊 Доставка на пляж</div>
-            <h1>🍓 <span class="highlight">Клубника</span> в шоколаде</h1>
-            <p class="subtitle">Свежая клубника с доставкой в <span>бунгало</span> за 10 минут</p>
+            <div class="header-badge"><i class="fas fa-water"></i> Доставка на пляж</div>
+            <h1><i class="fas fa-strawberry"></i> <span class="highlight">Клубника</span> в шоколаде</h1>
+            <p class="subtitle"><i class="fas fa-leaf"></i> Свежая клубника с доставкой в <span>бунгало</span> за 10 минут</p>
         </header>
 
         <!-- ===== ИНДИКАТОР ИНТЕРНЕТА ===== -->
         <div class="online-indicator" id="onlineIndicator">
             <span class="dot"></span>
-            <span id="onlineStatus">🌐 Интернет есть</span>
+            <span id="onlineStatus"><i class="fas fa-wifi"></i> Интернет есть</span>
         </div>
 
         <!-- ============================================================ -->
@@ -2052,14 +2182,14 @@
                 <h2>Технический перерыв</h2>
                 <p>Мы обновляем меню и готовим для вас что-то вкусное!</p>
                 <p style="font-size:14px; color:#8D6E63;">Скоро всё заработает, загляните через 5-10 минут</p>
-                <div class="break-time">⏳ Скоро открываемся!</div>
+                <div class="break-time"><i class="fas fa-clock"></i> ⏳ Скоро открываемся!</div>
                 <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;">
-                    <span class="icon">🗺️</span>
+                    <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                     Показать на карте
-                    <span class="arrow">→</span>
+                    <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                 </button>
                 <div class="beach-note" style="margin-top:12px;">
-                    <span>📍</span>
+                    <span><i class="fas fa-location-dot"></i></span>
                     <span>Наш киоск: 100 м от бунгало, у деревянного пирса</span>
                 </div>
             </div>
@@ -2073,18 +2203,18 @@
                 <span class="closed-icon">🔒</span>
                 <h2>Сейчас не принимаем заказы</h2>
                 <p>Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong> ночи по московскому времени.</p>
-                <p style="font-size:14px; color:#8D6E63; margin-top:4px;">Текущее время: <span id="currentTimeDisplay">--:--</span></p>
+                <p style="font-size:14px; color:#8D6E63; margin-top:4px;"><i class="fas fa-clock"></i> Текущее время: <span id="currentTimeDisplay">--:--</span></p>
                 <div class="work-time">
-                    🕐 График работы: <span>9:00 — 1:00 (МСК)</span>
+                    <i class="fas fa-clock"></i> 🕐 График работы: <span>9:00 — 1:00 (МСК)</span>
                 </div>
             </div>
             <button class="map-btn-top" onclick="openMap()">
-                <span class="icon">🗺️</span>
+                <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                 Показать на карте
-                <span class="arrow">→</span>
+                <span class="arrow"><i class="fas fa-arrow-right"></i></span>
             </button>
             <div class="beach-note" style="margin-top:0;">
-                <span>📍</span>
+                <span><i class="fas fa-location-dot"></i></span>
                 <span>Наш киоск: 100 м от бунгало, у деревянного пирса</span>
             </div>
         </div>
@@ -2099,12 +2229,12 @@
                 <p>Доставка работает только для гостей бунгало.</p>
                 <p><strong>Вернитесь в бунгало</strong> или <strong>подойдите к нашему киоску</strong>!</p>
                 <button class="map-btn-top" onclick="openMap()">
-                    <span class="icon">🗺️</span>
+                    <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                     Показать на карте
-                    <span class="arrow">→</span>
+                    <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                 </button>
                 <div class="beach-note">
-                    <span>📍</span>
+                    <span><i class="fas fa-location-dot"></i></span>
                     <span id="beachLandmarkText">Наш киоск: 100 м от бунгало, у деревянного пирса</span>
                 </div>
             </div>
@@ -2117,22 +2247,22 @@
 
             <!-- ===== КНОПКА "ПОКАЗАТЬ НА КАРТЕ" ===== -->
             <button class="map-btn-top" onclick="openMap()">
-                <span class="icon">🗺️</span>
+                <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                 Показать на карте
-                <span class="arrow">→</span>
+                <span class="arrow"><i class="fas fa-arrow-right"></i></span>
             </button>
 
             <!-- Номер бунгало -->
             <div class="bungalo-display">
-                <div class="label">📍 Ваше бунгало</div>
+                <div class="label"><i class="fas fa-location-dot"></i> Ваше бунгало</div>
                 <div class="number" id="bungaloNumberDisplay">#7</div>
-                <div class="hint">Сканируйте QR-код в вашем бунгало для заказа</div>
+                <div class="hint"><i class="fas fa-qrcode"></i> Сканируйте QR-код в вашем бунгало для заказа</div>
             </div>
 
             <!-- ===== КОНТАКТНЫЕ ДАННЫЕ ===== -->
             <div class="contact-section">
                 <div class="contact-label">
-                    📞 Как с вами связаться? <small>(если мы вас не найдем)</small>
+                    <i class="fas fa-phone"></i> Как с вами связаться? <small>(если мы вас не найдем)</small>
                 </div>
                 <div class="contact-row">
                     <input type="text" id="customerName" placeholder="Ваше имя">
@@ -2144,7 +2274,7 @@
             <!-- ===== МЕНЮ ===== -->
             <!-- ============================================================ -->
             <div class="section-title">
-                <span class="emoji">🍓</span> Стаканчики 200 мл
+                <i class="fas fa-strawberry"></i> Стаканчики 200 мл
             </div>
 
             <div class="menu-grid" id="menuGrid">
@@ -2155,7 +2285,7 @@
             <!-- ===== НАПИТКИ / ПЕРЕКУС ===== -->
             <!-- ============================================================ -->
             <div class="section-title">
-                <span class="emoji">🥤</span> Напитки / Перекус
+                <i class="fas fa-mug-saucer"></i> Напитки / Перекус
             </div>
 
             <div class="drinks-grid" id="drinksGrid">
@@ -2175,11 +2305,11 @@
     <!-- ============================================================ -->
     <div class="float-buttons">
         <button class="orders-float-btn" id="ordersFloatBtn" onclick="openOrdersModal()">
-            📋
+            <i class="fas fa-list-alt"></i>
             <span class="orders-badge" id="ordersBadge">0</span>
         </button>
         <button class="cart-float-btn" id="cartFloatBtn" style="display:none;">
-            🛒
+            <i class="fas fa-shopping-cart"></i>
             <span class="cart-badge" id="cartBadge">0</span>
             <span class="cart-total-badge" id="cartTotalBadge">0 ₽</span>
         </button>
@@ -2190,30 +2320,33 @@
     <!-- ============================================================ -->
     <div class="cart-modal" id="cartModal">
         <div class="modal-header">
-            <h2>🛒 Корзина</h2>
+            <h2><i class="fas fa-shopping-cart"></i> Корзина</h2>
             <div>
-                <button class="clear-cart-btn" id="clearCart">Очистить</button>
+                <button class="clear-cart-btn" id="clearCart"><i class="fas fa-trash-can"></i> Очистить</button>
                 <button class="close-btn" id="closeCart">✕</button>
             </div>
         </div>
         <div class="cart-content">
             <div id="cartItems">
-                <div class="cart-empty">Добавьте что-нибудь вкусное 😋</div>
+                <div class="cart-empty">
+                    <i class="fas fa-cart-plus"></i>
+                    Добавьте что-нибудь вкусное 😋
+                </div>
             </div>
 
             <!-- ===== ВЫБОР СПОСОБА ОПЛАТЫ ===== -->
             <div class="payment-section" id="paymentSection">
-                <div class="payment-title">💳 Способ оплаты</div>
+                <div class="payment-title"><i class="fas fa-credit-card"></i> Способ оплаты</div>
                 <div class="payment-options">
                     <button class="payment-btn active" data-method="cash" onclick="selectPayment('cash')">
                         <span class="payment-icon">💵</span>
                         <span class="payment-name">Наличными</span>
-                        <span class="payment-check">✅</span>
+                        <span class="payment-check"><i class="fas fa-check-circle"></i></span>
                     </button>
                     <button class="payment-btn" data-method="transfer" onclick="selectPayment('transfer')">
                         <span class="payment-icon">📱</span>
                         <span class="payment-name">Переводом</span>
-                        <span class="payment-check">✅</span>
+                        <span class="payment-check"><i class="fas fa-check-circle"></i></span>
                     </button>
                     <button class="payment-btn" data-method="sbp" onclick="selectPayment('sbp')" disabled>
                         <span class="payment-icon">🏦</span>
@@ -2230,7 +2363,7 @@
                 <span>Итого:</span>
                 <span class="total-price" id="cartTotal">0 ₽</span>
             </div>
-            <button id="orderButton" class="order-btn" disabled>✅ Заказать</button>
+            <button id="orderButton" class="order-btn" disabled><i class="fas fa-check-circle"></i> Заказать</button>
         </div>
     </div>
 
@@ -2257,25 +2390,26 @@
         // ===== ДАННЫЕ О МЕНЮ =====
         // ================================================================
         const MENU_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, emoji: '🍫', badge: 'hit',
-                badgeText: '🔥 Хит' },
-            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, emoji: '🤍',
-                badge: 'popular', badgeText: '⭐ Популярное' },
-            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, emoji: '💎', badge: 'new',
-                badgeText: '✨ Новинка' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, emoji: '🍌', badge: '',
-                badgeText: '' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, emoji: '🍌', badge: '',
-                badgeText: '' }
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, icon: 'fas fa-chocolate-bar',
+                badge: 'hit', badgeText: '🔥 Хит' },
+            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380,
+                icon: 'fas fa-chocolate-bar', iconColor: '#f5f5f5', badge: 'popular', badgeText: '⭐ Популярное' },
+            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, icon: 'fas fa-gem',
+                iconColor: '#8DD0D0', badge: 'new', badgeText: '✨ Новинка' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, icon: 'fas fa-banana',
+                badge: '', badgeText: '' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, icon: 'fas fa-banana',
+                badge: '', badgeText: '' }
         ];
 
         const ROMANTIC_ITEM = {
             id: '9',
-            name: '❤️ Для влюбленных',
+            name: 'Для влюбленных',
             desc: '2 стаканчика: Тиффани + Классика',
             price: 699,
             originalPrice: 770,
-            emoji: '💕',
+            icon: 'fas fa-heart',
+            iconColor: '#E91E63',
             badge: 'romantic',
             badgeText: '❤️ Романтика'
         };
@@ -2284,12 +2418,14 @@
         // ===== НАПИТКИ / ПЕРЕКУС =====
         // ================================================================
         const DRINK_ITEMS = [
-            { id: '6', name: 'Лимонад Горячий Ключ', desc: 'Заводской лимонад, охлажденный в бутылке', price: 150, emoji: '🍋',
-            image: 'limonad.jpg' },
-            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, emoji: '🥤', image: 'kola.jpg' },
-            { id: '8', name: 'Пиво Хадыженское', desc: 'Охлажденное 0.5 л', price: 200, emoji: '🍺', image: 'pivo.jpg' },
-            { id: '10', name: '🌯 Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, emoji: '🌯',
-                image: 'shaurma.jpg', shaurma: true }
+            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, icon: 'fas fa-lemon',
+                image: 'limonad.jpg' },
+            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, icon: 'fas fa-wine-bottle',
+                image: 'kola.jpg' },
+            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, icon: 'fas fa-beer-mug-empty',
+                image: 'pivo.jpg' },
+            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350,
+                icon: 'fas fa-burrito', image: 'shaurma.jpg', shaurma: true }
         ];
 
         // ================================================================
@@ -2307,14 +2443,13 @@
 
             if (online) {
                 indicator.className = 'online-indicator';
-                statusText.textContent = '🌐 Интернет есть';
+                statusText.innerHTML = '<i class="fas fa-wifi"></i> Интернет есть';
             } else {
                 indicator.className = 'online-indicator offline';
-                statusText.textContent = '📴 Нет интернета! Заказы недоступны';
+                statusText.innerHTML = '<i class="fas fa-wifi-slash"></i> Нет интернета! Заказы недоступны';
             }
         }
 
-        // Слушаем изменения статуса интернета
         window.addEventListener('online', function() {
             updateOnlineStatus();
             showNotification('🌐 Интернет появился! Можно делать заказы.');
@@ -2362,10 +2497,10 @@
         // ===== ДАННЫЕ О ПРИСЫПКАХ =====
         // ================================================================
         const TOPPINGS = [
-            { id: 'none', name: 'Без присыпки', emoji: '❌', price: 0 },
-            { id: 'peanut', name: 'Крошка арахиса', emoji: '🥜', price: 30 },
-            { id: 'coconut', name: 'Кокосовая стружка', emoji: '🥥', price: 25 },
-            { id: 'gold', name: 'Золотая пыль', emoji: '✨', price: 50 }
+            { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban', price: 0 },
+            { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling', price: 30 },
+            { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut', price: 25 },
+            { id: 'gold', name: 'Золотая пыль', icon: 'fas fa-star', price: 50 }
         ];
 
         // ================================================================
@@ -2451,28 +2586,23 @@
                 return;
             }
 
-            // Сохраняем данные в существующие поля на странице
             document.getElementById('customerName').value = name;
             document.getElementById('customerPhone').value = phone;
 
-            // Закрываем окно
             closeAuthModal();
 
-            // Открываем выбор присыпки
             if (pendingProduct) {
                 openToppingModal(pendingProduct);
                 pendingProduct = null;
             }
         }
 
-        // Закрытие по клику на оверлей
         document.getElementById('authModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeAuthModal();
             }
         });
 
-        // Закрытие по ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeAuthModal();
@@ -2516,24 +2646,25 @@
                          data-id="${ROMANTIC_ITEM.id}" 
                          data-name="${ROMANTIC_ITEM.name}" 
                          data-price="${ROMANTIC_ITEM.price}" 
-                         data-emoji="${ROMANTIC_ITEM.emoji}" 
+                         data-icon="${ROMANTIC_ITEM.icon}" 
+                         data-icon-color="${ROMANTIC_ITEM.iconColor || ''}" 
                          data-category="стаканчик"
                          data-original-price="${ROMANTIC_ITEM.originalPrice}"
                          data-is-romantic="true">
                         ${romanticBadgeHtml}
-                        <div class="item-image" onclick="${romanticAvailable ? `openImageModal('images/tiffani.jpg', 'Для влюбленных')` : ''}">
-                            <img src="images/tiffani.jpg" alt="Для влюбленных" ${!romanticAvailable ? 'style="filter: grayscale(1);"' : ''}>
+                        <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/tiffani.jpg', 'Для влюбленных')` : ''}" style="color:${ROMANTIC_ITEM.iconColor || '#E91E63'}">
+                            <i class="${ROMANTIC_ITEM.icon}"></i>
                             <span class="zoom-hint">🔍</span>
                         </div>
                         <div class="item-info">
-                            <h3>${ROMANTIC_ITEM.name}</h3>
+                            <h3><i class="${ROMANTIC_ITEM.icon}" style="color:${ROMANTIC_ITEM.iconColor || '#E91E63'}; margin-right:4px;"></i> ${ROMANTIC_ITEM.name}</h3>
                             <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
                             ${romanticAvailable ? 
                                 `<span class="price"><span class="old-price">${ROMANTIC_ITEM.originalPrice} ₽</span> ${ROMANTIC_ITEM.price} ₽ <span class="discount-badge">-9%</span></span>` : 
                                 `<span class="unavailable-label">❌ Нет в наличии</span>`
                             }
                         </div>
-                        <button class="select-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? 'Выбрать ❤️' : 'Закончился'}</button>
+                        <button class="select-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '<i class="fas fa-heart"></i> Выбрать' : 'Закончился'}</button>
                     </div>
                 `;
 
@@ -2544,12 +2675,13 @@
                 const badgeHtml = item.badge ? `<span class="badge ${item.badge}">${item.badgeText}</span>` : '';
                 const imagePath =
                     `images/${item.id === '1' ? 'klassika' : item.id === '2' ? 'belyy-shokolad' : item.id === '3' ? 'tiffani' : item.id === '4' ? 'miks' : 'banan'}.jpg`;
+                const iconColor = item.iconColor || 'var(--primary)';
 
                 html += `
-                        <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-emoji="${item.emoji}" data-category="стаканчик">
+                        <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-icon="${item.icon}" data-icon-color="${iconColor}" data-category="стаканчик">
                             ${badgeHtml}
-                            <div class="item-image" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
-                                <img src="${imagePath}" alt="${item.name}" ${!available ? 'style="filter: grayscale(1);"' : ''}>
+                            <div class="item-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}" style="color:${iconColor}">
+                                <i class="${item.icon}"></i>
                                 <span class="zoom-hint">🔍</span>
                             </div>
                             <div class="item-info">
@@ -2575,11 +2707,11 @@
 
                 return `
                         <div class="drink-item ${unavailableClass} ${shaurmaClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
-                            <div class="drink-image" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
-                                <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
+                            <div class="drink-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
+                                <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\'${item.icon}\\'></i>'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
                             </div>
                             <div class="drink-info">
-                                <h4>${item.name}</h4>
+                                <h4><i class="${item.icon}" style="margin-right:4px;"></i> ${item.name}</h4>
                                 <div class="drink-desc">${item.desc}</div>
                             </div>
                             ${available ? `<span class="drink-price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
@@ -2609,7 +2741,6 @@
         function handleSelectClick(e) {
             e.stopPropagation();
 
-            // Проверяем, введены ли имя и телефон
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
 
@@ -2620,26 +2751,24 @@
                 id: parseInt(item.dataset.id),
                 name: item.dataset.name,
                 price: parseInt(item.dataset.price),
-                emoji: item.dataset.emoji || '💕',
+                icon: item.dataset.icon || 'fas fa-chocolate-bar',
+                iconColor: item.dataset.iconColor || '#D4380D',
                 category: item.dataset.category || 'стаканчик',
                 isRomantic: item.dataset.isRomantic === 'true',
                 originalPrice: item.dataset.originalPrice ? parseInt(item.dataset.originalPrice) : null
             };
 
-            // Если имя или телефон не введены → показываем всплывающее окно
             if (!name || !phone) {
                 openAuthModal(product);
                 return;
             }
 
-            // Иначе открываем выбор присыпки
             openToppingModal(product);
         }
 
         function handleDrinkAdd(e) {
             e.stopPropagation();
 
-            // Проверяем, введены ли имя и телефон
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
 
@@ -2690,7 +2819,7 @@
         const toppingModal = document.getElementById('toppingModal');
         const toppingOptions = document.getElementById('toppingOptions');
         const confirmToppingBtn = document.getElementById('confirmToppingBtn');
-        const productEmoji = document.getElementById('productEmoji');
+        const productIcon = document.getElementById('productIcon');
         const productName = document.getElementById('productName');
         const productPrice = document.getElementById('productPrice');
 
@@ -2737,11 +2866,11 @@
         function loadMyOrders() {
             const phone = ordersPhoneInput.value.trim();
             if (!phone) {
-                ordersContent.innerHTML = '<div class="orders-empty">⚠️ Введите номер телефона</div>';
+                ordersContent.innerHTML = '<div class="orders-empty"><i class="fas fa-exclamation-triangle"></i> Введите номер телефона</div>';
                 return;
             }
 
-            ordersContent.innerHTML = '<div class="orders-empty">⏳ Загрузка...</div>';
+            ordersContent.innerHTML = '<div class="orders-empty"><i class="fas fa-spinner fa-spin"></i> Загрузка...</div>';
 
             fetch('/api/my-orders', {
                     method: 'POST',
@@ -2753,7 +2882,8 @@
                     if (!data.success || data.orders.length === 0) {
                         ordersContent.innerHTML = `
                                 <div class="orders-empty">
-                                    📭 Заказов не найдено<br>
+                                    <i class="fas fa-inbox"></i>
+                                    Заказов не найдено<br>
                                     <span style="font-size:14px; color:#BFA58A;">Сделайте первый заказ!</span>
                                 </div>
                             `;
@@ -2777,8 +2907,8 @@
                         const canCancel = order.status === 'ожидает' && minutes <= 5;
 
                         const cancelBtn = canCancel ?
-                            `<button class="oh-cancel-btn" onclick="cancelMyOrder(${order.id}, '${phone}')">❌ Отменить</button>` :
-                            (order.status === 'ожидает' ? `<button class="oh-cancel-btn" disabled>⏰ Прошло 5 мин</button>` :
+                            `<button class="oh-cancel-btn" onclick="cancelMyOrder(${order.id}, '${phone}')"><i class="fas fa-ban"></i> Отменить</button>` :
+                            (order.status === 'ожидает' ? `<button class="oh-cancel-btn" disabled><i class="fas fa-clock"></i> Прошло 5 мин</button>` :
                             '');
 
                         return `
@@ -2798,7 +2928,7 @@
                     ordersContent.innerHTML = ordersHtml;
                 })
                 .catch(() => {
-                    ordersContent.innerHTML = '<div class="orders-empty">❌ Ошибка загрузки</div>';
+                    ordersContent.innerHTML = '<div class="orders-empty"><i class="fas fa-exclamation-circle"></i> Ошибка загрузки</div>';
                 });
         }
 
@@ -2856,7 +2986,8 @@
             state.selectedProduct = product;
             state.selectedTopping = null;
 
-            productEmoji.textContent = product.emoji;
+            const iconColor = product.iconColor || '#D4380D';
+            productIcon.innerHTML = `<i class="${product.icon}" style="color:${iconColor};"></i>`;
             productName.textContent = product.name;
 
             if (product.isRomantic) {
@@ -2870,12 +3001,12 @@
             toppingOptions.innerHTML = TOPPINGS.map(topping => `
                         <div class="topping-option" data-id="${topping.id}" onclick="selectTopping('${topping.id}')">
                             <div class="option-left">
-                                <span class="option-emoji">${topping.emoji}</span>
+                                <span class="option-icon"><i class="${topping.icon}"></i></span>
                                 <span class="option-name">${topping.name}</span>
                             </div>
                             <div>
                                 ${topping.price > 0 ? `<span class="option-price">+${topping.price} ₽</span>` : ''}
-                                <span class="option-check">✅</span>
+                                <span class="option-check"><i class="fas fa-check-circle"></i></span>
                             </div>
                         </div>
                     `).join('');
@@ -2945,7 +3076,12 @@
             cartTotal.textContent = totalPrice + ' ₽';
 
             if (state.cart.length === 0) {
-                cartItems.innerHTML = '<div class="cart-empty">Добавьте что-нибудь вкусное 😋</div>';
+                cartItems.innerHTML = `
+                        <div class="cart-empty">
+                            <i class="fas fa-cart-plus"></i>
+                            Добавьте что-нибудь вкусное 😋
+                        </div>
+                    `;
                 orderButton.disabled = true;
             } else {
                 cartItems.innerHTML = state.cart.map((item, index) => `
@@ -2955,10 +3091,10 @@
                                     <div class="item-price-cart">${item.price} ₽ × ${item.quantity}</div>
                                 </div>
                                 <div class="item-actions">
-                                    <button class="qty-btn-minus" onclick="changeQuantity(${index}, -1)">−</button>
+                                    <button class="qty-btn-minus" onclick="changeQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
                                     <span class="qty-number">${item.quantity}</span>
-                                    <button class="qty-btn-plus" onclick="changeQuantity(${index}, 1)">+</button>
-                                    <button class="qty-btn-remove" onclick="removeItem(${index})">✕</button>
+                                    <button class="qty-btn-plus" onclick="changeQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
+                                    <button class="qty-btn-remove" onclick="removeItem(${index})"><i class="fas fa-xmark"></i></button>
                                 </div>
                             </div>
                         `).join('');
@@ -2989,7 +3125,6 @@
         }
 
         function openCart() {
-            // Проверяем, введены ли имя и телефон
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
 
@@ -3012,7 +3147,6 @@
         // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
         // ================================================================
         function submitOrder() {
-            // ==== ПРОВЕРКА ИНТЕРНЕТА ====
             if (!isOnline()) {
                 showNotification('📴 Нет интернета! Подключитесь к сети и попробуйте снова.', 'error');
                 return;
@@ -3080,7 +3214,7 @@
                 timestamp: new Date().toISOString()
             };
 
-            orderButton.textContent = '⏳ Отправка...';
+            orderButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
             orderButton.disabled = true;
 
             fetch('/api/order', {
@@ -3094,7 +3228,6 @@
                         showNotification('🎉 Заказ отправлен! Ждите доставку!');
                         state.cart = [];
                         updateCart();
-                        // Не очищаем имя и телефон!
                         selectPayment('cash');
                         closeCart();
                         setTimeout(updateOrdersBadge, 1000);
@@ -3106,7 +3239,7 @@
                     showNotification('❌ Ошибка соединения! Проверьте интернет', 'error');
                 })
                 .finally(() => {
-                    orderButton.textContent = '✅ Заказать';
+                    orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать';
                     orderButton.disabled = false;
                 });
         }
@@ -3123,7 +3256,7 @@
             overlay.innerHTML = `
                         <div class="map-modal-content">
                             <button class="modal-close" onclick="closeMap()">✕</button>
-                            <div class="modal-title">📍 Наш киоск на карте</div>
+                            <div class="modal-title"><i class="fas fa-map-marked-alt"></i> Наш киоск на карте</div>
                             <div class="map-container">
                                 <iframe 
                                     src="https://yandex.ru/map-widget/v1/?ll=${lng},${lat}&z=18&pt=${lng},${lat},flag"
@@ -3131,8 +3264,8 @@
                                 </iframe>
                             </div>
                             <div class="map-hint">
-                                🏠 <strong>Ориентир:</strong> ${MY_LOCATION.landmark}
-                                <br>📞 <strong>Телефон:</strong> ${MY_LOCATION.phone}
+                                <i class="fas fa-home"></i> <strong>Ориентир:</strong> ${MY_LOCATION.landmark}
+                                <br><i class="fas fa-phone"></i> <strong>Телефон:</strong> ${MY_LOCATION.phone}
                             </div>
                         </div>
                     `;
@@ -3151,7 +3284,7 @@
         // ===== УВЕДОМЛЕНИЯ =====
         // ================================================================
         function showNotification(message, type = '') {
-            notification.textContent = message;
+            notification.innerHTML = message;
             notification.className = 'notification show';
             if (type) notification.classList.add(type);
             clearTimeout(notification._timeout);
@@ -3164,7 +3297,6 @@
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         // ================================================================
         async function init() {
-            // Обновляем статус интернета
             updateOnlineStatus();
 
             const bungaloNumber = getBungaloNumber();
@@ -3336,7 +3468,7 @@
         console.log(`🌐 Проверка интернета подключена!`);
         console.log(`📝 При выборе товара - обязательный ввод имени и телефона!`);
         console.log(`🌯 Добавлен раздел "Напитки / Перекус" с шаурмой!`);
-        console.log(`🖼️ Все картинки добавлены: лимонад, кока-кола, шаурма!`);
+        console.log(`🎨 Все эмодзи заменены на иконки Font Awesome!`);
     </script>
 
 </body>
