@@ -2634,10 +2634,10 @@
                          data-original-price="${ROMANTIC_ITEM.originalPrice}"
                          data-is-romantic="true">
                         ${romanticBadgeHtml}
-                        <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/romantic.jpg', 'Для влюбленных')` : ''}">
-                            <img src="images/tiffani.jpg" alt="Для влюбленных" ${!romanticAvailable ? 'style="filter: grayscale(1);"' : ''}>
-                            <span class="zoom-hint">🔍</span>
-                        </div>
+                        <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/romantic.jpg?v=1', 'Для влюбленных')` : ''}">
+    <img src="images/romantic.jpg" alt="Для влюбленных" ${!romanticAvailable ? 'style="filter: grayscale(1);"' : ''}>
+    <span class="zoom-hint">🔍</span>
+</div>
                         <div class="item-info">
                             <h3><i class="${ROMANTIC_ITEM.icon}" style="color:${ROMANTIC_ITEM.iconColor || '#E91E63'}; margin-right:4px;"></i> ${ROMANTIC_ITEM.name}</h3>
                             <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
