@@ -3387,39 +3387,36 @@
             }
 
             if (bungaloNumber) {
-                console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
-                document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
-                bungaloMode.style.display = 'block';
-                beachMode.style.display = 'none';
-                closedMode.style.display = 'none';
-                techBreakMode.style.display = 'none';
-                ordersFloatBtn.style.display = 'flex';
-                document.getElementById('bottomTabBar').style.display = 'flex';
-                window.bungaloNumber = bungaloNumber;
+    console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
+    document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
+    bungaloMode.style.display = 'block';
+    beachMode.style.display = 'none';
+    closedMode.style.display = 'none';
+    techBreakMode.style.display = 'none';
+    document.getElementById('bottomTabBar').style.display = 'flex';
+    window.bungaloNumber = bungaloNumber;
 
-                renderMenu(settings || state.settings);
-                initCart();
+    renderMenu(settings || state.settings);
+    initCart();
 
-                setTimeout(updateOrdersBadge, 1000);
+    setTimeout(updateOrdersBadge, 1000);
 
-                customerPhone.addEventListener('input', function() {
-                    if (this.value.trim().length >= 5) {
-                        updateOrdersBadge();
-                    }
-                });
+    customerPhone.addEventListener('input', function() {
+        if (this.value.trim().length >= 5) {
+            updateOrdersBadge();
+        }
+    });
 
-            } else {
-                console.log('🏖️ Клиент на пляже');
-                bungaloMode.style.display = 'none';
-                beachMode.style.display = 'block';
-                closedMode.style.display = 'none';
-                techBreakMode.style.display = 'none';
-                ordersFloatBtn.style.display = 'none';
-                document.getElementById('bottomTabBar').style.display = 'flex';
-                document.getElementById('beachLandmarkText').textContent = `Наш киоск: ${MY_LOCATION.landmark}`;
-                showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
-            }
-
+} else {
+    console.log('🏖️ Клиент на пляже');
+    bungaloMode.style.display = 'none';
+    beachMode.style.display = 'block';
+    closedMode.style.display = 'none';
+    techBreakMode.style.display = 'none';
+    document.getElementById('bottomTabBar').style.display = 'flex';
+    document.getElementById('beachLandmarkText').textContent = `Наш киоск: ${MY_LOCATION.landmark}`;
+    showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
+}
             setInterval(function() {
                 const timeDisplay = document.getElementById('currentTimeDisplay');
                 if (timeDisplay) {
