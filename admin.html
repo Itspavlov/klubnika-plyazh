@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Админка - Управление</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f0eb;
+            padding: 20px;
+            padding-bottom: 40px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        h1 {
+            color: #8B0000;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        h1 small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #8D6E63;
+        }
+        
+        .control-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #8B0000;
+        }
+        .control-card .card-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #3E2723;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-card .card-title .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+        .badge.on { background: #E8F5E9; color: #2E7D32; }
+        .badge.off { background: #FFEBEE; color: #D32F2F; }
+        
+        .toggle-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .toggle-btn:active { transform: scale(0.97); }
+        .toggle-btn.on { background: #D32F2F; color: white; }
+        .toggle-btn.off { background: #2E7D32; color: white; }
+        
+        .menu-grid-admin {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .menu-item-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #FDF8F3;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #F0E8E0;
+        }
+        .menu-item-admin.romantic {
+            border-color: #E91E63;
+            background: #FCE4EC;
+        }
+        .menu-item-admin .item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #3E2723;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .menu-item-admin .item-status {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .menu-item-admin .item-status.available { color: #2E7D32; }
+        .menu-item-admin .item-status.unavailable { color: #D32F2F; }
+        
+        .menu-toggle-btn {
+            background: none;
+            border: 1px solid #E0D0C0;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .menu-toggle-btn:active { transform: scale(0.95); }
+        .menu-toggle-btn.on { background: #E8F5E9; border-color: #2E7D32; color: #2E7D32; }
+        .menu-toggle-btn.off { background: #FFEBEE; border-color: #D32F2F; color: #D32F2F; }
+        .menu-toggle-btn.romantic { border-color: #E91E63; }
+        .menu-toggle-btn.romantic.on { background: #FCE4EC; border-color: #E91E63; color: #E91E63; }
+        .menu-toggle-btn.romantic.off { background: #FFEBEE; border-color: #E91E63; color: #D32F2F; }
+        
+        .stats {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .stats span { font-size: 14px; color: #666; }
+        .stats strong {
+            font-size: 24px;
+            color: #3E2723;
+            display: block;
+        }
+        
+        .order-card {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #8B0000;
+        }
+        .order-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .order-card .bungalow {
+            font-weight: 700;
+            color: #8B0000;
+            font-size: 18px;
+        }
+        .order-card .order-id {
+            color: #BFA58A;
+            font-size: 12px;
+        }
+        .order-card .time {
+            color: #999;
+            font-size: 13px;
+        }
+        .order-card .customer-info {
+            font-size: 14px;
+            color: #5D4037;
+            margin-bottom: 6px;
+        }
+        .order-card .items-list {
+            margin: 6px 0 8px;
+            background: #FDF8F3;
+            border-radius: 12px;
+            padding: 8px 14px;
+        }
+        .order-card .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 13px;
+            color: #3E2723;
+            border-bottom: 1px solid #F0E8E0;
+        }
+        .order-card .item-row:last-child { border-bottom: none; }
+        .order-card .item-row .item-name { font-weight: 500; }
+        
+        .order-card .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .order-card .total {
+            font-weight: 700;
+            color: #8B0000;
+            font-size: 17px;
+        }
+        .order-card .status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+        .order-card .status.waiting { background: #FFF3E0; color: #E65100; }
+        .order-card .status.done { background: #E8F5E9; color: #2E7D32; }
+        .order-card .status.cancelled { background: #FFEBEE; color: #D32F2F; }
+        
+        .order-card .actions {
+            display: flex;
+            gap: 6px;
+        }
+        .order-card .actions button {
+            border: none;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .order-card .actions button:active { transform: scale(0.95); }
+        .order-card .actions .confirm-btn { background: #2E7D32; }
+        .order-card .actions .cancel-btn { background: #D32F2F; }
+        
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .controls button {
+            background: #8B0000;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .controls button:active { transform: scale(0.97); }
+        .controls button.secondary { background: #8D6E63; }
+        .controls .auto-refresh {
+            font-size: 13px;
+            color: #8D6E63;
+            margin-left: auto;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2E7D32;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 100;
+        }
+        .toast.show { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 40px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        
+        .tech-break-status {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 16px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        .tech-break-status.active {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+        .tech-break-status.inactive {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .romantic-label {
+            color: #E91E63;
+            font-size: 10px;
+            font-weight: 700;
+            background: #FCE4EC;
+            padding: 1px 10px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        
+        @media (max-width: 500px) {
+            .menu-grid-admin { grid-template-columns: 1fr; }
+            .order-card .header { flex-direction: column; align-items: flex-start; }
+            .controls .auto-refresh { margin-left: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            📋 Админка
+            <small>— управление</small>
+            <span class="tech-break-status" id="techBreakStatus">✅ Работает</span>
+        </h1>
+        
+        <!-- ============================================================ -->
+        <!-- ===== УПРАВЛЕНИЕ ===== -->
+        <!-- ============================================================ -->
+        
+        <!-- Технический перерыв -->
+        <div class="control-card">
+            <div class="card-title">
+                🔧 Технический перерыв
+                <span class="badge off" id="techBreakBadge">Выключен</span>
+            </div>
+            <button class="toggle-btn off" id="techBreakBtn">⏸️ Включить перерыв</button>
+            <p style="margin-top:8px; font-size:13px; color:#8D6E63;">
+                При включении клиенты не смогут делать заказы. Увидят сообщение о перерыве.
+            </p>
+        </div>
+        
+        <!-- Управление меню -->
+        <div class="control-card">
+            <div class="card-title">
+                📋 Меню
+                <span style="font-size:13px; font-weight:400; color:#8D6E63;">— включить/выключить позиции</span>
+            </div>
+            <div class="menu-grid-admin" id="menuGrid">
+                <!-- Загружается из JavaScript -->
+            </div>
+        </div>
+        
+        <!-- ============================================================ -->
+        <!-- ===== СТАТИСТИКА ===== -->
+        <!-- ============================================================ -->
+        <div class="stats">
+            <div>
+                <span>Всего заказов</span>
+                <strong id="totalOrders">0</strong>
+            </div>
+            <div>
+                <span>За сегодня</span>
+                <strong id="todayOrders">0</strong>
+            </div>
+            <div>
+                <span>Активных</span>
+                <strong id="activeOrders">0</strong>
+            </div>
+            <div>
+                <span>Выручка</span>
+                <strong id="totalRevenue">0 ₽</strong>
+            </div>
+        </div>
+        
+        <!-- ============================================================ -->
+        <!-- ===== КНОПКИ УПРАВЛЕНИЯ ===== -->
+        <!-- ============================================================ -->
+        <div class="controls">
+            <button onclick="loadAll()">🔄 Обновить</button>
+            <button class="secondary" onclick="clearOrders()">🗑️ Очистить историю</button>
+            <span class="auto-refresh" onclick="toggleAutoRefresh()">
+                🔄 Автообновление: <span id="refreshStatus">вкл</span>
+            </span>
+        </div>
+        
+        <!-- ============================================================ -->
+        <!-- ===== СПИСОК ЗАКАЗОВ ===== -->
+        <!-- ============================================================ -->
+        <div id="ordersList">
+            <div class="empty">
+                <span style="font-size:48px; display:block; margin-bottom:12px;">📭</span>
+                Заказов пока нет
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let refreshInterval = null;
+        let isAutoRefresh = true;
+        
+        // ================================================================
+        // ===== ДАННЫЕ О МЕНЮ =====
+        // ================================================================
+        const MENU_ITEMS = [
+            { id: '9', name: '❤️ Для влюбленных', emoji: '❤️', romantic: true },
+            { id: '1', name: '🍫 Классика', emoji: '🍫' },
+            { id: '2', name: '🤍 Белый шоколад', emoji: '🤍' },
+            { id: '3', name: '💎 Тиффани', emoji: '💎' },
+            { id: '4', name: '🍌 Микс клубника-банан', emoji: '🍌' },
+            { id: '5', name: '🍌 Банан в шоколаде', emoji: '🍌' },
+            { id: '6', name: '🍋 Лимонад', emoji: '🍋' },
+            { id: '7', name: '🥤 Кока-Кола', emoji: '🥤' },
+            { id: '8', name: '🍺 Пиво', emoji: '🍺' }
+        ];
+        
+        let settings = { technicalBreak: false, menuItems: {} };
+        
+        // ================================================================
+        // ===== ЗАГРУЗКА НАСТРОЕК =====
+        // ================================================================
+        async function loadSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                settings = data;
+                updateUI();
+            } catch (e) {
+                console.error('Ошибка загрузки настроек:', e);
+            }
+        }
+        
+        // ================================================================
+        // ===== ОБНОВЛЕНИЕ UI =====
+        // ================================================================
+        function updateUI() {
+            // Технический перерыв
+            const isBreak = settings.technicalBreak;
+            const breakBtn = document.getElementById('techBreakBtn');
+            const breakBadge = document.getElementById('techBreakBadge');
+            const breakStatus = document.getElementById('techBreakStatus');
+            
+            if (isBreak) {
+                breakBtn.textContent = '▶️ Выключить перерыв';
+                breakBtn.className = 'toggle-btn on';
+                breakBadge.textContent = 'Включен';
+                breakBadge.className = 'badge on';
+                breakStatus.textContent = '🔧 Технический перерыв';
+                breakStatus.className = 'tech-break-status active';
+            } else {
+                breakBtn.textContent = '⏸️ Включить перерыв';
+                breakBtn.className = 'toggle-btn off';
+                breakBadge.textContent = 'Выключен';
+                breakBadge.className = 'badge off';
+                breakStatus.textContent = '✅ Работает';
+                breakStatus.className = 'tech-break-status inactive';
+            }
+            
+            // Меню
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = MENU_ITEMS.map(item => {
+                const available = settings.menuItems[item.id] !== false;
+                const isRomantic = item.romantic || false;
+                const romanticClass = isRomantic ? 'romantic' : '';
+                
+                return `
+                    <div class="menu-item-admin ${romanticClass}">
+                        <span class="item-name">
+                            ${item.name}
+                            ${isRomantic ? '<span class="romantic-label">❤️ Романтика</span>' : ''}
+                            <span class="item-status ${available ? 'available' : 'unavailable'}">
+                                ${available ? '✅' : '❌'}
+                            </span>
+                        </span>
+                        <button class="menu-toggle-btn ${available ? 'on' : 'off'} ${romanticClass}" 
+                                onclick="toggleMenuItem('${item.id}')">
+                            ${available ? 'Доступно' : 'Скрыто'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // ================================================================
+        // ===== УПРАВЛЕНИЕ =====
+        // ================================================================
+        
+        // Технический перерыв
+        document.getElementById('techBreakBtn').addEventListener('click', async function() {
+            const newState = !settings.technicalBreak;
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ technicalBreak: newState })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    settings = data.settings;
+                    updateUI();
+                    showToast(newState ? '🔧 Технический перерыв включен!' : '✅ Технический перерыв выключен!');
+                }
+            } catch (e) {
+                showToast('❌ Ошибка');
+            }
+        });
+        
+        // Переключение позиции меню
+        async function toggleMenuItem(itemId) {
+            const newState = settings.menuItems[itemId] === false ? true : false;
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        menuItems: { [itemId]: newState }
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    settings = data.settings;
+                    updateUI();
+                    const item = MENU_ITEMS.find(i => i.id === itemId);
+                    showToast(`${newState ? '✅' : '❌'} ${item.name}: ${newState ? 'доступно' : 'скрыто'}`);
+                }
+            } catch (e) {
+                showToast('❌ Ошибка');
+            }
+        }
+        
+        // ================================================================
+        // ===== ЗАГРУЗКА ЗАКАЗОВ =====
+        // ================================================================
+        async function loadOrders() {
+            try {
+                const response = await fetch('/api/orders');
+                const orders = await response.json();
+                updateStats(orders);
+                renderOrders(orders);
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+            }
+        }
+        
+        async function loadAll() {
+            await loadSettings();
+            await loadOrders();
+        }
+        
+        // ================================================================
+        // ===== СТАТИСТИКА =====
+        // ================================================================
+        function updateStats(orders) {
+            const total = orders.length;
+            document.getElementById('totalOrders').textContent = total;
+            
+            const today = new Date().toDateString();
+            const todayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === today);
+            document.getElementById('todayOrders').textContent = todayOrders.length;
+            
+            const active = orders.filter(o => o.status === 'ожидает');
+            document.getElementById('activeOrders').textContent = active.length;
+            
+            let totalRevenue = 0;
+            orders.forEach(order => {
+                if (order.items) {
+                    order.items.forEach(item => {
+                        totalRevenue += (item.price || 0) * (item.quantity || 0);
+                    });
+                }
+            });
+            document.getElementById('totalRevenue').textContent = totalRevenue + ' ₽';
+        }
+        
+        // ================================================================
+        // ===== ОТОБРАЖЕНИЕ ЗАКАЗОВ =====
+        // ================================================================
+        function renderOrders(orders) {
+            const list = document.getElementById('ordersList');
+            
+            if (orders.length === 0) {
+                list.innerHTML = `
+                    <div class="empty">
+                        <span style="font-size:48px; display:block; margin-bottom:12px;">📭</span>
+                        Заказов пока нет
+                    </div>
+                `;
+                return;
+            }
+            
+            const sorted = [...orders].reverse();
+            
+            list.innerHTML = sorted.map(order => {
+                const itemsHtml = order.items && order.items.length > 0 
+                    ? order.items.map(item => {
+                        const isRomantic = item.name && item.name.includes('❤️');
+                        const nameDisplay = isRomantic ? item.name : item.name;
+                        return `
+                            <div class="item-row">
+                                <span class="item-name">${nameDisplay} ${isRomantic ? '❤️' : ''} ×${item.quantity}</span>
+                                <span>${(item.price || 0) * (item.quantity || 1)} ₽</span>
+                            </div>
+                        `;
+                    }).join('')
+                    : '<div style="color:#BFA58A; font-size:13px; padding:4px 0;">Нет товаров</div>';
+                
+                const total = order.total || order.items?.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0) || 0;
+                
+                let statusClass = 'waiting';
+                let statusText = order.status || 'ожидает';
+                if (statusText === 'выполнен') { statusClass = 'done'; }
+                if (statusText === 'отменен' || statusText === 'отменен (таймаут)') { statusClass = 'cancelled'; }
+                
+                let actionsHtml = '';
+                if (order.status === 'ожидает') {
+                    actionsHtml = `
+                        <div class="actions">
+                            <button class="confirm-btn" onclick="confirmOrder(${order.id}, '${order.confirmCode}')">✅ Доставлено</button>
+                            <button class="cancel-btn" onclick="cancelOrder(${order.id})">❌ Отменить</button>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="order-card">
+                        <div class="header">
+                            <div>
+                                <span class="bungalow">🏠 Бунгало #${order.bungalow || '?'}</span>
+                                <span class="order-id">#${order.id || '---'}</span>
+                                ${order.confirmCode ? `<span style="background:#FFE8E0; padding:2px 12px; border-radius:12px; font-size:13px; font-weight:700; color:#8B0000; margin-left:8px;">🔑 ${order.confirmCode}</span>` : ''}
+                            </div>
+                            <span class="time">${order.createdAt ? new Date(order.createdAt).toLocaleString() : '---'}</span>
+                        </div>
+                        
+                        ${order.customerName || order.customerPhone ? `
+                            <div class="customer-info">
+                                ${order.customerName ? `👤 ${order.customerName}` : ''}
+                                ${order.customerPhone ? `&nbsp;&nbsp; 📞 ${order.customerPhone}` : ''}
+                                ${order.paymentLabel ? `&nbsp;&nbsp; 💳 ${order.paymentLabel}` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="items-list">
+                            ${itemsHtml}
+                        </div>
+                        
+                        <div class="footer">
+                            <span class="total">💰 ${total} ₽</span>
+                            <span class="status ${statusClass}">${statusText}</span>
+                            ${actionsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // ================================================================
+        // ===== ДЕЙСТВИЯ С ЗАКАЗАМИ =====
+        // ================================================================
+        async function confirmOrder(orderId, code) {
+            if (!confirm(`✅ Подтвердить доставку заказа #${orderId}?`)) return;
+            try {
+                const res = await fetch('/api/confirm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId, code })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('✅ Доставка подтверждена!');
+                    loadOrders();
+                } else {
+                    showToast('❌ ' + (data.error || 'Ошибка'));
+                }
+            } catch (e) {
+                showToast('❌ Ошибка');
+            }
+        }
+        
+        async function cancelOrder(orderId) {
+            if (!confirm(`❌ Отменить заказ #${orderId}?`)) return;
+            try {
+                const res = await fetch('/api/cancel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('❌ Заказ отменен');
+                    loadOrders();
+                }
+            } catch (e) {
+                showToast('❌ Ошибка');
+            }
+        }
+        
+        async function clearOrders() {
+            if (!confirm('🗑️ Удалить все заказы?')) return;
+            try {
+                const res = await fetch('/api/clear-orders', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('🗑️ История очищена');
+                    loadOrders();
+                }
+            } catch (e) {
+                showToast('❌ Ошибка очистки');
+            }
+        }
+        
+        // ================================================================
+        // ===== TOAST =====
+        // ================================================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // ================================================================
+        // ===== АВТООБНОВЛЕНИЕ =====
+        // ================================================================
+        function toggleAutoRefresh() {
+            if (isAutoRefresh) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+                isAutoRefresh = false;
+                document.getElementById('refreshStatus').textContent = 'выкл';
+                document.getElementById('refreshStatus').style.color = '#D32F2F';
+                showToast('⏸️ Автообновление выключено');
+            } else {
+                startAutoRefresh();
+                isAutoRefresh = true;
+                document.getElementById('refreshStatus').textContent = 'вкл';
+                document.getElementById('refreshStatus').style.color = '#2E7D32';
+                showToast('▶️ Автообновление включено');
+            }
+        }
+        
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(loadOrders, 10000);
+        }
+        
+        // ================================================================
+        // ===== ЗАПУСК =====
+        // ================================================================
+        document.getElementById('refreshStatus').addEventListener('click', toggleAutoRefresh);
+        
+        loadAll();
+        startAutoRefresh();
+        
+        console.log('📋 Админка с управлением загружена!');
+        console.log('❤️ Романтическая позиция "Для влюбленных" добавлена в управление!');
+    </script>
+</body>
+</html>
