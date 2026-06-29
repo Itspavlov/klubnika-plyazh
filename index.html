@@ -2075,7 +2075,7 @@
     <div class="notification" id="notification"></div>
 
     <!-- ===== ОВЕРЛЕЙ ===== -->
-    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
     <!-- ===== МОДАЛЬНОЕ ОКНО "ВВЕДИТЕ ДАННЫЕ" ===== -->
     <div class="auth-modal-overlay" id="authModal">
@@ -2315,7 +2315,7 @@
             <h2><i class="fas fa-shopping-cart"></i> Корзина</h2>
             <div>
                 <button class="clear-cart-btn" id="clearCart"><i class="fas fa-trash-can"></i> Очистить</button>
-                <button class="close-btn" id="closeCart">✕</button>
+                <button class="close-btn" id="closeCart" onclick="closeCart()">✕</button>
             </div>
         </div>
         <div class="cart-content">
@@ -2857,6 +2857,8 @@
             // Подсвечиваем вкладку
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabOrders').classList.add('active');
+            
+            document.body.style.overflow = 'hidden';
         }
 
         function closeOrdersModal() {
@@ -2864,6 +2866,8 @@
             // Возвращаем подсветку на меню
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabMenu').classList.add('active');
+            
+            document.body.style.overflow = '';
         }
 
         function loadMyOrders() {
@@ -3049,15 +3053,19 @@
         });
 
         // ================================================================
-        // ===== ФУНКЦИИ КОРЗИНЫ =====
+        // ===== КОРЗИНА =====
         // ================================================================
+
         function addToCart(item) {
+            console.log('📥 addToCart вызван с:', item);
+            
             const existing = state.cart.find(c =>
                 c.id === item.id && c.topping === item.topping
             );
 
             if (existing) {
                 existing.quantity += item.quantity || 1;
+                console.log('➕ Обновлен существующий товар:', existing);
             } else {
                 state.cart.push({
                     id: item.id,
@@ -3069,8 +3077,10 @@
                     toppingName: item.toppingName || '',
                     isRomantic: item.isRomantic || false
                 });
+                console.log('➕ Добавлен новый товар:', state.cart[state.cart.length - 1]);
             }
 
+            console.log('📊 Корзина сейчас:', state.cart);
             updateCart();
         }
 
@@ -3078,34 +3088,33 @@
             const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            // Обновляем бейджи
-            const cartBadge = document.getElementById('tabCartBadge');
-            const cartTotalBadge = document.getElementById('tabCartTotal');
-            const cartBadgeFloat = document.getElementById('cartBadge');
-            const cartTotalBadgeFloat = document.getElementById('cartTotalBadge');
+            console.log('🔄 Обновление корзины:', { totalItems, totalPrice });
 
-            if (cartBadge) {
+            // Обновляем бейджи в нижней панели
+            const tabCartBadge = document.getElementById('tabCartBadge');
+            const tabCartTotal = document.getElementById('tabCartTotal');
+            
+            if (tabCartBadge) {
                 if (totalItems > 0) {
-                    cartBadge.textContent = totalItems;
-                    cartBadge.classList.remove('hidden');
+                    tabCartBadge.textContent = totalItems;
+                    tabCartBadge.classList.remove('hidden');
                 } else {
-                    cartBadge.classList.add('hidden');
+                    tabCartBadge.classList.add('hidden');
                 }
             }
-
-            if (cartTotalBadge) {
-                cartTotalBadge.textContent = totalPrice + ' ₽';
+            
+            if (tabCartTotal) {
+                tabCartTotal.textContent = totalPrice + ' ₽';
             }
 
-            if (cartBadgeFloat) {
-                cartBadgeFloat.textContent = totalItems;
-            }
-
-            if (cartTotalBadgeFloat) {
-                cartTotalBadgeFloat.textContent = totalPrice + ' ₽';
-            }
-
-            cartTotal.textContent = totalPrice + ' ₽';
+            // Обновляем старые бейджи
+            const cartBadge = document.getElementById('cartBadge');
+            const cartTotalBadge = document.getElementById('cartTotalBadge');
+            
+            if (cartBadge) cartBadge.textContent = totalItems;
+            if (cartTotalBadge) cartTotalBadge.textContent = totalPrice + ' ₽';
+            
+            document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
 
             if (state.cart.length === 0) {
                 cartItems.innerHTML = `
@@ -3168,17 +3177,25 @@
 
             cartModal.classList.add('open');
             cartOverlay.classList.add('open');
-            // Подсвечиваем вкладку
+            
+            // Подсвечиваем вкладку корзины
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabCart').classList.add('active');
+            const cartTab = document.getElementById('tabCart');
+            if (cartTab) cartTab.classList.add('active');
+            
+            document.body.style.overflow = 'hidden';
         }
 
         function closeCart() {
             cartModal.classList.remove('open');
             cartOverlay.classList.remove('open');
+            
             // Возвращаем подсветку на меню
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabMenu').classList.add('active');
+            const menuTab = document.getElementById('tabMenu');
+            if (menuTab) menuTab.classList.add('active');
+            
+            document.body.style.overflow = '';
         }
 
         // ================================================================
@@ -3194,6 +3211,32 @@
                 closeOrdersModal();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        }
+
+        // ================================================================
+        // ===== СВАЙП ДЛЯ ЗАКРЫТИЯ =====
+        // ================================================================
+
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        function setupSwipeClose(modalElement, closeFunction) {
+            if (!modalElement) return;
+            
+            modalElement.addEventListener('touchstart', function(e) {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            modalElement.addEventListener('touchmove', function(e) {
+                touchEndY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            modalElement.addEventListener('touchend', function(e) {
+                const diff = touchEndY - touchStartY;
+                if (diff > 80) {
+                    closeFunction();
+                }
+            }, { passive: true });
         }
 
         // ================================================================
@@ -3365,7 +3408,6 @@
                 beachMode.style.display = 'none';
                 closedMode.style.display = 'none';
                 techBreakMode.style.display = 'block';
-                ordersFloatBtn.style.display = 'none';
                 document.getElementById('bottomTabBar').style.display = 'none';
                 showNotification('🔧 Технический перерыв! Скоро всё заработает.', 'error');
                 return;
@@ -3380,43 +3422,43 @@
                 beachMode.style.display = 'none';
                 closedMode.style.display = 'block';
                 techBreakMode.style.display = 'none';
-                ordersFloatBtn.style.display = 'none';
                 document.getElementById('bottomTabBar').style.display = 'none';
                 showNotification('🔒 Прием заказов с 9:00 до 1:00 ночи (МСК)', 'error');
                 return;
             }
 
             if (bungaloNumber) {
-    console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
-    document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
-    bungaloMode.style.display = 'block';
-    beachMode.style.display = 'none';
-    closedMode.style.display = 'none';
-    techBreakMode.style.display = 'none';
-    document.getElementById('bottomTabBar').style.display = 'flex';
-    window.bungaloNumber = bungaloNumber;
+                console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
+                document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
+                bungaloMode.style.display = 'block';
+                beachMode.style.display = 'none';
+                closedMode.style.display = 'none';
+                techBreakMode.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
+                window.bungaloNumber = bungaloNumber;
 
-    renderMenu(settings || state.settings);
-    initCart();
+                renderMenu(settings || state.settings);
+                initCart();
 
-    setTimeout(updateOrdersBadge, 1000);
+                setTimeout(updateOrdersBadge, 1000);
 
-    customerPhone.addEventListener('input', function() {
-        if (this.value.trim().length >= 5) {
-            updateOrdersBadge();
-        }
-    });
+                customerPhone.addEventListener('input', function() {
+                    if (this.value.trim().length >= 5) {
+                        updateOrdersBadge();
+                    }
+                });
 
-} else {
-    console.log('🏖️ Клиент на пляже');
-    bungaloMode.style.display = 'none';
-    beachMode.style.display = 'block';
-    closedMode.style.display = 'none';
-    techBreakMode.style.display = 'none';
-    document.getElementById('bottomTabBar').style.display = 'flex';
-    document.getElementById('beachLandmarkText').textContent = `Наш киоск: ${MY_LOCATION.landmark}`;
-    showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
-}
+            } else {
+                console.log('🏖️ Клиент на пляже');
+                bungaloMode.style.display = 'none';
+                beachMode.style.display = 'block';
+                closedMode.style.display = 'none';
+                techBreakMode.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
+                document.getElementById('beachLandmarkText').textContent = `Наш киоск: ${MY_LOCATION.landmark}`;
+                showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
+            }
+
             setInterval(function() {
                 const timeDisplay = document.getElementById('currentTimeDisplay');
                 if (timeDisplay) {
@@ -3424,81 +3466,98 @@
                     timeDisplay.textContent = formatTime(now);
                 }
             }, 60000);
+
+            // Настройка свайпа
+            setTimeout(function() {
+                const cartModalEl = document.getElementById('cartModal');
+                const ordersModalEl = document.getElementById('ordersModal');
+                
+                if (cartModalEl) {
+                    setupSwipeClose(cartModalEl, closeCart);
+                }
+                if (ordersModalEl) {
+                    setupSwipeClose(ordersModalEl, closeOrdersModal);
+                }
+            }, 500);
         }
 
-        // ================================================================
-        // ===== ИНИЦИАЛИЗАЦИЯ КОРЗИНЫ =====
-        // ================================================================
-        function initCart() {
-            cartFloatBtn.addEventListener('click', openCart);
-            closeCartBtn.addEventListener('click', closeCart);
-            cartOverlay.addEventListener('click', closeCart);
-
-            confirmToppingBtn.addEventListener('click', function() {
-                if (!state.selectedProduct || !state.selectedTopping) {
-                    showNotification('⚠️ Выберите присыпку!', 'error');
-                    return;
-                }
-
-                const product = state.selectedProduct;
-                const topping = state.selectedTopping;
-
-                let finalPrice = product.price;
-                let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
-                let quantity = 1;
-
-                if (product.isRomantic) {
-                    quantity = 2;
-                    finalPrice = product.price;
-                } else {
-                    finalPrice = product.price + topping.price;
-                }
-
-                const itemName = product.isRomantic ?
-                    `${product.name}` :
-                    `${product.name}${toppingText}`;
-
-                addToCart({
-                    id: product.id,
-                    name: itemName,
-                    price: finalPrice,
-                    quantity: quantity,
-                    category: product.category,
-                    topping: topping.id,
-                    toppingName: topping.name,
-                    isRomantic: product.isRomantic || false
-                });
-
-                closeToppingModal();
-
-                if (product.isRomantic) {
-                    showNotification(`❤️ ${product.name} добавлен! 2 стаканчика с присыпкой ${topping.name === 'Без присыпки' ? 'без присыпки' : topping.name}`);
-                } else {
-                    showNotification(`✅ ${product.name}${toppingText} добавлен!`);
-                }
-            });
-
-            clearCartBtn.addEventListener('click', function() {
-                if (state.cart.length === 0) return;
-                if (!confirm('🗑️ Очистить всю корзину?')) return;
-                state.cart = [];
-                updateCart();
-                showNotification('🗑️ Корзина очищена');
-            });
-
-            orderButton.addEventListener('click', submitOrder);
-            updateCart();
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeOrdersModal();
-                    closeImageModal();
-                    closeToppingModal();
-                    closeCart();
-                }
-            });
+       function initCart() {
+    // cartFloatBtn больше не существует — используем нижнюю панель
+    // closeCartBtn тоже не нужен — закрываем через крестик в модалке
+    
+    // === КНОПКА "ДОБАВИТЬ В КОРЗИНУ" (в модалке присыпок) ===
+    confirmToppingBtn.addEventListener('click', function() {
+        console.log('🛒 confirmToppingBtn нажат');
+        
+        if (!state.selectedProduct) {
+            showNotification('⚠️ Товар не выбран!', 'error');
+            return;
+        }
+        
+        if (!state.selectedTopping) {
+            showNotification('⚠️ Выберите присыпку!', 'error');
+            return;
         }
 
+        const product = state.selectedProduct;
+        const topping = state.selectedTopping;
+
+        console.log('📦 Товар:', product);
+        console.log('📦 Присыпка:', topping);
+
+        let finalPrice = product.price;
+        let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
+        let quantity = 1;
+
+        if (product.isRomantic) {
+            quantity = 2;
+            finalPrice = product.price;
+        } else {
+            finalPrice = product.price + topping.price;
+        }
+
+        const itemName = product.isRomantic ?
+            `${product.name}` :
+            `${product.name}${toppingText}`;
+
+        const cartItem = {
+            id: product.id,
+            name: itemName,
+            price: finalPrice,
+            quantity: quantity,
+            category: product.category,
+            topping: topping.id,
+            toppingName: topping.name,
+            isRomantic: product.isRomantic || false
+        };
+
+        console.log('📦 Добавляем в корзину:', cartItem);
+
+        addToCart(cartItem);
+        closeToppingModal();
+
+        if (product.isRomantic) {
+            showNotification(`❤️ ${product.name} добавлен! 2 стаканчика с присыпкой ${topping.name === 'Без присыпки' ? 'без присыпки' : topping.name}`);
+        } else {
+            showNotification(`✅ ${product.name}${toppingText} добавлен!`);
+        }
+    });
+
+    // === ОЧИСТКА КОРЗИНЫ ===
+    clearCartBtn.addEventListener('click', function() {
+        if (state.cart.length === 0) return;
+        if (!confirm('🗑️ Очистить всю корзину?')) return;
+        state.cart = [];
+        updateCart();
+        showNotification('🗑️ Корзина очищена');
+    });
+
+    // === ЗАКАЗ ===
+    orderButton.addEventListener('click', submitOrder);
+    
+    // === ОБНОВЛЯЕМ КОРЗИНУ ===
+    updateCart();
+}
         // ================================================================
         // ===== ЗАПУСК =====
         // ================================================================
@@ -3517,6 +3576,8 @@
         console.log(`🎨 Все эмодзи заменены на иконки Font Awesome!`);
         console.log(`🖼️ У клубники (стаканчиков) теперь картинки!`);
         console.log(`📱 Добавлена нижняя панель (Tab Bar) как в мобильных приложениях!`);
+        console.log(`🔄 Добавлен свайп вниз для закрытия корзины и заказов!`);
+        console.log(`📦 Исправлено добавление в корзину после выбора присыпки!`);
     </script>
 
 </body>
