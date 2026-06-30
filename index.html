@@ -2512,8 +2512,7 @@
         // ================================================================
         // ===== УПРАВЛЕНИЕ СЕССИЕЙ (30 СЕКУНД ДЛЯ ТЕСТА) =====
         // ================================================================
-
-        const SESSION_DURATION = 30 * 1000; // 30 СЕКУНД ДЛЯ ТЕСТА ⏱️
+const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 часов
         let sessionCheckInterval = null;
 
         function getBungaloNumber() {
@@ -2640,26 +2639,24 @@
                 window.location.reload();
             }, 300);
         }
-
-        // Запускаем фоновую проверку каждые 5 секунд (для теста)
-        function startSessionCheck() {
-            if (sessionCheckInterval) {
-                clearInterval(sessionCheckInterval);
-            }
-            
-            sessionCheckInterval = setInterval(() => {
-                const bungaloNumber = getBungaloNumber();
-                if (bungaloNumber) {
-                    const session = getSession();
-                    if (session) {
-                        const timePassed = Date.now() - session.lastRefresh;
-                        if (timePassed > SESSION_DURATION) {
-                            showBeachMode();
-                        }
-                    }
+function startSessionCheck() {
+    if (sessionCheckInterval) {
+        clearInterval(sessionCheckInterval);
+    }
+    
+    sessionCheckInterval = setInterval(() => {
+        const bungaloNumber = getBungaloNumber();
+        if (bungaloNumber) {
+            const session = getSession();
+            if (session) {
+                const timePassed = Date.now() - session.lastRefresh;
+                if (timePassed > SESSION_DURATION) {
+                    showBeachMode();
                 }
-            }, 5000); // Проверяем каждые 5 секунд
+            }
         }
+    }, 60000); // Проверяем каждую минуту
+}
 
         // ================================================================
         // ===== НАСТРОЙКИ =====
