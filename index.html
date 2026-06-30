@@ -2576,40 +2576,43 @@
         }
 
         function checkAndShowBeachMode() {
-            const bungaloNumber = getBungaloNumber();
-            
-            // Если нет бунгало - показываем beachMode
-            if (!bungaloNumber) {
-                showBeachMode();
-                return true;
-            }
-            
-            const session = getSession();
-            
-            // Первый запуск - создаем сессию
-            if (!session) {
-                const newSession = {
-                    bungalo: bungaloNumber,
-                    lastRefresh: Date.now()
-                };
-                saveSession(newSession);
-                hideBeachMode();
-                return false;
-            }
-            
-            // Проверяем, прошло ли время
-            const timePassed = Date.now() - session.lastRefresh;
-            
-            if (timePassed > SESSION_DURATION) {
-                // Прошло время - показываем beachMode
-                showBeachMode();
-                return true;
-            }
-            
-            // Сессия активна
-            hideBeachMode();
-            return false;
-        }
+    const bungaloNumber = getBungaloNumber();
+    
+    // Если нет бунгало - показываем beachMode
+    if (!bungaloNumber) {
+        showBeachMode();
+        return true;
+    }
+    
+    const session = getSession();
+    
+    // Первый запуск - создаем сессию
+    if (!session) {
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+        hideBeachMode();
+        return false;
+    }
+    
+    // Проверяем, прошло ли время
+    const timePassed = Date.now() - session.lastRefresh;
+    
+    if (timePassed > SESSION_DURATION) {
+        // Время прошло, но пользователь перешел по ссылке - обновляем сессию!
+        session.lastRefresh = Date.now();
+        saveSession(session);
+        hideBeachMode();
+        showNotification('✅ Доступ обновлен! Добро пожаловать!');
+        return false;
+    }
+    
+    // Сессия активна
+    hideBeachMode();
+    return false;
+}
 
         function refreshSession() {
             const bungaloNumber = getBungaloNumber();
