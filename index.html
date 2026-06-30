@@ -567,7 +567,7 @@
         /* ============================================================ */
         .beach-message {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px 20px;
             background: linear-gradient(135deg, #FFF8F0, #FFEDD8);
             border-radius: var(--radius);
             border: 2px dashed #E8C9A0;
@@ -589,6 +589,25 @@
             margin-bottom: 8px;
         }
 
+        .beach-message h2 i {
+            color: #E91E63;
+        }
+
+        .beach-message .bungalo-info-beach {
+            display: inline-block;
+            background: rgba(212, 56, 13, 0.08);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .beach-message .bungalo-info-beach i {
+            margin-right: 6px;
+        }
+
         .beach-message p {
             color: var(--text-muted);
             font-size: 15px;
@@ -596,8 +615,43 @@
             line-height: 1.6;
         }
 
+        .beach-message .beach-heart {
+            color: #E91E63;
+            font-size: 18px;
+            margin: 0 4px;
+        }
+
+        .beach-message .beach-distance {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #FFFFFF;
+            border-radius: 12px;
+            margin: 12px auto 16px;
+            max-width: 280px;
+            border: 1px solid #FFE0B2;
+        }
+
+        .beach-message .beach-distance i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .beach-message .beach-distance span {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+
+        .beach-message .beach-distance .heart-icon {
+            color: #E91E63;
+            font-size: 20px;
+        }
+
         .beach-message .map-btn-top {
-            margin-top: 16px;
+            margin-top: 8px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
@@ -607,6 +661,18 @@
 
         .beach-message .map-btn-top:active {
             background: var(--primary-dark);
+        }
+
+        .beach-message .btn-scan-beach {
+            background: linear-gradient(135deg, #006064, #004D50);
+            color: #FFFFFF;
+            border: none;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 96, 100, 0.25);
+        }
+
+        .beach-message .btn-scan-beach:active {
+            background: #004D50;
         }
 
         .beach-note {
@@ -622,6 +688,42 @@
             border: 1px dashed #FFE0B2;
             max-width: 300px;
             margin: 14px auto 0;
+        }
+
+        .beach-note i {
+            color: var(--primary-light);
+        }
+
+        .beach-instructions {
+            text-align: left;
+            background: #E3F2FD;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 12px 0 8px;
+            border: 1px solid #90CAF9;
+        }
+
+        .beach-instructions .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #0D47A1;
+            padding: 4px 0;
+        }
+
+        .beach-instructions .step .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: #0D47A1;
+            color: #FFFFFF;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
         /* ============================================================ */
@@ -1443,7 +1545,6 @@
             box-shadow: none;
         }
 
-        /* Шаурма отдельный стиль */
         .drink-item.shaurma {
             background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
             border-color: #FF8F00;
@@ -2028,6 +2129,9 @@
             .badge { font-size: 7px; padding: 1px 8px; right: 65px; }
             .badge i { font-size: 7px; }
             .drink-item.shaurma { margin-bottom: 0px; }
+            .beach-message h2 { font-size: 20px; }
+            .beach-message .beach-distance { font-size: 13px; padding: 8px 12px; }
+            .beach-instructions .step { font-size: 12px; }
         }
 
         @media (max-width: 380px) {
@@ -2041,7 +2145,9 @@
             .cart-item .item-actions button { width: 24px; height: 24px; font-size: 12px; }
             .cart-item .item-actions .qty-btn-remove { width: 22px; height: 22px; font-size: 10px; }
             .bungalo-display .number { font-size: 28px; }
-            .beach-message h2 { font-size: 20px; }
+            .beach-message h2 { font-size: 18px; }
+            .beach-message .beach-distance { font-size: 12px; padding: 6px 10px; }
+            .beach-message .beach-distance i { font-size: 18px; }
             .topping-option .option-name { font-size: 13px; }
             .topping-option .option-icon { font-size: 20px; }
             .drink-item .drink-icon { width: 30px; height: 30px; margin-right: 8px; }
@@ -2066,6 +2172,8 @@
             .badge { font-size: 6px; padding: 1px 6px; right: 55px; }
             .badge i { font-size: 6px; }
             .drink-item.shaurma { margin-bottom: 0px; }
+            .beach-instructions .step { font-size: 11px; }
+            .beach-instructions .step .step-num { width: 18px; height: 18px; font-size: 9px; }
         }
     </style>
 </head>
@@ -2201,22 +2309,60 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- ===== БЛОК ДЛЯ ПЛЯЖА (НЕТ БУНГАЛО) ===== -->
+        <!-- ===== БЛОК ДЛЯ ПЛЯЖА (НЕТ БУНГАЛО ИЛИ СЕССИЯ ИСТЕКЛА) ===== -->
         <!-- ============================================================ -->
         <div id="beachMode" style="display:none;">
             <div class="beach-message">
-                <span class="beach-icon">🏖️</span>
-                <h2>Вы не в бунгало</h2>
-                <p>Доставка работает только для гостей бунгало.</p>
-                <p><strong>Вернитесь в бунгало</strong> или <strong>подойдите к нашему киоску</strong>!</p>
+                <span class="beach-icon">🍓</span>
+                
+                <div class="bungalo-info-beach" id="beachBungaloInfo">
+                    <i class="fas fa-home"></i> Бунгало #<span id="beachBungaloNumber">-</span>
+                </div>
+                
+                <h2>
+                    <i class="fas fa-heart beach-heart"></i>
+                    Доставка только в бунгало
+                    <i class="fas fa-heart beach-heart"></i>
+                </h2>
+                
+                <p>Вы можете найти наш киоск на карте</p>
+                <p style="font-size:14px; color:#8D6E63; margin-top:2px;">Мы рядом с вами ❤️</p>
+                
+                <div class="beach-distance">
+                    <i class="fas fa-location-dot"></i>
+                    <span>Киоск в 100 метрах</span>
+                    <span class="heart-icon">❤️</span>
+                </div>
+
                 <button class="map-btn-top" onclick="openMap()">
                     <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                     Показать на карте
                     <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                 </button>
+
+                <div style="margin-top:12px; padding-top:12px; border-top: 1px dashed #E8C9A0;">
+                    <p style="font-size:13px; color:#8D6E63; margin-bottom:8px;">
+                        <i class="fas fa-qrcode"></i> Чтобы сделать заказ:
+                    </p>
+                    <div class="beach-instructions">
+                        <div class="step">
+                            <span class="step-num">1</span>
+                            <span>Откройте камеру телефона</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">2</span>
+                            <span>Наведите на QR-код в бунгало</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">3</span>
+                            <span>Перейдите по ссылке</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="beach-note">
-                    <span><i class="fas fa-location-dot"></i></span>
-                    <span id="beachLandmarkText">Наш киоск: 100 м от бунгало, у деревянного пирса</span>
+                    <span><i class="fas fa-clock"></i></span>
+                    <span>Работаем 9:00 — 1:00 (МСК)</span>
                 </div>
             </div>
         </div>
@@ -2364,6 +2510,155 @@
     <!-- ============================================================ -->
     <script>
         // ================================================================
+        // ===== УПРАВЛЕНИЕ СЕССИЕЙ (30 СЕКУНД ДЛЯ ТЕСТА) =====
+        // ================================================================
+
+        const SESSION_DURATION = 30 * 1000; // 30 СЕКУНД ДЛЯ ТЕСТА ⏱️
+        let sessionCheckInterval = null;
+
+        function getBungaloNumber() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const b = urlParams.get('b');
+            if (b && !isNaN(b) && parseInt(b) > 0) {
+                return parseInt(b);
+            }
+            return null;
+        }
+
+        function getSessionKey() {
+            const b = getBungaloNumber();
+            if (!b) return null;
+            return `qr_session_${b}`;
+        }
+
+        function getSession() {
+            const key = getSessionKey();
+            if (!key) return null;
+            try {
+                const data = localStorage.getItem(key);
+                if (!data) return null;
+                return JSON.parse(data);
+            } catch {
+                return null;
+            }
+        }
+
+        function saveSession(data) {
+            const key = getSessionKey();
+            if (!key) return;
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function showBeachMode() {
+            const beachMode = document.getElementById('beachMode');
+            const bungaloMode = document.getElementById('bungaloMode');
+            
+            bungaloMode.style.display = 'none';
+            beachMode.style.display = 'block';
+            
+            // Обновляем текст в beachMode
+            const bungaloNumber = getBungaloNumber();
+            const beachBungaloNumber = document.getElementById('beachBungaloNumber');
+            
+            if (bungaloNumber) {
+                document.getElementById('beachBungaloInfo').style.display = 'inline-block';
+                beachBungaloNumber.textContent = bungaloNumber;
+            } else {
+                document.getElementById('beachBungaloInfo').style.display = 'none';
+            }
+            
+            document.getElementById('bottomTabBar').style.display = 'flex';
+        }
+
+        function hideBeachMode() {
+            document.getElementById('beachMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'block';
+        }
+
+        function checkAndShowBeachMode() {
+            const bungaloNumber = getBungaloNumber();
+            
+            // Если нет бунгало - показываем beachMode
+            if (!bungaloNumber) {
+                showBeachMode();
+                return true;
+            }
+            
+            const session = getSession();
+            
+            // Первый запуск - создаем сессию
+            if (!session) {
+                const newSession = {
+                    bungalo: bungaloNumber,
+                    lastRefresh: Date.now()
+                };
+                saveSession(newSession);
+                hideBeachMode();
+                return false;
+            }
+            
+            // Проверяем, прошло ли время
+            const timePassed = Date.now() - session.lastRefresh;
+            
+            if (timePassed > SESSION_DURATION) {
+                // Прошло время - показываем beachMode
+                showBeachMode();
+                return true;
+            }
+            
+            // Сессия активна
+            hideBeachMode();
+            return false;
+        }
+
+        function refreshSession() {
+            const bungaloNumber = getBungaloNumber();
+            if (!bungaloNumber) {
+                showNotification('⚠️ Номер бунгало не найден!', 'error');
+                return;
+            }
+            
+            const session = getSession();
+            if (session) {
+                session.lastRefresh = Date.now();
+                saveSession(session);
+            } else {
+                saveSession({
+                    bungalo: bungaloNumber,
+                    lastRefresh: Date.now()
+                });
+            }
+            
+            hideBeachMode();
+            showNotification('✅ Доступ обновлен!');
+            
+            // Перезагружаем страницу для обновления
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+
+        // Запускаем фоновую проверку каждые 5 секунд (для теста)
+        function startSessionCheck() {
+            if (sessionCheckInterval) {
+                clearInterval(sessionCheckInterval);
+            }
+            
+            sessionCheckInterval = setInterval(() => {
+                const bungaloNumber = getBungaloNumber();
+                if (bungaloNumber) {
+                    const session = getSession();
+                    if (session) {
+                        const timePassed = Date.now() - session.lastRefresh;
+                        if (timePassed > SESSION_DURATION) {
+                            showBeachMode();
+                        }
+                    }
+                }
+            }, 5000); // Проверяем каждые 5 секунд
+        }
+
+        // ================================================================
         // ===== НАСТРОЙКИ =====
         // ================================================================
         const MY_LOCATION = {
@@ -2491,18 +2786,6 @@
             { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut', price: 25 },
             { id: 'gold', name: 'Золотая пыль', icon: 'fas fa-star', price: 50 }
         ];
-
-        // ================================================================
-        // ===== QR-КОД ЛОГИКА =====
-        // ================================================================
-        function getBungaloNumber() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const b = urlParams.get('b');
-            if (b && !isNaN(b) && parseInt(b) > 0) {
-                return parseInt(b);
-            }
-            return null;
-        }
 
         // ================================================================
         // ===== СОСТОЯНИЕ =====
@@ -2792,8 +3075,6 @@
         // ================================================================
         const cartItems = document.getElementById('cartItems');
         const cartTotal = document.getElementById('cartTotal');
-        const cartBadge = document.getElementById('cartBadge');
-        const cartTotalBadge = document.getElementById('cartTotalBadge');
         const orderButton = document.getElementById('orderButton');
         const customerName = document.getElementById('customerName');
         const customerPhone = document.getElementById('customerPhone');
@@ -2801,8 +3082,6 @@
         const clearCartBtn = document.getElementById('clearCart');
         const cartModal = document.getElementById('cartModal');
         const cartOverlay = document.getElementById('cartOverlay');
-        const cartFloatBtn = document.getElementById('cartFloatBtn');
-        const closeCartBtn = document.getElementById('closeCart');
 
         const toppingModal = document.getElementById('toppingModal');
         const toppingOptions = document.getElementById('toppingOptions');
@@ -2818,8 +3097,6 @@
         const ordersModal = document.getElementById('ordersModal');
         const ordersContent = document.getElementById('ordersContent');
         const ordersPhoneInput = document.getElementById('ordersPhoneInput');
-        const ordersBadge = document.getElementById('ordersBadge');
-        const ordersFloatBtn = document.getElementById('ordersFloatBtn');
 
         // ================================================================
         // ===== ФУНКЦИИ УВЕЛИЧЕНИЯ КАРТИНКИ =====
@@ -2854,7 +3131,6 @@
             if (customerPhone.value) {
                 loadMyOrders();
             }
-            // Подсвечиваем вкладку
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabOrders').classList.add('active');
             
@@ -2863,7 +3139,6 @@
 
         function closeOrdersModal() {
             ordersModal.classList.remove('open');
-            // Возвращаем подсветку на меню
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabMenu').classList.add('active');
             
@@ -3090,7 +3365,6 @@
 
             console.log('🔄 Обновление корзины:', { totalItems, totalPrice });
 
-            // Обновляем бейджи в нижней панели
             const tabCartBadge = document.getElementById('tabCartBadge');
             const tabCartTotal = document.getElementById('tabCartTotal');
             
@@ -3107,13 +3381,6 @@
                 tabCartTotal.textContent = totalPrice + ' ₽';
             }
 
-            // Обновляем старые бейджи
-            const cartBadge = document.getElementById('cartBadge');
-            const cartTotalBadge = document.getElementById('cartTotalBadge');
-            
-            if (cartBadge) cartBadge.textContent = totalItems;
-            if (cartTotalBadge) cartTotalBadge.textContent = totalPrice + ' ₽';
-            
             document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
 
             if (state.cart.length === 0) {
@@ -3178,7 +3445,6 @@
             cartModal.classList.add('open');
             cartOverlay.classList.add('open');
             
-            // Подсвечиваем вкладку корзины
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             const cartTab = document.getElementById('tabCart');
             if (cartTab) cartTab.classList.add('active');
@@ -3190,7 +3456,6 @@
             cartModal.classList.remove('open');
             cartOverlay.classList.remove('open');
             
-            // Возвращаем подсветку на меню
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             const menuTab = document.getElementById('tabMenu');
             if (menuTab) menuTab.classList.add('active');
@@ -3360,7 +3625,7 @@
                                 </iframe>
                             </div>
                             <div class="map-hint">
-                                <i class="fas fa-home"></i> <strong>Ориентир:</strong> ${MY_LOCATION.landmark}
+                                <i class="fas fa-heart" style="color:#E91E63;"></i> <strong>Ориентир:</strong> ${MY_LOCATION.landmark}
                                 <br><i class="fas fa-phone"></i> <strong>Телефон:</strong> ${MY_LOCATION.phone}
                             </div>
                         </div>
@@ -3394,6 +3659,21 @@
         // ================================================================
         async function init() {
             updateOnlineStatus();
+
+            // Проверяем сессию
+            const showBeach = checkAndShowBeachMode();
+            
+            // Если показан beachMode - не грузим меню
+            if (showBeach) {
+                document.getElementById('bungaloMode').style.display = 'none';
+                document.getElementById('closedMode').style.display = 'none';
+                document.getElementById('techBreakMode').style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
+                
+                // Запускаем фоновую проверку
+                startSessionCheck();
+                return;
+            }
 
             const bungaloNumber = getBungaloNumber();
             const bungaloMode = document.getElementById('bungaloMode');
@@ -3448,6 +3728,9 @@
                     }
                 });
 
+                // Запускаем фоновую проверку сессии
+                startSessionCheck();
+
             } else {
                 console.log('🏖️ Клиент на пляже');
                 bungaloMode.style.display = 'none';
@@ -3467,6 +3750,16 @@
                 }
             }, 60000);
 
+            // Проверка сессии при возвращении в приложение
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    const b = getBungaloNumber();
+                    if (b) {
+                        checkAndShowBeachMode();
+                    }
+                }
+            });
+
             // Настройка свайпа
             setTimeout(function() {
                 const cartModalEl = document.getElementById('cartModal');
@@ -3481,83 +3774,77 @@
             }, 500);
         }
 
-       function initCart() {
-    // cartFloatBtn больше не существует — используем нижнюю панель
-    // closeCartBtn тоже не нужен — закрываем через крестик в модалке
-    
-    // === КНОПКА "ДОБАВИТЬ В КОРЗИНУ" (в модалке присыпок) ===
-    confirmToppingBtn.addEventListener('click', function() {
-        console.log('🛒 confirmToppingBtn нажат');
-        
-        if (!state.selectedProduct) {
-            showNotification('⚠️ Товар не выбран!', 'error');
-            return;
+        function initCart() {
+            confirmToppingBtn.addEventListener('click', function() {
+                console.log('🛒 confirmToppingBtn нажат');
+                
+                if (!state.selectedProduct) {
+                    showNotification('⚠️ Товар не выбран!', 'error');
+                    return;
+                }
+                
+                if (!state.selectedTopping) {
+                    showNotification('⚠️ Выберите присыпку!', 'error');
+                    return;
+                }
+
+                const product = state.selectedProduct;
+                const topping = state.selectedTopping;
+
+                console.log('📦 Товар:', product);
+                console.log('📦 Присыпка:', topping);
+
+                let finalPrice = product.price;
+                let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
+                let quantity = 1;
+
+                if (product.isRomantic) {
+                    quantity = 2;
+                    finalPrice = product.price;
+                } else {
+                    finalPrice = product.price + topping.price;
+                }
+
+                const itemName = product.isRomantic ?
+                    `${product.name}` :
+                    `${product.name}${toppingText}`;
+
+                const cartItem = {
+                    id: product.id,
+                    name: itemName,
+                    price: finalPrice,
+                    quantity: quantity,
+                    category: product.category,
+                    topping: topping.id,
+                    toppingName: topping.name,
+                    isRomantic: product.isRomantic || false
+                };
+
+                console.log('📦 Добавляем в корзину:', cartItem);
+
+                addToCart(cartItem);
+                closeToppingModal();
+
+                if (product.isRomantic) {
+                    showNotification(`❤️ ${product.name} добавлен! 2 стаканчика с присыпкой ${topping.name === 'Без присыпки' ? 'без присыпки' : topping.name}`);
+                } else {
+                    showNotification(`✅ ${product.name}${toppingText} добавлен!`);
+                }
+            });
+
+            clearCartBtn.addEventListener('click', function() {
+                if (state.cart.length === 0) return;
+                if (!confirm('🗑️ Очистить всю корзину?')) return;
+                state.cart = [];
+                updateCart();
+                showNotification('🗑️ Корзина очищена');
+            });
+
+            orderButton.addEventListener('click', submitOrder);
+            
+            updateCart();
         }
-        
-        if (!state.selectedTopping) {
-            showNotification('⚠️ Выберите присыпку!', 'error');
-            return;
-        }
 
-        const product = state.selectedProduct;
-        const topping = state.selectedTopping;
-
-        console.log('📦 Товар:', product);
-        console.log('📦 Присыпка:', topping);
-
-        let finalPrice = product.price;
-        let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
-        let quantity = 1;
-
-        if (product.isRomantic) {
-            quantity = 2;
-            finalPrice = product.price;
-        } else {
-            finalPrice = product.price + topping.price;
-        }
-
-        const itemName = product.isRomantic ?
-            `${product.name}` :
-            `${product.name}${toppingText}`;
-
-        const cartItem = {
-            id: product.id,
-            name: itemName,
-            price: finalPrice,
-            quantity: quantity,
-            category: product.category,
-            topping: topping.id,
-            toppingName: topping.name,
-            isRomantic: product.isRomantic || false
-        };
-
-        console.log('📦 Добавляем в корзину:', cartItem);
-
-        addToCart(cartItem);
-        closeToppingModal();
-
-        if (product.isRomantic) {
-            showNotification(`❤️ ${product.name} добавлен! 2 стаканчика с присыпкой ${topping.name === 'Без присыпки' ? 'без присыпки' : topping.name}`);
-        } else {
-            showNotification(`✅ ${product.name}${toppingText} добавлен!`);
-        }
-    });
-
-    // === ОЧИСТКА КОРЗИНЫ ===
-    clearCartBtn.addEventListener('click', function() {
-        if (state.cart.length === 0) return;
-        if (!confirm('🗑️ Очистить всю корзину?')) return;
-        state.cart = [];
-        updateCart();
-        showNotification('🗑️ Корзина очищена');
-    });
-
-    // === ЗАКАЗ ===
-    orderButton.addEventListener('click', submitOrder);
-    
-    // === ОБНОВЛЯЕМ КОРЗИНУ ===
-    updateCart();
-}
         // ================================================================
         // ===== ЗАПУСК =====
         // ================================================================
@@ -3578,6 +3865,8 @@
         console.log(`📱 Добавлена нижняя панель (Tab Bar) как в мобильных приложениях!`);
         console.log(`🔄 Добавлен свайп вниз для закрытия корзины и заказов!`);
         console.log(`📦 Исправлено добавление в корзину после выбора присыпки!`);
+        console.log(`⏱️ Таймер на 30 секунд для теста (невидимый)!`);
+        console.log(`🏖️ При истечении времени показывается beachMode с картой и сердечком!`);
     </script>
 
 </body>
