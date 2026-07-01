@@ -2826,38 +2826,40 @@
         }
 
         function checkAndShowBeachMode() {
-            const bungaloNumber = getBungaloNumber();
-            
-            if (!bungaloNumber) {
-                showBeachMode();
-                return true;
-            }
-            
-            const session = getSession();
-            
-            if (!session) {
-                const newSession = {
-                    bungalo: bungaloNumber,
-                    lastRefresh: Date.now()
-                };
-                saveSession(newSession);
-                hideBeachMode();
-                return false;
-            }
-            
-            const timePassed = Date.now() - session.lastRefresh;
-            
-            if (timePassed > SESSION_DURATION) {
-                session.lastRefresh = Date.now();
-                saveSession(session);
-                hideBeachMode();
-                showNotification('✅ Доступ обновлен!');
-                return false;
-            }
-            
-            hideBeachMode();
-            return false;
-        }
+    const bungaloNumber = getBungaloNumber();
+    
+    // Если нет бунгало - показываем beachMode
+    if (!bungaloNumber) {
+        showBeachMode();
+        return true;
+    }
+    
+    const session = getSession();
+    
+    // Первый запуск - создаем сессию
+    if (!session) {
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+        hideBeachMode();
+        return false;
+    }
+    
+    // Проверяем, прошло ли время
+    const timePassed = Date.now() - session.lastRefresh;
+    
+    if (timePassed > SESSION_DURATION) {
+        // Время истекло - показываем beachMode, НЕ обновляем сессию!
+        showBeachMode();
+        return true; // <-- Возвращаем true, чтобы показать beachMode
+    }
+    
+    // Сессия активна
+    hideBeachMode();
+    return false;
+}
 
         function refreshSession() {
             const bungaloNumber = getBungaloNumber();
