@@ -2786,6 +2786,10 @@
 // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
 // ================================================================
 
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
+
 const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
 let sessionCheckInterval = null;
 
@@ -2804,6 +2808,7 @@ function getSessionKey() {
     return `qr_session_${b}`;
 }
 
+// ===== ХРАНИМ ВРЕМЯ В localStorage (не удаляется при закрытии) =====
 function getSession() {
     const key = getSessionKey();
     if (!key) return null;
@@ -2826,6 +2831,25 @@ function deleteSession() {
     const key = getSessionKey();
     if (!key) return;
     localStorage.removeItem(key);
+}
+
+// ===== ХРАНИМ ФЛАГ "ОТКРЫТО" В sessionStorage (удаляется при закрытии вкладки) =====
+function getTabOpenFlag() {
+    const key = getSessionKey();
+    if (!key) return null;
+    return sessionStorage.getItem(key + '_tab');
+}
+
+function setTabOpenFlag() {
+    const key = getSessionKey();
+    if (!key) return;
+    sessionStorage.setItem(key + '_tab', 'true');
+}
+
+function clearTabOpenFlag() {
+    const key = getSessionKey();
+    if (!key) return;
+    sessionStorage.removeItem(key + '_tab');
 }
 
 function showBeachMode() {
@@ -2862,26 +2886,31 @@ function checkAndShowBeachMode() {
     }
     
     const session = getSession();
+    const tabOpen = getTabOpenFlag();
     
-    // Если сессии нет — создаем (первый вход по QR)
+    // Если сессии нет — показываем beachMode
     if (!session) {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-        hideBeachMode();
-        return false; // показываем меню
+        showBeachMode();
+        return true;
+    }
+    
+    // Если вкладка была закрыта (флаг отсутствует) — показываем beachMode
+    if (!tabOpen) {
+        showBeachMode();
+        return true;
     }
     
     const timePassed = Date.now() - session.lastRefresh;
     
     if (timePassed > SESSION_DURATION) {
         deleteSession();
+        clearTabOpenFlag();
         showBeachMode();
         return true;
     }
     
+    // Обновляем флаг, что вкладка открыта
+    setTabOpenFlag();
     hideBeachMode();
     return false;
 }
@@ -2893,18 +2922,17 @@ function refreshSession() {
         return;
     }
     
-    // Обновляем сессию (при повторном сканировании QR)
-    const session = getSession();
-    if (session) {
-        session.lastRefresh = Date.now();
-        saveSession(session);
-    } else {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-    }
+    // Удаляем старую сессию
+    deleteSession();
+    clearTabOpenFlag();
+    
+    // Создаем новую
+    const newSession = {
+        bungalo: bungaloNumber,
+        lastRefresh: Date.now()
+    };
+    saveSession(newSession);
+    setTabOpenFlag();
     
     hideBeachMode();
     showNotification('✅ Доступ обновлен!');
@@ -2924,6 +2952,7 @@ function startSessionCheck() {
                 const timePassed = Date.now() - session.lastRefresh;
                 if (timePassed > SESSION_DURATION) {
                     deleteSession();
+                    clearTabOpenFlag();
                     showBeachMode();
                 }
             }
