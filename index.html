@@ -2782,6 +2782,10 @@
 // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
 // ================================================================
 
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
+
 const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
 let sessionCheckInterval = null;
 
@@ -2859,10 +2863,15 @@ function checkAndShowBeachMode() {
     
     const session = getSession();
     
-    // Если сессии нет — показываем beachMode
+    // Если сессии нет — создаем (первый вход по QR)
     if (!session) {
-        showBeachMode();
-        return true;
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+        hideBeachMode();
+        return false; // показываем меню
     }
     
     const timePassed = Date.now() - session.lastRefresh;
@@ -2884,15 +2893,18 @@ function refreshSession() {
         return;
     }
     
-    // Удаляем старую сессию
-    deleteSession();
-    
-    // Создаем новую
-    const newSession = {
-        bungalo: bungaloNumber,
-        lastRefresh: Date.now()
-    };
-    saveSession(newSession);
+    // Обновляем сессию (при повторном сканировании QR)
+    const session = getSession();
+    if (session) {
+        session.lastRefresh = Date.now();
+        saveSession(session);
+    } else {
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+    }
     
     hideBeachMode();
     showNotification('✅ Доступ обновлен!');
