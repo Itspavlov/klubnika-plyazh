@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍓 Клубника на пляже</title>
+    <title>🍓 Strawberry in Chocolate</title>
     <link rel="manifest" href="manifest.json">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,12 +15,14 @@
             --primary: #D4380D;
             --primary-dark: #B8300A;
             --primary-light: #FF6B35;
-            --secondary: #F7C948;
-            --bg: #FFF8F0;
+            --gold: #C9A87C;
+            --gold-light: #E8D5B8;
+            --sand: #F5EDE4;
+            --bg: #F8F3ED;
             --card-bg: #FFFFFF;
-            --text-dark: #2D1B12;
-            --text-muted: #8D6E63;
-            --shadow: 0 8px 32px rgba(212, 56, 13, 0.12);
+            --text-dark: #3D2C26;
+            --text-muted: #8F7A6E;
+            --shadow: 0 8px 32px rgba(212, 56, 13, 0.10);
             --radius: 20px;
             --radius-sm: 14px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -39,13 +41,13 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             background: var(--bg);
             min-height: 100vh;
             padding: 12px;
             padding-bottom: calc(var(--tab-height) + 16px);
-            background-image: radial-gradient(circle at 10% 20%, rgba(247, 201, 72, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(212, 56, 13, 0.06) 0%, transparent 50%);
+            background-image: radial-gradient(circle at 10% 20%, rgba(201, 168, 124, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(212, 56, 13, 0.04) 0%, transparent 50%);
         }
 
         .app-container {
@@ -66,7 +68,7 @@
             right: -60px;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(247, 201, 72, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(201, 168, 124, 0.08) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -76,57 +78,77 @@
         /* ============================================================ */
         .header {
             text-align: center;
-            padding: 4px 0 14px;
+            padding: 6px 0 14px;
             position: relative;
             z-index: 1;
         }
 
         .header-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #FFE8E0, #FFD4C8);
+            background: linear-gradient(135deg, #F5EDE4, #EDE3D8);
             color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 16px;
-            border-radius: 20px;
-            letter-spacing: 1px;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 30px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .header-badge i {
             margin-right: 4px;
+            color: var(--gold);
+        }
+
+        .header .logo-icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 4px;
+            animation: float 3s ease-in-out infinite;
         }
 
         .header h1 {
-            font-size: 32px;
+            font-size: 28px;
             color: var(--text-dark);
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
         }
 
         .header h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background: linear-gradient(135deg, var(--primary), var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
+        .header h1 .chocolate-text {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
         .header .subtitle {
             color: var(--text-muted);
-            font-size: 15px;
-            margin-top: 2px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
         }
 
         .header .subtitle span {
-            font-weight: 700;
+            font-weight: 600;
             color: var(--primary);
         }
 
         .header .subtitle i {
             margin-right: 4px;
-            color: var(--primary-light);
+            color: var(--gold);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
 
         /* ============================================================ */
@@ -138,10 +160,10 @@
             justify-content: center;
             gap: 8px;
             padding: 8px 16px;
-            border-radius: 12px;
+            border-radius: 30px;
             margin-bottom: 12px;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 500;
             transition: all 0.3s ease;
             background: #E8F5E9;
             color: #2E7D32;
@@ -155,8 +177,8 @@
         }
 
         .online-indicator .dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #2E7D32;
             transition: all 0.3s ease;
@@ -173,6 +195,117 @@
         }
 
         /* ============================================================ */
+        /* ===== КАРТОЧКИ-ЧИПСЫ (НАВИГАЦИЯ) ===== */
+        /* ============================================================ */
+        .chips-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+
+        .chips-nav .chip {
+            flex: 1;
+            padding: 10px 8px;
+            border-radius: 30px;
+            border: 1.5px solid #EDE3D8;
+            background: #FDFAF7;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .chips-nav .chip i {
+            font-size: 14px;
+        }
+
+        .chips-nav .chip:active {
+            transform: scale(0.95);
+        }
+
+        .chips-nav .chip.active {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
+            color: var(--primary);
+            box-shadow: 0 2px 12px rgba(201, 168, 124, 0.15);
+        }
+
+        .chips-nav .chip.active i {
+            color: var(--gold);
+        }
+
+        .chips-nav .chip.main-chip {
+            flex: 1.5;
+            padding: 12px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border-color: var(--gold);
+            background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
+            color: var(--text-dark);
+            box-shadow: 0 2px 16px rgba(201, 168, 124, 0.20);
+        }
+
+        .chips-nav .chip.main-chip i {
+            font-size: 18px;
+            color: #D4380D;
+        }
+
+        .chips-nav .chip.main-chip.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.25);
+        }
+
+        .chips-nav .chip.main-chip.active i {
+            color: #FFFFFF;
+        }
+
+        /* ============================================================ */
+        /* ===== СЕКЦИИ МЕНЮ ===== */
+        /* ============================================================ */
+        .menu-section {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+
+        .menu-section.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-section .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0 0 14px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #EDE3D8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-section .section-title i {
+            font-size: 20px;
+            color: var(--gold);
+        }
+
+        /* ============================================================ */
         /* ===== МОДАЛЬНОЕ ОКНО "ВВЕДИТЕ ДАННЫЕ" ===== */
         /* ============================================================ */
         .auth-modal-overlay {
@@ -182,9 +315,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.50);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 450;
             justify-content: center;
             align-items: center;
@@ -203,7 +336,7 @@
             padding: 28px 24px 24px;
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.20);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
         }
 
         @keyframes modalPop {
@@ -215,12 +348,12 @@
             position: absolute;
             top: 12px;
             right: 16px;
-            background: #F5F0EB;
+            background: #F5EDE4;
             border: none;
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
@@ -231,18 +364,19 @@
 
         .auth-modal-content .modal-close:active {
             transform: scale(0.90);
-            background: #E8E0D8;
+            background: #EDE3D8;
         }
 
         .auth-modal-content .modal-title {
             font-size: 22px;
-            font-weight: 800;
+            font-weight: 600;
             color: var(--text-dark);
             text-align: center;
+            letter-spacing: 0.5px;
         }
 
         .auth-modal-content .modal-title i {
-            color: var(--primary);
+            color: var(--gold);
             margin-right: 8px;
         }
 
@@ -251,6 +385,7 @@
             font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 16px;
+            font-weight: 400;
         }
 
         .auth-modal-content .auth-row {
@@ -263,24 +398,24 @@
         .auth-modal-content .auth-row input {
             width: 100%;
             padding: 14px 16px;
-            border: 2px solid #E8F0F5;
+            border: 1.5px solid #EDE3D8;
             border-radius: 12px;
             font-size: 16px;
-            background: #FFFFFF;
+            background: #FDFAF7;
             outline: none;
             transition: var(--transition);
             color: var(--text-dark);
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .auth-modal-content .auth-row input:focus {
-            border-color: #006064;
-            box-shadow: 0 0 0 4px rgba(0, 96, 100, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.10);
         }
 
         .auth-modal-content .auth-row input::placeholder {
-            color: #B0BEC5;
-            font-weight: 400;
+            color: #BFAF9E;
+            font-weight: 300;
         }
 
         .auth-modal-content .confirm-btn {
@@ -289,13 +424,14 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: 17px;
-            font-weight: 700;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.30);
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.20);
             font-family: inherit;
+            letter-spacing: 0.5px;
         }
 
         .auth-modal-content .confirm-btn i {
@@ -312,56 +448,43 @@
         .tech-break-message {
             text-align: center;
             padding: 40px 20px 30px;
-            background: linear-gradient(135deg, #FFF5F0, #FFE8E0);
+            background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             border-radius: var(--radius);
-            border: 2px solid #FFCDD2;
+            border: 1px solid #E8D5B8;
             margin-bottom: 16px;
         }
 
         .tech-break-message .break-icon {
-            font-size: 64px;
+            font-size: 56px;
             display: block;
             margin-bottom: 12px;
             animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
         .tech-break-message h2 {
-            font-size: 24px;
-            color: #C62828;
+            font-size: 22px;
+            color: var(--primary);
             margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .tech-break-message p {
             color: var(--text-muted);
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 4px;
             line-height: 1.6;
         }
 
         .tech-break-message .break-time {
             background: #FFFFFF;
-            border-radius: 12px;
-            padding: 10px 16px;
+            border-radius: 30px;
+            padding: 10px 20px;
             margin: 12px auto 0;
             display: inline-block;
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 500;
+            font-size: 14px;
             color: var(--text-dark);
-            border: 1px solid #FFCDD2;
-        }
-
-        .tech-break-message .map-btn-top {
-            margin-top: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            justify-content: center;
-            box-shadow: 0 4px 16px rgba(212, 56, 13, 0.25);
+            border: 1px solid #E8D5B8;
         }
 
         /* ============================================================ */
@@ -370,45 +493,47 @@
         .closed-message {
             text-align: center;
             padding: 30px 20px 20px;
-            background: linear-gradient(135deg, #FFF5F0, #FFE8E0);
+            background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             border-radius: var(--radius);
-            border: 2px solid #FFCDD2;
+            border: 1px solid #E8D5B8;
             margin-bottom: 16px;
         }
 
         .closed-message .closed-icon {
-            font-size: 56px;
+            font-size: 48px;
             display: block;
             margin-bottom: 8px;
         }
 
         .closed-message h2 {
-            font-size: 22px;
-            color: #C62828;
+            font-size: 20px;
+            color: var(--primary);
             margin-bottom: 6px;
+            font-weight: 600;
         }
 
         .closed-message p {
             color: var(--text-muted);
-            font-size: 15px;
+            font-size: 14px;
             margin-bottom: 4px;
             line-height: 1.6;
         }
 
         .closed-message .work-time {
             background: #FFFFFF;
-            border-radius: 12px;
-            padding: 10px 16px;
+            border-radius: 30px;
+            padding: 10px 20px;
             margin: 12px auto 0;
             display: inline-block;
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 500;
+            font-size: 14px;
             color: var(--text-dark);
-            border: 1px solid #FFCDD2;
+            border: 1px solid #E8D5B8;
         }
 
         .closed-message .work-time span {
             color: var(--primary);
+            font-weight: 600;
         }
 
         /* ============================================================ */
@@ -418,13 +543,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, #F0F8FF, #E3F0F7);
-            border: none;
-            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #F5EDE4, #EDE3D8);
+            border: 1px solid #E8D5B8;
+            border-radius: 30px;
             padding: 10px 18px;
             margin-bottom: 16px;
-            color: #006064;
-            font-weight: 600;
+            color: var(--text-dark);
+            font-weight: 500;
             font-size: 14px;
             cursor: pointer;
             transition: var(--transition);
@@ -432,20 +557,23 @@
             width: 100%;
             position: relative;
             z-index: 1;
+            letter-spacing: 0.3px;
         }
 
         .map-btn-top:active {
             transform: scale(0.97);
+            background: #EDE3D8;
         }
 
         .map-btn-top .icon {
-            font-size: 18px;
+            font-size: 16px;
+            color: var(--gold);
         }
 
         .map-btn-top .arrow {
-            font-size: 18px;
+            font-size: 14px;
             margin-left: auto;
-            color: #8D6E63;
+            color: var(--text-muted);
             transition: var(--transition);
         }
 
@@ -457,73 +585,114 @@
         /* ===== НОМЕР БУНГАЛО ===== */
         /* ============================================================ */
         .bungalo-display {
-            background: linear-gradient(135deg, rgba(139, 0, 0, 0.25), rgba(60, 0, 0, 0.35)), url('images/bungalo-bg.webp');
-            background-size: cover;
-            background-position: center;
+            position: relative;
             border-radius: var(--radius);
-            padding: 16px 20px;
+            padding: 18px 20px;
             margin-bottom: 16px;
             text-align: center;
             color: #FFFFFF;
-            box-shadow: 0 8px 24px rgba(212, 56, 13, 0.30);
-            position: relative;
-            z-index: 1;
             overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bungalo-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('images/bungalo-bg.webp') center/cover no-repeat;
+            filter: blur(6px) brightness(0.5);
+            transform: scale(1.05);
+            z-index: 0;
         }
 
         .bungalo-display::after {
-            content: '🍓';
+            content: '';
             position: absolute;
-            right: -10px;
-            bottom: -20px;
-            font-size: 80px;
-            opacity: 0.10;
-            transform: rotate(-10deg);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 56, 13, 0.20), rgba(0, 0, 0, 0.40));
+            z-index: 1;
         }
 
         .bungalo-display .label {
-            font-size: 11px;
+            position: relative;
+            z-index: 2;
+            font-size: 10px;
             font-weight: 500;
-            opacity: 0.85;
-            letter-spacing: 1.5px;
+            opacity: 0.90;
+            letter-spacing: 2px;
             text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
         }
 
         .bungalo-display .number {
-            font-size: 40px;
-            font-weight: 800;
+            position: relative;
+            z-index: 2;
+            font-size: 44px;
+            font-weight: 700;
             margin: 0px 0;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            letter-spacing: 4px;
+            color: #FFFFFF;
+            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.40), 0 0 40px rgba(212, 56, 13, 0.20);
+        }
+
+        .bungalo-display .number .hash {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
         }
 
         .bungalo-display .hint {
-            font-size: 12px;
+            position: relative;
+            z-index: 2;
+            font-size: 11px;
             opacity: 0.80;
-            font-weight: 400;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.75);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.20);
+        }
+
+        .bungalo-display .hint i {
+            margin-right: 4px;
         }
 
         /* ============================================================ */
         /* ===== КОНТАКТНЫЕ ДАННЫЕ ===== */
         /* ============================================================ */
         .contact-section {
-            background: #F8FCFF;
+            background: #FDFAF7;
             border-radius: var(--radius-sm);
             padding: 14px 16px;
             margin-bottom: 16px;
-            border: 1.5px solid #E8F0F5;
+            border: 1px solid #EDE3D8;
             position: relative;
             z-index: 1;
         }
 
         .contact-section .contact-label {
-            font-weight: 700;
+            font-weight: 500;
             font-size: 13px;
-            color: #006064;
+            color: var(--primary);
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .contact-section .contact-label i {
+            color: var(--gold);
         }
 
         .contact-section .contact-label small {
@@ -542,24 +711,24 @@
             flex: 1;
             min-width: 120px;
             padding: 10px 14px;
-            border: 1.5px solid #E8F0F5;
+            border: 1.5px solid #EDE3D8;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             background: #FFFFFF;
             outline: none;
             transition: var(--transition);
             color: var(--text-dark);
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .contact-row input:focus {
-            border-color: #006064;
-            box-shadow: 0 0 0 4px rgba(0, 96, 100, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.08);
         }
 
         .contact-row input::placeholder {
-            color: #B0BEC5;
-            font-weight: 400;
+            color: #BFAF9E;
+            font-weight: 300;
         }
 
         /* ============================================================ */
@@ -567,112 +736,115 @@
         /* ============================================================ */
         .beach-message {
             text-align: center;
-            padding: 30px 20px 20px;
-            background: linear-gradient(135deg, #FFF8F0, #FFEDD8);
+            padding: 35px 24px 28px;
+            background: linear-gradient(145deg, #FFFFFF, #F8F3ED);
             border-radius: var(--radius);
-            border: 2px dashed #E8C9A0;
+            border: 1px solid #E8D5B8;
+            box-shadow: 0 8px 32px rgba(212, 56, 13, 0.06);
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
         }
 
         .beach-icon {
-            font-size: 64px;
+            font-size: 56px;
             display: block;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             animation: float 3s ease-in-out infinite;
         }
 
         .beach-message h2 {
-            font-size: 24px;
+            font-size: 22px;
+            font-weight: 600;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
 
-        .beach-message h2 i {
+        .beach-message h2 .beach-heart {
             color: #E91E63;
+            font-weight: 300;
+            margin: 0 6px;
         }
 
         .beach-message .bungalo-info-beach {
             display: inline-block;
             background: rgba(212, 56, 13, 0.08);
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 4px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
             color: var(--primary);
-            margin-bottom: 12px;
-        }
-
-        .beach-message .bungalo-info-beach i {
-            margin-right: 6px;
+            margin-bottom: 10px;
+            letter-spacing: 0.3px;
         }
 
         .beach-message p {
             color: var(--text-muted);
             font-size: 15px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             line-height: 1.6;
-        }
-
-        .beach-message .beach-heart {
-            color: #E91E63;
-            font-size: 18px;
-            margin: 0 4px;
+            font-weight: 400;
         }
 
         .beach-message .beach-distance {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 10px 16px;
-            background: #FFFFFF;
-            border-radius: 12px;
+            gap: 10px;
+            padding: 8px 22px;
+            background: linear-gradient(135deg, #F5EDE4, #EDE3D8);
+            border-radius: 30px;
             margin: 12px auto 16px;
-            max-width: 280px;
-            border: 1px solid #FFE0B2;
+            border: 1px solid #E8D5B8;
         }
 
         .beach-message .beach-distance i {
-            font-size: 24px;
-            color: var(--primary);
+            color: var(--gold);
+            font-size: 18px;
         }
 
         .beach-message .beach-distance span {
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 500;
+            font-size: 14px;
             color: var(--text-dark);
+            letter-spacing: 0.3px;
         }
 
         .beach-message .beach-distance .heart-icon {
             color: #E91E63;
-            font-size: 20px;
+            font-size: 14px;
+        }
+
+        .beach-message .btn-scan-beach {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.20);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+            margin-top: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .beach-message .btn-scan-beach:active {
+            transform: scale(0.97);
+        }
+
+        .beach-message .btn-scan-beach i {
+            font-size: 16px;
         }
 
         .beach-message .map-btn-top {
             margin-top: 8px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            justify-content: center;
-            box-shadow: 0 4px 16px rgba(212, 56, 13, 0.25);
-        }
-
-        .beach-message .map-btn-top:active {
-            background: var(--primary-dark);
-        }
-
-        .beach-message .btn-scan-beach {
-            background: linear-gradient(135deg, #006064, #004D50);
-            color: #FFFFFF;
-            border: none;
-            justify-content: center;
-            box-shadow: 0 4px 16px rgba(0, 96, 100, 0.25);
-        }
-
-        .beach-message .btn-scan-beach:active {
-            background: #004D50;
         }
 
         .beach-note {
@@ -681,35 +853,36 @@
             justify-content: center;
             gap: 8px;
             padding: 10px 16px;
-            background: #FFF8E1;
-            border-radius: 12px;
-            font-size: 13px;
-            color: #795548;
-            border: 1px dashed #FFE0B2;
-            max-width: 300px;
+            background: #F5EDE4;
+            border-radius: 30px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border: 1px solid #E8D5B8;
+            max-width: 280px;
             margin: 14px auto 0;
         }
 
         .beach-note i {
-            color: var(--primary-light);
+            color: var(--gold);
         }
 
         .beach-instructions {
             text-align: left;
-            background: #E3F2FD;
-            border-radius: 12px;
-            padding: 12px 16px;
+            background: #FDFAF7;
+            border-radius: 14px;
+            padding: 14px 18px;
             margin: 12px 0 8px;
-            border: 1px solid #90CAF9;
+            border: 1px solid #EDE3D8;
         }
 
         .beach-instructions .step {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 13px;
-            color: #0D47A1;
+            color: var(--text-dark);
             padding: 4px 0;
+            font-weight: 400;
         }
 
         .beach-instructions .step .step-num {
@@ -718,12 +891,364 @@
             justify-content: center;
             width: 22px;
             height: 22px;
-            background: #0D47A1;
+            background: var(--gold);
             color: #FFFFFF;
             border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 600;
             flex-shrink: 0;
+        }
+
+        /* ============================================================ */
+        /* ===== КАРТОЧКИ ТОВАРОВ ===== */
+        /* ============================================================ */
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            background: #FDFAF7;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid #EDE3D8;
+            transition: var(--transition);
+            position: relative;
+            cursor: default;
+        }
+
+        .menu-item:active { transform: scale(0.98); }
+        .menu-item:hover { border-color: #E8D5B8; }
+        .menu-item.unavailable {
+            opacity: 0.5;
+            border-color: #EDE3D8;
+            background: #F5EDE4;
+        }
+
+        .menu-item.romantic-item .item-info h3 {
+            color: #E91E63;
+        }
+
+        .menu-item.romantic-item .price .old-price {
+            text-decoration: line-through;
+            color: #BFAF9E;
+            font-weight: 400;
+            font-size: 12px;
+            margin-right: 6px;
+        }
+
+        .menu-item.romantic-item .price .discount-badge {
+            background: #E91E63;
+            color: #FFFFFF;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 1px 12px;
+            border-radius: 30px;
+            margin-left: 6px;
+        }
+
+        .menu-item.romantic-item .select-btn {
+            background: linear-gradient(135deg, #E91E63, #AD1457) !important;
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.20) !important;
+        }
+
+        .menu-item.romantic-item .select-btn:active {
+            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.15) !important;
+        }
+
+        .item-icon {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            margin-right: 14px;
+            border-radius: 12px;
+            background: #F5EDE4;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #EDE3D8;
+        }
+
+        .item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .item-icon .zoom-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #FFFFFF;
+            font-size: 8px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .item-icon .volume-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #FFFFFF;
+            font-size: 8px;
+            font-weight: 600;
+            padding: 1px 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-info h3 {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        .item-info .item-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+            font-weight: 400;
+        }
+
+        .item-info .price {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .item-info .price small {
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .item-info .unavailable-label {
+            color: #BFAF9E;
+            font-weight: 500;
+            font-size: 12px;
+            background: #F5EDE4;
+            padding: 2px 14px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        /* ============================================================ */
+        /* ===== КНОПКА ВЫБРАТЬ (КРАСНАЯ) ===== */
+        /* ============================================================ */
+        .select-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 16px rgba(212, 56, 13, 0.15);
+        }
+
+        .select-btn i {
+            margin-right: 4px;
+        }
+
+        .select-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(212, 56, 13, 0.10);
+        }
+
+        .select-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: 74px;
+            background: var(--gold);
+            color: #FFFFFF;
+            font-size: 7px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge i {
+            font-size: 7px;
+        }
+
+        .badge.hit { 
+            background: var(--primary); 
+            box-shadow: 0 2px 12px rgba(212, 56, 13, 0.20);
+        }
+        .badge.new { 
+            background: #7A9B7A; 
+            box-shadow: 0 2px 12px rgba(122, 155, 122, 0.20);
+        }
+        .badge.popular { 
+            background: var(--gold); 
+            box-shadow: 0 2px 12px rgba(201, 168, 124, 0.20);
+        }
+        .badge.romantic {
+            background: #E91E63;
+            box-shadow: 0 2px 12px rgba(233, 30, 99, 0.20);
+        }
+
+        /* ============================================================ */
+        /* ===== НАПИТКИ / ПЕРЕКУС ===== */
+        /* ============================================================ */
+        .drinks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .drink-item {
+            display: flex;
+            align-items: center;
+            background: #FDFAF7;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid #EDE3D8;
+            transition: var(--transition);
+        }
+
+        .drink-item:active { transform: scale(0.98); }
+        .drink-item.unavailable {
+            opacity: 0.5;
+            border-color: #EDE3D8;
+            background: #F5EDE4;
+        }
+
+        .drink-item .drink-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 12px;
+            background: #F5EDE4;
+            border: 1px solid #EDE3D8;
+            cursor: pointer;
+        }
+
+        .drink-item .drink-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .drink-item .drink-info {
+            flex: 1;
+        }
+
+        .drink-item .drink-info h4 {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .drink-item .drink-info .drink-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .drink-item .drink-price {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 15px;
+            margin-right: 8px;
+        }
+
+        .drink-item .drink-price small {
+            font-weight: 400;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .drink-item .unavailable-label {
+            color: #BFAF9E;
+            font-weight: 500;
+            font-size: 11px;
+            background: #F5EDE4;
+            padding: 2px 14px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .drink-add {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(212, 56, 13, 0.12);
+        }
+
+        .drink-add:active { transform: scale(0.90); }
+        .drink-add:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .drink-item.shaurma {
+            background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
+            border-color: #E8D5B8;
+        }
+
+        .drink-item.shaurma .drink-price {
+            color: var(--primary);
+        }
+
+        .drink-item.shaurma .drink-info h4 {
+            color: var(--primary);
+        }
+
+        .drink-item.shaurma .drink-add {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 4px 12px rgba(212, 56, 13, 0.15);
         }
 
         /* ============================================================ */
@@ -736,9 +1261,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.50);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 400;
             justify-content: center;
             align-items: center;
@@ -757,19 +1282,19 @@
             padding: 28px 24px 24px;
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.20);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
         }
 
         .topping-modal-content .modal-close {
             position: absolute;
             top: 12px;
             right: 16px;
-            background: #F5F0EB;
+            background: #F5EDE4;
             border: none;
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
@@ -780,18 +1305,19 @@
 
         .topping-modal-content .modal-close:active {
             transform: scale(0.90);
-            background: #E8E0D8;
+            background: #EDE3D8;
         }
 
         .topping-modal-content .modal-title {
             font-size: 22px;
-            font-weight: 800;
+            font-weight: 600;
             color: var(--text-dark);
             text-align: center;
+            letter-spacing: 0.5px;
         }
 
         .topping-modal-content .modal-title i {
-            color: var(--secondary);
+            color: var(--gold);
             margin-right: 8px;
         }
 
@@ -800,36 +1326,37 @@
             font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 16px;
+            font-weight: 400;
         }
 
         .topping-modal-content .modal-product {
-            background: linear-gradient(135deg, #FDF8F3, #FFF5ED);
+            background: #FDFAF7;
             border-radius: var(--radius-sm);
             padding: 12px 16px;
             margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border: 1.5px solid #F0E0D0;
+            border: 1px solid #EDE3D8;
         }
 
         .topping-modal-content .modal-product .product-icon {
-            font-size: 32px;
+            font-size: 28px;
             width: 40px;
             text-align: center;
         }
 
         .topping-modal-content .modal-product .product-name {
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 600;
+            font-size: 15px;
             color: var(--text-dark);
         }
 
         .topping-modal-content .modal-product .product-price {
             color: var(--primary);
-            font-weight: 800;
+            font-weight: 600;
             margin-left: auto;
-            font-size: 17px;
+            font-size: 16px;
         }
 
         .topping-options {
@@ -844,7 +1371,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 16px;
-            border: 2px solid #F0E8E0;
+            border: 1.5px solid #EDE3D8;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: var(--transition);
@@ -854,9 +1381,9 @@
         .topping-option:active { transform: scale(0.97); }
 
         .topping-option.selected {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, #FFF5F0, #FFEDE5);
-            box-shadow: 0 0 0 4px rgba(212, 56, 13, 0.06);
+            border-color: var(--gold);
+            background: #FDFAF7;
+            box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.10);
         }
 
         .topping-option .option-left {
@@ -866,28 +1393,28 @@
         }
 
         .topping-option .option-icon {
-            font-size: 24px;
-            width: 32px;
+            font-size: 20px;
+            width: 28px;
             text-align: center;
+            color: var(--gold);
         }
 
         .topping-option .option-name {
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 500;
+            font-size: 14px;
             color: var(--text-dark);
         }
 
         .topping-option .option-price {
-            font-weight: 600;
+            font-weight: 500;
             color: var(--primary);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .topping-option .option-check {
             display: none;
-            color: var(--primary);
-            font-size: 20px;
-            font-weight: 700;
+            color: var(--gold);
+            font-size: 18px;
         }
 
         .topping-option.selected .option-check { display: block; }
@@ -898,13 +1425,14 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: 17px;
-            font-weight: 700;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.30);
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.20);
             font-family: inherit;
+            letter-spacing: 0.5px;
         }
 
         .topping-modal-content .confirm-btn i {
@@ -913,7 +1441,7 @@
 
         .topping-modal-content .confirm-btn:active { transform: scale(0.97); }
         .topping-modal-content .confirm-btn:disabled {
-            opacity: 0.40;
+            opacity: 0.4;
             cursor: not-allowed;
             box-shadow: none;
         }
@@ -928,9 +1456,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.50);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 250;
             justify-content: center;
             align-items: center;
@@ -947,7 +1475,7 @@
             max-height: 85vh;
             overflow: hidden;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.20);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
             display: flex;
             flex-direction: column;
         }
@@ -957,28 +1485,29 @@
             justify-content: space-between;
             align-items: center;
             padding: 18px 20px 12px;
-            border-bottom: 2px solid #F0E8E0;
+            border-bottom: 1px solid #EDE3D8;
             flex-shrink: 0;
         }
 
         .orders-modal-content .modal-header h2 {
             font-size: 20px;
             color: var(--text-dark);
-            font-weight: 800;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .orders-modal-content .modal-header h2 i {
-            color: #006064;
+            color: var(--gold);
             margin-right: 8px;
         }
 
         .orders-modal-content .modal-header .close-btn {
-            background: #F5F0EB;
+            background: #F5EDE4;
             border: none;
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
@@ -995,7 +1524,7 @@
         }
 
         .orders-content .orders-empty {
-            color: #BFA58A;
+            color: #BFAF9E;
             font-size: 16px;
             text-align: center;
             padding: 30px 0;
@@ -1005,15 +1534,15 @@
             font-size: 48px;
             display: block;
             margin-bottom: 12px;
-            color: #BFA58A;
+            color: #BFAF9E;
         }
 
         .orders-content .order-history-item {
-            background: #FDF8F3;
+            background: #FDFAF7;
             border-radius: 14px;
             padding: 12px 16px;
             margin-bottom: 10px;
-            border: 1px solid #F0E8E0;
+            border: 1px solid #EDE3D8;
         }
 
         .orders-content .order-history-item .oh-header {
@@ -1024,16 +1553,16 @@
         }
 
         .orders-content .order-history-item .oh-id {
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-muted);
             font-size: 12px;
         }
 
         .orders-content .order-history-item .oh-status {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 12px;
-            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 14px;
+            border-radius: 30px;
         }
 
         .orders-content .order-history-item .oh-status.waiting { background: #FFF3E0; color: #E65100; }
@@ -1048,14 +1577,14 @@
         }
 
         .orders-content .order-history-item .oh-total {
-            font-weight: 700;
+            font-weight: 600;
             color: var(--primary);
             font-size: 15px;
         }
 
         .orders-content .order-history-item .oh-time {
             font-size: 11px;
-            color: #BFA58A;
+            color: #BFAF9E;
         }
 
         .orders-content .order-history-item .oh-cancel-btn {
@@ -1063,8 +1592,8 @@
             color: #FFFFFF;
             border: none;
             padding: 4px 14px;
-            border-radius: 12px;
-            font-size: 12px;
+            border-radius: 30px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -1083,7 +1612,7 @@
 
         .orders-modal-content .orders-footer {
             padding: 12px 20px 20px;
-            border-top: 2px solid #F0E8E0;
+            border-top: 1px solid #EDE3D8;
             display: flex;
             gap: 10px;
             flex-shrink: 0;
@@ -1092,30 +1621,33 @@
         .orders-modal-content .orders-footer input {
             flex: 1;
             padding: 10px 14px;
-            border: 1.5px solid #E8F0F5;
+            border: 1.5px solid #EDE3D8;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
             transition: var(--transition);
+            background: #FDFAF7;
         }
 
         .orders-modal-content .orders-footer input:focus {
-            border-color: #006064;
-            box-shadow: 0 0 0 4px rgba(0, 96, 100, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.08);
         }
 
         .orders-load-btn {
-            background: linear-gradient(135deg, #006064, #004D50);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
             padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 700;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
             white-space: nowrap;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(212, 56, 13, 0.15);
         }
 
         .orders-load-btn i {
@@ -1134,9 +1666,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.80);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             z-index: 500;
             justify-content: center;
             align-items: center;
@@ -1151,7 +1683,7 @@
             max-height: 90vh;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
             animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             background: transparent;
             position: relative;
@@ -1167,16 +1699,16 @@
 
         .image-modal-content .image-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.15);
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 44px;
-            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            font-size: 22px;
+            font-size: 18px;
             color: #FFFFFF;
             cursor: pointer;
             transition: var(--transition);
@@ -1190,14 +1722,14 @@
 
         .image-modal-overlay .image-caption {
             position: absolute;
-            bottom: 30px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            font-weight: 500;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 6px 18px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            font-weight: 400;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 16px;
             border-radius: 20px;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
@@ -1207,361 +1739,17 @@
 
         @media (max-width: 500px) {
             .image-modal-content .image-close {
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
                 top: 12px;
                 right: 12px;
             }
             .image-modal-overlay .image-caption {
-                font-size: 12px;
-                padding: 4px 14px;
-                bottom: 20px;
+                font-size: 11px;
+                padding: 4px 12px;
+                bottom: 16px;
             }
-        }
-
-        /* ============================================================ */
-        /* ===== ЗАГОЛОВКИ РАЗДЕЛОВ ===== */
-        /* ============================================================ */
-        .section-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin: 22px 0 14px 0;
-            padding-bottom: 8px;
-            border-bottom: 3px solid #FFE8E0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .section-title:first-of-type { margin-top: 0; }
-
-        .section-title i {
-            font-size: 24px;
-            color: var(--primary);
-        }
-
-        /* ============================================================ */
-        /* ===== КАРТОЧКИ ТОВАРОВ ===== */
-        /* ============================================================ */
-        .menu-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            background: #FDF8F3;
-            padding: 12px 14px;
-            border-radius: var(--radius-sm);
-            border: 1.5px solid #F0E8E0;
-            transition: var(--transition);
-            position: relative;
-            cursor: default;
-        }
-
-        .menu-item:active { transform: scale(0.98); }
-        .menu-item:hover { border-color: #E0D0C0; }
-        .menu-item.unavailable {
-            opacity: 0.6;
-            border-color: #FFCDD2;
-            background: #FFF5F5;
-        }
-
-        .menu-item.romantic-item .item-info h3 {
-            color: #E91E63;
-        }
-
-        .menu-item.romantic-item .price .old-price {
-            text-decoration: line-through;
-            color: #BFA58A;
-            font-weight: 400;
-            font-size: 13px;
-            margin-right: 6px;
-        }
-
-        .menu-item.romantic-item .price .discount-badge {
-            background: #E91E63;
-            color: #FFFFFF;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 1px 10px;
-            border-radius: 12px;
-            margin-left: 6px;
-        }
-
-        .menu-item.romantic-item .select-btn {
-            background: linear-gradient(135deg, #E91E63, #AD1457) !important;
-            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.30) !important;
-        }
-
-        .menu-item.romantic-item .select-btn:active {
-            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.20) !important;
-        }
-
-        .item-icon {
-            width: 56px;
-            height: 56px;
-            flex-shrink: 0;
-            margin-right: 14px;
-            border-radius: 14px;
-            background: #F5F0EB;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .item-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            border-radius: 14px;
-        }
-
-        .item-icon .zoom-hint {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #FFFFFF;
-            font-size: 9px;
-            padding: 1px 8px;
-            border-radius: 10px;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .item-info h3 {
-            font-size: 15px;
-            color: var(--text-dark);
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .item-info .item-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 3px;
-        }
-
-        .item-info .price {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 17px;
-        }
-
-        .item-info .price small {
-            font-weight: 400;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .item-info .unavailable-label {
-            color: #D32F2F;
-            font-weight: 700;
-            font-size: 13px;
-            background: #FFEBEE;
-            padding: 2px 12px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-
-        .select-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            flex-shrink: 0;
-            font-family: inherit;
-            box-shadow: 0 4px 12px rgba(212, 56, 13, 0.20);
-        }
-
-        .select-btn i {
-            margin-right: 4px;
-        }
-
-        .select-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(212, 56, 13, 0.15);
-        }
-
-        .select-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .badge {
-            position: absolute;
-            top: -6px;
-            right: 78px;
-            background: linear-gradient(135deg, #FF6F00, #E65100);
-            color: #FFFFFF;
-            font-size: 8px;
-            font-weight: 700;
-            padding: 2px 10px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .badge i {
-            font-size: 8px;
-        }
-
-        .badge.hit { background: linear-gradient(135deg, #D32F2F, #B71C1C); }
-        .badge.new { background: linear-gradient(135deg, #2E7D32, #1B5E20); }
-        .badge.popular { background: linear-gradient(135deg, #E65100, #BF360C); }
-        .badge.romantic {
-            background: linear-gradient(135deg, #E91E63, #AD1457);
-            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.3);
-        }
-
-        /* ============================================================ */
-        /* ===== НАПИТКИ / ПЕРЕКУС ===== */
-        /* ============================================================ */
-        .drinks-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .drink-item {
-            display: flex;
-            align-items: center;
-            background: #F0F8FF;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 1.5px solid #D6E8F0;
-            transition: var(--transition);
-        }
-
-        .drink-item:active { transform: scale(0.98); }
-        .drink-item.unavailable {
-            opacity: 0.6;
-            border-color: #FFCDD2;
-            background: #FFF5F5;
-        }
-
-        .drink-item .drink-icon {
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 12px;
-            background: #FFFFFF;
-            cursor: pointer;
-        }
-
-        .drink-item .drink-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .drink-item .drink-info {
-            flex: 1;
-        }
-
-        .drink-item .drink-info h4 {
-            font-size: 15px;
-            color: var(--text-dark);
-            font-weight: 700;
-        }
-
-        .drink-item .drink-info .drink-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .drink-item .drink-price {
-            color: #006064;
-            font-weight: 800;
-            font-size: 16px;
-            margin-right: 8px;
-        }
-
-        .drink-item .drink-price small {
-            font-weight: 400;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .drink-item .unavailable-label {
-            color: #D32F2F;
-            font-weight: 700;
-            font-size: 12px;
-            background: #FFEBEE;
-            padding: 2px 12px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-right: 8px;
-        }
-
-        .drink-add {
-            background: linear-gradient(135deg, #006064, #004D50);
-            color: #FFFFFF;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            transition: var(--transition);
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0, 96, 100, 0.20);
-        }
-
-        .drink-add:active { transform: scale(0.90); }
-        .drink-add:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .drink-item.shaurma {
-            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-            border-color: #FF8F00;
-            margin-bottom: 0px;
-        }
-
-        .drink-item.shaurma .drink-price {
-            color: #E65100;
-        }
-
-        .drink-item.shaurma .drink-info h4 {
-            color: #E65100;
-        }
-
-        .drink-item.shaurma .drink-add {
-            background: linear-gradient(135deg, #E65100, #BF360C);
-            box-shadow: 0 4px 12px rgba(230, 81, 0, 0.30);
         }
 
         /* ============================================================ */
@@ -1573,7 +1761,7 @@
             left: 0;
             right: 0;
             background: #FFFFFF;
-            border-top: 1px solid #E8E0D8;
+            border-top: 1px solid #EDE3D8;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -1581,7 +1769,7 @@
             z-index: 100;
             max-width: 480px;
             margin: 0 auto;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
         }
 
         .tab-item {
@@ -1601,16 +1789,17 @@
         }
 
         .tab-item .tab-icon {
-            font-size: 22px;
-            color: #BFA58A;
+            font-size: 20px;
+            color: #BFAF9E;
             transition: all 0.2s ease;
         }
 
         .tab-item .tab-label {
-            font-size: 10px;
-            color: #BFA58A;
-            font-weight: 600;
+            font-size: 9px;
+            color: #BFAF9E;
+            font-weight: 500;
             transition: all 0.2s ease;
+            letter-spacing: 0.5px;
         }
 
         .tab-item.active .tab-icon {
@@ -1627,10 +1816,10 @@
             right: 8px;
             background: #D32F2F;
             color: #FFFFFF;
-            font-size: 9px;
-            font-weight: 700;
-            min-width: 18px;
-            height: 18px;
+            font-size: 8px;
+            font-weight: 600;
+            min-width: 16px;
+            height: 16px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1643,8 +1832,8 @@
         }
 
         .tab-item .tab-total {
-            font-size: 9px;
-            font-weight: 600;
+            font-size: 8px;
+            font-weight: 500;
             color: var(--primary);
         }
 
@@ -1661,8 +1850,7 @@
             border-radius: 32px 32px 0 0;
             max-height: 80vh;
             z-index: 200;
-            box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.15);
-            animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.06);
             max-width: 480px;
             margin: 0 auto;
             padding-bottom: 70px;
@@ -1680,27 +1868,28 @@
             justify-content: space-between;
             align-items: center;
             padding: 18px 20px 12px;
-            border-bottom: 2px solid #F0E8E0;
+            border-bottom: 1px solid #EDE3D8;
         }
 
         .cart-modal .modal-header h2 {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--text-dark);
-            font-weight: 800;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .cart-modal .modal-header h2 i {
-            color: var(--primary);
+            color: var(--gold);
             margin-right: 8px;
         }
 
         .cart-modal .modal-header .close-btn {
-            background: #F5F0EB;
+            background: #F5EDE4;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
@@ -1722,19 +1911,19 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid #F5F0EB;
+            border-bottom: 1px solid #F5EDE4;
         }
 
         .cart-item .item-info-cart { flex: 1; }
         .cart-item .item-info-cart .item-name-cart {
-            font-weight: 600;
+            font-weight: 500;
             font-size: 14px;
             color: var(--text-dark);
         }
         .cart-item .item-info-cart .item-price-cart {
-            font-weight: 600;
+            font-weight: 500;
             color: var(--primary);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .cart-item .item-actions {
@@ -1744,12 +1933,12 @@
         }
 
         .cart-item .item-actions button {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border: none;
             border-radius: 50%;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
@@ -1757,14 +1946,14 @@
             justify-content: center;
         }
 
-        .cart-item .item-actions .qty-btn-minus { background: #F5F0EB; color: #5D4037; }
+        .cart-item .item-actions .qty-btn-minus { background: #F5EDE4; color: var(--text-muted); }
         .cart-item .item-actions .qty-btn-plus { background: var(--primary); color: #FFFFFF; }
         .cart-item .item-actions .qty-btn-remove {
-            background: #FFEBEE;
-            color: #D32F2F;
-            font-size: 12px;
-            width: 26px;
-            height: 26px;
+            background: #F5EDE4;
+            color: #BFAF9E;
+            font-size: 10px;
+            width: 24px;
+            height: 24px;
         }
 
         .cart-item .item-actions .qty-btn-minus:active,
@@ -1772,35 +1961,35 @@
         .cart-item .item-actions .qty-btn-remove:active { transform: scale(0.90); }
 
         .cart-item .item-actions .qty-number {
-            font-weight: 700;
-            font-size: 15px;
+            font-weight: 600;
+            font-size: 14px;
             color: var(--text-dark);
-            min-width: 22px;
+            min-width: 20px;
             text-align: center;
         }
 
         .cart-modal .cart-empty {
-            color: #BFA58A;
-            font-size: 16px;
+            color: #BFAF9E;
+            font-size: 15px;
             text-align: center;
             padding: 30px 0;
         }
 
         .cart-modal .cart-empty i {
-            font-size: 48px;
+            font-size: 44px;
             display: block;
             margin-bottom: 12px;
-            color: #BFA58A;
+            color: #BFAF9E;
         }
 
         .cart-modal .cart-total {
             display: flex;
             justify-content: space-between;
-            font-weight: 700;
-            font-size: 20px;
+            font-weight: 600;
+            font-size: 18px;
             margin: 12px 0 16px;
             padding-top: 12px;
-            border-top: 2px solid #F0E8E0;
+            border-top: 1px solid #EDE3D8;
             color: var(--text-dark);
         }
 
@@ -1812,13 +2001,14 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: 18px;
-            font-weight: 700;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.30);
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.20);
             font-family: inherit;
+            letter-spacing: 0.5px;
         }
 
         .cart-modal .order-btn i {
@@ -1827,7 +2017,7 @@
 
         .cart-modal .order-btn:active { transform: scale(0.97); }
         .cart-modal .order-btn:disabled {
-            opacity: 0.40;
+            opacity: 0.4;
             cursor: not-allowed;
             box-shadow: none;
         }
@@ -1835,11 +2025,12 @@
         .cart-modal .clear-cart-btn {
             background: none;
             border: none;
-            color: #D32F2F;
-            font-size: 13px;
+            color: #BFAF9E;
+            font-size: 12px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 400;
             padding: 4px 8px;
+            transition: var(--transition);
         }
 
         .cart-modal .clear-cart-btn i {
@@ -1850,22 +2041,24 @@
         /* ===== ВЫБОР СПОСОБА ОПЛАТЫ ===== */
         /* ============================================================ */
         .payment-section {
-            background: #F8FCFF;
+            background: #FDFAF7;
             border-radius: var(--radius-sm);
             padding: 14px 16px;
             margin: 12px 0 12px;
-            border: 1.5px solid #E8F0F5;
+            border: 1px solid #EDE3D8;
         }
 
         .payment-title {
-            font-weight: 700;
-            font-size: 14px;
-            color: #006064;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--primary);
             margin-bottom: 10px;
+            letter-spacing: 0.3px;
         }
 
         .payment-title i {
             margin-right: 6px;
+            color: var(--gold);
         }
 
         .payment-options {
@@ -1876,9 +2069,9 @@
 
         .payment-btn {
             flex: 1;
-            min-width: 80px;
-            padding: 10px 12px;
-            border: 2px solid #E8F0F5;
+            min-width: 70px;
+            padding: 8px 12px;
+            border: 1.5px solid #EDE3D8;
             border-radius: 12px;
             background: #FFFFFF;
             cursor: pointer;
@@ -1893,30 +2086,30 @@
 
         .payment-btn:active { transform: scale(0.97); }
 
-        .payment-btn .payment-icon { font-size: 22px; }
+        .payment-btn .payment-icon { font-size: 18px; }
         .payment-btn .payment-name {
-            font-size: 12px;
-            font-weight: 600;
-            color: #3E2723;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
         }
         .payment-btn .payment-check {
             display: none;
-            font-size: 14px;
+            font-size: 12px;
             color: #2E7D32;
         }
         .payment-btn .payment-badge {
-            font-size: 9px;
-            font-weight: 700;
-            color: #FF6F00;
-            background: #FFF8E1;
-            padding: 1px 8px;
-            border-radius: 10px;
+            font-size: 8px;
+            font-weight: 500;
+            color: var(--gold);
+            background: #F5EDE4;
+            padding: 1px 10px;
+            border-radius: 20px;
             margin-top: 2px;
         }
 
         .payment-btn.active {
-            border-color: #2E7D32;
-            background: #E8F5E9;
+            border-color: var(--gold);
+            background: #FDFAF7;
         }
         .payment-btn.active .payment-check { display: block; }
 
@@ -1925,19 +2118,20 @@
             cursor: not-allowed;
         }
         .payment-btn:disabled .payment-badge {
-            background: #FFF3E0;
-            color: #E65100;
+            background: #F5EDE4;
+            color: #BFAF9E;
         }
 
         .payment-info {
-            font-size: 13px;
-            color: #8D6E63;
+            font-size: 12px;
+            color: var(--text-muted);
             margin-top: 8px;
             padding: 8px 12px;
-            background: #FFF8E1;
-            border-radius: 10px;
-            border: 1px dashed #FFE0B2;
+            background: #F5EDE4;
+            border-radius: 12px;
+            border: 1px solid #EDE3D8;
             text-align: center;
+            font-weight: 400;
         }
 
         /* ============================================================ */
@@ -1950,9 +2144,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.40);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 150;
         }
 
@@ -1968,9 +2162,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.50);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 300;
             justify-content: center;
             align-items: center;
@@ -1989,19 +2183,19 @@
             padding: 24px 20px 20px;
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.20);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.10);
         }
 
         .map-modal-content .modal-close {
             position: absolute;
             top: 12px;
             right: 16px;
-            background: #F5F0EB;
+            background: #F5EDE4;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
@@ -2013,45 +2207,51 @@
         .map-modal-content .modal-close:active { transform: scale(0.90); }
 
         .map-modal-content .modal-title {
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 600;
             color: var(--text-dark);
             margin-bottom: 16px;
             text-align: center;
+            letter-spacing: 0.5px;
         }
 
         .map-modal-content .modal-title i {
-            color: #006064;
+            color: var(--gold);
             margin-right: 8px;
         }
 
         .map-modal-content .map-container {
             border-radius: var(--radius-sm);
             overflow: hidden;
-            background: #F5F0EB;
-            min-height: 300px;
+            background: #F5EDE4;
+            min-height: 280px;
             position: relative;
         }
 
         .map-modal-content .map-container iframe {
             width: 100%;
-            height: 350px;
+            height: 320px;
             border: none;
         }
 
         .map-modal-content .map-hint {
             text-align: center;
             margin-top: 14px;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.6;
+            font-weight: 400;
         }
 
         .map-modal-content .map-hint i {
             margin-right: 4px;
+            color: var(--gold);
         }
 
-        .map-modal-content .map-hint strong { color: var(--text-dark); }
+        .map-modal-content .map-hint strong { 
+            color: var(--text-dark);
+            font-weight: 500;
+        }
 
         /* ============================================================ */
         /* ===== УВЕДОМЛЕНИЯ ===== */
@@ -2064,15 +2264,16 @@
             transform: translateX(-50%);
             background: #2E7D32;
             color: #FFFFFF;
-            padding: 14px 28px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
             z-index: 1000;
             max-width: 90%;
             text-align: center;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 500;
+            font-size: 13px;
             animation: slideDown 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 0.3px;
         }
 
         .notification i {
@@ -2093,87 +2294,105 @@
         @media (max-width: 500px) {
             body { padding: 8px; padding-bottom: calc(var(--tab-height) + 8px); }
             .app-container { padding: 16px 14px 24px; border-radius: 24px; }
-            .header h1 { font-size: 28px; }
-            .item-icon { width: 48px; height: 48px; margin-right: 10px; }
+            .header h1 { font-size: 22px; }
+            .header .logo-icon { font-size: 32px; }
+            .item-icon { width: 46px; height: 46px; margin-right: 10px; }
             .menu-item { padding: 10px 12px; }
-            .contact-row input { font-size: 14px; padding: 8px 12px; min-width: 100px; }
+            .contact-row input { font-size: 13px; padding: 8px 12px; min-width: 100px; }
             .bottom-tab-bar { padding: 4px 0 8px; }
-            .tab-item .tab-icon { font-size: 20px; }
-            .tab-item .tab-label { font-size: 9px; }
+            .tab-item .tab-icon { font-size: 18px; }
+            .tab-item .tab-label { font-size: 8px; }
             .tab-item { padding: 2px 8px; }
-            .tab-item .tab-badge { min-width: 16px; height: 16px; font-size: 8px; right: 4px; top: -2px; }
+            .tab-item .tab-badge { min-width: 14px; height: 14px; font-size: 7px; right: 4px; top: -2px; }
             .cart-modal { padding-bottom: 60px; }
             .cart-modal .cart-content { padding: 12px 16px 20px; }
             .cart-item .item-info-cart .item-name-cart { font-size: 13px; }
             .map-modal-content { padding: 16px; margin: 10px; }
-            .map-modal-content .map-container iframe { height: 280px; }
-            .bungalo-display .number { font-size: 32px; }
+            .map-modal-content .map-container iframe { height: 240px; }
+            .bungalo-display .number { font-size: 36px; }
             .map-btn-top { font-size: 13px; padding: 8px 14px; }
             .topping-modal-content { padding: 20px 16px 16px; }
             .topping-modal-content .modal-title { font-size: 20px; }
-            .drink-item .drink-icon { width: 34px; height: 34px; margin-right: 10px; }
+            .drink-item .drink-icon { width: 32px; height: 32px; margin-right: 10px; }
             .closed-message h2 { font-size: 20px; }
-            .closed-message .closed-icon { font-size: 48px; }
+            .closed-message .closed-icon { font-size: 44px; }
             .orders-modal-content { max-width: 100%; margin: 10px; border-radius: 20px; }
             .orders-modal-content .orders-footer { flex-direction: column; }
             .orders-load-btn { width: 100%; justify-content: center; }
-            .tech-break-message .break-icon { font-size: 48px; }
+            .tech-break-message .break-icon { font-size: 44px; }
             .tech-break-message h2 { font-size: 20px; }
-            .payment-btn { min-width: 60px; padding: 8px 10px; }
-            .payment-btn .payment-icon { font-size: 18px; }
-            .payment-btn .payment-name { font-size: 11px; }
-            .badge.romantic { font-size: 7px; padding: 1px 8px; right: 70px; }
-            .online-indicator { font-size: 12px; padding: 6px 12px; }
+            .payment-btn { min-width: 50px; padding: 6px 10px; }
+            .payment-btn .payment-icon { font-size: 16px; }
+            .payment-btn .payment-name { font-size: 10px; }
+            .badge.romantic { font-size: 6px; padding: 1px 8px; right: 66px; }
+            .online-indicator { font-size: 11px; padding: 6px 12px; }
             .auth-modal-content { padding: 20px 16px 16px; }
             .auth-modal-content .modal-title { font-size: 20px; }
-            .badge { font-size: 7px; padding: 1px 8px; right: 65px; }
-            .badge i { font-size: 7px; }
+            .badge { font-size: 6px; padding: 1px 8px; right: 62px; }
+            .badge i { font-size: 6px; }
             .drink-item.shaurma { margin-bottom: 0px; }
             .beach-message h2 { font-size: 20px; }
-            .beach-message .beach-distance { font-size: 13px; padding: 8px 12px; }
+            .beach-message .beach-distance { font-size: 13px; padding: 6px 16px; }
             .beach-instructions .step { font-size: 12px; }
+            .beach-message { padding: 28px 18px 22px; }
+            .beach-message .btn-scan-beach { font-size: 14px; padding: 12px 24px; }
+            .chips-nav .chip { font-size: 10px; padding: 8px 6px; }
+            .chips-nav .chip i { font-size: 12px; }
+            .chips-nav .chip.main-chip { font-size: 12px; padding: 10px 8px; }
+            .chips-nav .chip.main-chip i { font-size: 16px; }
+            .bungalo-display { min-height: 100px; padding: 14px 16px; }
+            .bungalo-display .number { font-size: 36px; }
         }
 
         @media (max-width: 380px) {
             body { padding-bottom: calc(var(--tab-height) + 4px); }
-            .header h1 { font-size: 24px; }
+            .header h1 { font-size: 18px; }
+            .header .logo-icon { font-size: 28px; }
             .item-info h3 { font-size: 13px; }
-            .item-info .price { font-size: 15px; }
-            .item-icon { width: 42px; height: 42px; margin-right: 8px; }
-            .select-btn { font-size: 12px; padding: 6px 14px; }
-            .contact-row input { font-size: 13px; padding: 6px 10px; min-width: 80px; }
-            .cart-item .item-actions button { width: 24px; height: 24px; font-size: 12px; }
-            .cart-item .item-actions .qty-btn-remove { width: 22px; height: 22px; font-size: 10px; }
+            .item-info .price { font-size: 14px; }
+            .item-icon { width: 40px; height: 40px; margin-right: 8px; }
+            .select-btn { font-size: 11px; padding: 6px 14px; }
+            .contact-row input { font-size: 12px; padding: 6px 10px; min-width: 80px; }
+            .cart-item .item-actions button { width: 22px; height: 22px; font-size: 10px; }
+            .cart-item .item-actions .qty-btn-remove { width: 20px; height: 20px; font-size: 9px; }
             .bungalo-display .number { font-size: 28px; }
             .beach-message h2 { font-size: 18px; }
-            .beach-message .beach-distance { font-size: 12px; padding: 6px 10px; }
-            .beach-message .beach-distance i { font-size: 18px; }
+            .beach-message .beach-distance { font-size: 12px; padding: 4px 14px; }
+            .beach-message .beach-distance i { font-size: 16px; }
             .topping-option .option-name { font-size: 13px; }
-            .topping-option .option-icon { font-size: 20px; }
-            .drink-item .drink-icon { width: 30px; height: 30px; margin-right: 8px; }
-            .drink-item .drink-price { font-size: 14px; }
+            .topping-option .option-icon { font-size: 18px; }
+            .drink-item .drink-icon { width: 28px; height: 28px; margin-right: 8px; }
+            .drink-item .drink-price { font-size: 13px; }
             .closed-message h2 { font-size: 18px; }
-            .closed-message .closed-icon { font-size: 40px; }
-            .closed-message .work-time { font-size: 13px; padding: 8px 14px; }
+            .closed-message .closed-icon { font-size: 36px; }
+            .closed-message .work-time { font-size: 12px; padding: 6px 14px; }
             .bottom-tab-bar { padding: 2px 0 6px; }
-            .tab-item .tab-icon { font-size: 18px; }
-            .tab-item .tab-label { font-size: 8px; }
+            .tab-item .tab-icon { font-size: 16px; }
+            .tab-item .tab-label { font-size: 7px; }
             .cart-modal { padding-bottom: 50px; }
-            .tech-break-message .break-icon { font-size: 40px; }
+            .tech-break-message .break-icon { font-size: 36px; }
             .tech-break-message h2 { font-size: 18px; }
-            .payment-btn { min-width: 50px; padding: 6px 8px; }
-            .payment-btn .payment-icon { font-size: 16px; }
-            .payment-btn .payment-name { font-size: 10px; }
-            .online-indicator { font-size: 11px; padding: 4px 10px; }
-            .online-indicator .dot { width: 8px; height: 8px; }
-            .auth-modal-content { padding: 16px 14px 14px; }
+            .payment-btn { min-width: 40px; padding: 4px 8px; }
+            .payment-btn .payment-icon { font-size: 14px; }
+            .payment-btn .payment-name { font-size: 9px; }
+            .online-indicator { font-size: 10px; padding: 4px 10px; }
+            .online-indicator .dot { width: 6px; height: 6px; }
+            .auth-modal-content { padding: 14px 12px 12px; }
             .auth-modal-content .modal-title { font-size: 18px; }
-            .auth-modal-content .auth-row input { font-size: 14px; padding: 10px 12px; }
-            .badge { font-size: 6px; padding: 1px 6px; right: 55px; }
-            .badge i { font-size: 6px; }
+            .auth-modal-content .auth-row input { font-size: 13px; padding: 8px 10px; }
+            .badge { font-size: 5px; padding: 1px 6px; right: 52px; }
+            .badge i { font-size: 5px; }
             .drink-item.shaurma { margin-bottom: 0px; }
             .beach-instructions .step { font-size: 11px; }
-            .beach-instructions .step .step-num { width: 18px; height: 18px; font-size: 9px; }
+            .beach-instructions .step .step-num { width: 16px; height: 16px; font-size: 8px; }
+            .beach-message { padding: 20px 14px 18px; }
+            .beach-message .btn-scan-beach { font-size: 13px; padding: 10px 18px; }
+            .chips-nav .chip { font-size: 9px; padding: 6px 4px; }
+            .chips-nav .chip i { font-size: 10px; }
+            .chips-nav .chip.main-chip { font-size: 11px; padding: 8px 6px; }
+            .chips-nav .chip.main-chip i { font-size: 14px; }
+            .bungalo-display { min-height: 80px; padding: 12px 14px; }
+            .bungalo-display .number { font-size: 28px; letter-spacing: 2px; }
         }
     </style>
 </head>
@@ -2189,8 +2408,8 @@
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">✕</button>
-            <div class="modal-title"><i class="fas fa-pen"></i> Введите ваши данные</div>
-            <div class="modal-subtitle">Чтобы мы могли связаться с вами и доставить заказ</div>
+            <div class="modal-title"><i class="fas fa-pen"></i> Ваши данные</div>
+            <div class="modal-subtitle">Чтобы мы могли связаться с вами</div>
             <div class="auth-row">
                 <input type="text" id="authName" placeholder="Ваше имя">
                 <input type="tel" id="authPhone" placeholder="Номер телефона">
@@ -2203,7 +2422,7 @@
     <div class="topping-modal-overlay" id="toppingModal">
         <div class="topping-modal-content">
             <button class="modal-close" onclick="closeToppingModal()">✕</button>
-            <div class="modal-title"><i class="fas fa-sparkles"></i> Выберите присыпку</div>
+            <div class="modal-title"><i class="fas fa-sparkles"></i> Присыпка</div>
             <div class="modal-subtitle">Добавьте изюминку к вашему стаканчику</div>
             <div class="modal-product" id="selectedProductDisplay">
                 <span class="product-icon" id="productIcon"><i class="fas fa-chocolate-bar"></i></span>
@@ -2252,7 +2471,13 @@
         <!-- ===== ШАПКА ===== -->
         <header class="header">
             <div class="header-badge"><i class="fas fa-water"></i> Доставка на пляж</div>
-            <h1><i class="fas fa-strawberry"></i> <span class="highlight">Клубника</span> в шоколаде</h1>
+            <span class="logo-icon">🍓</span>
+            <h1>
+                <span class="highlight">Strawberry</span>
+                <span style="color:var(--text-dark);">in</span>
+                <span class="chocolate-text">Chocolate</span>
+            </h1>
+            <span class="en-title">✦ Fresh & Delicious ✦</span>
             <p class="subtitle"><i class="fas fa-leaf"></i> Свежая клубника с доставкой в <span>бунгало</span> за 10 минут</p>
         </header>
 
@@ -2270,7 +2495,7 @@
                 <span class="break-icon">🔧</span>
                 <h2>Технический перерыв</h2>
                 <p>Мы обновляем меню и готовим для вас что-то вкусное!</p>
-                <p style="font-size:14px; color:#8D6E63;">Скоро всё заработает, загляните через 5-10 минут</p>
+                <p style="font-size:14px; color:#8F7A6E;">Скоро всё заработает, загляните через 5-10 минут</p>
                 <div class="break-time"><i class="fas fa-clock"></i> ⏳ Скоро открываемся!</div>
                 <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;">
                     <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
@@ -2279,7 +2504,7 @@
                 </button>
                 <div class="beach-note" style="margin-top:12px;">
                     <span><i class="fas fa-location-dot"></i></span>
-                    <span>Наш киоск: 100 м от бунгало, у деревянного пирса</span>
+                    <span>Наш киоск: 100 м от бунгало</span>
                 </div>
             </div>
         </div>
@@ -2292,7 +2517,7 @@
                 <span class="closed-icon">🔒</span>
                 <h2>Сейчас не принимаем заказы</h2>
                 <p>Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong> ночи по московскому времени.</p>
-                <p style="font-size:14px; color:#8D6E63; margin-top:4px;"><i class="fas fa-clock"></i> Текущее время: <span id="currentTimeDisplay">--:--</span></p>
+                <p style="font-size:14px; color:#8F7A6E; margin-top:4px;"><i class="fas fa-clock"></i> Текущее время: <span id="currentTimeDisplay">--:--</span></p>
                 <div class="work-time">
                     <i class="fas fa-clock"></i> 🕐 График работы: <span>9:00 — 1:00 (МСК)</span>
                 </div>
@@ -2304,7 +2529,7 @@
             </button>
             <div class="beach-note" style="margin-top:0;">
                 <span><i class="fas fa-location-dot"></i></span>
-                <span>Наш киоск: 100 м от бунгало, у деревянного пирса</span>
+                <span>Наш киоск: 100 м от бунгало</span>
             </div>
         </div>
 
@@ -2326,7 +2551,7 @@
                 </h2>
                 
                 <p>Вы можете найти наш киоск на карте</p>
-                <p style="font-size:14px; color:#8D6E63; margin-top:2px;">Мы рядом с вами ❤️</p>
+                <p style="font-size:14px; color:#8F7A6E; margin-top:2px;">Мы рядом с вами</p>
                 
                 <div class="beach-distance">
                     <i class="fas fa-location-dot"></i>
@@ -2340,8 +2565,8 @@
                     <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                 </button>
 
-                <div style="margin-top:12px; padding-top:12px; border-top: 1px dashed #E8C9A0;">
-                    <p style="font-size:13px; color:#8D6E63; margin-bottom:8px;">
+                <div style="margin-top:12px; padding-top:12px; border-top: 1px solid #EDE3D8;">
+                    <p style="font-size:13px; color:#8F7A6E; margin-bottom:8px;">
                         <i class="fas fa-qrcode"></i> Чтобы сделать заказ:
                     </p>
                     <div class="beach-instructions">
@@ -2379,11 +2604,11 @@
                 <span class="arrow"><i class="fas fa-arrow-right"></i></span>
             </button>
 
-            <!-- Номер бунгало -->
+            <!-- Номер бунгало (с blur и ярким текстом) -->
             <div class="bungalo-display">
                 <div class="label"><i class="fas fa-location-dot"></i> Ваше бунгало</div>
-                <div class="number" id="bungaloNumberDisplay">#7</div>
-                <div class="hint"><i class="fas fa-qrcode"></i> Сканируйте QR-код в вашем бунгало для заказа</div>
+                <div class="number"><span class="hash">#</span><span id="bungaloNumberDisplay">7</span></div>
+                <div class="hint"><i class="fas fa-qrcode"></i> Сканируйте QR-код в вашем бунгало</div>
             </div>
 
             <!-- ===== КОНТАКТНЫЕ ДАННЫЕ ===== -->
@@ -2398,25 +2623,54 @@
             </div>
 
             <!-- ============================================================ -->
-            <!-- ===== МЕНЮ ===== -->
+            <!-- ===== КАРТОЧКИ-ЧИПСЫ (НАВИГАЦИЯ) ===== -->
             <!-- ============================================================ -->
-            <div class="section-title">
-                <i class="fas fa-strawberry"></i> Стаканчики 200 мл
+            <div class="chips-nav">
+                <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
+                    <i class="fas fa-apple-alt"></i> Другие фрукты
+                </button>
+                <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')">
+                    <i class="fas fa-strawberry"></i> Клубника в шоколаде
+                </button>
+                <button class="chip" data-section="drinks" onclick="switchSection('drinks')">
+                    <i class="fas fa-mug-saucer"></i> Напитки
+                </button>
             </div>
 
-            <div class="menu-grid" id="menuGrid">
-                <!-- Загружается из JavaScript -->
+            <!-- ============================================================ -->
+            <!-- ===== СЕКЦИЯ: КЛУБНИКА В ШОКОЛАДЕ (с присыпками) ===== -->
+            <!-- ============================================================ -->
+            <div class="menu-section active" id="section-strawberry">
+                <div class="section-title">
+                    <i class="fas fa-strawberry"></i> Клубника в шоколаде
+                </div>
+                <div class="menu-grid" id="strawberryGrid">
+                    <!-- Загружается из JavaScript -->
+                </div>
             </div>
 
             <!-- ============================================================ -->
-            <!-- ===== НАПИТКИ / ПЕРЕКУС ===== -->
+            <!-- ===== СЕКЦИЯ: ДРУГИЕ ФРУКТЫ (БЕЗ шоколада, БЕЗ присыпок) ===== -->
             <!-- ============================================================ -->
-            <div class="section-title">
-                <i class="fas fa-mug-saucer"></i> Напитки / Перекус
+            <div class="menu-section" id="section-fruits">
+                <div class="section-title">
+                    <i class="fas fa-apple-alt"></i> Свежие фрукты
+                </div>
+                <div class="menu-grid" id="fruitsGrid">
+                    <!-- Загружается из JavaScript -->
+                </div>
             </div>
 
-            <div class="drinks-grid" id="drinksGrid">
-                <!-- Загружается из JavaScript -->
+            <!-- ============================================================ -->
+            <!-- ===== СЕКЦИЯ: НАПИТКИ / ПЕРЕКУС ===== -->
+            <!-- ============================================================ -->
+            <div class="menu-section" id="section-drinks">
+                <div class="section-title">
+                    <i class="fas fa-mug-saucer"></i> Напитки и перекус
+                </div>
+                <div class="drinks-grid" id="drinksGrid">
+                    <!-- Загружается из JavaScript -->
+                </div>
             </div>
 
             <div style="height: 20px;"></div>
@@ -2431,20 +2685,17 @@
     <!-- ===== НИЖНЯЯ ПАНЕЛЬ (TAB BAR) ===== -->
     <!-- ============================================================ -->
     <div class="bottom-tab-bar" id="bottomTabBar">
-        <!-- Вкладка "Меню" -->
         <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
             <span class="tab-icon"><i class="fas fa-home"></i></span>
             <span class="tab-label">Меню</span>
         </button>
         
-        <!-- Вкладка "Мои заказы" -->
         <button class="tab-item" id="tabOrders" onclick="openOrdersModal()">
             <span class="tab-icon"><i class="fas fa-list-alt"></i></span>
             <span class="tab-label">Заказы</span>
             <span class="tab-badge hidden" id="tabOrdersBadge">0</span>
         </button>
         
-        <!-- Вкладка "Корзина" -->
         <button class="tab-item" id="tabCart" onclick="openCart()">
             <span class="tab-icon"><i class="fas fa-shopping-cart"></i></span>
             <span class="tab-label">Корзина</span>
@@ -2461,7 +2712,7 @@
             <h2><i class="fas fa-shopping-cart"></i> Корзина</h2>
             <div>
                 <button class="clear-cart-btn" id="clearCart"><i class="fas fa-trash-can"></i> Очистить</button>
-                <button class="close-btn" id="closeCart" onclick="closeCart()">✕</button>
+                <button class="close-btn" onclick="closeCart()">✕</button>
             </div>
         </div>
         <div class="cart-content">
@@ -2510,9 +2761,10 @@
     <!-- ============================================================ -->
     <script>
         // ================================================================
-        // ===== УПРАВЛЕНИЕ СЕССИЕЙ (30 СЕКУНД ДЛЯ ТЕСТА) =====
+        // ===== УПРАВЛЕНИЕ СЕССИЕЙ (5 ЧАСОВ) =====
         // ================================================================
-const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 часов
+
+        const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 ЧАСОВ
         let sessionCheckInterval = null;
 
         function getBungaloNumber() {
@@ -2555,7 +2807,6 @@ const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 часов
             bungaloMode.style.display = 'none';
             beachMode.style.display = 'block';
             
-            // Обновляем текст в beachMode
             const bungaloNumber = getBungaloNumber();
             const beachBungaloNumber = document.getElementById('beachBungaloNumber');
             
@@ -2575,43 +2826,38 @@ const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 часов
         }
 
         function checkAndShowBeachMode() {
-    const bungaloNumber = getBungaloNumber();
-    
-    // Если нет бунгало - показываем beachMode
-    if (!bungaloNumber) {
-        showBeachMode();
-        return true;
-    }
-    
-    const session = getSession();
-    
-    // Первый запуск - создаем сессию
-    if (!session) {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-        hideBeachMode();
-        return false;
-    }
-    
-    // Проверяем, прошло ли время
-    const timePassed = Date.now() - session.lastRefresh;
-    
-    if (timePassed > SESSION_DURATION) {
-        // Время прошло, но пользователь перешел по ссылке - обновляем сессию!
-        session.lastRefresh = Date.now();
-        saveSession(session);
-        hideBeachMode();
-        showNotification('✅ Доступ обновлен! Добро пожаловать!');
-        return false;
-    }
-    
-    // Сессия активна
-    hideBeachMode();
-    return false;
-}
+            const bungaloNumber = getBungaloNumber();
+            
+            if (!bungaloNumber) {
+                showBeachMode();
+                return true;
+            }
+            
+            const session = getSession();
+            
+            if (!session) {
+                const newSession = {
+                    bungalo: bungaloNumber,
+                    lastRefresh: Date.now()
+                };
+                saveSession(newSession);
+                hideBeachMode();
+                return false;
+            }
+            
+            const timePassed = Date.now() - session.lastRefresh;
+            
+            if (timePassed > SESSION_DURATION) {
+                session.lastRefresh = Date.now();
+                saveSession(session);
+                hideBeachMode();
+                showNotification('✅ Доступ обновлен!');
+                return false;
+            }
+            
+            hideBeachMode();
+            return false;
+        }
 
         function refreshSession() {
             const bungaloNumber = getBungaloNumber();
@@ -2634,29 +2880,29 @@ const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 часов
             hideBeachMode();
             showNotification('✅ Доступ обновлен!');
             
-            // Перезагружаем страницу для обновления
             setTimeout(() => {
                 window.location.reload();
             }, 300);
         }
-function startSessionCheck() {
-    if (sessionCheckInterval) {
-        clearInterval(sessionCheckInterval);
-    }
-    
-    sessionCheckInterval = setInterval(() => {
-        const bungaloNumber = getBungaloNumber();
-        if (bungaloNumber) {
-            const session = getSession();
-            if (session) {
-                const timePassed = Date.now() - session.lastRefresh;
-                if (timePassed > SESSION_DURATION) {
-                    showBeachMode();
-                }
+
+        function startSessionCheck() {
+            if (sessionCheckInterval) {
+                clearInterval(sessionCheckInterval);
             }
+            
+            sessionCheckInterval = setInterval(() => {
+                const bungaloNumber = getBungaloNumber();
+                if (bungaloNumber) {
+                    const session = getSession();
+                    if (session) {
+                        const timePassed = Date.now() - session.lastRefresh;
+                        if (timePassed > SESSION_DURATION) {
+                            showBeachMode();
+                        }
+                    }
+                }
+            }, 60000);
         }
-    }, 60000); // Проверяем каждую минуту
-}
 
         // ================================================================
         // ===== НАСТРОЙКИ =====
@@ -2676,40 +2922,45 @@ function startSessionCheck() {
         // ================================================================
         // ===== ДАННЫЕ О МЕНЮ =====
         // ================================================================
-        const MENU_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, badge: 'hit',
-            badgeText: '🔥 Хит' },
-            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, badge: 'popular',
-                badgeText: '⭐ Популярное' },
-            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, badge: 'new',
-            badgeText: '✨ Новинка' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, badge: '',
-            badgeText: '' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, badge: '',
-            badgeText: '' }
+
+        // Клубника в шоколаде (с присыпками)
+        const STRAWBERRY_ITEMS = [
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', badge: 'hit', badgeText: '🔥 Хит' },
+            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, volume: '300 мл', badge: 'popular', badgeText: '⭐ Популярное' },
+            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, volume: '300 мл', badge: 'new', badgeText: '✨ Новинка' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', badge: '', badgeText: '' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', badge: '', badgeText: '' }
         ];
 
+        // Другие фрукты (БЕЗ шоколада, БЕЗ присыпок)
+        const FRUITS_ITEMS = [
+            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', emoji: '🍉' },
+            { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, volume: '300 мл', emoji: '🍈' },
+            { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, volume: '200 мл', emoji: '🍓' },
+            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, volume: '200 мл', emoji: '🫐' },
+            { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', emoji: '🫐' }
+        ];
+
+        // Романтическая позиция (в секции клубники) - ВИДНО ТОЛЬКО 300 мл
         const ROMANTIC_ITEM = {
             id: '9',
             name: 'Для влюбленных',
             desc: '2 стаканчика: Тиффани + Классика',
             price: 699,
             originalPrice: 770,
+            volume: '300 мл',
             icon: 'fas fa-heart',
             iconColor: '#E91E63',
             badge: 'romantic',
             badgeText: '❤️ Романтика'
         };
 
-        // ================================================================
-        // ===== НАПИТКИ / ПЕРЕКУС =====
-        // ================================================================
+        // Напитки и перекус
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'limonad.jpg' },
             { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'kola.jpg' },
             { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'pivo.jpg' },
-            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350,
-                image: 'shaurma.jpg', shaurma: true }
+            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, image: 'shaurma.jpg', shaurma: true }
         ];
 
         // ================================================================
@@ -2788,6 +3039,244 @@ function startSessionCheck() {
         ];
 
         // ================================================================
+        // ===== ПЕРЕКЛЮЧЕНИЕ СЕКЦИЙ =====
+        // ================================================================
+
+        function switchSection(section) {
+            document.querySelectorAll('.menu-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const target = document.getElementById('section-' + section);
+            if (target) {
+                target.classList.add('active');
+            }
+            
+            document.querySelectorAll('.chip').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const activeChip = document.querySelector(`.chip[data-section="${section}"]`);
+            if (activeChip) {
+                activeChip.classList.add('active');
+            }
+        }
+
+        // ================================================================
+        // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
+        // ================================================================
+        function renderMenu(settings) {
+            // === КЛУБНИКА В ШОКОЛАДЕ (с присыпками) ===
+            const strawberryGrid = document.getElementById('strawberryGrid');
+            let strawberryHtml = '';
+
+            // Романтическая позиция (объем 300 мл как у всех)
+            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
+            const romanticBadgeHtml = ROMANTIC_ITEM.badge ? `<span class="badge ${ROMANTIC_ITEM.badge}">${ROMANTIC_ITEM.badgeText}</span>` : '';
+
+            strawberryHtml += `
+                <div class="menu-item romantic-item ${romanticAvailable ? '' : 'unavailable'}" 
+                     data-id="${ROMANTIC_ITEM.id}" 
+                     data-name="${ROMANTIC_ITEM.name}" 
+                     data-price="${ROMANTIC_ITEM.price}" 
+                     data-icon="${ROMANTIC_ITEM.icon}" 
+                     data-icon-color="${ROMANTIC_ITEM.iconColor || ''}" 
+                     data-category="стаканчик"
+                     data-original-price="${ROMANTIC_ITEM.originalPrice}"
+                     data-is-romantic="true"
+                     data-has-toppings="true">
+                    ${romanticBadgeHtml}
+                    <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/romantic.jpg?v=1', 'Для влюбленных')` : ''}">
+                        <img src="images/romantic.jpg" alt="Для влюбленных" ${!romanticAvailable ? 'style="filter: grayscale(1);"' : ''}>
+                        <span class="volume-badge">${ROMANTIC_ITEM.volume}</span>
+                        <span class="zoom-hint">🔍</span>
+                    </div>
+                    <div class="item-info">
+                        <h3><i class="${ROMANTIC_ITEM.icon}" style="color:${ROMANTIC_ITEM.iconColor || '#E91E63'}; margin-right:4px;"></i> ${ROMANTIC_ITEM.name}</h3>
+                        <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
+                        ${romanticAvailable ? 
+                            `<span class="price"><span class="old-price">${ROMANTIC_ITEM.originalPrice} ₽</span> ${ROMANTIC_ITEM.price} ₽ <span class="discount-badge">-9%</span></span>` : 
+                            `<span class="unavailable-label">❌ Нет в наличии</span>`
+                        }
+                    </div>
+                    <button class="select-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '<i class="fas fa-heart"></i> Выбрать' : 'Закончился'}</button>
+                </div>
+            `;
+
+            STRAWBERRY_ITEMS.forEach(item => {
+                const available = settings.menuItems[item.id] !== false;
+                const unavailableClass = available ? '' : 'unavailable';
+                const badgeHtml = item.badge ? `<span class="badge ${item.badge}">${item.badgeText}</span>` : '';
+                const imagePath = `images/${item.id === '1' ? 'klassika' : item.id === '2' ? 'belyy-shokolad' : item.id === '3' ? 'tiffani' : item.id === '4' ? 'miks' : 'banan'}.jpg`;
+
+                strawberryHtml += `
+                    <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="стаканчик" data-volume="${item.volume}" data-has-toppings="true">
+                        ${badgeHtml}
+                        <div class="item-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
+                            <img src="${imagePath}" alt="${item.name}" ${!available ? 'style="filter: grayscale(1);"' : ''}>
+                            <span class="volume-badge">${item.volume}</span>
+                            <span class="zoom-hint">🔍</span>
+                        </div>
+                        <div class="item-info">
+                            <h3>${item.name}</h3>
+                            <div class="item-desc">${item.desc}</div>
+                            ${available ? `<span class="price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
+                        </div>
+                        <button class="select-btn" ${available ? '' : 'disabled'}>${available ? 'Выбрать' : 'Закончился'}</button>
+                    </div>
+                `;
+            });
+
+            strawberryGrid.innerHTML = strawberryHtml;
+
+            // === ДРУГИЕ ФРУКТЫ (БЕЗ шоколада, БЕЗ присыпок) ===
+            const fruitsGrid = document.getElementById('fruitsGrid');
+            fruitsGrid.innerHTML = FRUITS_ITEMS.map(item => {
+                const available = settings.menuItems[item.id] !== false;
+                const unavailableClass = available ? '' : 'unavailable';
+                const imagePath = `images/${item.id === '11' ? 'watermelon' : item.id === '12' ? 'melon' : item.id === '13' ? 'raspberry' : item.id === '14' ? 'blackberry' : 'blueberry'}.jpg`;
+
+                return `
+                    <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="фрукты" data-volume="${item.volume}" data-has-toppings="false">
+                        <div class="item-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
+                            <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
+                            <span class="volume-badge">${item.volume}</span>
+                            <span class="zoom-hint">🔍</span>
+                        </div>
+                        <div class="item-info">
+                            <h3>${item.emoji} ${item.name}</h3>
+                            <div class="item-desc">${item.desc}</div>
+                            ${available ? `<span class="price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
+                        </div>
+                        <button class="select-btn" ${available ? '' : 'disabled'}>${available ? 'Выбрать' : 'Закончился'}</button>
+                    </div>
+                `;
+            }).join('');
+
+            // === НАПИТКИ / ПЕРЕКУС ===
+            const drinksGrid = document.getElementById('drinksGrid');
+            drinksGrid.innerHTML = DRINK_ITEMS.map(item => {
+                const available = settings.menuItems[item.id] !== false;
+                const unavailableClass = available ? '' : 'unavailable';
+                const isShaurma = item.shaurma || false;
+                const shaurmaClass = isShaurma ? 'shaurma' : '';
+                const imagePath = `images/${item.image}`;
+
+                return `
+                    <div class="drink-item ${unavailableClass} ${shaurmaClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
+                        <div class="drink-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
+                            <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.image === 'limonad.jpg' ? '🍋' : item.image === 'kola.jpg' ? '🥤' : item.image === 'pivo.jpg' ? '🍺' : '🌯'}'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
+                        </div>
+                        <div class="drink-info">
+                            <h4>${item.name}</h4>
+                            <div class="drink-desc">${item.desc}</div>
+                        </div>
+                        ${available ? `<span class="drink-price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
+                        <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                    </div>
+                `;
+            }).join('');
+
+            attachEvents();
+        }
+
+        // ================================================================
+        // ===== ПРИВЯЗКА СОБЫТИЙ =====
+        // ================================================================
+        function attachEvents() {
+            document.querySelectorAll('.select-btn:not([disabled])').forEach(button => {
+                button.removeEventListener('click', handleSelectClick);
+                button.addEventListener('click', handleSelectClick);
+            });
+
+            document.querySelectorAll('.drink-add:not([disabled])').forEach(button => {
+                button.removeEventListener('click', handleDrinkAdd);
+                button.addEventListener('click', handleDrinkAdd);
+            });
+        }
+
+        function handleSelectClick(e) {
+            e.stopPropagation();
+
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            const item = this.closest('.menu-item');
+            if (!item) return;
+
+            const hasToppings = item.dataset.hasToppings === 'true';
+
+            const product = {
+                id: parseInt(item.dataset.id),
+                name: item.dataset.name,
+                price: parseInt(item.dataset.price),
+                icon: item.dataset.icon || 'fas fa-chocolate-bar',
+                iconColor: item.dataset.iconColor || '#D4380D',
+                category: item.dataset.category || 'стаканчик',
+                isRomantic: item.dataset.isRomantic === 'true',
+                originalPrice: item.dataset.originalPrice ? parseInt(item.dataset.originalPrice) : null,
+                hasToppings: hasToppings
+            };
+
+            if (!name || !phone) {
+                openAuthModal(product);
+                return;
+            }
+
+            // Если это фрукты (без присыпок) — добавляем сразу
+            if (!hasToppings) {
+                addToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category,
+                    topping: '',
+                    toppingName: '',
+                    isRomantic: product.isRomantic || false
+                });
+                showNotification(`✅ ${product.name} добавлен!`);
+                return;
+            }
+
+            // Если это клубника (с присыпками) — открываем модалку
+            openToppingModal(product);
+        }
+
+        function handleDrinkAdd(e) {
+            e.stopPropagation();
+
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null);
+                return;
+            }
+
+            const item = this.closest('.drink-item');
+            if (!item) return;
+
+            const id = parseInt(item.dataset.id);
+            const nameDrink = item.dataset.name;
+            const price = parseInt(item.dataset.price);
+            const category = item.dataset.category || 'напиток';
+
+            addToCart({
+                id: id,
+                name: nameDrink,
+                price: price,
+                quantity: 1,
+                category: category,
+                topping: '',
+                toppingName: ''
+            });
+
+            showNotification(`✅ ${nameDrink} добавлен!`);
+        }
+
+        // ================================================================
         // ===== СОСТОЯНИЕ =====
         // ================================================================
         const state = {
@@ -2864,8 +3353,24 @@ function startSessionCheck() {
             closeAuthModal();
 
             if (pendingProduct) {
-                openToppingModal(pendingProduct);
-                pendingProduct = null;
+                if (pendingProduct.hasToppings === false) {
+                    // Фрукты — добавляем сразу
+                    addToCart({
+                        id: pendingProduct.id,
+                        name: pendingProduct.name,
+                        price: pendingProduct.price,
+                        quantity: 1,
+                        category: pendingProduct.category,
+                        topping: '',
+                        toppingName: '',
+                        isRomantic: pendingProduct.isRomantic || false
+                    });
+                    showNotification(`✅ ${pendingProduct.name} добавлен!`);
+                    pendingProduct = null;
+                } else {
+                    openToppingModal(pendingProduct);
+                    pendingProduct = null;
+                }
             }
         }
 
@@ -2898,176 +3403,6 @@ function startSessionCheck() {
                 console.error('Ошибка загрузки настроек:', e);
                 return null;
             }
-        }
-
-        // ================================================================
-        // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
-        // ================================================================
-        function renderMenu(settings) {
-            const menuGrid = document.getElementById('menuGrid');
-
-            let html = '';
-
-            // Романтическая позиция
-            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
-            const romanticBadgeHtml = ROMANTIC_ITEM.badge ? `<span class="badge ${ROMANTIC_ITEM.badge}">${ROMANTIC_ITEM.badgeText}</span>` :
-                '';
-
-            html += `
-                    <div class="menu-item romantic-item ${romanticAvailable ? '' : 'unavailable'}" 
-                         data-id="${ROMANTIC_ITEM.id}" 
-                         data-name="${ROMANTIC_ITEM.name}" 
-                         data-price="${ROMANTIC_ITEM.price}" 
-                         data-icon="${ROMANTIC_ITEM.icon}" 
-                         data-icon-color="${ROMANTIC_ITEM.iconColor || ''}" 
-                         data-category="стаканчик"
-                         data-original-price="${ROMANTIC_ITEM.originalPrice}"
-                         data-is-romantic="true">
-                        ${romanticBadgeHtml}
-                        <div class="item-icon" onclick="${romanticAvailable ? `openImageModal('images/romantic.jpg?v=1', 'Для влюбленных')` : ''}">
-                            <img src="images/romantic.jpg" alt="Для влюбленных" ${!romanticAvailable ? 'style="filter: grayscale(1);"' : ''}>
-                            <span class="zoom-hint">🔍</span>
-                        </div>
-                        <div class="item-info">
-                            <h3><i class="${ROMANTIC_ITEM.icon}" style="color:${ROMANTIC_ITEM.iconColor || '#E91E63'}; margin-right:4px;"></i> ${ROMANTIC_ITEM.name}</h3>
-                            <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
-                            ${romanticAvailable ? 
-                                `<span class="price"><span class="old-price">${ROMANTIC_ITEM.originalPrice} ₽</span> ${ROMANTIC_ITEM.price} ₽ <span class="discount-badge">-9%</span></span>` : 
-                                `<span class="unavailable-label">❌ Нет в наличии</span>`
-                            }
-                        </div>
-                        <button class="select-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '<i class="fas fa-heart"></i> Выбрать' : 'Закончился'}</button>
-                    </div>
-                `;
-
-            // Обычные позиции
-            MENU_ITEMS.forEach(item => {
-                const available = settings.menuItems[item.id] !== false;
-                const unavailableClass = available ? '' : 'unavailable';
-                const badgeHtml = item.badge ? `<span class="badge ${item.badge}">${item.badgeText}</span>` : '';
-                const imagePath =
-                    `images/${item.id === '1' ? 'klassika' : item.id === '2' ? 'belyy-shokolad' : item.id === '3' ? 'tiffani' : item.id === '4' ? 'miks' : 'banan'}.jpg`;
-
-                html += `
-                        <div class="menu-item ${unavailableClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="стаканчик">
-                            ${badgeHtml}
-                            <div class="item-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
-                                <img src="${imagePath}" alt="${item.name}" ${!available ? 'style="filter: grayscale(1);"' : ''}>
-                                <span class="zoom-hint">🔍</span>
-                            </div>
-                            <div class="item-info">
-                                <h3>${item.name}</h3>
-                                <div class="item-desc">${item.desc}</div>
-                                ${available ? `<span class="price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
-                            </div>
-                            <button class="select-btn" ${available ? '' : 'disabled'}>${available ? 'Выбрать' : 'Закончился'}</button>
-                        </div>
-                    `;
-            });
-
-            menuGrid.innerHTML = html;
-
-            // Напитки / Перекус
-            const drinksGrid = document.getElementById('drinksGrid');
-            drinksGrid.innerHTML = DRINK_ITEMS.map(item => {
-                const available = settings.menuItems[item.id] !== false;
-                const unavailableClass = available ? '' : 'unavailable';
-                const isShaurma = item.shaurma || false;
-                const shaurmaClass = isShaurma ? 'shaurma' : '';
-                const imagePath = `images/${item.image}`;
-
-                return `
-                        <div class="drink-item ${unavailableClass} ${shaurmaClass}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
-                            <div class="drink-icon" onclick="${available ? `openImageModal('${imagePath}', '${item.name}')` : ''}">
-                                <img src="${imagePath}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.image === 'limonad.jpg' ? '🍋' : item.image === 'kola.jpg' ? '🥤' : item.image === 'pivo.jpg' ? '🍺' : '🌯'}'" ${!available ? 'style="filter: grayscale(1);"' : ''}>
-                            </div>
-                            <div class="drink-info">
-                                <h4>${item.name}</h4>
-                                <div class="drink-desc">${item.desc}</div>
-                            </div>
-                            ${available ? `<span class="drink-price">${item.price} <small>₽</small></span>` : `<span class="unavailable-label">❌ Нет в наличии</span>`}
-                            <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                        </div>
-                    `;
-            }).join('');
-
-            attachEvents();
-        }
-
-        // ================================================================
-        // ===== ПРИВЯЗКА СОБЫТИЙ =====
-        // ================================================================
-        function attachEvents() {
-            document.querySelectorAll('.select-btn:not([disabled])').forEach(button => {
-                button.removeEventListener('click', handleSelectClick);
-                button.addEventListener('click', handleSelectClick);
-            });
-
-            document.querySelectorAll('.drink-add:not([disabled])').forEach(button => {
-                button.removeEventListener('click', handleDrinkAdd);
-                button.addEventListener('click', handleDrinkAdd);
-            });
-        }
-
-        function handleSelectClick(e) {
-            e.stopPropagation();
-
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-
-            const item = this.closest('.menu-item');
-            if (!item) return;
-
-            const product = {
-                id: parseInt(item.dataset.id),
-                name: item.dataset.name,
-                price: parseInt(item.dataset.price),
-                icon: item.dataset.icon || 'fas fa-chocolate-bar',
-                iconColor: item.dataset.iconColor || '#D4380D',
-                category: item.dataset.category || 'стаканчик',
-                isRomantic: item.dataset.isRomantic === 'true',
-                originalPrice: item.dataset.originalPrice ? parseInt(item.dataset.originalPrice) : null
-            };
-
-            if (!name || !phone) {
-                openAuthModal(product);
-                return;
-            }
-
-            openToppingModal(product);
-        }
-
-        function handleDrinkAdd(e) {
-            e.stopPropagation();
-
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-
-            if (!name || !phone) {
-                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
-                openAuthModal(null);
-                return;
-            }
-
-            const item = this.closest('.drink-item');
-            if (!item) return;
-
-            const id = parseInt(item.dataset.id);
-            const nameDrink = item.dataset.name;
-            const price = parseInt(item.dataset.price);
-            const category = item.dataset.category || 'напиток';
-
-            addToCart({
-                id: id,
-                name: nameDrink,
-                price: price,
-                quantity: 1,
-                category: category,
-                topping: '',
-                toppingName: ''
-            });
-
-            showNotification(`✅ ${nameDrink} добавлен!`);
         }
 
         // ================================================================
@@ -3166,7 +3501,7 @@ function startSessionCheck() {
                                 <div class="orders-empty">
                                     <i class="fas fa-inbox"></i>
                                     Заказов не найдено<br>
-                                    <span style="font-size:14px; color:#BFA58A;">Сделайте первый заказ!</span>
+                                    <span style="font-size:14px; color:#BFAF9E;">Сделайте первый заказ!</span>
                                 </div>
                             `;
                         return;
@@ -3332,15 +3667,12 @@ function startSessionCheck() {
         // ================================================================
 
         function addToCart(item) {
-            console.log('📥 addToCart вызван с:', item);
-            
             const existing = state.cart.find(c =>
                 c.id === item.id && c.topping === item.topping
             );
 
             if (existing) {
                 existing.quantity += item.quantity || 1;
-                console.log('➕ Обновлен существующий товар:', existing);
             } else {
                 state.cart.push({
                     id: item.id,
@@ -3352,18 +3684,14 @@ function startSessionCheck() {
                     toppingName: item.toppingName || '',
                     isRomantic: item.isRomantic || false
                 });
-                console.log('➕ Добавлен новый товар:', state.cart[state.cart.length - 1]);
             }
 
-            console.log('📊 Корзина сейчас:', state.cart);
             updateCart();
         }
 
         function updateCart() {
             const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-            console.log('🔄 Обновление корзины:', { totalItems, totalPrice });
 
             const tabCartBadge = document.getElementById('tabCartBadge');
             const tabCartTotal = document.getElementById('tabCartTotal');
@@ -3660,17 +3988,13 @@ function startSessionCheck() {
         async function init() {
             updateOnlineStatus();
 
-            // Проверяем сессию
             const showBeach = checkAndShowBeachMode();
             
-            // Если показан beachMode - не грузим меню
             if (showBeach) {
                 document.getElementById('bungaloMode').style.display = 'none';
                 document.getElementById('closedMode').style.display = 'none';
                 document.getElementById('techBreakMode').style.display = 'none';
                 document.getElementById('bottomTabBar').style.display = 'flex';
-                
-                // Запускаем фоновую проверку
                 startSessionCheck();
                 return;
             }
@@ -3709,7 +4033,7 @@ function startSessionCheck() {
 
             if (bungaloNumber) {
                 console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
-                document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
+                document.getElementById('bungaloNumberDisplay').textContent = `${bungaloNumber}`;
                 bungaloMode.style.display = 'block';
                 beachMode.style.display = 'none';
                 closedMode.style.display = 'none';
@@ -3728,7 +4052,6 @@ function startSessionCheck() {
                     }
                 });
 
-                // Запускаем фоновую проверку сессии
                 startSessionCheck();
 
             } else {
@@ -3738,7 +4061,6 @@ function startSessionCheck() {
                 closedMode.style.display = 'none';
                 techBreakMode.style.display = 'none';
                 document.getElementById('bottomTabBar').style.display = 'flex';
-                document.getElementById('beachLandmarkText').textContent = `Наш киоск: ${MY_LOCATION.landmark}`;
                 showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
             }
 
@@ -3750,7 +4072,6 @@ function startSessionCheck() {
                 }
             }, 60000);
 
-            // Проверка сессии при возвращении в приложение
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
                     const b = getBungaloNumber();
@@ -3760,7 +4081,6 @@ function startSessionCheck() {
                 }
             });
 
-            // Настройка свайпа
             setTimeout(function() {
                 const cartModalEl = document.getElementById('cartModal');
                 const ordersModalEl = document.getElementById('ordersModal');
@@ -3776,8 +4096,6 @@ function startSessionCheck() {
 
         function initCart() {
             confirmToppingBtn.addEventListener('click', function() {
-                console.log('🛒 confirmToppingBtn нажат');
-                
                 if (!state.selectedProduct) {
                     showNotification('⚠️ Товар не выбран!', 'error');
                     return;
@@ -3791,22 +4109,20 @@ function startSessionCheck() {
                 const product = state.selectedProduct;
                 const topping = state.selectedTopping;
 
-                console.log('📦 Товар:', product);
-                console.log('📦 Присыпка:', topping);
-
                 let finalPrice = product.price;
                 let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
                 let quantity = 1;
 
+                // Для романтической позиции — 1 комплект (2 стаканчика)
                 if (product.isRomantic) {
-                    quantity = 2;
-                    finalPrice = product.price;
+                    quantity = 1; // 1 комплект = 2 стаканчика
+                    finalPrice = product.price; // 699 ₽ за комплект
                 } else {
                     finalPrice = product.price + topping.price;
                 }
 
                 const itemName = product.isRomantic ?
-                    `${product.name}` :
+                    `${product.name} (2 стаканчика)` :
                     `${product.name}${toppingText}`;
 
                 const cartItem = {
@@ -3819,8 +4135,6 @@ function startSessionCheck() {
                     toppingName: topping.name,
                     isRomantic: product.isRomantic || false
                 };
-
-                console.log('📦 Добавляем в корзину:', cartItem);
 
                 addToCart(cartItem);
                 closeToppingModal();
@@ -3850,23 +4164,11 @@ function startSessionCheck() {
         // ================================================================
         init();
 
-        console.log('🍓 Приложение загружено!');
+        console.log('🍓 Strawberry in Chocolate');
         console.log(`📍 Координаты киоска: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
         console.log(`🕐 График работы: ${WORK_HOURS.start}:00 - ${WORK_HOURS.end}:00 (МСК)`);
-        console.log(`📋 "Мои заказы" - отмена в течение 5 минут!`);
-        console.log(`🔧 Технический перерыв и управление меню подключены!`);
-        console.log(`💳 Оплата: Наличными / Переводом / СБП (скоро)`);
-        console.log(`❤️ Добавлена романтическая позиция "Для влюбленных" со скидкой -9%!`);
-        console.log(`🌐 Проверка интернета подключена!`);
-        console.log(`📝 При выборе товара - обязательный ввод имени и телефона!`);
-        console.log(`🌯 Добавлен раздел "Напитки / Перекус" с шаурмой!`);
-        console.log(`🎨 Все эмодзи заменены на иконки Font Awesome!`);
-        console.log(`🖼️ У клубники (стаканчиков) теперь картинки!`);
-        console.log(`📱 Добавлена нижняя панель (Tab Bar) как в мобильных приложениях!`);
-        console.log(`🔄 Добавлен свайп вниз для закрытия корзины и заказов!`);
-        console.log(`📦 Исправлено добавление в корзину после выбора присыпки!`);
-        console.log(`⏱️ Таймер на 30 секунд для теста (невидимый)!`);
-        console.log(`🏖️ При истечении времени показывается beachMode с картой и сердечком!`);
+        console.log(`⏱️ Сессия активна 5 часов!`);
+        console.log(`🍫 Клубника в шоколаде (с присыпками) | 🍉 Свежие фрукты (без присыпок)`);
     </script>
 
 </body>
