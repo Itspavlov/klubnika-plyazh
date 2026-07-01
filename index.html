@@ -2764,149 +2764,145 @@
         // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
         // ================================================================
 
-       // ================================================================
-// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
-// ================================================================
+        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА ДЛЯ ТЕСТА ⏱️
+        let sessionCheckInterval = null;
 
-const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
-let sessionCheckInterval = null;
+        function getBungaloNumber() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const b = urlParams.get('b');
+            if (b && !isNaN(b) && parseInt(b) > 0) {
+                return parseInt(b);
+            }
+            return null;
+        }
 
-function getBungaloNumber() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const b = urlParams.get('b');
-    if (b && !isNaN(b) && parseInt(b) > 0) {
-        return parseInt(b);
-    }
-    return null;
-}
+        function getSessionKey() {
+            const b = getBungaloNumber();
+            if (!b) return null;
+            return `qr_session_${b}`;
+        }
 
-function getSessionKey() {
-    const b = getBungaloNumber();
-    if (!b) return null;
-    return `qr_session_${b}`;
-}
-
-function getSession() {
-    const key = getSessionKey();
-    if (!key) return null;
-    try {
-        const data = sessionStorage.getItem(key);
-        if (!data) return null;
-        return JSON.parse(data);
-    } catch {
-        return null;
-    }
-}
-
-function saveSession(data) {
-    const key = getSessionKey();
-    if (!key) return;
-    sessionStorage.setItem(key, JSON.stringify(data));
-}
-
-function showBeachMode() {
-    const beachMode = document.getElementById('beachMode');
-    const bungaloMode = document.getElementById('bungaloMode');
-    
-    bungaloMode.style.display = 'none';
-    beachMode.style.display = 'block';
-    
-    const bungaloNumber = getBungaloNumber();
-    const beachBungaloNumber = document.getElementById('beachBungaloNumber');
-    
-    if (bungaloNumber) {
-        document.getElementById('beachBungaloInfo').style.display = 'inline-block';
-        beachBungaloNumber.textContent = bungaloNumber;
-    } else {
-        document.getElementById('beachBungaloInfo').style.display = 'none';
-    }
-    
-    document.getElementById('bottomTabBar').style.display = 'flex';
-}
-
-function hideBeachMode() {
-    document.getElementById('beachMode').style.display = 'none';
-    document.getElementById('bungaloMode').style.display = 'block';
-}
-
-function checkAndShowBeachMode() {
-    const bungaloNumber = getBungaloNumber();
-    
-    if (!bungaloNumber) {
-        showBeachMode();
-        return true;
-    }
-    
-    const session = getSession();
-    
-    // Если сессии нет — создаем ее (первый вход по QR)
-    if (!session) {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-        hideBeachMode();
-        return false; // Показываем меню
-    }
-    
-    const timePassed = Date.now() - session.lastRefresh;
-    
-    if (timePassed > SESSION_DURATION) {
-        showBeachMode();
-        return true;
-    }
-    
-    hideBeachMode();
-    return false;
-}
-
-function refreshSession() {
-    const bungaloNumber = getBungaloNumber();
-    if (!bungaloNumber) {
-        showNotification('⚠️ Номер бунгало не найден!', 'error');
-        return;
-    }
-    
-    // Обновляем сессию (при сканировании QR)
-    const session = getSession();
-    if (session) {
-        session.lastRefresh = Date.now();
-        saveSession(session);
-    } else {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-    }
-    
-    hideBeachMode();
-    showNotification('✅ Доступ обновлен!');
-    
-    setTimeout(() => {
-        window.location.reload();
-    }, 300);
-}
-
-function startSessionCheck() {
-    if (sessionCheckInterval) {
-        clearInterval(sessionCheckInterval);
-    }
-    
-    sessionCheckInterval = setInterval(() => {
-        const bungaloNumber = getBungaloNumber();
-        if (bungaloNumber) {
-            const session = getSession();
-            if (session) {
-                const timePassed = Date.now() - session.lastRefresh;
-                if (timePassed > SESSION_DURATION) {
-                    showBeachMode();
-                }
+        function getSession() {
+            const key = getSessionKey();
+            if (!key) return null;
+            try {
+                const data = sessionStorage.getItem(key);
+                if (!data) return null;
+                return JSON.parse(data);
+            } catch {
+                return null;
             }
         }
-    }, 5000);
-}
+
+        function saveSession(data) {
+            const key = getSessionKey();
+            if (!key) return;
+            sessionStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function showBeachMode() {
+            const beachMode = document.getElementById('beachMode');
+            const bungaloMode = document.getElementById('bungaloMode');
+            
+            bungaloMode.style.display = 'none';
+            beachMode.style.display = 'block';
+            
+            const bungaloNumber = getBungaloNumber();
+            const beachBungaloNumber = document.getElementById('beachBungaloNumber');
+            
+            if (bungaloNumber) {
+                document.getElementById('beachBungaloInfo').style.display = 'inline-block';
+                beachBungaloNumber.textContent = bungaloNumber;
+            } else {
+                document.getElementById('beachBungaloInfo').style.display = 'none';
+            }
+            
+            document.getElementById('bottomTabBar').style.display = 'flex';
+        }
+
+        function hideBeachMode() {
+            document.getElementById('beachMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'block';
+        }
+
+        function checkAndShowBeachMode() {
+            const bungaloNumber = getBungaloNumber();
+            
+            if (!bungaloNumber) {
+                showBeachMode();
+                return true;
+            }
+            
+            const session = getSession();
+            
+            // Если сессии нет — создаем ее (первый вход по QR)
+            if (!session) {
+                const newSession = {
+                    bungalo: bungaloNumber,
+                    lastRefresh: Date.now()
+                };
+                saveSession(newSession);
+                hideBeachMode();
+                return false; // Показываем меню
+            }
+            
+            const timePassed = Date.now() - session.lastRefresh;
+            
+            if (timePassed > SESSION_DURATION) {
+                showBeachMode();
+                return true;
+            }
+            
+            hideBeachMode();
+            return false;
+        }
+
+        function refreshSession() {
+            const bungaloNumber = getBungaloNumber();
+            if (!bungaloNumber) {
+                showNotification('⚠️ Номер бунгало не найден!', 'error');
+                return;
+            }
+            
+            // Обновляем сессию (при сканировании QR)
+            const session = getSession();
+            if (session) {
+                session.lastRefresh = Date.now();
+                saveSession(session);
+            } else {
+                const newSession = {
+                    bungalo: bungaloNumber,
+                    lastRefresh: Date.now()
+                };
+                saveSession(newSession);
+            }
+            
+            hideBeachMode();
+            showNotification('✅ Доступ обновлен!');
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+
+        function startSessionCheck() {
+            if (sessionCheckInterval) {
+                clearInterval(sessionCheckInterval);
+            }
+            
+            sessionCheckInterval = setInterval(() => {
+                const bungaloNumber = getBungaloNumber();
+                if (bungaloNumber) {
+                    const session = getSession();
+                    if (session) {
+                        const timePassed = Date.now() - session.lastRefresh;
+                        if (timePassed > SESSION_DURATION) {
+                            showBeachMode();
+                        }
+                    }
+                }
+            }, 5000);
+        }
 
         // ================================================================
         // ===== НАСТРОЙКИ =====
@@ -4087,7 +4083,6 @@ function startSessionCheck() {
                         // Принудительная проверка сессии
                         const session = getSession();
                         if (!session) {
-                            // Нет сессии → beachMode
                             showBeachMode();
                             document.getElementById('bungaloMode').style.display = 'none';
                             return;
@@ -4095,7 +4090,6 @@ function startSessionCheck() {
                         
                         const timePassed = Date.now() - session.lastRefresh;
                         if (timePassed > SESSION_DURATION) {
-                            // Сессия истекла → beachMode
                             showBeachMode();
                             document.getElementById('bungaloMode').style.display = 'none';
                             return;
@@ -4193,6 +4187,7 @@ function startSessionCheck() {
         console.log(`🕐 График работы: ${WORK_HOURS.start}:00 - ${WORK_HOURS.end}:00 (МСК)`);
         console.log(`⏱️ Сессия активна 1 минуту (тест)!`);
         console.log(`🍫 Клубника в шоколаде (с присыпками) | 🍉 Свежие фрукты (без присыпок)`);
+        console.log(`📱 Сессия создается только при сканировании QR`);
     </script>
 
 </body>
