@@ -69,6 +69,53 @@
         .toggle-btn.on { background: #D32F2F; color: white; }
         .toggle-btn.off { background: #2E7D32; color: white; }
         
+        /* ============================================================ */
+        /* ===== ЧИПСЫ-НАВИГАЦИЯ ===== */
+        /* ============================================================ */
+        .chips-nav-admin {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .chips-nav-admin .chip {
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1.5px solid #EDE3D8;
+            background: #FDFAF7;
+            font-size: 12px;
+            font-weight: 500;
+            color: #8F7A6E;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chips-nav-admin .chip:active { transform: scale(0.95); }
+        .chips-nav-admin .chip.active {
+            border-color: #8B0000;
+            background: #FDFAF7;
+            color: #8B0000;
+            box-shadow: 0 2px 12px rgba(139, 0, 0, 0.10);
+        }
+        .chips-nav-admin .chip i { font-size: 14px; }
+        
+        /* ============================================================ */
+        /* ===== СЕКЦИИ МЕНЮ ===== */
+        /* ============================================================ */
+        .menu-section-admin {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+        .menu-section-admin.active { display: block; }
+        
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .menu-grid-admin {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -87,6 +134,14 @@
             border-color: #E91E63;
             background: #FCE4EC;
         }
+        .menu-item-admin.fruit {
+            border-color: #7A9B7A;
+            background: #F0F7F0;
+        }
+        .menu-item-admin.drink {
+            border-color: #64B5F6;
+            background: #F0F7FF;
+        }
         .menu-item-admin .item-name {
             font-weight: 600;
             font-size: 14px;
@@ -94,7 +149,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
+        .menu-item-admin .item-name .emoji { font-size: 18px; }
         .menu-item-admin .item-status {
             font-size: 12px;
             font-weight: 600;
@@ -119,6 +176,25 @@
         .menu-toggle-btn.romantic { border-color: #E91E63; }
         .menu-toggle-btn.romantic.on { background: #FCE4EC; border-color: #E91E63; color: #E91E63; }
         .menu-toggle-btn.romantic.off { background: #FFEBEE; border-color: #E91E63; color: #D32F2F; }
+        .menu-toggle-btn.fruit { border-color: #7A9B7A; }
+        .menu-toggle-btn.fruit.on { background: #E8F5E9; border-color: #2E7D32; color: #2E7D32; }
+        .menu-toggle-btn.fruit.off { background: #FFEBEE; border-color: #D32F2F; color: #D32F2F; }
+        .menu-toggle-btn.drink { border-color: #64B5F6; }
+        .menu-toggle-btn.drink.on { background: #E3F2FD; border-color: #1565C0; color: #1565C0; }
+        .menu-toggle-btn.drink.off { background: #FFEBEE; border-color: #D32F2F; color: #D32F2F; }
+        
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8D6E63;
+            padding: 8px 0 4px;
+            border-bottom: 1px solid #EDE3D8;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-label i { font-size: 14px; }
         
         .stats {
             background: white;
@@ -312,11 +388,30 @@
             border-radius: 10px;
             margin-left: 4px;
         }
+        .fruit-label {
+            color: #2E7D32;
+            font-size: 10px;
+            font-weight: 700;
+            background: #E8F5E9;
+            padding: 1px 10px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        .drink-label {
+            color: #1565C0;
+            font-size: 10px;
+            font-weight: 700;
+            background: #E3F2FD;
+            padding: 1px 10px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
         
         @media (max-width: 500px) {
             .menu-grid-admin { grid-template-columns: 1fr; }
             .order-card .header { flex-direction: column; align-items: flex-start; }
             .controls .auto-refresh { margin-left: 0; width: 100%; }
+            .chips-nav-admin .chip { font-size: 11px; padding: 6px 12px; }
         }
     </style>
 </head>
@@ -350,8 +445,47 @@
                 📋 Меню
                 <span style="font-size:13px; font-weight:400; color:#8D6E63;">— включить/выключить позиции</span>
             </div>
-            <div class="menu-grid-admin" id="menuGrid">
-                <!-- Загружается из JavaScript -->
+            
+            <!-- ЧИПСЫ-НАВИГАЦИЯ -->
+            <div class="chips-nav-admin">
+                <button class="chip active" data-section="all" onclick="switchMenuSection('all')">
+                    <i class="fas fa-th-list"></i> Все
+                </button>
+                <button class="chip" data-section="strawberry" onclick="switchMenuSection('strawberry')">
+                    <i class="fas fa-strawberry"></i> Клубника
+                </button>
+                <button class="chip" data-section="fruits" onclick="switchMenuSection('fruits')">
+                    <i class="fas fa-apple-alt"></i> Фрукты
+                </button>
+                <button class="chip" data-section="drinks" onclick="switchMenuSection('drinks')">
+                    <i class="fas fa-mug-saucer"></i> Напитки
+                </button>
+            </div>
+            
+            <!-- СЕКЦИИ МЕНЮ -->
+            <div id="menuSections">
+                <!-- Все -->
+                <div class="menu-section-admin active" id="section-all">
+                    <div class="menu-grid-admin" id="menuGridAll"></div>
+                </div>
+                
+                <!-- Клубника -->
+                <div class="menu-section-admin" id="section-strawberry">
+                    <div class="section-label"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+                    <div class="menu-grid-admin" id="menuGridStrawberry"></div>
+                </div>
+                
+                <!-- Фрукты -->
+                <div class="menu-section-admin" id="section-fruits">
+                    <div class="section-label"><i class="fas fa-apple-alt"></i> Свежие фрукты (без шоколада)</div>
+                    <div class="menu-grid-admin" id="menuGridFruits"></div>
+                </div>
+                
+                <!-- Напитки -->
+                <div class="menu-section-admin" id="section-drinks">
+                    <div class="section-label"><i class="fas fa-mug-saucer"></i> Напитки и перекус</div>
+                    <div class="menu-grid-admin" id="menuGridDrinks"></div>
+                </div>
             </div>
         </div>
         
@@ -402,25 +536,54 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // Font Awesome для иконок
+        const faLink = document.createElement('link');
+        faLink.rel = 'stylesheet';
+        faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
+        document.head.appendChild(faLink);
+        
         let refreshInterval = null;
         let isAutoRefresh = true;
         
         // ================================================================
-        // ===== ДАННЫЕ О МЕНЮ =====
+        // ===== ДАННЫЕ О МЕНЮ (ВСЕ ПОЗИЦИИ) =====
         // ================================================================
-        const MENU_ITEMS = [
-            { id: '9', name: '❤️ Для влюбленных', emoji: '❤️', romantic: true },
-            { id: '1', name: '🍫 Классика', emoji: '🍫' },
-            { id: '2', name: '🤍 Белый шоколад', emoji: '🤍' },
-            { id: '3', name: '💎 Тиффани', emoji: '💎' },
-            { id: '4', name: '🍌 Микс клубника-банан', emoji: '🍌' },
-            { id: '5', name: '🍌 Банан в шоколаде', emoji: '🍌' },
-            { id: '6', name: '🍋 Лимонад', emoji: '🍋' },
-            { id: '7', name: '🥤 Кока-Кола', emoji: '🥤' },
-            { id: '8', name: '🍺 Пиво', emoji: '🍺' }
+        const MENU_ITEMS = {
+            // Клубника в шоколаде (с присыпками)
+            strawberry: [
+                { id: '9', name: 'Для влюбленных', emoji: '❤️', romantic: true, category: 'strawberry' },
+                { id: '1', name: 'Классика', emoji: '🍫', category: 'strawberry' },
+                { id: '2', name: 'Белый шоколад', emoji: '🤍', category: 'strawberry' },
+                { id: '3', name: 'Тиффани', emoji: '💎', category: 'strawberry' },
+                { id: '4', name: 'Микс клубника-банан', emoji: '🍌', category: 'strawberry' },
+                { id: '5', name: 'Банан в шоколаде', emoji: '🍌', category: 'strawberry' }
+            ],
+            // Свежие фрукты (БЕЗ шоколада, БЕЗ присыпок)
+            fruits: [
+                { id: '11', name: 'Сладкий арбуз', emoji: '🍉', category: 'fruits' },
+                { id: '12', name: 'Дыня', emoji: '🍈', category: 'fruits' },
+                { id: '13', name: 'Малина', emoji: '🍓', category: 'fruits' },
+                { id: '14', name: 'Ежевика', emoji: '🫐', category: 'fruits' },
+                { id: '15', name: 'Голубика', emoji: '🫐', category: 'fruits' }
+            ],
+            // Напитки и перекус
+            drinks: [
+                { id: '6', name: 'Лимонад', emoji: '🍋', category: 'drinks' },
+                { id: '7', name: 'Кока-Кола', emoji: '🥤', category: 'drinks' },
+                { id: '8', name: 'Пиво', emoji: '🍺', category: 'drinks' },
+                { id: '10', name: 'Шаурма с курицей', emoji: '🌯', category: 'drinks' }
+            ]
+        };
+        
+        // Все позиции для секции "Все"
+        const ALL_ITEMS = [
+            ...MENU_ITEMS.strawberry,
+            ...MENU_ITEMS.fruits,
+            ...MENU_ITEMS.drinks
         ];
         
         let settings = { technicalBreak: false, menuItems: {} };
+        let currentSection = 'all';
         
         // ================================================================
         // ===== ЗАГРУЗКА НАСТРОЕК =====
@@ -437,8 +600,91 @@
         }
         
         // ================================================================
-        // ===== ОБНОВЛЕНИЕ UI =====
+        // ===== ПЕРЕКЛЮЧЕНИЕ СЕКЦИЙ =====
         // ================================================================
+        function switchMenuSection(section) {
+            currentSection = section;
+            
+            // Обновляем чипсы
+            document.querySelectorAll('.chips-nav-admin .chip').forEach(el => {
+                el.classList.toggle('active', el.dataset.section === section);
+            });
+            
+            // Обновляем секции
+            document.querySelectorAll('.menu-section-admin').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const target = document.getElementById('section-' + section);
+            if (target) target.classList.add('active');
+            
+            // Перерисовываем меню для выбранной секции
+            renderMenuSection(section);
+        }
+        
+        // ================================================================
+        // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
+        // ================================================================
+        function renderMenuSection(section) {
+            let items = [];
+            let gridId = '';
+            
+            if (section === 'all') {
+                items = ALL_ITEMS;
+                gridId = 'menuGridAll';
+            } else if (section === 'strawberry') {
+                items = MENU_ITEMS.strawberry;
+                gridId = 'menuGridStrawberry';
+            } else if (section === 'fruits') {
+                items = MENU_ITEMS.fruits;
+                gridId = 'menuGridFruits';
+            } else if (section === 'drinks') {
+                items = MENU_ITEMS.drinks;
+                gridId = 'menuGridDrinks';
+            }
+            
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            
+            grid.innerHTML = items.map(item => {
+                const available = settings.menuItems[item.id] !== false;
+                const isRomantic = item.romantic || false;
+                const category = item.category || '';
+                
+                let categoryClass = '';
+                let labelHtml = '';
+                if (isRomantic) {
+                    categoryClass = 'romantic';
+                    labelHtml = '<span class="romantic-label">❤️ Романтика</span>';
+                } else if (category === 'fruits') {
+                    categoryClass = 'fruit';
+                    labelHtml = '<span class="fruit-label">🍉 Фрукт</span>';
+                } else if (category === 'drinks') {
+                    categoryClass = 'drink';
+                    labelHtml = '<span class="drink-label">🥤 Напиток</span>';
+                }
+                
+                const toggleClass = isRomantic ? 'romantic' : (category === 'fruits' ? 'fruit' : (category === 'drinks' ? 'drink' : ''));
+                
+                return `
+                    <div class="menu-item-admin ${categoryClass}">
+                        <span class="item-name">
+                            <span class="emoji">${item.emoji}</span>
+                            ${item.name}
+                            ${labelHtml}
+                            <span class="item-status ${available ? 'available' : 'unavailable'}">
+                                ${available ? '✅' : '❌'}
+                            </span>
+                        </span>
+                        <button class="menu-toggle-btn ${available ? 'on' : 'off'} ${toggleClass}" 
+                                onclick="toggleMenuItem('${item.id}')">
+                            ${available ? 'Доступно' : 'Скрыто'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
         function updateUI() {
             // Технический перерыв
             const isBreak = settings.technicalBreak;
@@ -462,29 +708,11 @@
                 breakStatus.className = 'tech-break-status inactive';
             }
             
-            // Меню
-            const grid = document.getElementById('menuGrid');
-            grid.innerHTML = MENU_ITEMS.map(item => {
-                const available = settings.menuItems[item.id] !== false;
-                const isRomantic = item.romantic || false;
-                const romanticClass = isRomantic ? 'romantic' : '';
-                
-                return `
-                    <div class="menu-item-admin ${romanticClass}">
-                        <span class="item-name">
-                            ${item.name}
-                            ${isRomantic ? '<span class="romantic-label">❤️ Романтика</span>' : ''}
-                            <span class="item-status ${available ? 'available' : 'unavailable'}">
-                                ${available ? '✅' : '❌'}
-                            </span>
-                        </span>
-                        <button class="menu-toggle-btn ${available ? 'on' : 'off'} ${romanticClass}" 
-                                onclick="toggleMenuItem('${item.id}')">
-                            ${available ? 'Доступно' : 'Скрыто'}
-                        </button>
-                    </div>
-                `;
-            }).join('');
+            // Перерисовываем все секции меню
+            renderMenuSection('all');
+            renderMenuSection('strawberry');
+            renderMenuSection('fruits');
+            renderMenuSection('drinks');
         }
         
         // ================================================================
@@ -526,8 +754,9 @@
                 if (data.success) {
                     settings = data.settings;
                     updateUI();
-                    const item = MENU_ITEMS.find(i => i.id === itemId);
-                    showToast(`${newState ? '✅' : '❌'} ${item.name}: ${newState ? 'доступно' : 'скрыто'}`);
+                    const allItems = ALL_ITEMS;
+                    const item = allItems.find(i => i.id === itemId);
+                    showToast(`${newState ? '✅' : '❌'} ${item ? item.name : itemId}: ${newState ? 'доступно' : 'скрыто'}`);
                 }
             } catch (e) {
                 showToast('❌ Ошибка');
@@ -762,7 +991,10 @@
         startAutoRefresh();
         
         console.log('📋 Админка с управлением загружена!');
-        console.log('❤️ Романтическая позиция "Для влюбленных" добавлена в управление!');
+        console.log('🍓 Клубника в шоколаде (6 позиций)');
+        console.log('🍉 Свежие фрукты (5 позиций)');
+        console.log('🥤 Напитки и перекус (4 позиции)');
+        console.log('📊 Всего позиций: 15');
     </script>
 </body>
 </html>
