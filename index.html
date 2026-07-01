@@ -2770,6 +2770,9 @@
 // ================================================================
 // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
 // ================================================================
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
 
 const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
 let sessionCheckInterval = null;
@@ -2807,6 +2810,12 @@ function saveSession(data) {
     sessionStorage.setItem(key, JSON.stringify(data));
 }
 
+function deleteSession() {
+    const key = getSessionKey();
+    if (!key) return;
+    sessionStorage.removeItem(key);
+}
+
 function showBeachMode() {
     const beachMode = document.getElementById('beachMode');
     const bungaloMode = document.getElementById('bungaloMode');
@@ -2842,20 +2851,32 @@ function checkAndShowBeachMode() {
     
     const session = getSession();
     
-    // ✅ Если сессии нет — создаем (первый вход по QR)
+    // Проверяем тип загрузки страницы
+    const navEntry = performance.getEntriesByType('navigation')[0];
+    const isReload = navEntry?.type === 'reload';
+    const isBackForward = navEntry?.type === 'back_forward';
+    
+    // Если сессии нет
     if (!session) {
+        // Если это перезагрузка или возврат назад — показываем beachMode
+        if (isReload || isBackForward) {
+            showBeachMode();
+            return true;
+        }
+        // Первый вход (новая вкладка или клик по ссылке) — создаем сессию
         const newSession = {
             bungalo: bungaloNumber,
             lastRefresh: Date.now()
         };
         saveSession(newSession);
         hideBeachMode();
-        return false; // показываем меню
+        return false;
     }
     
     const timePassed = Date.now() - session.lastRefresh;
     
     if (timePassed > SESSION_DURATION) {
+        deleteSession();
         showBeachMode();
         return true;
     }
@@ -2871,18 +2892,13 @@ function refreshSession() {
         return;
     }
     
-    // Обновляем сессию (при сканировании QR)
-    const session = getSession();
-    if (session) {
-        session.lastRefresh = Date.now();
-        saveSession(session);
-    } else {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-    }
+    deleteSession();
+    
+    const newSession = {
+        bungalo: bungaloNumber,
+        lastRefresh: Date.now()
+    };
+    saveSession(newSession);
     
     hideBeachMode();
     showNotification('✅ Доступ обновлен!');
@@ -2901,6 +2917,7 @@ function startSessionCheck() {
             if (session) {
                 const timePassed = Date.now() - session.lastRefresh;
                 if (timePassed > SESSION_DURATION) {
+                    deleteSession();
                     showBeachMode();
                 }
             }
