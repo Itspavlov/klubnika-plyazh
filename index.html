@@ -2763,72 +2763,74 @@
         // ================================================================
         // ===== УПРАВЛЕНИЕ СЕССИЕЙ (5 ЧАСОВ) =====
         // ================================================================
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
 
-        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
-        let sessionCheckInterval = null;
+const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
+let sessionCheckInterval = null;
 
-        function getBungaloNumber() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const b = urlParams.get('b');
-            if (b && !isNaN(b) && parseInt(b) > 0) {
-                return parseInt(b);
-            }
-            return null;
-        }
+function getBungaloNumber() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const b = urlParams.get('b');
+    if (b && !isNaN(b) && parseInt(b) > 0) {
+        return parseInt(b);
+    }
+    return null;
+}
 
-        function getSessionKey() {
-            const b = getBungaloNumber();
-            if (!b) return null;
-            return `qr_session_${b}`;
-        }
+function getSessionKey() {
+    const b = getBungaloNumber();
+    if (!b) return null;
+    return `qr_session_${b}`;
+}
 
-        function getSession() {
-            const key = getSessionKey();
-            if (!key) return null;
-            try {
-                const data = localStorage.getItem(key);
-                if (!data) return null;
-                return JSON.parse(data);
-            } catch {
-                return null;
-            }
-        }
+function getSession() {
+    const key = getSessionKey();
+    if (!key) return null;
+    try {
+        const data = sessionStorage.getItem(key);
+        if (!data) return null;
+        return JSON.parse(data);
+    } catch {
+        return null;
+    }
+}
 
-        function saveSession(data) {
-            const key = getSessionKey();
-            if (!key) return;
-            localStorage.setItem(key, JSON.stringify(data));
-        }
+function saveSession(data) {
+    const key = getSessionKey();
+    if (!key) return;
+    sessionStorage.setItem(key, JSON.stringify(data));
+}
 
-        function showBeachMode() {
-            const beachMode = document.getElementById('beachMode');
-            const bungaloMode = document.getElementById('bungaloMode');
-            
-            bungaloMode.style.display = 'none';
-            beachMode.style.display = 'block';
-            
-            const bungaloNumber = getBungaloNumber();
-            const beachBungaloNumber = document.getElementById('beachBungaloNumber');
-            
-            if (bungaloNumber) {
-                document.getElementById('beachBungaloInfo').style.display = 'inline-block';
-                beachBungaloNumber.textContent = bungaloNumber;
-            } else {
-                document.getElementById('beachBungaloInfo').style.display = 'none';
-            }
-            
-            document.getElementById('bottomTabBar').style.display = 'flex';
-        }
+function showBeachMode() {
+    const beachMode = document.getElementById('beachMode');
+    const bungaloMode = document.getElementById('bungaloMode');
+    
+    bungaloMode.style.display = 'none';
+    beachMode.style.display = 'block';
+    
+    const bungaloNumber = getBungaloNumber();
+    const beachBungaloNumber = document.getElementById('beachBungaloNumber');
+    
+    if (bungaloNumber) {
+        document.getElementById('beachBungaloInfo').style.display = 'inline-block';
+        beachBungaloNumber.textContent = bungaloNumber;
+    } else {
+        document.getElementById('beachBungaloInfo').style.display = 'none';
+    }
+    
+    document.getElementById('bottomTabBar').style.display = 'flex';
+}
 
-        function hideBeachMode() {
-            document.getElementById('beachMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-        }
+function hideBeachMode() {
+    document.getElementById('beachMode').style.display = 'none';
+    document.getElementById('bungaloMode').style.display = 'block';
+}
 
-        function checkAndShowBeachMode() {
+function checkAndShowBeachMode() {
     const bungaloNumber = getBungaloNumber();
     
-    // Если нет бунгало - показываем beachMode
     if (!bungaloNumber) {
         showBeachMode();
         return true;
@@ -2836,7 +2838,6 @@
     
     const session = getSession();
     
-    // Первый запуск - создаем сессию
     if (!session) {
         const newSession = {
             bungalo: bungaloNumber,
@@ -2847,45 +2848,43 @@
         return false;
     }
     
-    // Проверяем, прошло ли время
     const timePassed = Date.now() - session.lastRefresh;
     
     if (timePassed > SESSION_DURATION) {
-        // Время истекло - показываем beachMode, НЕ обновляем сессию!
         showBeachMode();
-        return true; // <-- Возвращаем true, чтобы показать beachMode
+        return true;
     }
     
-    // Сессия активна
     hideBeachMode();
     return false;
 }
 
-        function refreshSession() {
-            const bungaloNumber = getBungaloNumber();
-            if (!bungaloNumber) {
-                showNotification('⚠️ Номер бунгало не найден!', 'error');
-                return;
-            }
-            
-            const session = getSession();
-            if (session) {
-                session.lastRefresh = Date.now();
-                saveSession(session);
-            } else {
-                saveSession({
-                    bungalo: bungaloNumber,
-                    lastRefresh: Date.now()
-                });
-            }
-            
-            hideBeachMode();
-            showNotification('✅ Доступ обновлен!');
-            
-            setTimeout(() => {
-                window.location.reload();
-            }, 300);
-        }
+function refreshSession() {
+    const bungaloNumber = getBungaloNumber();
+    if (!bungaloNumber) {
+        showNotification('⚠️ Номер бунгало не найден!', 'error');
+        return;
+    }
+    
+    // ОБНОВЛЯЕМ СЕССИЮ при сканировании QR
+    const session = getSession();
+    if (session) {
+        session.lastRefresh = Date.now();
+        saveSession(session);
+    } else {
+        saveSession({
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        });
+    }
+    
+    hideBeachMode();
+    showNotification('✅ Доступ обновлен!');
+    
+    setTimeout(() => {
+        window.location.reload();
+    }, 300);
+}
 
         function startSessionCheck() {
             if (sessionCheckInterval) {
