@@ -2925,161 +2925,175 @@
         // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
         // ================================================================
 
-        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
-        let sessionCheckInterval = null;
-        let isPickupMode = false;
+        // ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
 
-        function getBungaloNumber() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const b = urlParams.get('b');
-            if (b && !isNaN(b) && parseInt(b) > 0) {
-                return parseInt(b);
-            }
-            return null;
-        }
+const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
+let sessionCheckInterval = null;
+let isPickupMode = false;
 
-        function getSessionKey() {
-            const b = getBungaloNumber();
-            if (!b) return null;
-            return `qr_session_${b}`;
-        }
+function getBungaloNumber() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const b = urlParams.get('b');
+    if (b && !isNaN(b) && parseInt(b) > 0) {
+        return parseInt(b);
+    }
+    return null;
+}
 
-        function getSession() {
-            const key = getSessionKey();
-            if (!key) return null;
-            try {
-                const data = localStorage.getItem(key);
-                if (!data) return null;
-                return JSON.parse(data);
-            } catch {
-                return null;
-            }
-        }
+function getSessionKey() {
+    const b = getBungaloNumber();
+    if (!b) return null;
+    return `qr_session_${b}`;
+}
 
-        function saveSession(data) {
-            const key = getSessionKey();
-            if (!key) return;
-            localStorage.setItem(key, JSON.stringify(data));
-        }
+function getSession() {
+    const key = getSessionKey();
+    if (!key) return null;
+    try {
+        const data = localStorage.getItem(key);
+        if (!data) return null;
+        return JSON.parse(data);
+    } catch {
+        return null;
+    }
+}
 
-        function deleteSession() {
-            const key = getSessionKey();
-            if (!key) return;
-            localStorage.removeItem(key);
-        }
+function saveSession(data) {
+    const key = getSessionKey();
+    if (!key) return;
+    localStorage.setItem(key, JSON.stringify(data));
+}
 
-        function showBeachMode() {
-            const beachMode = document.getElementById('beachMode');
-            const bungaloMode = document.getElementById('bungaloMode');
-            const chooseMode = document.getElementById('chooseMode');
-            
-            bungaloMode.style.display = 'none';
-            beachMode.style.display = 'block';
-            chooseMode.style.display = 'none';
-            
-            document.getElementById('bottomTabBar').style.display = 'flex';
-        }
+function deleteSession() {
+    const key = getSessionKey();
+    if (!key) return;
+    localStorage.removeItem(key);
+}
 
-        function hideBeachMode() {
-            document.getElementById('beachMode').style.display = 'none';
-            document.getElementById('chooseMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-        }
+function showBeachMode() {
+    const beachMode = document.getElementById('beachMode');
+    const bungaloMode = document.getElementById('bungaloMode');
+    const chooseMode = document.getElementById('chooseMode');
+    
+    bungaloMode.style.display = 'none';
+    beachMode.style.display = 'block';
+    chooseMode.style.display = 'none';
+    
+    document.getElementById('bottomTabBar').style.display = 'flex';
+}
 
-        function showChooseMode() {
-            const bungaloNumber = getBungaloNumber();
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('beachMode').style.display = 'none';
-            document.getElementById('chooseMode').style.display = 'block';
-            document.getElementById('bottomTabBar').style.display = 'flex';
-            
-            if (bungaloNumber) {
-                document.getElementById('chooseBungaloNumber').textContent = bungaloNumber;
-                document.getElementById('chooseInfoBungalo').textContent = bungaloNumber;
-            }
-        }
+function hideBeachMode() {
+    document.getElementById('beachMode').style.display = 'none';
+    document.getElementById('chooseMode').style.display = 'none';
+    document.getElementById('bungaloMode').style.display = 'block';
+}
 
-        function hideChooseMode() {
-            document.getElementById('chooseMode').style.display = 'none';
-        }
+function showChooseMode() {
+    const bungaloNumber = getBungaloNumber();
+    document.getElementById('bungaloMode').style.display = 'none';
+    document.getElementById('beachMode').style.display = 'none';
+    document.getElementById('chooseMode').style.display = 'block';
+    document.getElementById('bottomTabBar').style.display = 'flex';
+    
+    if (bungaloNumber) {
+        document.getElementById('chooseBungaloNumber').textContent = bungaloNumber;
+        document.getElementById('chooseInfoBungalo').textContent = bungaloNumber;
+    }
+}
 
-        function checkAndShowBeachMode() {
-            const bungaloNumber = getBungaloNumber();
-            
-            if (!bungaloNumber) {
-                showBeachMode();
-                return true;
-            }
-            
-            const session = getSession();
-            
-            if (!session) {
-                showChooseMode();
-                return true;
-            }
-            
-            const timePassed = Date.now() - session.lastRefresh;
-            
-            if (timePassed > SESSION_DURATION) {
-                deleteSession();
-                showChooseMode();
-                return true;
-            }
-            
-            hideBeachMode();
-            hideChooseMode();
-            return false;
-        }
+function hideChooseMode() {
+    document.getElementById('chooseMode').style.display = 'none';
+}
 
-        function refreshSession() {
-            const bungaloNumber = getBungaloNumber();
-            if (!bungaloNumber) {
-                showNotification('⚠️ Номер бунгало не найден!', 'error');
-                return;
-            }
-            
-            deleteSession();
-            
-            const newSession = {
-                bungalo: bungaloNumber,
-                lastRefresh: Date.now()
-            };
-            saveSession(newSession);
-            
-            isPickupMode = false;
-            hideChooseMode();
-            hideBeachMode();
-            showNotification('✅ Доступ обновлен!');
-            window.location.reload();
-        }
+function checkAndShowBeachMode() {
+    const bungaloNumber = getBungaloNumber();
+    
+    if (!bungaloNumber) {
+        showBeachMode();
+        return true;
+    }
+    
+    const session = getSession();
+    
+    // ===== ПЕРВЫЙ ВХОД ПО QR =====
+    // Если сессии нет — создаем (это сканирование QR)
+    if (!session) {
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+        hideBeachMode();
+        hideChooseMode();
+        return false; // показываем меню
+    }
+    
+    // ===== ПРОВЕРКА ВРЕМЕНИ =====
+    const timePassed = Date.now() - session.lastRefresh;
+    
+    // ===== СЕССИЯ ИСТЕКЛА =====
+    if (timePassed > SESSION_DURATION) {
+        deleteSession();
+        showChooseMode(); // показываем "Где вы?"
+        return true;
+    }
+    
+    // ===== СЕССИЯ АКТИВНА =====
+    hideBeachMode();
+    hideChooseMode();
+    return false;
+}
 
-        function openBeachOrder() {
-            const bungaloNumber = getBungaloNumber();
-            if (!bungaloNumber) {
-                showNotification('⚠️ Номер бунгало не найден!', 'error');
-                return;
-            }
-            
-            isPickupMode = true;
-            
-            deleteSession();
-            const newSession = {
-                bungalo: bungaloNumber,
-                lastRefresh: Date.now(),
-                isPickup: true
-            };
-            saveSession(newSession);
-            
-            hideChooseMode();
-            hideBeachMode();
-            document.getElementById('bungaloMode').style.display = 'block';
-            document.getElementById('bottomTabBar').style.display = 'flex';
-            
-            showNotification(`🏖️ Заказ будет доставлен к бунгало #${bungaloNumber}! Ждите у входа.`);
-            
-            showPickupBanner(bungaloNumber);
-        }
+function refreshSession() {
+    const bungaloNumber = getBungaloNumber();
+    if (!bungaloNumber) {
+        showNotification('⚠️ Номер бунгало не найден!', 'error');
+        return;
+    }
+    
+    deleteSession();
+    
+    const newSession = {
+        bungalo: bungaloNumber,
+        lastRefresh: Date.now()
+    };
+    saveSession(newSession);
+    
+    isPickupMode = false;
+    hideChooseMode();
+    hideBeachMode();
+    showNotification('✅ Доступ обновлен!');
+    window.location.reload();
+}
 
+function openBeachOrder() {
+    const bungaloNumber = getBungaloNumber();
+    if (!bungaloNumber) {
+        showNotification('⚠️ Номер бунгало не найден!', 'error');
+        return;
+    }
+    
+    isPickupMode = true;
+    
+    deleteSession();
+    const newSession = {
+        bungalo: bungaloNumber,
+        lastRefresh: Date.now(),
+        isPickup: true
+    };
+    saveSession(newSession);
+    
+    hideChooseMode();
+    hideBeachMode();
+    document.getElementById('bungaloMode').style.display = 'block';
+    document.getElementById('bottomTabBar').style.display = 'flex';
+    
+    showNotification(`🏖️ Заказ будет доставлен к бунгало #${bungaloNumber}! Ждите у входа.`);
+    
+    showPickupBanner(bungaloNumber);
+}
         function showPickupBanner(bungaloNumber) {
             const existing = document.getElementById('pickupBanner');
             if (existing) existing.remove();
