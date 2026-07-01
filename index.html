@@ -2767,6 +2767,9 @@
         // ================================================================
 // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
 // ================================================================
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
 
 const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
 let sessionCheckInterval = null;
@@ -2839,10 +2842,15 @@ function checkAndShowBeachMode() {
     
     const session = getSession();
     
-    // НЕ СОЗДАЕМ СЕССИЮ! Если нет сессии — показываем beachMode
+    // ✅ Если сессии нет — создаем (первый вход по QR)
     if (!session) {
-        showBeachMode();
-        return true;
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+        hideBeachMode();
+        return false; // показываем меню
     }
     
     const timePassed = Date.now() - session.lastRefresh;
@@ -2863,7 +2871,7 @@ function refreshSession() {
         return;
     }
     
-    // ТОЛЬКО ЗДЕСЬ СОЗДАЕМ/ОБНОВЛЯЕМ СЕССИЮ (при сканировании QR)
+    // Обновляем сессию (при сканировании QR)
     const session = getSession();
     if (session) {
         session.lastRefresh = Date.now();
@@ -2912,7 +2920,7 @@ function startSessionCheck() {
 
         const WORK_HOURS = {
             start: 9,
-            end: 1
+            end: 2
         };
 
         // ================================================================
