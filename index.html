@@ -2764,145 +2764,141 @@
         // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
         // ================================================================
 
-        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА ДЛЯ ТЕСТА ⏱️
-        let sessionCheckInterval = null;
+        // ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
 
-        function getBungaloNumber() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const b = urlParams.get('b');
-            if (b && !isNaN(b) && parseInt(b) > 0) {
-                return parseInt(b);
-            }
-            return null;
-        }
+const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
+let sessionCheckInterval = null;
 
-        function getSessionKey() {
-            const b = getBungaloNumber();
-            if (!b) return null;
-            return `qr_session_${b}`;
-        }
+function getBungaloNumber() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const b = urlParams.get('b');
+    if (b && !isNaN(b) && parseInt(b) > 0) {
+        return parseInt(b);
+    }
+    return null;
+}
 
-        function getSession() {
-            const key = getSessionKey();
-            if (!key) return null;
-            try {
-                const data = sessionStorage.getItem(key);
-                if (!data) return null;
-                return JSON.parse(data);
-            } catch {
-                return null;
-            }
-        }
+function getSessionKey() {
+    const b = getBungaloNumber();
+    if (!b) return null;
+    return `qr_session_${b}`;
+}
 
-        function saveSession(data) {
-            const key = getSessionKey();
-            if (!key) return;
-            sessionStorage.setItem(key, JSON.stringify(data));
-        }
+function getSession() {
+    const key = getSessionKey();
+    if (!key) return null;
+    try {
+        const data = sessionStorage.getItem(key);
+        if (!data) return null;
+        return JSON.parse(data);
+    } catch {
+        return null;
+    }
+}
 
-        function showBeachMode() {
-            const beachMode = document.getElementById('beachMode');
-            const bungaloMode = document.getElementById('bungaloMode');
-            
-            bungaloMode.style.display = 'none';
-            beachMode.style.display = 'block';
-            
-            const bungaloNumber = getBungaloNumber();
-            const beachBungaloNumber = document.getElementById('beachBungaloNumber');
-            
-            if (bungaloNumber) {
-                document.getElementById('beachBungaloInfo').style.display = 'inline-block';
-                beachBungaloNumber.textContent = bungaloNumber;
-            } else {
-                document.getElementById('beachBungaloInfo').style.display = 'none';
-            }
-            
-            document.getElementById('bottomTabBar').style.display = 'flex';
-        }
+function saveSession(data) {
+    const key = getSessionKey();
+    if (!key) return;
+    sessionStorage.setItem(key, JSON.stringify(data));
+}
 
-        function hideBeachMode() {
-            document.getElementById('beachMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-        }
+function showBeachMode() {
+    const beachMode = document.getElementById('beachMode');
+    const bungaloMode = document.getElementById('bungaloMode');
+    
+    bungaloMode.style.display = 'none';
+    beachMode.style.display = 'block';
+    
+    const bungaloNumber = getBungaloNumber();
+    const beachBungaloNumber = document.getElementById('beachBungaloNumber');
+    
+    if (bungaloNumber) {
+        document.getElementById('beachBungaloInfo').style.display = 'inline-block';
+        beachBungaloNumber.textContent = bungaloNumber;
+    } else {
+        document.getElementById('beachBungaloInfo').style.display = 'none';
+    }
+    
+    document.getElementById('bottomTabBar').style.display = 'flex';
+}
 
-        function checkAndShowBeachMode() {
-            const bungaloNumber = getBungaloNumber();
-            
-            if (!bungaloNumber) {
-                showBeachMode();
-                return true;
-            }
-            
-            const session = getSession();
-            
-            // Если сессии нет — создаем ее (первый вход по QR)
-            if (!session) {
-                const newSession = {
-                    bungalo: bungaloNumber,
-                    lastRefresh: Date.now()
-                };
-                saveSession(newSession);
-                hideBeachMode();
-                return false; // Показываем меню
-            }
-            
-            const timePassed = Date.now() - session.lastRefresh;
-            
-            if (timePassed > SESSION_DURATION) {
-                showBeachMode();
-                return true;
-            }
-            
-            hideBeachMode();
-            return false;
-        }
+function hideBeachMode() {
+    document.getElementById('beachMode').style.display = 'none';
+    document.getElementById('bungaloMode').style.display = 'block';
+}
 
-        function refreshSession() {
-            const bungaloNumber = getBungaloNumber();
-            if (!bungaloNumber) {
-                showNotification('⚠️ Номер бунгало не найден!', 'error');
-                return;
-            }
-            
-            // Обновляем сессию (при сканировании QR)
+function checkAndShowBeachMode() {
+    const bungaloNumber = getBungaloNumber();
+    
+    if (!bungaloNumber) {
+        showBeachMode();
+        return true;
+    }
+    
+    const session = getSession();
+    
+    // НЕ СОЗДАЕМ СЕССИЮ! Если нет сессии — показываем beachMode
+    if (!session) {
+        showBeachMode();
+        return true;
+    }
+    
+    const timePassed = Date.now() - session.lastRefresh;
+    
+    if (timePassed > SESSION_DURATION) {
+        showBeachMode();
+        return true;
+    }
+    
+    hideBeachMode();
+    return false;
+}
+
+function refreshSession() {
+    const bungaloNumber = getBungaloNumber();
+    if (!bungaloNumber) {
+        showNotification('⚠️ Номер бунгало не найден!', 'error');
+        return;
+    }
+    
+    // ТОЛЬКО ЗДЕСЬ СОЗДАЕМ/ОБНОВЛЯЕМ СЕССИЮ (при сканировании QR)
+    const session = getSession();
+    if (session) {
+        session.lastRefresh = Date.now();
+        saveSession(session);
+    } else {
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+    }
+    
+    hideBeachMode();
+    showNotification('✅ Доступ обновлен!');
+    window.location.reload();
+}
+
+function startSessionCheck() {
+    if (sessionCheckInterval) {
+        clearInterval(sessionCheckInterval);
+    }
+    
+    sessionCheckInterval = setInterval(() => {
+        const bungaloNumber = getBungaloNumber();
+        if (bungaloNumber) {
             const session = getSession();
             if (session) {
-                session.lastRefresh = Date.now();
-                saveSession(session);
-            } else {
-                const newSession = {
-                    bungalo: bungaloNumber,
-                    lastRefresh: Date.now()
-                };
-                saveSession(newSession);
-            }
-            
-            hideBeachMode();
-            showNotification('✅ Доступ обновлен!');
-            
-            setTimeout(() => {
-                window.location.reload();
-            }, 300);
-        }
-
-        function startSessionCheck() {
-            if (sessionCheckInterval) {
-                clearInterval(sessionCheckInterval);
-            }
-            
-            sessionCheckInterval = setInterval(() => {
-                const bungaloNumber = getBungaloNumber();
-                if (bungaloNumber) {
-                    const session = getSession();
-                    if (session) {
-                        const timePassed = Date.now() - session.lastRefresh;
-                        if (timePassed > SESSION_DURATION) {
-                            showBeachMode();
-                        }
-                    }
+                const timePassed = Date.now() - session.lastRefresh;
+                if (timePassed > SESSION_DURATION) {
+                    showBeachMode();
                 }
-            }, 5000);
+            }
         }
+    }, 5000);
+}
 
         // ================================================================
         // ===== НАСТРОЙКИ =====
