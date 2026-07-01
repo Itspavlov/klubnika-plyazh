@@ -2778,6 +2778,10 @@
 // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
 // ================================================================
 
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
+
 const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
 let sessionCheckInterval = null;
 
@@ -2880,21 +2884,15 @@ function refreshSession() {
         return;
     }
     
-    // Проверяем, была ли уже создана сессия
-    const session = getSession();
+    // Удаляем старую сессию
+    deleteSession();
     
-    if (session) {
-        // Если сессия есть — обновляем время
-        session.lastRefresh = Date.now();
-        saveSession(session);
-    } else {
-        // Если сессии нет — создаем новую
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-    }
+    // Создаем новую
+    const newSession = {
+        bungalo: bungaloNumber,
+        lastRefresh: Date.now()
+    };
+    saveSession(newSession);
     
     hideBeachMode();
     showNotification('✅ Доступ обновлен!');
