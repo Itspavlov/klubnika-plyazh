@@ -2551,7 +2551,7 @@
                 </h2>
                 
                 <p>Вы можете найти наш киоск на карте</p>
-                <p style="font-size:14px; color:#8F7A6E; margin-top:2px;">Мы рядом с вами</p>
+                <p style="font-size:14px; color:#8F7A6E; margin-top:2px;">Мы рядом с вами ❤️</p>
                 
                 <div class="beach-distance">
                     <i class="fas fa-location-dot"></i>
@@ -2761,130 +2761,124 @@
     <!-- ============================================================ -->
     <script>
         // ================================================================
-        // ===== УПРАВЛЕНИЕ СЕССИЕЙ (5 ЧАСОВ) =====
+        // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
         // ================================================================
-// ================================================================
-// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
-// ================================================================
 
-const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
-let sessionCheckInterval = null;
+        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
+        let sessionCheckInterval = null;
 
-function getBungaloNumber() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const b = urlParams.get('b');
-    if (b && !isNaN(b) && parseInt(b) > 0) {
-        return parseInt(b);
-    }
-    return null;
-}
+        function getBungaloNumber() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const b = urlParams.get('b');
+            if (b && !isNaN(b) && parseInt(b) > 0) {
+                return parseInt(b);
+            }
+            return null;
+        }
 
-function getSessionKey() {
-    const b = getBungaloNumber();
-    if (!b) return null;
-    return `qr_session_${b}`;
-}
+        function getSessionKey() {
+            const b = getBungaloNumber();
+            if (!b) return null;
+            return `qr_session_${b}`;
+        }
 
-function getSession() {
-    const key = getSessionKey();
-    if (!key) return null;
-    try {
-        const data = sessionStorage.getItem(key);
-        if (!data) return null;
-        return JSON.parse(data);
-    } catch {
-        return null;
-    }
-}
+        function getSession() {
+            const key = getSessionKey();
+            if (!key) return null;
+            try {
+                const data = sessionStorage.getItem(key);
+                if (!data) return null;
+                return JSON.parse(data);
+            } catch {
+                return null;
+            }
+        }
 
-function saveSession(data) {
-    const key = getSessionKey();
-    if (!key) return;
-    sessionStorage.setItem(key, JSON.stringify(data));
-}
+        function saveSession(data) {
+            const key = getSessionKey();
+            if (!key) return;
+            sessionStorage.setItem(key, JSON.stringify(data));
+        }
 
-function showBeachMode() {
-    const beachMode = document.getElementById('beachMode');
-    const bungaloMode = document.getElementById('bungaloMode');
-    
-    bungaloMode.style.display = 'none';
-    beachMode.style.display = 'block';
-    
-    const bungaloNumber = getBungaloNumber();
-    const beachBungaloNumber = document.getElementById('beachBungaloNumber');
-    
-    if (bungaloNumber) {
-        document.getElementById('beachBungaloInfo').style.display = 'inline-block';
-        beachBungaloNumber.textContent = bungaloNumber;
-    } else {
-        document.getElementById('beachBungaloInfo').style.display = 'none';
-    }
-    
-    document.getElementById('bottomTabBar').style.display = 'flex';
-}
+        function showBeachMode() {
+            const beachMode = document.getElementById('beachMode');
+            const bungaloMode = document.getElementById('bungaloMode');
+            
+            bungaloMode.style.display = 'none';
+            beachMode.style.display = 'block';
+            
+            const bungaloNumber = getBungaloNumber();
+            const beachBungaloNumber = document.getElementById('beachBungaloNumber');
+            
+            if (bungaloNumber) {
+                document.getElementById('beachBungaloInfo').style.display = 'inline-block';
+                beachBungaloNumber.textContent = bungaloNumber;
+            } else {
+                document.getElementById('beachBungaloInfo').style.display = 'none';
+            }
+            
+            document.getElementById('bottomTabBar').style.display = 'flex';
+        }
 
-function hideBeachMode() {
-    document.getElementById('beachMode').style.display = 'none';
-    document.getElementById('bungaloMode').style.display = 'block';
-}
+        function hideBeachMode() {
+            document.getElementById('beachMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'block';
+        }
 
-function checkAndShowBeachMode() {
-    const bungaloNumber = getBungaloNumber();
-    
-    if (!bungaloNumber) {
-        showBeachMode();
-        return true;
-    }
-    
-    const session = getSession();
-    
-    if (!session) {
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-        hideBeachMode();
-        return false;
-    }
-    
-    const timePassed = Date.now() - session.lastRefresh;
-    
-    if (timePassed > SESSION_DURATION) {
-        showBeachMode();
-        return true;
-    }
-    
-    hideBeachMode();
-    return false;
-}
+        function checkAndShowBeachMode() {
+            const bungaloNumber = getBungaloNumber();
+            
+            if (!bungaloNumber) {
+                showBeachMode();
+                return true;
+            }
+            
+            const session = getSession();
+            
+            // Если сессии нет — показываем beachMode (НЕ создаем сессию автоматически!)
+            if (!session) {
+                showBeachMode();
+                return true;
+            }
+            
+            const timePassed = Date.now() - session.lastRefresh;
+            
+            if (timePassed > SESSION_DURATION) {
+                showBeachMode();
+                return true;
+            }
+            
+            hideBeachMode();
+            return false;
+        }
 
-function refreshSession() {
-    const bungaloNumber = getBungaloNumber();
-    if (!bungaloNumber) {
-        showNotification('⚠️ Номер бунгало не найден!', 'error');
-        return;
-    }
-    
-    // ОБНОВЛЯЕМ СЕССИЮ при сканировании QR
-    const session = getSession();
-    if (session) {
-        session.lastRefresh = Date.now();
-        saveSession(session);
-    } else {
-        saveSession({
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        });
-    }
-    
-    hideBeachMode();
-    showNotification('✅ Доступ обновлен!');
-    
-    setTimeout(() => {
-        window.location.reload();
-    }, 300);
-}
+        function refreshSession() {
+            const bungaloNumber = getBungaloNumber();
+            if (!bungaloNumber) {
+                showNotification('⚠️ Номер бунгало не найден!', 'error');
+                return;
+            }
+            
+            // Обновляем или создаем сессию (ТОЛЬКО при сканировании QR)
+            const session = getSession();
+            if (session) {
+                session.lastRefresh = Date.now();
+                saveSession(session);
+            } else {
+                const newSession = {
+                    bungalo: bungaloNumber,
+                    lastRefresh: Date.now()
+                };
+                saveSession(newSession);
+            }
+            
+            hideBeachMode();
+            showNotification('✅ Доступ обновлен!');
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
 
         function startSessionCheck() {
             if (sessionCheckInterval) {
@@ -2942,7 +2936,7 @@ function refreshSession() {
             { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', emoji: '🫐' }
         ];
 
-        // Романтическая позиция (в секции клубники) - ВИДНО ТОЛЬКО 300 мл
+        // Романтическая позиция (в секции клубники)
         const ROMANTIC_ITEM = {
             id: '9',
             name: 'Для влюбленных',
@@ -3071,7 +3065,7 @@ function refreshSession() {
             const strawberryGrid = document.getElementById('strawberryGrid');
             let strawberryHtml = '';
 
-            // Романтическая позиция (объем 300 мл как у всех)
+            // Романтическая позиция
             const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
             const romanticBadgeHtml = ROMANTIC_ITEM.badge ? `<span class="badge ${ROMANTIC_ITEM.badge}">${ROMANTIC_ITEM.badgeText}</span>` : '';
 
@@ -3986,136 +3980,134 @@ function refreshSession() {
         // ================================================================
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         // ================================================================
-       async function init() {
-    updateOnlineStatus();
+        async function init() {
+            updateOnlineStatus();
 
-    // Проверяем сессию при загрузке
-    const showBeach = checkAndShowBeachMode();
-    
-    if (showBeach) {
-        document.getElementById('bungaloMode').style.display = 'none';
-        document.getElementById('closedMode').style.display = 'none';
-        document.getElementById('techBreakMode').style.display = 'none';
-        document.getElementById('bottomTabBar').style.display = 'flex';
-        startSessionCheck();
-        return;
-    }
-
-    const bungaloNumber = getBungaloNumber();
-    const bungaloMode = document.getElementById('bungaloMode');
-    const beachMode = document.getElementById('beachMode');
-    const closedMode = document.getElementById('closedMode');
-    const techBreakMode = document.getElementById('techBreakMode');
-
-    const settings = await loadSettings();
-
-    if (settings && settings.technicalBreak) {
-        bungaloMode.style.display = 'none';
-        beachMode.style.display = 'none';
-        closedMode.style.display = 'none';
-        techBreakMode.style.display = 'block';
-        document.getElementById('bottomTabBar').style.display = 'none';
-        showNotification('🔧 Технический перерыв! Скоро всё заработает.', 'error');
-        return;
-    }
-
-    const working = isWorkingTime();
-    const currentMsk = getCurrentMskTime();
-    document.getElementById('currentTimeDisplay').textContent = formatTime(currentMsk);
-
-    if (!working) {
-        bungaloMode.style.display = 'none';
-        beachMode.style.display = 'none';
-        closedMode.style.display = 'block';
-        techBreakMode.style.display = 'none';
-        document.getElementById('bottomTabBar').style.display = 'none';
-        showNotification('🔒 Прием заказов с 9:00 до 1:00 ночи (МСК)', 'error');
-        return;
-    }
-
-    if (bungaloNumber) {
-        console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
-        document.getElementById('bungaloNumberDisplay').textContent = `${bungaloNumber}`;
-        bungaloMode.style.display = 'block';
-        beachMode.style.display = 'none';
-        closedMode.style.display = 'none';
-        techBreakMode.style.display = 'none';
-        document.getElementById('bottomTabBar').style.display = 'flex';
-        window.bungaloNumber = bungaloNumber;
-
-        renderMenu(settings || state.settings);
-        initCart();
-
-        setTimeout(updateOrdersBadge, 1000);
-
-        customerPhone.addEventListener('input', function() {
-            if (this.value.trim().length >= 5) {
-                updateOrdersBadge();
+            // Проверяем сессию при загрузке
+            const showBeach = checkAndShowBeachMode();
+            
+            if (showBeach) {
+                document.getElementById('bungaloMode').style.display = 'none';
+                document.getElementById('closedMode').style.display = 'none';
+                document.getElementById('techBreakMode').style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
+                startSessionCheck();
+                return;
             }
-        });
 
-        startSessionCheck();
-
-    } else {
-        console.log('🏖️ Клиент на пляже');
-        bungaloMode.style.display = 'none';
-        beachMode.style.display = 'block';
-        closedMode.style.display = 'none';
-        techBreakMode.style.display = 'none';
-        document.getElementById('bottomTabBar').style.display = 'flex';
-        showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
-    }
-
-    setInterval(function() {
-        const timeDisplay = document.getElementById('currentTimeDisplay');
-        if (timeDisplay) {
-            const now = getCurrentMskTime();
-            timeDisplay.textContent = formatTime(now);
-        }
-    }, 60000);
-
-    // ================================================================
-    // ===== ПРОВЕРКА ПРИ ВОЗВРАЩЕНИИ В ПРИЛОЖЕНИЕ =====
-    // ================================================================
-    document.addEventListener('visibilitychange', function() {
-        if (!document.hidden) {
             const bungaloNumber = getBungaloNumber();
-            if (bungaloNumber) {
-                // Принудительная проверка сессии
-                const session = getSession();
-                if (session) {
-                    const timePassed = Date.now() - session.lastRefresh;
-                    if (timePassed > SESSION_DURATION) {
-                        // Сессия истекла
-                        showBeachMode();
-                        // Скрываем меню
-                        document.getElementById('bungaloMode').style.display = 'none';
-                        document.getElementById('bottomTabBar').style.display = 'flex';
-                    }
-                    // Если сессия активна — ничего не делаем
-                } else {
-                    // Нет сессии — показываем beachMode
-                    showBeachMode();
-                    document.getElementById('bungaloMode').style.display = 'none';
-                    document.getElementById('bottomTabBar').style.display = 'flex';
-                }
-            }
-        }
-    });
+            const bungaloMode = document.getElementById('bungaloMode');
+            const beachMode = document.getElementById('beachMode');
+            const closedMode = document.getElementById('closedMode');
+            const techBreakMode = document.getElementById('techBreakMode');
 
-    // Настройка свайпа
-    setTimeout(function() {
-        const cartModalEl = document.getElementById('cartModal');
-        const ordersModalEl = document.getElementById('ordersModal');
-        
-        if (cartModalEl) {
-            setupSwipeClose(cartModalEl, closeCart);
+            const settings = await loadSettings();
+
+            if (settings && settings.technicalBreak) {
+                bungaloMode.style.display = 'none';
+                beachMode.style.display = 'none';
+                closedMode.style.display = 'none';
+                techBreakMode.style.display = 'block';
+                document.getElementById('bottomTabBar').style.display = 'none';
+                showNotification('🔧 Технический перерыв! Скоро всё заработает.', 'error');
+                return;
+            }
+
+            const working = isWorkingTime();
+            const currentMsk = getCurrentMskTime();
+            document.getElementById('currentTimeDisplay').textContent = formatTime(currentMsk);
+
+            if (!working) {
+                bungaloMode.style.display = 'none';
+                beachMode.style.display = 'none';
+                closedMode.style.display = 'block';
+                techBreakMode.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'none';
+                showNotification('🔒 Прием заказов с 9:00 до 1:00 ночи (МСК)', 'error');
+                return;
+            }
+
+            if (bungaloNumber) {
+                console.log(`🍓 Клиент в бунгало #${bungaloNumber}`);
+                document.getElementById('bungaloNumberDisplay').textContent = `${bungaloNumber}`;
+                bungaloMode.style.display = 'block';
+                beachMode.style.display = 'none';
+                closedMode.style.display = 'none';
+                techBreakMode.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
+                window.bungaloNumber = bungaloNumber;
+
+                renderMenu(settings || state.settings);
+                initCart();
+
+                setTimeout(updateOrdersBadge, 1000);
+
+                customerPhone.addEventListener('input', function() {
+                    if (this.value.trim().length >= 5) {
+                        updateOrdersBadge();
+                    }
+                });
+
+                startSessionCheck();
+
+            } else {
+                console.log('🏖️ Клиент на пляже');
+                bungaloMode.style.display = 'none';
+                beachMode.style.display = 'block';
+                closedMode.style.display = 'none';
+                techBreakMode.style.display = 'none';
+                document.getElementById('bottomTabBar').style.display = 'flex';
+                showNotification('📍 Доставка только в бунгало! Вернитесь в бунгало для заказа.', 'error');
+            }
+
+            setInterval(function() {
+                const timeDisplay = document.getElementById('currentTimeDisplay');
+                if (timeDisplay) {
+                    const now = getCurrentMskTime();
+                    timeDisplay.textContent = formatTime(now);
+                }
+            }, 60000);
+
+            // ================================================================
+            // ===== ПРОВЕРКА ПРИ ВОЗВРАЩЕНИИ В ПРИЛОЖЕНИЕ =====
+            // ================================================================
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    const bungaloNumber = getBungaloNumber();
+                    if (bungaloNumber) {
+                        // Принудительная проверка сессии
+                        const session = getSession();
+                        if (!session) {
+                            // Нет сессии → beachMode
+                            showBeachMode();
+                            document.getElementById('bungaloMode').style.display = 'none';
+                            return;
+                        }
+                        
+                        const timePassed = Date.now() - session.lastRefresh;
+                        if (timePassed > SESSION_DURATION) {
+                            // Сессия истекла → beachMode
+                            showBeachMode();
+                            document.getElementById('bungaloMode').style.display = 'none';
+                            return;
+                        }
+                    }
+                }
+            });
+
+            // Настройка свайпа
+            setTimeout(function() {
+                const cartModalEl = document.getElementById('cartModal');
+                const ordersModalEl = document.getElementById('ordersModal');
+                
+                if (cartModalEl) {
+                    setupSwipeClose(cartModalEl, closeCart);
+                }
+                if (ordersModalEl) {
+                    setupSwipeClose(ordersModalEl, closeOrdersModal);
+                }
+            }, 500);
         }
-        if (ordersModalEl) {
-            setupSwipeClose(ordersModalEl, closeOrdersModal);
-        }
-    }, 500);
-}
 
         function initCart() {
             confirmToppingBtn.addEventListener('click', function() {
@@ -4190,7 +4182,7 @@ function refreshSession() {
         console.log('🍓 Strawberry in Chocolate');
         console.log(`📍 Координаты киоска: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
         console.log(`🕐 График работы: ${WORK_HOURS.start}:00 - ${WORK_HOURS.end}:00 (МСК)`);
-        console.log(`⏱️ Сессия активна 5 часов!`);
+        console.log(`⏱️ Сессия активна 1 минуту (тест)!`);
         console.log(`🍫 Клубника в шоколаде (с присыпками) | 🍉 Свежие фрукты (без присыпок)`);
     </script>
 
