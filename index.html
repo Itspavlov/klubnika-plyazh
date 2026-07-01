@@ -2774,6 +2774,10 @@
 // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
 // ================================================================
 
+// ================================================================
+// ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
+// ================================================================
+
 const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
 let sessionCheckInterval = null;
 
@@ -2796,7 +2800,7 @@ function getSession() {
     const key = getSessionKey();
     if (!key) return null;
     try {
-        const data = sessionStorage.getItem(key);
+        const data = localStorage.getItem(key);
         if (!data) return null;
         return JSON.parse(data);
     } catch {
@@ -2807,13 +2811,13 @@ function getSession() {
 function saveSession(data) {
     const key = getSessionKey();
     if (!key) return;
-    sessionStorage.setItem(key, JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(data));
 }
 
 function deleteSession() {
     const key = getSessionKey();
     if (!key) return;
-    sessionStorage.removeItem(key);
+    localStorage.removeItem(key);
 }
 
 function showBeachMode() {
@@ -2851,26 +2855,10 @@ function checkAndShowBeachMode() {
     
     const session = getSession();
     
-    // Проверяем тип загрузки страницы
-    const navEntry = performance.getEntriesByType('navigation')[0];
-    const isReload = navEntry?.type === 'reload';
-    const isBackForward = navEntry?.type === 'back_forward';
-    
-    // Если сессии нет
+    // Если сессии нет — показываем beachMode
     if (!session) {
-        // Если это перезагрузка или возврат назад — показываем beachMode
-        if (isReload || isBackForward) {
-            showBeachMode();
-            return true;
-        }
-        // Первый вход (новая вкладка или клик по ссылке) — создаем сессию
-        const newSession = {
-            bungalo: bungaloNumber,
-            lastRefresh: Date.now()
-        };
-        saveSession(newSession);
-        hideBeachMode();
-        return false;
+        showBeachMode();
+        return true;
     }
     
     const timePassed = Date.now() - session.lastRefresh;
@@ -2892,13 +2880,21 @@ function refreshSession() {
         return;
     }
     
-    deleteSession();
+    // Проверяем, была ли уже создана сессия
+    const session = getSession();
     
-    const newSession = {
-        bungalo: bungaloNumber,
-        lastRefresh: Date.now()
-    };
-    saveSession(newSession);
+    if (session) {
+        // Если сессия есть — обновляем время
+        session.lastRefresh = Date.now();
+        saveSession(session);
+    } else {
+        // Если сессии нет — создаем новую
+        const newSession = {
+            bungalo: bungaloNumber,
+            lastRefresh: Date.now()
+        };
+        saveSession(newSession);
+    }
     
     hideBeachMode();
     showNotification('✅ Доступ обновлен!');
