@@ -195,6 +195,35 @@
         }
 
         /* ============================================================ */
+        /* ===== БАННЕР ВСТРЕЧИ ===== */
+        /* ============================================================ */
+        .pickup-banner {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            padding: 10px 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2E7D32;
+            border: 1px solid #A5D6A7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .pickup-banner i {
+            font-size: 18px;
+        }
+
+        .pickup-banner .banner-sub {
+            font-size: 12px;
+            font-weight: 400;
+            color: #558B2F;
+        }
+
+        /* ============================================================ */
         /* ===== КАРТОЧКИ-ЧИПСЫ (НАВИГАЦИЯ) ===== */
         /* ============================================================ */
         .chips-nav {
@@ -897,6 +926,123 @@
             font-size: 10px;
             font-weight: 600;
             flex-shrink: 0;
+        }
+
+        /* ============================================================ */
+        /* ===== ЭКРАН "ГДЕ ВЫ?" ===== */
+        /* ============================================================ */
+        .choose-message {
+            text-align: center;
+            padding: 35px 24px 28px;
+            background: linear-gradient(145deg, #FFFFFF, #F8F3ED);
+            border-radius: var(--radius);
+            border: 1px solid #E8D5B8;
+            box-shadow: 0 8px 32px rgba(212, 56, 13, 0.06);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .choose-icon {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .choose-message h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .choose-message > p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .choose-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .choose-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            background: #FFFFFF;
+            border: 1.5px solid #EDE3D8;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+        }
+
+        .choose-option:active {
+            transform: scale(0.98);
+            border-color: var(--gold);
+            background: #FDFAF7;
+            box-shadow: 0 2px 12px rgba(201, 168, 124, 0.10);
+        }
+
+        .choose-option .choose-option-icon {
+            font-size: 32px;
+            width: 48px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .choose-option .choose-option-text {
+            flex: 1;
+        }
+
+        .choose-option .choose-option-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+
+        .choose-option .choose-option-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .choose-option .choose-option-arrow {
+            font-size: 20px;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .choose-option:active .choose-option-arrow {
+            transform: translateX(4px);
+            color: var(--primary);
+        }
+
+        .choose-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 12px 16px;
+            background: #F5EDE4;
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .choose-info i {
+            color: var(--gold);
+            margin-right: 4px;
+        }
+
+        .choose-info .highlight {
+            color: var(--primary);
+            font-weight: 600;
         }
 
         /* ============================================================ */
@@ -2342,6 +2488,13 @@
             .chips-nav .chip.main-chip i { font-size: 16px; }
             .bungalo-display { min-height: 100px; padding: 14px 16px; }
             .bungalo-display .number { font-size: 36px; }
+            .choose-message { padding: 25px 16px 20px; }
+            .choose-option { padding: 12px 14px; }
+            .choose-option .choose-option-icon { font-size: 28px; width: 40px; }
+            .choose-option .choose-option-title { font-size: 15px; }
+            .choose-option .choose-option-desc { font-size: 12px; }
+            .choose-info { font-size: 12px; gap: 12px; }
+            .pickup-banner { font-size: 13px; padding: 8px 12px; }
         }
 
         @media (max-width: 380px) {
@@ -2393,6 +2546,14 @@
             .chips-nav .chip.main-chip i { font-size: 14px; }
             .bungalo-display { min-height: 80px; padding: 12px 14px; }
             .bungalo-display .number { font-size: 28px; letter-spacing: 2px; }
+            .choose-message { padding: 20px 12px 16px; }
+            .choose-option { padding: 10px 12px; gap: 10px; }
+            .choose-option .choose-option-icon { font-size: 24px; width: 36px; }
+            .choose-option .choose-option-title { font-size: 14px; }
+            .choose-option .choose-option-desc { font-size: 11px; }
+            .choose-info { font-size: 11px; gap: 8px; padding: 8px 12px; }
+            .pickup-banner { font-size: 12px; padding: 6px 10px; }
+            .pickup-banner i { font-size: 14px; }
         }
     </style>
 </head>
@@ -2534,60 +2695,60 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- ===== БЛОК ДЛЯ ПЛЯЖА (НЕТ БУНГАЛО ИЛИ СЕССИЯ ИСТЕКЛА) ===== -->
+        <!-- ===== БЛОК ДЛЯ ПЛЯЖА (НЕТ БУНГАЛО) ===== -->
         <!-- ============================================================ -->
         <div id="beachMode" style="display:none;">
             <div class="beach-message">
-                <span class="beach-icon">🍓</span>
-                
-                <div class="bungalo-info-beach" id="beachBungaloInfo">
-                    <i class="fas fa-home"></i> Бунгало #<span id="beachBungaloNumber">-</span>
-                </div>
-                
-                <h2>
-                    <i class="fas fa-heart beach-heart"></i>
-                    Доставка только в бунгало
-                    <i class="fas fa-heart beach-heart"></i>
-                </h2>
-                
-                <p>Вы можете найти наш киоск на карте</p>
-                <p style="font-size:14px; color:#8F7A6E; margin-top:2px;">Мы рядом с вами ❤️</p>
-                
-                <div class="beach-distance">
-                    <i class="fas fa-location-dot"></i>
-                    <span>Киоск в 100 метрах</span>
-                    <span class="heart-icon">❤️</span>
-                </div>
-
+                <span class="beach-icon">🏖️</span>
+                <h2>Вы не в бунгало</h2>
+                <p>Доставка работает только для гостей бунгало.</p>
+                <p><strong>Вернитесь в бунгало</strong> или <strong>подойдите к нашему киоску</strong>!</p>
                 <button class="map-btn-top" onclick="openMap()">
                     <span class="icon"><i class="fas fa-map-marked-alt"></i></span>
                     Показать на карте
                     <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                 </button>
+                <div class="beach-note">
+                    <span><i class="fas fa-location-dot"></i></span>
+                    <span id="beachLandmarkText">Наш киоск: 100 м от бунгало, у деревянного пирса</span>
+                </div>
+            </div>
+        </div>
 
-                <div style="margin-top:12px; padding-top:12px; border-top: 1px solid #EDE3D8;">
-                    <p style="font-size:13px; color:#8F7A6E; margin-bottom:8px;">
-                        <i class="fas fa-qrcode"></i> Чтобы сделать заказ:
-                    </p>
-                    <div class="beach-instructions">
-                        <div class="step">
-                            <span class="step-num">1</span>
-                            <span>Откройте камеру телефона</span>
+        <!-- ============================================================ -->
+        <!-- ===== НОВЫЙ ЭКРАН "ГДЕ ВЫ?" ===== -->
+        <!-- ============================================================ -->
+        <div id="chooseMode" style="display:none;">
+            <div class="choose-message">
+                <span class="choose-icon">⏰</span>
+                <h2>Доступ истек</h2>
+                <p>Чтобы продолжить, выберите ваш вариант:</p>
+                
+                <div class="choose-options">
+                    <!-- Вариант 1: В бунгало -->
+                    <div class="choose-option" onclick="refreshSession()">
+                        <div class="choose-option-icon">🏠</div>
+                        <div class="choose-option-text">
+                            <div class="choose-option-title">Я в бунгало</div>
+                            <div class="choose-option-desc">Сканирую QR-код для заказа</div>
                         </div>
-                        <div class="step">
-                            <span class="step-num">2</span>
-                            <span>Наведите на QR-код в бунгало</span>
+                        <div class="choose-option-arrow">→</div>
+                    </div>
+                    
+                    <!-- Вариант 2: На пляже -->
+                    <div class="choose-option" onclick="openBeachOrder()">
+                        <div class="choose-option-icon">🏖️</div>
+                        <div class="choose-option-text">
+                            <div class="choose-option-title">Я на пляже</div>
+                            <div class="choose-option-desc">Встречу вас у бунгало #<span id="chooseBungaloNumber">1</span></div>
                         </div>
-                        <div class="step">
-                            <span class="step-num">3</span>
-                            <span>Перейдите по ссылке</span>
-                        </div>
+                        <div class="choose-option-arrow">→</div>
                     </div>
                 </div>
                 
-                <div class="beach-note">
-                    <span><i class="fas fa-clock"></i></span>
-                    <span>Работаем 9:00 — 1:00 (МСК)</span>
+                <div class="choose-info">
+                    <div><i class="fas fa-location-dot"></i> Встреча у бунгало #<span id="chooseInfoBungalo">1</span></div>
+                    <div><i class="fas fa-clock"></i> Работаем 9:00 — 1:00 (МСК)</div>
                 </div>
             </div>
         </div>
@@ -2604,10 +2765,10 @@
                 <span class="arrow"><i class="fas fa-arrow-right"></i></span>
             </button>
 
-            <!-- Номер бунгало (с blur и ярким текстом) -->
+            <!-- Номер бунгало -->
             <div class="bungalo-display">
                 <div class="label"><i class="fas fa-location-dot"></i> Ваше бунгало</div>
-                <div class="number"><span class="hash">#</span><span id="bungaloNumberDisplay">7</span></div>
+                <div class="number" id="bungaloNumberDisplay">#7</div>
                 <div class="hint"><i class="fas fa-qrcode"></i> Сканируйте QR-код в вашем бунгало</div>
             </div>
 
@@ -2764,8 +2925,9 @@
         // ===== УПРАВЛЕНИЕ СЕССИЕЙ (1 МИНУТА ДЛЯ ТЕСТА) =====
         // ================================================================
 
-        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА ДЛЯ ТЕСТА ⏱️
+        const SESSION_DURATION = 1 * 60 * 1000; // 1 МИНУТА
         let sessionCheckInterval = null;
+        let isPickupMode = false;
 
         function getBungaloNumber() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -2809,26 +2971,36 @@
         function showBeachMode() {
             const beachMode = document.getElementById('beachMode');
             const bungaloMode = document.getElementById('bungaloMode');
+            const chooseMode = document.getElementById('chooseMode');
             
             bungaloMode.style.display = 'none';
             beachMode.style.display = 'block';
-            
-            const bungaloNumber = getBungaloNumber();
-            const beachBungaloNumber = document.getElementById('beachBungaloNumber');
-            
-            if (bungaloNumber) {
-                document.getElementById('beachBungaloInfo').style.display = 'inline-block';
-                beachBungaloNumber.textContent = bungaloNumber;
-            } else {
-                document.getElementById('beachBungaloInfo').style.display = 'none';
-            }
+            chooseMode.style.display = 'none';
             
             document.getElementById('bottomTabBar').style.display = 'flex';
         }
 
         function hideBeachMode() {
             document.getElementById('beachMode').style.display = 'none';
+            document.getElementById('chooseMode').style.display = 'none';
             document.getElementById('bungaloMode').style.display = 'block';
+        }
+
+        function showChooseMode() {
+            const bungaloNumber = getBungaloNumber();
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('beachMode').style.display = 'none';
+            document.getElementById('chooseMode').style.display = 'block';
+            document.getElementById('bottomTabBar').style.display = 'flex';
+            
+            if (bungaloNumber) {
+                document.getElementById('chooseBungaloNumber').textContent = bungaloNumber;
+                document.getElementById('chooseInfoBungalo').textContent = bungaloNumber;
+            }
+        }
+
+        function hideChooseMode() {
+            document.getElementById('chooseMode').style.display = 'none';
         }
 
         function checkAndShowBeachMode() {
@@ -2839,50 +3011,23 @@
                 return true;
             }
             
-            // 1. Проверяем сессию в localStorage
             const session = getSession();
             
-            // 2. Получаем тип загрузки страницы
-            const navEntry = performance.getEntriesByType('navigation')[0];
-            const loadType = navEntry?.type || 'navigate';
-            
-            // 3. Логируем информацию для отладки
-            console.log(`🔄 Тип загрузки: ${loadType}`);
-            console.log(`📎 Реферер: ${document.referrer || 'пустой'}`);
-            console.log(`🔑 Сессия: ${session ? 'есть' : 'нет'}`);
-            
-            // 4. Если сессии нет — это первый вход или она истекла
             if (!session) {
-                // Если это перезагрузка или возврат из истории — показываем beachMode
-                if (loadType === 'reload' || loadType === 'back_forward') {
-                    console.log('❌ Сессии нет, это перезагрузка/возврат — beachMode');
-                    showBeachMode();
-                    return true;
-                }
-                
-                // Иначе считаем, что это новое сканирование QR
-                console.log('✅ Новое сканирование QR — создаем сессию');
-                const newSession = {
-                    bungalo: bungaloNumber,
-                    lastRefresh: Date.now()
-                };
-                saveSession(newSession);
-                hideBeachMode();
-                return false;
-            }
-            
-            // 5. Сессия есть — проверяем время
-            const timePassed = Date.now() - session.lastRefresh;
-            if (timePassed > SESSION_DURATION) {
-                console.log('⏰ Сессия истекла — удаляем и показываем beachMode');
-                deleteSession();
-                showBeachMode();
+                showChooseMode();
                 return true;
             }
             
-            // 6. Сессия активна
-            console.log('✅ Сессия активна — показываем меню');
+            const timePassed = Date.now() - session.lastRefresh;
+            
+            if (timePassed > SESSION_DURATION) {
+                deleteSession();
+                showChooseMode();
+                return true;
+            }
+            
             hideBeachMode();
+            hideChooseMode();
             return false;
         }
 
@@ -2893,7 +3038,6 @@
                 return;
             }
             
-            // Удаляем старую сессию и создаем новую
             deleteSession();
             
             const newSession = {
@@ -2902,9 +3046,57 @@
             };
             saveSession(newSession);
             
+            isPickupMode = false;
+            hideChooseMode();
             hideBeachMode();
             showNotification('✅ Доступ обновлен!');
             window.location.reload();
+        }
+
+        function openBeachOrder() {
+            const bungaloNumber = getBungaloNumber();
+            if (!bungaloNumber) {
+                showNotification('⚠️ Номер бунгало не найден!', 'error');
+                return;
+            }
+            
+            isPickupMode = true;
+            
+            deleteSession();
+            const newSession = {
+                bungalo: bungaloNumber,
+                lastRefresh: Date.now(),
+                isPickup: true
+            };
+            saveSession(newSession);
+            
+            hideChooseMode();
+            hideBeachMode();
+            document.getElementById('bungaloMode').style.display = 'block';
+            document.getElementById('bottomTabBar').style.display = 'flex';
+            
+            showNotification(`🏖️ Заказ будет доставлен к бунгало #${bungaloNumber}! Ждите у входа.`);
+            
+            showPickupBanner(bungaloNumber);
+        }
+
+        function showPickupBanner(bungaloNumber) {
+            const existing = document.getElementById('pickupBanner');
+            if (existing) existing.remove();
+            
+            const banner = document.createElement('div');
+            banner.id = 'pickupBanner';
+            banner.className = 'pickup-banner';
+            banner.innerHTML = `
+                <i class="fas fa-walking"></i>
+                Встреча у бунгало #${bungaloNumber}
+                <span class="banner-sub">(ждите у входа)</span>
+            `;
+            
+            const indicator = document.getElementById('onlineIndicator');
+            if (indicator) {
+                indicator.parentNode.insertBefore(banner, indicator.nextSibling);
+            }
         }
 
         function startSessionCheck() {
@@ -2918,9 +3110,9 @@
                     const session = getSession();
                     if (session) {
                         const timePassed = Date.now() - session.lastRefresh;
-                        if (timePassed > SESSION_DURATION) {
+                        if (timePassed > SESSION_DURATION && !session.isPickup) {
                             deleteSession();
-                            showBeachMode();
+                            showChooseMode();
                         }
                     }
                 }
@@ -2946,7 +3138,6 @@
         // ===== ДАННЫЕ О МЕНЮ =====
         // ================================================================
 
-        // Клубника в шоколаде (с присыпками)
         const STRAWBERRY_ITEMS = [
             { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', badge: 'hit', badgeText: '🔥 Хит' },
             { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, volume: '300 мл', badge: 'popular', badgeText: '⭐ Популярное' },
@@ -2955,7 +3146,6 @@
             { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', badge: '', badgeText: '' }
         ];
 
-        // Другие фрукты (БЕЗ шоколада, БЕЗ присыпок)
         const FRUITS_ITEMS = [
             { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', emoji: '🍉' },
             { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, volume: '300 мл', emoji: '🍈' },
@@ -2964,7 +3154,6 @@
             { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', emoji: '🫐' }
         ];
 
-        // Романтическая позиция (в секции клубники)
         const ROMANTIC_ITEM = {
             id: '9',
             name: 'Для влюбленных',
@@ -2978,7 +3167,6 @@
             badgeText: '❤️ Романтика'
         };
 
-        // Напитки и перекус
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'limonad.jpg' },
             { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'kola.jpg' },
@@ -3089,11 +3277,9 @@
         // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
         // ================================================================
         function renderMenu(settings) {
-            // === КЛУБНИКА В ШОКОЛАДЕ (с присыпками) ===
             const strawberryGrid = document.getElementById('strawberryGrid');
             let strawberryHtml = '';
 
-            // Романтическая позиция
             const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
             const romanticBadgeHtml = ROMANTIC_ITEM.badge ? `<span class="badge ${ROMANTIC_ITEM.badge}">${ROMANTIC_ITEM.badgeText}</span>` : '';
 
@@ -3152,7 +3338,6 @@
 
             strawberryGrid.innerHTML = strawberryHtml;
 
-            // === ДРУГИЕ ФРУКТЫ (БЕЗ шоколада, БЕЗ присыпок) ===
             const fruitsGrid = document.getElementById('fruitsGrid');
             fruitsGrid.innerHTML = FRUITS_ITEMS.map(item => {
                 const available = settings.menuItems[item.id] !== false;
@@ -3176,7 +3361,6 @@
                 `;
             }).join('');
 
-            // === НАПИТКИ / ПЕРЕКУС ===
             const drinksGrid = document.getElementById('drinksGrid');
             drinksGrid.innerHTML = DRINK_ITEMS.map(item => {
                 const available = settings.menuItems[item.id] !== false;
@@ -3246,7 +3430,6 @@
                 return;
             }
 
-            // Если это фрукты (без присыпок) — добавляем сразу
             if (!hasToppings) {
                 addToCart({
                     id: product.id,
@@ -3262,7 +3445,6 @@
                 return;
             }
 
-            // Если это клубника (с присыпками) — открываем модалку
             openToppingModal(product);
         }
 
@@ -3377,7 +3559,6 @@
 
             if (pendingProduct) {
                 if (pendingProduct.hasToppings === false) {
-                    // Фрукты — добавляем сразу
                     addToCart({
                         id: pendingProduct.id,
                         name: pendingProduct.name,
@@ -3920,7 +4101,8 @@
                     price: item.price,
                     quantity: item.quantity,
                     category: item.category || 'другое',
-                    topping: item.toppingName || ''
+                    topping: item.toppingName || '',
+                    isPickup: isPickupMode || false
                 })),
                 total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 timestamp: new Date().toISOString()
@@ -3937,7 +4119,11 @@
                 .then(res => res.json())
                 .then(result => {
                     if (result.success) {
-                        showNotification('🎉 Заказ отправлен! Ждите доставку!');
+                        if (isPickupMode) {
+                            showNotification(`🏖️ Заказ ждет вас у бунгало #${bungaloNumber}! Ждите у входа.`);
+                        } else {
+                            showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+                        }
                         state.cart = [];
                         updateCart();
                         selectPayment('cash');
@@ -4011,7 +4197,6 @@
         async function init() {
             updateOnlineStatus();
 
-            // Проверяем сессию при загрузке
             const showBeach = checkAndShowBeachMode();
             
             if (showBeach) {
@@ -4096,25 +4281,21 @@
                 }
             }, 60000);
 
-            // ================================================================
-            // ===== ПРОВЕРКА ПРИ ВОЗВРАЩЕНИИ В ПРИЛОЖЕНИЕ =====
-            // ================================================================
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
                     const bungaloNumber = getBungaloNumber();
                     if (bungaloNumber) {
-                        // Принудительная проверка сессии
                         const session = getSession();
                         if (!session) {
-                            showBeachMode();
+                            showChooseMode();
                             document.getElementById('bungaloMode').style.display = 'none';
                             return;
                         }
                         
                         const timePassed = Date.now() - session.lastRefresh;
-                        if (timePassed > SESSION_DURATION) {
+                        if (timePassed > SESSION_DURATION && !session.isPickup) {
                             deleteSession();
-                            showBeachMode();
+                            showChooseMode();
                             document.getElementById('bungaloMode').style.display = 'none';
                             return;
                         }
@@ -4122,7 +4303,6 @@
                 }
             });
 
-            // Настройка свайпа
             setTimeout(function() {
                 const cartModalEl = document.getElementById('cartModal');
                 const ordersModalEl = document.getElementById('ordersModal');
@@ -4155,10 +4335,9 @@
                 let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
                 let quantity = 1;
 
-                // Для романтической позиции — 1 комплект (2 стаканчика)
                 if (product.isRomantic) {
-                    quantity = 1; // 1 комплект = 2 стаканчика
-                    finalPrice = product.price; // 699 ₽ за комплект
+                    quantity = 1;
+                    finalPrice = product.price;
                 } else {
                     finalPrice = product.price + topping.price;
                 }
@@ -4210,7 +4389,7 @@
         console.log(`📍 Координаты киоска: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
         console.log(`🕐 График работы: ${WORK_HOURS.start}:00 - ${WORK_HOURS.end}:00 (МСК)`);
         console.log(`⏱️ Сессия активна 1 минуту (тест)!`);
-        console.log(`📱 Определение QR через performance API`);
+        console.log(`🏖️ Новый экран "Где вы?" с доставкой к бунгало #1`);
         console.log(`🍫 Клубника в шоколаде (с присыпками) | 🍉 Свежие фрукты (без присыпок)`);
     </script>
 
