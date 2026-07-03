@@ -27,11 +27,7 @@
             --tab-height: 64px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -66,9 +62,68 @@
             pointer-events: none;
         }
 
+        .header-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 2;
+        }
+        .header-actions .action-btn {
+            background: #FDFAF7;
+            border: 1px solid #EDE3D8;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+        .header-actions .action-btn:active { transform: scale(0.95); }
+        .header-actions .action-btn i { font-size: 14px; }
+        .header-actions .action-btn .badge-new {
+            background: #D32F2F;
+            color: white;
+            font-size: 8px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            margin-left: 2px;
+            min-width: 16px;
+            text-align: center;
+        }
+        .header-actions .action-btn .badge-new.support-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            font-size: 9px;
+            padding: 1px 4px;
+            display: none;
+            animation: pulseBadge 0.5s ease 3;
+            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+        }
+        .header-actions .action-btn .badge-new.support-badge.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
         .header {
             text-align: center;
-            padding: 6px 0 14px;
+            padding: 2px 0 10px;
             position: relative;
             z-index: 1;
         }
@@ -83,23 +138,19 @@
             border-radius: 30px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
-
-        .header-badge i {
-            margin-right: 4px;
-            color: var(--gold);
-        }
+        .header-badge i { margin-right: 4px; color: var(--gold); }
 
         .header .logo-icon {
-            font-size: 40px;
+            font-size: 36px;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             animation: float 3s ease-in-out infinite;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 26px;
             color: var(--text-dark);
             font-weight: 700;
             letter-spacing: 0.5px;
@@ -112,33 +163,30 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
-        .header h1 .chocolate-text {
-            color: var(--primary-dark);
-            font-weight: 700;
-        }
+        .header h1 .chocolate-text { color: var(--primary-dark); font-weight: 700; }
 
         .header .subtitle {
             color: var(--text-muted);
             font-size: 13px;
             font-weight: 400;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
+            line-height: 1.4;
         }
-
-        .header .subtitle span {
+        .header .subtitle span { font-weight: 600; color: var(--primary); }
+        .header .subtitle i { margin-right: 4px; color: var(--gold); }
+        .header .subtitle .delivery-time {
+            background: #FFF3E0;
+            padding: 1px 12px;
+            border-radius: 20px;
             font-weight: 600;
-            color: var(--primary);
-        }
-
-        .header .subtitle i {
-            margin-right: 4px;
-            color: var(--gold);
+            color: #E65100;
+            font-size: 12px;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-6px); }
         }
 
         .online-indicator {
@@ -146,31 +194,28 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 30px;
-            margin-bottom: 12px;
-            font-size: 12px;
+            margin-bottom: 10px;
+            font-size: 11px;
             font-weight: 500;
             transition: all 0.3s ease;
             background: #E8F5E9;
             color: #2E7D32;
             border: 1px solid #A5D6A7;
         }
-
         .online-indicator.offline {
             background: #FFEBEE;
             color: #D32F2F;
             border: 1px solid #EF9A9A;
         }
-
         .online-indicator .dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: #2E7D32;
             transition: all 0.3s ease;
         }
-
         .online-indicator.offline .dot {
             background: #D32F2F;
             animation: pulse 1.5s ease-in-out infinite;
@@ -181,51 +226,41 @@
             50% { opacity: 0.4; transform: scale(0.8); }
         }
 
-        /* ===== ЭКРАН "НЕТ ДОСТУПА" ===== */
         .no-access-message {
             text-align: center;
-            padding: 40px 24px 30px;
+            padding: 30px 20px 24px;
             background: linear-gradient(145deg, #FFFFFF, #F8F3ED);
             border-radius: var(--radius);
             border: 1px solid #E8D5B8;
             box-shadow: 0 8px 32px rgba(212, 56, 13, 0.06);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             position: relative;
             z-index: 1;
         }
-
-        .no-access-icon {
-            font-size: 64px;
-            display: block;
-            margin-bottom: 12px;
-        }
-
+        .no-access-icon { font-size: 52px; display: block; margin-bottom: 8px; }
         .no-access-message h2 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
-
         .no-access-message > p {
             color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 20px;
-            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
         }
-
         .no-access-options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 14px;
         }
-
         .no-access-btn {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 16px 20px;
+            gap: 12px;
+            padding: 14px 18px;
             background: #FFFFFF;
             border: 2px solid #EDE3D8;
             border-radius: var(--radius-sm);
@@ -235,42 +270,28 @@
             text-align: left;
             width: 100%;
         }
-
         .no-access-btn:active {
             transform: scale(0.98);
             border-color: var(--gold);
             background: #FDFAF7;
         }
-
-        .no-access-btn .btn-icon {
-            font-size: 36px;
-            width: 50px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .no-access-btn .btn-text {
-            flex: 1;
-        }
-
+        .no-access-btn .btn-icon { font-size: 30px; width: 44px; text-align: center; flex-shrink: 0; }
+        .no-access-btn .btn-text { flex: 1; }
         .no-access-btn .btn-title {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-dark);
             display: block;
         }
-
         .no-access-btn .btn-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
         }
-
         .no-access-btn .btn-arrow {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--text-muted);
             transition: var(--transition);
         }
-
         .no-access-btn:active .btn-arrow {
             transform: translateX(4px);
             color: var(--primary);
@@ -279,67 +300,53 @@
         .no-access-info {
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 14px;
             flex-wrap: wrap;
-            padding: 14px 18px;
+            padding: 10px 14px;
             background: #F5EDE4;
             border-radius: 12px;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
         }
+        .no-access-info i { color: var(--gold); margin-right: 4px; }
+        .no-access-info .highlight { color: var(--primary); font-weight: 600; }
 
-        .no-access-info i {
-            color: var(--gold);
-            margin-right: 4px;
-        }
-
-        .no-access-info .highlight {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* ===== БУНГАЛО ДИСПЛЕЙ ===== */
         .pickup-banner {
-            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-            padding: 10px 16px;
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            padding: 8px 14px;
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: #2E7D32;
-            border: 1px solid #A5D6A7;
+            color: #E65100;
+            border: 1px solid #FFB74D;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
-
-        .pickup-banner i {
-            font-size: 18px;
-        }
-
+        .pickup-banner i { font-size: 16px; }
         .pickup-banner .banner-sub {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 400;
-            color: #558B2F;
+            color: #BF360C;
         }
 
         .chips-nav {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 14px;
             justify-content: center;
         }
-
         .chips-nav .chip {
             flex: 1;
-            padding: 10px 8px;
+            padding: 8px 6px;
             border-radius: 30px;
             border: 1.5px solid #EDE3D8;
             background: #FDFAF7;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: var(--text-muted);
             cursor: pointer;
@@ -349,63 +356,41 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
         }
-
-        .chips-nav .chip i {
-            font-size: 14px;
-        }
-
-        .chips-nav .chip:active {
-            transform: scale(0.95);
-        }
-
+        .chips-nav .chip i { font-size: 13px; }
+        .chips-nav .chip:active { transform: scale(0.95); }
         .chips-nav .chip.active {
             border-color: var(--gold);
             background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             color: var(--primary);
             box-shadow: 0 2px 12px rgba(201, 168, 124, 0.15);
         }
-
-        .chips-nav .chip.active i {
-            color: var(--gold);
-        }
-
+        .chips-nav .chip.active i { color: var(--gold); }
         .chips-nav .chip.main-chip {
             flex: 1.5;
-            padding: 12px 12px;
-            font-size: 14px;
+            padding: 10px 10px;
+            font-size: 13px;
             font-weight: 600;
             border-color: var(--gold);
             background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             color: var(--text-dark);
             box-shadow: 0 2px 16px rgba(201, 168, 124, 0.20);
         }
-
-        .chips-nav .chip.main-chip i {
-            font-size: 18px;
-            color: #D4380D;
-        }
-
+        .chips-nav .chip.main-chip i { font-size: 16px; color: #D4380D; }
         .chips-nav .chip.main-chip.active {
             border-color: var(--primary);
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             box-shadow: 0 4px 20px rgba(212, 56, 13, 0.25);
         }
-
-        .chips-nav .chip.main-chip.active i {
-            color: #FFFFFF;
-        }
+        .chips-nav .chip.main-chip.active i { color: #FFFFFF; }
 
         .menu-section {
             display: none;
             animation: fadeSlide 0.3s ease;
         }
-
-        .menu-section.active {
-            display: block;
-        }
+        .menu-section.active { display: block; }
 
         @keyframes fadeSlide {
             from { opacity: 0; transform: translateY(10px); }
@@ -413,22 +398,18 @@
         }
 
         .menu-section .section-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             color: var(--text-dark);
-            margin: 0 0 14px 0;
-            padding-bottom: 8px;
+            margin: 0 0 12px 0;
+            padding-bottom: 6px;
             border-bottom: 2px solid #EDE3D8;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             letter-spacing: 0.5px;
         }
-
-        .menu-section .section-title i {
-            font-size: 20px;
-            color: var(--gold);
-        }
+        .menu-section .section-title i { font-size: 18px; color: var(--gold); }
 
         .auth-modal-overlay {
             display: none;
@@ -445,17 +426,14 @@
             align-items: center;
             padding: 20px;
         }
-
-        .auth-modal-overlay.open {
-            display: flex;
-        }
+        .auth-modal-overlay.open { display: flex; }
 
         .auth-modal-content {
             background: #FFFFFF;
             border-radius: 28px;
             max-width: 420px;
             width: 100%;
-            padding: 28px 24px 24px;
+            padding: 24px 20px 20px;
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
@@ -468,12 +446,12 @@
 
         .auth-modal-content .modal-close {
             position: absolute;
-            top: 12px;
-            right: 16px;
+            top: 10px;
+            right: 14px;
             background: #F5EDE4;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             font-size: 16px;
             color: var(--text-muted);
@@ -483,71 +461,55 @@
             align-items: center;
             justify-content: center;
         }
-
-        .auth-modal-content .modal-close:active {
-            transform: scale(0.90);
-            background: #EDE3D8;
-        }
+        .auth-modal-content .modal-close:active { transform: scale(0.90); background: #EDE3D8; }
 
         .auth-modal-content .modal-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--text-dark);
             text-align: center;
             letter-spacing: 0.5px;
         }
-
-        .auth-modal-content .modal-title i {
-            color: var(--gold);
-            margin-right: 8px;
-        }
-
+        .auth-modal-content .modal-title i { color: var(--gold); margin-right: 8px; }
         .auth-modal-content .modal-subtitle {
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             font-weight: 400;
         }
-
         .auth-modal-content .auth-row {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 18px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
-
         .auth-modal-content .auth-row input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border: 1.5px solid #EDE3D8;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             background: #FDFAF7;
             outline: none;
             transition: var(--transition);
             color: var(--text-dark);
             font-weight: 400;
         }
-
         .auth-modal-content .auth-row input:focus {
             border-color: var(--gold);
             box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.10);
         }
-
-        .auth-modal-content .auth-row input::placeholder {
-            color: #BFAF9E;
-            font-weight: 300;
-        }
+        .auth-modal-content .auth-row input::placeholder { color: #BFAF9E; font-weight: 300; }
 
         .auth-modal-content .confirm-btn {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -555,115 +517,68 @@
             font-family: inherit;
             letter-spacing: 0.5px;
         }
-
-        .auth-modal-content .confirm-btn i {
-            margin-right: 8px;
-        }
-
-        .auth-modal-content .confirm-btn:active {
-            transform: scale(0.97);
-        }
+        .auth-modal-content .confirm-btn i { margin-right: 8px; }
+        .auth-modal-content .confirm-btn:active { transform: scale(0.97); }
 
         .tech-break-message {
             text-align: center;
-            padding: 40px 20px 30px;
+            padding: 30px 20px 24px;
             background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             border-radius: var(--radius);
             border: 1px solid #E8D5B8;
             margin-bottom: 16px;
         }
-
-        .tech-break-message .break-icon {
-            font-size: 56px;
-            display: block;
-            margin-bottom: 12px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .tech-break-message h2 {
-            font-size: 22px;
-            color: var(--primary);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .tech-break-message p {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 4px;
-            line-height: 1.6;
-        }
-
+        .tech-break-message .break-icon { font-size: 48px; display: block; margin-bottom: 10px; animation: float 3s ease-in-out infinite; }
+        .tech-break-message h2 { font-size: 20px; color: var(--primary); margin-bottom: 6px; font-weight: 600; }
+        .tech-break-message p { color: var(--text-muted); font-size: 14px; margin-bottom: 4px; line-height: 1.5; }
         .tech-break-message .break-time {
             background: #FFFFFF;
             border-radius: 30px;
-            padding: 10px 20px;
-            margin: 12px auto 0;
+            padding: 8px 18px;
+            margin: 10px auto 0;
             display: inline-block;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dark);
             border: 1px solid #E8D5B8;
         }
 
         .closed-message {
             text-align: center;
-            padding: 30px 20px 20px;
+            padding: 24px 18px 18px;
             background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             border-radius: var(--radius);
             border: 1px solid #E8D5B8;
             margin-bottom: 16px;
         }
-
-        .closed-message .closed-icon {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .closed-message h2 {
-            font-size: 20px;
-            color: var(--primary);
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .closed-message p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-bottom: 4px;
-            line-height: 1.6;
-        }
-
+        .closed-message .closed-icon { font-size: 44px; display: block; margin-bottom: 6px; }
+        .closed-message h2 { font-size: 18px; color: var(--primary); margin-bottom: 4px; font-weight: 600; }
+        .closed-message p { color: var(--text-muted); font-size: 13px; margin-bottom: 4px; line-height: 1.5; }
         .closed-message .work-time {
             background: #FFFFFF;
             border-radius: 30px;
-            padding: 10px 20px;
-            margin: 12px auto 0;
+            padding: 8px 18px;
+            margin: 10px auto 0;
             display: inline-block;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dark);
             border: 1px solid #E8D5B8;
         }
-
-        .closed-message .work-time span {
-            color: var(--primary);
-            font-weight: 600;
-        }
+        .closed-message .work-time span { color: var(--primary); font-weight: 600; }
 
         .map-btn-top {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: linear-gradient(135deg, #F5EDE4, #EDE3D8);
             border: 1px solid #E8D5B8;
             border-radius: 30px;
-            padding: 10px 18px;
-            margin-bottom: 16px;
+            padding: 8px 16px;
+            margin-bottom: 12px;
             color: var(--text-dark);
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
@@ -672,44 +587,26 @@
             z-index: 1;
             letter-spacing: 0.3px;
         }
-
-        .map-btn-top:active {
-            transform: scale(0.97);
-            background: #EDE3D8;
-        }
-
-        .map-btn-top .icon {
-            font-size: 16px;
-            color: var(--gold);
-        }
-
-        .map-btn-top .arrow {
-            font-size: 14px;
-            margin-left: auto;
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
-
-        .map-btn-top:active .arrow {
-            transform: translateX(4px);
-        }
+        .map-btn-top:active { transform: scale(0.97); background: #EDE3D8; }
+        .map-btn-top .icon { font-size: 15px; color: var(--gold); }
+        .map-btn-top .arrow { font-size: 13px; margin-left: auto; color: var(--text-muted); transition: var(--transition); }
+        .map-btn-top:active .arrow { transform: translateX(4px); }
 
         .bungalo-display {
             position: relative;
             border-radius: var(--radius);
-            padding: 18px 20px;
-            margin-bottom: 16px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
             text-align: center;
             color: #FFFFFF;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
-            min-height: 120px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-
         .bungalo-display::before {
             content: '';
             position: absolute;
@@ -722,7 +619,6 @@
             transform: scale(1.05);
             z-index: 0;
         }
-
         .bungalo-display::after {
             content: '';
             position: absolute;
@@ -733,11 +629,10 @@
             background: linear-gradient(135deg, rgba(212, 56, 13, 0.20), rgba(0, 0, 0, 0.40));
             z-index: 1;
         }
-
         .bungalo-display .label {
             position: relative;
             z-index: 2;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 500;
             opacity: 0.90;
             letter-spacing: 2px;
@@ -745,180 +640,114 @@
             color: rgba(255, 255, 255, 0.85);
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
         }
-
         .bungalo-display .number {
             position: relative;
             z-index: 2;
-            font-size: 44px;
+            font-size: 36px;
             font-weight: 700;
             margin: 0px 0;
             letter-spacing: 4px;
             color: #FFFFFF;
             text-shadow: 0 4px 16px rgba(0, 0, 0, 0.40), 0 0 40px rgba(212, 56, 13, 0.20);
         }
-
-        .bungalo-display .number .hash {
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 400;
-        }
-
+        .bungalo-display .number .hash { color: rgba(255, 255, 255, 0.6); font-weight: 400; }
         .bungalo-display .hint {
             position: relative;
             z-index: 2;
-            font-size: 11px;
+            font-size: 10px;
             opacity: 0.80;
             font-weight: 300;
             letter-spacing: 0.5px;
             color: rgba(255, 255, 255, 0.75);
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.20);
         }
-
-        .bungalo-display .hint i {
-            margin-right: 4px;
-        }
+        .bungalo-display .hint i { margin-right: 4px; }
 
         .contact-section {
             background: #FDFAF7;
             border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            margin-bottom: 16px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
             border: 1px solid #EDE3D8;
             position: relative;
             z-index: 1;
         }
-
         .contact-section .contact-label {
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             letter-spacing: 0.3px;
         }
-
-        .contact-section .contact-label i {
-            color: var(--gold);
-        }
-
-        .contact-section .contact-label small {
-            font-weight: 400;
-            color: var(--text-muted);
-            font-size: 11px;
-        }
-
-        .contact-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .contact-section .contact-label i { color: var(--gold); }
+        .contact-section .contact-label small { font-weight: 400; color: var(--text-muted); font-size: 10px; }
+        .contact-row { display: flex; gap: 8px; flex-wrap: wrap; }
         .contact-row input {
             flex: 1;
-            min-width: 120px;
-            padding: 10px 14px;
+            min-width: 100px;
+            padding: 8px 12px;
             border: 1.5px solid #EDE3D8;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 13px;
             background: #FFFFFF;
             outline: none;
             transition: var(--transition);
             color: var(--text-dark);
             font-weight: 400;
         }
-
         .contact-row input:focus {
             border-color: var(--gold);
             box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.08);
         }
+        .contact-row input::placeholder { color: #BFAF9E; font-weight: 300; }
 
-        .contact-row input::placeholder {
-            color: #BFAF9E;
-            font-weight: 300;
-        }
-
-        .beach-note {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: #F5EDE4;
-            border-radius: 30px;
-            font-size: 12px;
-            color: var(--text-muted);
-            border: 1px solid #E8D5B8;
-            max-width: 280px;
-            margin: 14px auto 0;
-        }
-
-        .beach-note i {
-            color: var(--gold);
-        }
-
-        .menu-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .menu-grid { display: flex; flex-direction: column; gap: 8px; }
 
         .menu-item {
             display: flex;
             align-items: center;
             background: #FDFAF7;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border-radius: var(--radius-sm);
             border: 1px solid #EDE3D8;
             transition: var(--transition);
             position: relative;
             cursor: default;
         }
-
         .menu-item:active { transform: scale(0.98); }
         .menu-item:hover { border-color: #E8D5B8; }
-        .menu-item.unavailable {
-            opacity: 0.5;
-            border-color: #EDE3D8;
-            background: #F5EDE4;
-        }
-
-        .menu-item.romantic-item .item-info h3 {
-            color: #E91E63;
-        }
-
+        .menu-item.unavailable { opacity: 0.5; border-color: #EDE3D8; background: #F5EDE4; }
+        .menu-item.romantic-item .item-info h3 { color: #E91E63; }
         .menu-item.romantic-item .price .old-price {
             text-decoration: line-through;
             color: #BFAF9E;
             font-weight: 400;
-            font-size: 12px;
-            margin-right: 6px;
+            font-size: 11px;
+            margin-right: 4px;
         }
-
         .menu-item.romantic-item .price .discount-badge {
             background: #E91E63;
             color: #FFFFFF;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 600;
-            padding: 1px 12px;
+            padding: 1px 10px;
             border-radius: 30px;
-            margin-left: 6px;
+            margin-left: 4px;
         }
-
         .menu-item.romantic-item .select-btn {
             background: linear-gradient(135deg, #E91E63, #AD1457) !important;
             box-shadow: 0 4px 12px rgba(233, 30, 99, 0.20) !important;
         }
-
-        .menu-item.romantic-item .select-btn:active {
-            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.15) !important;
-        }
+        .menu-item.romantic-item .select-btn:active { box-shadow: 0 2px 8px rgba(233, 30, 99, 0.15) !important; }
 
         .item-icon {
-            width: 54px;
-            height: 54px;
+            width: 48px;
+            height: 48px;
             flex-shrink: 0;
-            margin-right: 14px;
+            margin-right: 12px;
             border-radius: 12px;
             background: #F5EDE4;
             cursor: pointer;
@@ -926,7 +755,6 @@
             overflow: hidden;
             border: 1px solid #EDE3D8;
         }
-
         .item-icon img {
             width: 100%;
             height: 100%;
@@ -934,74 +762,60 @@
             display: block;
             border-radius: 12px;
         }
-
         .item-icon .zoom-hint {
             position: absolute;
-            bottom: 4px;
-            right: 4px;
+            bottom: 2px;
+            right: 2px;
             background: rgba(0, 0, 0, 0.4);
             color: #FFFFFF;
-            font-size: 8px;
-            padding: 1px 8px;
-            border-radius: 10px;
+            font-size: 7px;
+            padding: 1px 6px;
+            border-radius: 8px;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             opacity: 0.6;
             pointer-events: none;
         }
-
         .item-icon .volume-badge {
             position: absolute;
-            top: 4px;
-            right: 4px;
+            top: 2px;
+            right: 2px;
             background: rgba(0, 0, 0, 0.5);
             color: #FFFFFF;
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 600;
-            padding: 1px 8px;
-            border-radius: 10px;
+            padding: 1px 6px;
+            border-radius: 8px;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
 
-        .item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
+        .item-info { flex: 1; min-width: 0; }
         .item-info h3 {
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-dark);
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             letter-spacing: 0.3px;
         }
-
         .item-info .item-desc {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             font-weight: 400;
         }
-
         .item-info .price {
             color: var(--primary);
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
         }
-
-        .item-info .price small {
-            font-weight: 400;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
+        .item-info .price small { font-weight: 400; font-size: 11px; color: var(--text-muted); }
         .item-info .unavailable-label {
             color: #BFAF9E;
             font-weight: 500;
-            font-size: 12px;
+            font-size: 11px;
             background: #F5EDE4;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
             display: inline-block;
         }
@@ -1010,9 +824,9 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -1021,31 +835,19 @@
             letter-spacing: 0.3px;
             box-shadow: 0 4px 16px rgba(212, 56, 13, 0.15);
         }
-
-        .select-btn i {
-            margin-right: 4px;
-        }
-
-        .select-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(212, 56, 13, 0.10);
-        }
-
-        .select-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+        .select-btn i { margin-right: 4px; }
+        .select-btn:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(212, 56, 13, 0.10); }
+        .select-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
         .badge {
             position: absolute;
             top: -4px;
-            right: 74px;
+            right: 64px;
             background: var(--gold);
             color: #FFFFFF;
-            font-size: 7px;
+            font-size: 6px;
             font-weight: 600;
-            padding: 2px 12px;
+            padding: 1px 10px;
             border-radius: 30px;
             text-transform: uppercase;
             letter-spacing: 0.8px;
@@ -1053,104 +855,70 @@
             align-items: center;
             gap: 4px;
         }
-
-        .badge i { font-size: 7px; }
+        .badge i { font-size: 6px; }
         .badge.hit { background: var(--primary); box-shadow: 0 2px 12px rgba(212, 56, 13, 0.20); }
         .badge.new { background: #7A9B7A; box-shadow: 0 2px 12px rgba(122, 155, 122, 0.20); }
         .badge.popular { background: var(--gold); box-shadow: 0 2px 12px rgba(201, 168, 124, 0.20); }
         .badge.romantic { background: #E91E63; box-shadow: 0 2px 12px rgba(233, 30, 99, 0.20); }
 
-        .drinks-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        .drinks-grid { display: flex; flex-direction: column; gap: 8px; }
         .drink-item {
             display: flex;
             align-items: center;
             background: #FDFAF7;
-            padding: 10px 14px;
+            padding: 8px 12px;
             border-radius: var(--radius-sm);
             border: 1px solid #EDE3D8;
             transition: var(--transition);
         }
-
         .drink-item:active { transform: scale(0.98); }
-        .drink-item.unavailable {
-            opacity: 0.5;
-            border-color: #EDE3D8;
-            background: #F5EDE4;
-        }
-
+        .drink-item.unavailable { opacity: 0.5; border-color: #EDE3D8; background: #F5EDE4; }
         .drink-item .drink-icon {
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             flex-shrink: 0;
             border-radius: 50%;
             overflow: hidden;
-            margin-right: 12px;
+            margin-right: 10px;
             background: #F5EDE4;
             border: 1px solid #EDE3D8;
             cursor: pointer;
         }
-
-        .drink-item .drink-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .drink-item .drink-info {
-            flex: 1;
-        }
-
+        .drink-item .drink-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .drink-item .drink-info { flex: 1; }
         .drink-item .drink-info h4 {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dark);
             font-weight: 600;
             letter-spacing: 0.3px;
         }
-
-        .drink-item .drink-info .drink-desc {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
+        .drink-item .drink-info .drink-desc { font-size: 10px; color: var(--text-muted); font-weight: 400; }
         .drink-item .drink-price {
             color: var(--primary);
             font-weight: 600;
-            font-size: 15px;
-            margin-right: 8px;
+            font-size: 14px;
+            margin-right: 6px;
         }
-
-        .drink-item .drink-price small {
-            font-weight: 400;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
+        .drink-item .drink-price small { font-weight: 400; font-size: 10px; color: var(--text-muted); }
         .drink-item .unavailable-label {
             color: #BFAF9E;
             font-weight: 500;
-            font-size: 11px;
+            font-size: 10px;
             background: #F5EDE4;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
             display: inline-block;
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .drink-add {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             transition: var(--transition);
             flex-shrink: 0;
@@ -1159,7 +927,6 @@
             justify-content: center;
             box-shadow: 0 4px 12px rgba(212, 56, 13, 0.12);
         }
-
         .drink-add:active { transform: scale(0.90); }
         .drink-add:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
@@ -1167,7 +934,6 @@
             background: linear-gradient(135deg, #FDFAF7, #F5EDE4);
             border-color: #E8D5B8;
         }
-
         .drink-item.shaurma .drink-price { color: var(--primary); }
         .drink-item.shaurma .drink-info h4 { color: var(--primary); }
         .drink-item.shaurma .drink-add {
@@ -1190,7 +956,6 @@
             align-items: center;
             padding: 20px;
         }
-
         .topping-modal-overlay.open { display: flex; }
 
         .topping-modal-content {
@@ -1198,20 +963,19 @@
             border-radius: 28px;
             max-width: 420px;
             width: 100%;
-            padding: 28px 24px 24px;
+            padding: 24px 20px 20px;
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
         }
-
         .topping-modal-content .modal-close {
             position: absolute;
-            top: 12px;
-            right: 16px;
+            top: 10px;
+            right: 14px;
             background: #F5EDE4;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             font-size: 16px;
             color: var(--text-muted);
@@ -1221,131 +985,82 @@
             align-items: center;
             justify-content: center;
         }
-
-        .topping-modal-content .modal-close:active {
-            transform: scale(0.90);
-            background: #EDE3D8;
-        }
-
+        .topping-modal-content .modal-close:active { transform: scale(0.90); background: #EDE3D8; }
         .topping-modal-content .modal-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--text-dark);
             text-align: center;
             letter-spacing: 0.5px;
         }
-
-        .topping-modal-content .modal-title i {
-            color: var(--gold);
-            margin-right: 8px;
-        }
-
+        .topping-modal-content .modal-title i { color: var(--gold); margin-right: 8px; }
         .topping-modal-content .modal-subtitle {
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             font-weight: 400;
         }
-
         .topping-modal-content .modal-product {
             background: #FDFAF7;
             border-radius: var(--radius-sm);
-            padding: 12px 16px;
-            margin-bottom: 18px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             border: 1px solid #EDE3D8;
         }
-
-        .topping-modal-content .modal-product .product-icon {
-            font-size: 28px;
-            width: 40px;
-            text-align: center;
-        }
-
+        .topping-modal-content .modal-product .product-icon { font-size: 24px; width: 36px; text-align: center; }
         .topping-modal-content .modal-product .product-name {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-dark);
         }
-
         .topping-modal-content .modal-product .product-price {
             color: var(--primary);
             font-weight: 600;
             margin-left: auto;
-            font-size: 16px;
+            font-size: 15px;
         }
-
         .topping-options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 18px;
+            gap: 8px;
+            margin-bottom: 14px;
         }
-
         .topping-option {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 1.5px solid #EDE3D8;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: var(--transition);
             background: #FFFFFF;
         }
-
         .topping-option:active { transform: scale(0.97); }
-
         .topping-option.selected {
             border-color: var(--gold);
             background: #FDFAF7;
             box-shadow: 0 0 0 3px rgba(201, 168, 124, 0.10);
         }
-
-        .topping-option .option-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .topping-option .option-icon {
-            font-size: 20px;
-            width: 28px;
-            text-align: center;
-            color: var(--gold);
-        }
-
-        .topping-option .option-name {
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--text-dark);
-        }
-
-        .topping-option .option-price {
-            font-weight: 500;
-            color: var(--primary);
-            font-size: 13px;
-        }
-
-        .topping-option .option-check {
-            display: none;
-            color: var(--gold);
-            font-size: 18px;
-        }
-
+        .topping-option .option-left { display: flex; align-items: center; gap: 10px; }
+        .topping-option .option-icon { font-size: 18px; width: 24px; text-align: center; color: var(--gold); }
+        .topping-option .option-name { font-weight: 500; font-size: 13px; color: var(--text-dark); }
+        .topping-option .option-price { font-weight: 500; color: var(--primary); font-size: 12px; }
+        .topping-option .option-check { display: none; color: var(--gold); font-size: 16px; }
         .topping-option.selected .option-check { display: block; }
 
         .topping-modal-content .confirm-btn {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -1353,7 +1068,6 @@
             font-family: inherit;
             letter-spacing: 0.5px;
         }
-
         .topping-modal-content .confirm-btn i { margin-right: 8px; }
         .topping-modal-content .confirm-btn:active { transform: scale(0.97); }
         .topping-modal-content .confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
@@ -1373,7 +1087,6 @@
             align-items: center;
             padding: 20px;
         }
-
         .orders-modal-overlay.open { display: flex; }
 
         .orders-modal-content {
@@ -1388,33 +1101,26 @@
             display: flex;
             flex-direction: column;
         }
-
         .orders-modal-content .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 20px 12px;
+            padding: 14px 18px 10px;
             border-bottom: 1px solid #EDE3D8;
             flex-shrink: 0;
         }
-
         .orders-modal-content .modal-header h2 {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--text-dark);
             font-weight: 600;
             letter-spacing: 0.5px;
         }
-
-        .orders-modal-content .modal-header h2 i {
-            color: var(--gold);
-            margin-right: 8px;
-        }
-
+        .orders-modal-content .modal-header h2 i { color: var(--gold); margin-right: 8px; }
         .orders-modal-content .modal-header .close-btn {
             background: #F5EDE4;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             font-size: 16px;
             color: var(--text-muted);
@@ -1424,285 +1130,339 @@
             align-items: center;
             justify-content: center;
         }
+        .orders-modal-content .modal-header .close-btn:active { transform: scale(0.90); }
 
         .orders-modal-content .orders-content {
-            padding: 16px 20px;
+            padding: 12px 16px;
             overflow-y: auto;
             flex: 1;
             max-height: 50vh;
         }
-
         .orders-content .orders-empty {
             color: #BFAF9E;
-            font-size: 16px;
+            font-size: 14px;
             text-align: center;
-            padding: 30px 0;
+            padding: 24px 0;
         }
-
-        .orders-content .orders-empty i {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 12px;
-            color: #BFAF9E;
-        }
+        .orders-content .orders-empty i { font-size: 40px; display: block; margin-bottom: 10px; color: #BFAF9E; }
 
         .orders-content .order-history-item {
             background: #FDFAF7;
-            border-radius: 14px;
-            padding: 12px 16px;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
             border: 1px solid #EDE3D8;
         }
-
         .orders-content .order-history-item .oh-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
-
-        .orders-content .order-history-item .oh-id {
-            font-weight: 500;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
+        .orders-content .order-history-item .oh-id { font-weight: 500; color: var(--text-muted); font-size: 11px; }
         .orders-content .order-history-item .oh-status {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
         }
-
         .orders-content .order-history-item .oh-status.waiting { background: #FFF3E0; color: #E65100; }
         .orders-content .order-history-item .oh-status.done { background: #E8F5E9; color: #2E7D32; }
         .orders-content .order-history-item .oh-status.cancelled { background: #FFEBEE; color: #D32F2F; }
         .orders-content .order-history-item .oh-status.timeout { background: #FFF3E0; color: #E65100; }
-
         .orders-content .order-history-item .oh-items {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
-            margin: 4px 0;
+            margin: 2px 0;
         }
-
         .orders-content .order-history-item .oh-total {
             font-weight: 600;
             color: var(--primary);
-            font-size: 15px;
+            font-size: 14px;
         }
-
-        .orders-content .order-history-item .oh-time {
-            font-size: 11px;
-            color: #BFAF9E;
-        }
-
+        .orders-content .order-history-item .oh-time { font-size: 10px; color: #BFAF9E; }
         .orders-content .order-history-item .oh-cancel-btn {
             background: #D32F2F;
             color: #FFFFFF;
             border: none;
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 30px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 4px;
+            margin-top: 2px;
         }
-
         .orders-content .order-history-item .oh-cancel-btn i { margin-right: 4px; }
         .orders-content .order-history-item .oh-cancel-btn:active { transform: scale(0.95); }
         .orders-content .order-history-item .oh-cancel-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .orders-modal-content .orders-footer {
-            padding: 12px 20px 20px;
-            border-top: 1px solid #EDE3D8;
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .orders-modal-content .orders-footer input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1.5px solid #EDE3D8;
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            transition: var(--transition);
-            background: #FDFAF7;
-        }
-
-        .orders-modal-content .orders-footer input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.08);
-        }
-
-        .orders-load-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-            white-space: nowrap;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 12px rgba(212, 56, 13, 0.15);
-        }
-
-        .orders-load-btn i { margin-right: 6px; }
-        .orders-load-btn:active { transform: scale(0.95); }
-
-        .image-modal-overlay {
+        /* ===== МОДАЛЬНОЕ ОКНО ОТЗЫВОВ (ВЕСЬ ЭКРАН) ===== */
+        .reviews-modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.80);
+            background: rgba(0, 0, 0, 0.60);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            z-index: 500;
+            z-index: 350;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            cursor: pointer;
+            padding: 0;
         }
+        .reviews-modal-overlay.open { display: flex; }
 
-        .image-modal-overlay.open { display: flex; }
-
-        .image-modal-content {
-            max-width: 90vw;
-            max-height: 90vh;
-            border-radius: 16px;
+        .reviews-modal-content {
+            background: #FFFFFF;
+            border-radius: 0;
+            max-width: 100%;
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
             overflow: hidden;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
-            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: transparent;
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
             position: relative;
         }
-
-        .image-modal-content img {
-            width: 100%;
-            height: auto;
-            max-height: 85vh;
-            object-fit: contain;
-            display: block;
-        }
-
-        .image-modal-content .image-close {
+        .reviews-modal-content .modal-close {
             position: absolute;
-            top: 16px;
+            top: 12px;
             right: 16px;
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: #F5EDE4;
+            border: none;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            font-size: 18px;
-            color: #FFFFFF;
+            font-size: 20px;
+            color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            z-index: 20;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
-
-        .image-modal-content .image-close:active { transform: scale(0.90); }
-
-        .image-modal-overlay .image-caption {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 13px;
-            font-weight: 400;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 4px 16px;
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+        .reviews-modal-content .modal-close:active { transform: scale(0.90); background: #EDE3D8; }
+        .reviews-modal-content .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
             text-align: center;
-            white-space: nowrap;
+            letter-spacing: 0.5px;
+            padding: 20px 50px 14px;
+            border-bottom: 1px solid #EDE3D8;
+            flex-shrink: 0;
+            position: relative;
+            background: #FFFFFF;
+        }
+        .reviews-modal-content .modal-title i { color: #FFB300; margin-right: 8px; }
+        .reviews-modal-content .modal-title .sub {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 4px;
+        }
+        .reviews-modal-list {
+            padding: 16px 20px 20px;
+            overflow-y: auto;
+            flex: 1;
+            background: #F8F3ED;
+        }
+        .reviews-modal-list .empty-reviews-modal {
+            text-align: center;
+            color: #BFAF9E;
+            padding: 40px 0;
+            font-size: 16px;
+        }
+        .reviews-modal-list .empty-reviews-modal i { 
+            font-size: 48px; 
+            display: block; 
+            margin-bottom: 12px; 
+            color: #EDE3D8; 
+        }
+        .reviews-modal-list .review-item-modal {
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            border: 1px solid #EDE3D8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .reviews-modal-list .review-item-modal .review-header-modal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .reviews-modal-list .review-item-modal .review-name-modal {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 15px;
+        }
+        .reviews-modal-list .review-item-modal .review-stars-modal {
+            color: #FFB300;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .reviews-modal-list .review-item-modal .review-text-modal {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 6px 0 4px;
+        }
+        .reviews-modal-list .review-item-modal .review-time-modal {
+            font-size: 12px;
+            color: #BFAF9E;
+            display: block;
+            margin-top: 6px;
+        }
+        .reviews-modal-list .review-item-modal .review-order-modal {
+            font-size: 12px;
+            color: #8D6E63;
+            background: #F5EDE4;
+            padding: 2px 14px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        .reviews-modal-footer {
+            padding: 14px 20px 20px;
+            border-top: 1px solid #EDE3D8;
+            text-align: center;
+            flex-shrink: 0;
+            background: #FFFFFF;
+        }
+        .reviews-modal-footer .footer-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .reviews-modal-footer .footer-text i { 
+            color: #E91E63; 
+            margin-right: 4px; 
         }
 
-        .bottom-tab-bar {
+        /* ===== МОДАЛ ОТЗЫВА (ОЦЕНКА) ===== */
+        .review-modal-overlay {
+            display: none;
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
             right: 0;
-            background: #FFFFFF;
-            border-top: 1px solid #EDE3D8;
-            display: flex;
-            justify-content: space-around;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.50);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 500;
+            justify-content: center;
             align-items: center;
-            padding: 6px 0 12px;
-            z-index: 100;
-            max-width: 480px;
-            margin: 0 auto;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+            padding: 20px;
         }
+        .review-modal-overlay.open { display: flex; }
 
-        .tab-item {
+        .review-modal-content {
+            background: #FFFFFF;
+            border-radius: 28px;
+            max-width: 420px;
+            width: 100%;
+            padding: 28px 24px 24px;
+            position: relative;
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+        }
+        .review-modal-content .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: #F5EDE4;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 16px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            padding: 4px 16px;
-            border: none;
-            background: none;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            position: relative;
-            gap: 2px;
-            flex: 1;
         }
-
-        .tab-item .tab-icon {
-            font-size: 20px;
-            color: #BFAF9E;
-            transition: all 0.2s ease;
-        }
-
-        .tab-item .tab-label {
-            font-size: 9px;
-            color: #BFAF9E;
-            font-weight: 500;
-            transition: all 0.2s ease;
+        .review-modal-content .modal-close:active { transform: scale(0.90); background: #EDE3D8; }
+        .review-modal-content .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
             letter-spacing: 0.5px;
         }
-
-        .tab-item.active .tab-icon { color: var(--primary); }
-        .tab-item.active .tab-label { color: var(--primary); }
-
-        .tab-item .tab-badge {
-            position: absolute;
-            top: 0px;
-            right: 8px;
-            background: #D32F2F;
-            color: #FFFFFF;
-            font-size: 8px;
-            font-weight: 600;
-            min-width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
+        .review-modal-content .modal-title i { color: #FFB300; margin-right: 8px; }
+        .review-modal-content .modal-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 400;
         }
-
-        .tab-item .tab-badge.hidden { display: none; }
-        .tab-item .tab-total { font-size: 8px; font-weight: 500; color: var(--primary); }
+        .review-modal-content .stars-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .review-modal-content .stars-row .star {
+            font-size: 36px;
+            color: #EDE3D8;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .review-modal-content .stars-row .star.active { color: #FFB300; }
+        .review-modal-content .stars-row .star:active { transform: scale(0.90); }
+        .review-modal-content textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #EDE3D8;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #FDFAF7;
+            outline: none;
+            transition: var(--transition);
+            color: var(--text-dark);
+            font-family: inherit;
+            resize: vertical;
+            min-height: 90px;
+        }
+        .review-modal-content textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.10);
+        }
+        .review-modal-content textarea::placeholder { color: #BFAF9E; font-weight: 300; }
+        .review-modal-content .confirm-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.20);
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            margin-top: 14px;
+        }
+        .review-modal-content .confirm-btn i { margin-right: 8px; }
+        .review-modal-content .confirm-btn:active { transform: scale(0.97); }
+        .review-modal-content .confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
         .cart-modal {
             display: none;
@@ -1717,33 +1477,29 @@
             box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.06);
             max-width: 480px;
             margin: 0 auto;
-            padding-bottom: 70px;
+            padding-bottom: 60px;
         }
-
         .cart-modal.open { display: block; }
 
         .cart-modal .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 20px 12px;
+            padding: 14px 18px 10px;
             border-bottom: 1px solid #EDE3D8;
         }
-
         .cart-modal .modal-header h2 {
-            font-size: 18px;
+            font-size: 17px;
             color: var(--text-dark);
             font-weight: 600;
             letter-spacing: 0.5px;
         }
-
         .cart-modal .modal-header h2 i { color: var(--gold); margin-right: 8px; }
-
         .cart-modal .modal-header .close-btn {
             background: #F5EDE4;
             border: none;
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             font-size: 16px;
             color: var(--text-muted);
@@ -1753,47 +1509,42 @@
             align-items: center;
             justify-content: center;
         }
-
         .cart-modal .modal-header .close-btn:active { transform: scale(0.90); }
 
         .cart-modal .cart-content {
-            padding: 16px 20px 24px;
+            padding: 12px 16px 20px;
             max-height: 55vh;
             overflow-y: auto;
         }
-
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #F5EDE4;
         }
-
         .cart-item .item-info-cart { flex: 1; }
         .cart-item .item-info-cart .item-name-cart {
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dark);
         }
         .cart-item .item-info-cart .item-price-cart {
             font-weight: 500;
             color: var(--primary);
-            font-size: 13px;
+            font-size: 12px;
         }
-
         .cart-item .item-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
-
         .cart-item .item-actions button {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border: none;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -1801,57 +1552,48 @@
             align-items: center;
             justify-content: center;
         }
-
         .cart-item .item-actions .qty-btn-minus { background: #F5EDE4; color: var(--text-muted); }
         .cart-item .item-actions .qty-btn-plus { background: var(--primary); color: #FFFFFF; }
-        .cart-item .item-actions .qty-btn-remove { background: #F5EDE4; color: #BFAF9E; font-size: 10px; width: 24px; height: 24px; }
+        .cart-item .item-actions .qty-btn-remove { background: #F5EDE4; color: #BFAF9E; font-size: 9px; width: 22px; height: 22px; }
         .cart-item .item-actions .qty-btn-minus:active,
         .cart-item .item-actions .qty-btn-plus:active,
         .cart-item .item-actions .qty-btn-remove:active { transform: scale(0.90); }
-
         .cart-item .item-actions .qty-number {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dark);
-            min-width: 20px;
+            min-width: 18px;
             text-align: center;
         }
 
         .cart-modal .cart-empty {
             color: #BFAF9E;
-            font-size: 15px;
+            font-size: 14px;
             text-align: center;
-            padding: 30px 0;
+            padding: 24px 0;
         }
-
-        .cart-modal .cart-empty i {
-            font-size: 44px;
-            display: block;
-            margin-bottom: 12px;
-            color: #BFAF9E;
-        }
+        .cart-modal .cart-empty i { font-size: 40px; display: block; margin-bottom: 10px; color: #BFAF9E; }
 
         .cart-modal .cart-total {
             display: flex;
             justify-content: space-between;
             font-weight: 600;
-            font-size: 18px;
-            margin: 12px 0 16px;
-            padding-top: 12px;
+            font-size: 17px;
+            margin: 10px 0 12px;
+            padding-top: 10px;
             border-top: 1px solid #EDE3D8;
             color: var(--text-dark);
         }
-
         .cart-modal .cart-total .total-price { color: var(--primary); }
 
         .cart-modal .order-btn {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -1859,7 +1601,6 @@
             font-family: inherit;
             letter-spacing: 0.5px;
         }
-
         .cart-modal .order-btn i { margin-right: 8px; }
         .cart-modal .order-btn:active { transform: scale(0.97); }
         .cart-modal .order-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
@@ -1868,45 +1609,40 @@
             background: none;
             border: none;
             color: #BFAF9E;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             font-weight: 400;
             padding: 4px 8px;
             transition: var(--transition);
         }
-
         .cart-modal .clear-cart-btn i { margin-right: 4px; }
 
         .payment-section {
             background: #FDFAF7;
             border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            margin: 12px 0 12px;
+            padding: 12px 14px;
+            margin: 10px 0 10px;
             border: 1px solid #EDE3D8;
         }
-
         .payment-title {
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: 0.3px;
         }
-
         .payment-title i { margin-right: 6px; color: var(--gold); }
-
         .payment-options {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
-
         .payment-btn {
             flex: 1;
-            min-width: 70px;
-            padding: 8px 12px;
+            min-width: 60px;
+            padding: 6px 10px;
             border: 1.5px solid #EDE3D8;
-            border-radius: 12px;
+            border-radius: 10px;
             background: #FFFFFF;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -1917,25 +1653,23 @@
             font-family: inherit;
             position: relative;
         }
-
         .payment-btn:active { transform: scale(0.97); }
-        .payment-btn .payment-icon { font-size: 18px; }
-        .payment-btn .payment-name { font-size: 11px; font-weight: 500; color: var(--text-muted); }
-        .payment-btn .payment-check { display: none; font-size: 12px; color: #2E7D32; }
-        .payment-btn .payment-badge { font-size: 8px; font-weight: 500; color: var(--gold); background: #F5EDE4; padding: 1px 10px; border-radius: 20px; margin-top: 2px; }
-
+        .payment-btn .payment-icon { font-size: 16px; }
+        .payment-btn .payment-name { font-size: 10px; font-weight: 500; color: var(--text-muted); }
+        .payment-btn .payment-check { display: none; font-size: 11px; color: #2E7D32; }
+        .payment-btn .payment-badge { font-size: 7px; font-weight: 500; color: var(--gold); background: #F5EDE4; padding: 1px 8px; border-radius: 20px; margin-top: 2px; }
         .payment-btn.active { border-color: var(--gold); background: #FDFAF7; }
         .payment-btn.active .payment-check { display: block; }
         .payment-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .payment-btn:disabled .payment-badge { background: #F5EDE4; color: #BFAF9E; }
 
         .payment-info {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-top: 8px;
-            padding: 8px 12px;
+            margin-top: 6px;
+            padding: 6px 10px;
             background: #F5EDE4;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid #EDE3D8;
             text-align: center;
             font-weight: 400;
@@ -1953,7 +1687,6 @@
             -webkit-backdrop-filter: blur(8px);
             z-index: 150;
         }
-
         .cart-overlay.open { display: block; }
 
         .map-modal-overlay {
@@ -1971,7 +1704,6 @@
             align-items: center;
             padding: 20px;
         }
-
         .map-modal-overlay.open { display: flex; }
 
         .map-modal-content {
@@ -1981,20 +1713,19 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: 24px 20px 20px;
+            padding: 20px 18px 18px;
             position: relative;
             animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 24px 80px rgba(0, 0, 0, 0.10);
         }
-
         .map-modal-content .modal-close {
             position: absolute;
-            top: 12px;
-            right: 16px;
+            top: 10px;
+            right: 14px;
             background: #F5EDE4;
             border: none;
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             font-size: 16px;
             color: var(--text-muted);
@@ -2004,67 +1735,192 @@
             align-items: center;
             justify-content: center;
         }
-
         .map-modal-content .modal-close:active { transform: scale(0.90); }
-
         .map-modal-content .modal-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             color: var(--text-dark);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             text-align: center;
             letter-spacing: 0.5px;
         }
-
         .map-modal-content .modal-title i { color: var(--gold); margin-right: 8px; }
-
         .map-modal-content .map-container {
             border-radius: var(--radius-sm);
             overflow: hidden;
             background: #F5EDE4;
-            min-height: 280px;
+            min-height: 240px;
             position: relative;
         }
-
-        .map-modal-content .map-container iframe {
-            width: 100%;
-            height: 320px;
-            border: none;
-        }
-
+        .map-modal-content .map-container iframe { width: 100%; height: 280px; border: none; }
         .map-modal-content .map-hint {
             text-align: center;
-            margin-top: 14px;
-            font-size: 13px;
+            margin-top: 10px;
+            font-size: 12px;
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.5;
             font-weight: 400;
         }
-
         .map-modal-content .map-hint i { margin-right: 4px; color: var(--gold); }
         .map-modal-content .map-hint strong { color: var(--text-dark); font-weight: 500; }
+
+        .image-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.80);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+        .image-modal-overlay.open { display: flex; }
+
+        .image-modal-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: transparent;
+            position: relative;
+        }
+        .image-modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 85vh;
+            object-fit: contain;
+            display: block;
+        }
+        .image-modal-content .image-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 16px;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .image-modal-content .image-close:active { transform: scale(0.90); }
+        .image-modal-overlay .image-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            font-weight: 400;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-top: 1px solid #EDE3D8;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 4px 0 10px;
+            z-index: 100;
+            max-width: 480px;
+            margin: 0 auto;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 2px 12px;
+            border: none;
+            background: none;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            position: relative;
+            gap: 2px;
+            flex: 1;
+        }
+        .tab-item .tab-icon {
+            font-size: 18px;
+            color: #BFAF9E;
+            transition: all 0.2s ease;
+        }
+        .tab-item .tab-label {
+            font-size: 8px;
+            color: #BFAF9E;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+        .tab-item.active .tab-icon { color: var(--primary); }
+        .tab-item.active .tab-label { color: var(--primary); }
+        .tab-item .tab-badge {
+            position: absolute;
+            top: 0px;
+            right: 4px;
+            background: #D32F2F;
+            color: #FFFFFF;
+            font-size: 7px;
+            font-weight: 600;
+            min-width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+        .tab-item .tab-badge.hidden { display: none; }
+        .tab-item .tab-total { font-size: 7px; font-weight: 500; color: var(--primary); }
 
         .notification {
             display: none;
             position: fixed;
-            top: 20px;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
             background: #2E7D32;
             color: #FFFFFF;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 30px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
             z-index: 1000;
             max-width: 90%;
             text-align: center;
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             animation: slideDown 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             letter-spacing: 0.3px;
         }
-
-        .notification i { margin-right: 8px; }
+        .notification i { margin-right: 6px; }
         .notification.error { background: #D32F2F; }
         .notification.show { display: block; }
 
@@ -2073,106 +1929,129 @@
             to { transform: translate(-50%, 0); opacity: 1; }
         }
 
-        /* ===== МЕДИА-ЗАПРОСЫ ===== */
         @media (max-width: 500px) {
             body { padding: 8px; padding-bottom: calc(var(--tab-height) + 8px); }
-            .app-container { padding: 16px 14px 24px; border-radius: 24px; }
-            .header h1 { font-size: 22px; }
-            .header .logo-icon { font-size: 32px; }
-            .item-icon { width: 46px; height: 46px; margin-right: 10px; }
-            .menu-item { padding: 10px 12px; }
-            .contact-row input { font-size: 13px; padding: 8px 12px; min-width: 100px; }
-            .bottom-tab-bar { padding: 4px 0 8px; }
-            .tab-item .tab-icon { font-size: 18px; }
-            .tab-item .tab-label { font-size: 8px; }
-            .tab-item { padding: 2px 8px; }
-            .tab-item .tab-badge { min-width: 14px; height: 14px; font-size: 7px; right: 4px; top: -2px; }
-            .cart-modal { padding-bottom: 60px; }
-            .cart-modal .cart-content { padding: 12px 16px 20px; }
-            .cart-item .item-info-cart .item-name-cart { font-size: 13px; }
-            .map-modal-content { padding: 16px; margin: 10px; }
-            .map-modal-content .map-container iframe { height: 240px; }
-            .bungalo-display .number { font-size: 36px; }
-            .map-btn-top { font-size: 13px; padding: 8px 14px; }
-            .topping-modal-content { padding: 20px 16px 16px; }
-            .topping-modal-content .modal-title { font-size: 20px; }
-            .drink-item .drink-icon { width: 32px; height: 32px; margin-right: 10px; }
-            .closed-message h2 { font-size: 20px; }
-            .closed-message .closed-icon { font-size: 44px; }
+            .app-container { padding: 14px 12px 20px; border-radius: 24px; }
+            .header h1 { font-size: 20px; }
+            .header .logo-icon { font-size: 30px; }
+            .header .subtitle { font-size: 12px; }
+            .header-actions .action-btn { font-size: 10px; padding: 4px 10px; }
+            .header-actions .action-btn i { font-size: 12px; }
+            .item-icon { width: 42px; height: 42px; margin-right: 10px; }
+            .menu-item { padding: 8px 10px; }
+            .contact-row input { font-size: 12px; padding: 6px 10px; min-width: 80px; }
+            .bottom-tab-bar { padding: 2px 0 6px; }
+            .tab-item .tab-icon { font-size: 16px; }
+            .tab-item .tab-label { font-size: 7px; }
+            .tab-item { padding: 2px 6px; }
+            .tab-item .tab-badge { min-width: 12px; height: 12px; font-size: 6px; right: 2px; top: -2px; }
+            .cart-modal { padding-bottom: 50px; }
+            .cart-modal .cart-content { padding: 10px 12px 16px; }
+            .cart-item .item-info-cart .item-name-cart { font-size: 12px; }
+            .map-modal-content { padding: 14px; margin: 10px; }
+            .map-modal-content .map-container iframe { height: 200px; }
+            .bungalo-display .number { font-size: 30px; }
+            .map-btn-top { font-size: 12px; padding: 6px 12px; }
+            .topping-modal-content { padding: 18px 14px 14px; }
+            .topping-modal-content .modal-title { font-size: 18px; }
+            .drink-item .drink-icon { width: 28px; height: 28px; margin-right: 8px; }
+            .drink-item .drink-price { font-size: 13px; }
+            .closed-message h2 { font-size: 18px; }
+            .closed-message .closed-icon { font-size: 38px; }
             .orders-modal-content { max-width: 100%; margin: 10px; border-radius: 20px; }
             .orders-modal-content .orders-footer { flex-direction: column; }
             .orders-load-btn { width: 100%; justify-content: center; }
-            .tech-break-message .break-icon { font-size: 44px; }
-            .tech-break-message h2 { font-size: 20px; }
-            .payment-btn { min-width: 50px; padding: 6px 10px; }
-            .payment-btn .payment-icon { font-size: 16px; }
-            .payment-btn .payment-name { font-size: 10px; }
-            .badge.romantic { font-size: 6px; padding: 1px 8px; right: 66px; }
-            .online-indicator { font-size: 11px; padding: 6px 12px; }
-            .auth-modal-content { padding: 20px 16px 16px; }
-            .auth-modal-content .modal-title { font-size: 20px; }
-            .badge { font-size: 6px; padding: 1px 8px; right: 62px; }
-            .badge i { font-size: 6px; }
-            .drink-item.shaurma { margin-bottom: 0px; }
-            .chips-nav .chip { font-size: 10px; padding: 8px 6px; }
-            .chips-nav .chip i { font-size: 12px; }
-            .chips-nav .chip.main-chip { font-size: 12px; padding: 10px 8px; }
-            .chips-nav .chip.main-chip i { font-size: 16px; }
-            .bungalo-display { min-height: 100px; padding: 14px 16px; }
-            .bungalo-display .number { font-size: 36px; }
-            .pickup-banner { font-size: 13px; padding: 8px 12px; }
-            .no-access-message h2 { font-size: 22px; }
-            .no-access-icon { font-size: 52px; }
-            .no-access-btn { padding: 14px 16px; }
-            .no-access-btn .btn-icon { font-size: 30px; width: 40px; }
-            .no-access-btn .btn-title { font-size: 15px; }
+            .tech-break-message .break-icon { font-size: 38px; }
+            .tech-break-message h2 { font-size: 18px; }
+            .payment-btn { min-width: 44px; padding: 4px 8px; }
+            .payment-btn .payment-icon { font-size: 14px; }
+            .payment-btn .payment-name { font-size: 9px; }
+            .badge.romantic { font-size: 5px; padding: 1px 6px; right: 56px; }
+            .online-indicator { font-size: 10px; padding: 4px 10px; }
+            .auth-modal-content { padding: 18px 14px 14px; }
+            .auth-modal-content .modal-title { font-size: 18px; }
+            .badge { font-size: 5px; padding: 1px 6px; right: 52px; }
+            .badge i { font-size: 5px; }
+            .chips-nav .chip { font-size: 9px; padding: 6px 4px; }
+            .chips-nav .chip i { font-size: 11px; }
+            .chips-nav .chip.main-chip { font-size: 11px; padding: 8px 6px; }
+            .chips-nav .chip.main-chip i { font-size: 14px; }
+            .bungalo-display { min-height: 80px; padding: 12px 14px; }
+            .bungalo-display .number { font-size: 30px; letter-spacing: 2px; }
+            .pickup-banner { font-size: 12px; padding: 6px 10px; }
+            .pickup-banner i { font-size: 14px; }
+            .no-access-message { padding: 24px 14px 18px; }
+            .no-access-icon { font-size: 44px; }
+            .no-access-message h2 { font-size: 20px; }
+            .no-access-btn { padding: 10px 12px; gap: 8px; }
+            .no-access-btn .btn-icon { font-size: 26px; width: 36px; }
+            .no-access-btn .btn-title { font-size: 14px; }
+            .no-access-btn .btn-desc { font-size: 11px; }
+            .no-access-info { font-size: 11px; gap: 8px; padding: 8px 12px; }
+            .reviews-modal-content .modal-title { font-size: 19px; padding: 16px 45px 12px; }
+            .reviews-modal-list .review-item-modal { padding: 12px 14px; }
+            .reviews-modal-list .review-item-modal .review-text-modal { font-size: 14px; }
+            .review-modal-content .stars-row .star { font-size: 30px; }
+            .review-modal-content textarea { font-size: 14px; min-height: 70px; }
+            .header-actions .action-btn .badge-new { font-size: 7px; padding: 1px 5px; min-width: 14px; }
+            .reviews-modal-list { padding: 12px 14px 16px; }
+            .reviews-modal-footer .footer-text { font-size: 13px; }
         }
 
         @media (max-width: 380px) {
             body { padding-bottom: calc(var(--tab-height) + 4px); }
-            .header h1 { font-size: 18px; }
-            .header .logo-icon { font-size: 28px; }
-            .item-info h3 { font-size: 13px; }
-            .item-info .price { font-size: 14px; }
-            .item-icon { width: 40px; height: 40px; margin-right: 8px; }
-            .select-btn { font-size: 11px; padding: 6px 14px; }
-            .contact-row input { font-size: 12px; padding: 6px 10px; min-width: 80px; }
-            .cart-item .item-actions button { width: 22px; height: 22px; font-size: 10px; }
-            .cart-item .item-actions .qty-btn-remove { width: 20px; height: 20px; font-size: 9px; }
-            .bungalo-display .number { font-size: 28px; }
-            .bottom-tab-bar { padding: 2px 0 6px; }
-            .tab-item .tab-icon { font-size: 16px; }
-            .tab-item .tab-label { font-size: 7px; }
-            .cart-modal { padding-bottom: 50px; }
-            .tech-break-message .break-icon { font-size: 36px; }
-            .tech-break-message h2 { font-size: 18px; }
-            .payment-btn { min-width: 40px; padding: 4px 8px; }
-            .payment-btn .payment-icon { font-size: 14px; }
-            .payment-btn .payment-name { font-size: 9px; }
-            .online-indicator { font-size: 10px; padding: 4px 10px; }
-            .online-indicator .dot { width: 6px; height: 6px; }
-            .auth-modal-content { padding: 14px 12px 12px; }
-            .auth-modal-content .modal-title { font-size: 18px; }
-            .auth-modal-content .auth-row input { font-size: 13px; padding: 8px 10px; }
-            .badge { font-size: 5px; padding: 1px 6px; right: 52px; }
-            .badge i { font-size: 5px; }
-            .drink-item.shaurma { margin-bottom: 0px; }
-            .chips-nav .chip { font-size: 9px; padding: 6px 4px; }
-            .chips-nav .chip i { font-size: 10px; }
-            .chips-nav .chip.main-chip { font-size: 11px; padding: 8px 6px; }
-            .chips-nav .chip.main-chip i { font-size: 14px; }
-            .bungalo-display { min-height: 80px; padding: 12px 14px; }
-            .bungalo-display .number { font-size: 28px; letter-spacing: 2px; }
-            .pickup-banner { font-size: 12px; padding: 6px 10px; }
-            .pickup-banner i { font-size: 14px; }
-            .no-access-message { padding: 30px 16px 24px; }
-            .no-access-icon { font-size: 44px; }
-            .no-access-message h2 { font-size: 20px; }
-            .no-access-btn { padding: 12px 14px; gap: 10px; }
-            .no-access-btn .btn-icon { font-size: 28px; width: 36px; }
-            .no-access-btn .btn-title { font-size: 14px; }
-            .no-access-btn .btn-desc { font-size: 12px; }
-            .no-access-info { font-size: 11px; gap: 10px; padding: 10px 14px; }
+            .header h1 { font-size: 17px; }
+            .header .logo-icon { font-size: 26px; }
+            .header .subtitle { font-size: 11px; }
+            .item-info h3 { font-size: 12px; }
+            .item-info .price { font-size: 13px; }
+            .item-icon { width: 36px; height: 36px; margin-right: 8px; }
+            .select-btn { font-size: 10px; padding: 4px 12px; }
+            .contact-row input { font-size: 11px; padding: 4px 8px; min-width: 70px; }
+            .cart-item .item-actions button { width: 20px; height: 20px; font-size: 9px; }
+            .cart-item .item-actions .qty-btn-remove { width: 18px; height: 18px; font-size: 8px; }
+            .bungalo-display .number { font-size: 24px; }
+            .bottom-tab-bar { padding: 2px 0 4px; }
+            .tab-item .tab-icon { font-size: 14px; }
+            .tab-item .tab-label { font-size: 6px; }
+            .cart-modal { padding-bottom: 40px; }
+            .tech-break-message .break-icon { font-size: 32px; }
+            .tech-break-message h2 { font-size: 16px; }
+            .payment-btn { min-width: 36px; padding: 2px 6px; }
+            .payment-btn .payment-icon { font-size: 12px; }
+            .payment-btn .payment-name { font-size: 8px; }
+            .online-indicator { font-size: 9px; padding: 3px 8px; }
+            .online-indicator .dot { width: 5px; height: 5px; }
+            .auth-modal-content { padding: 12px 10px 10px; }
+            .auth-modal-content .modal-title { font-size: 16px; }
+            .auth-modal-content .auth-row input { font-size: 12px; padding: 6px 8px; }
+            .badge { font-size: 4px; padding: 1px 4px; right: 44px; }
+            .badge i { font-size: 4px; }
+            .chips-nav .chip { font-size: 8px; padding: 4px 3px; }
+            .chips-nav .chip i { font-size: 9px; }
+            .chips-nav .chip.main-chip { font-size: 10px; padding: 6px 4px; }
+            .chips-nav .chip.main-chip i { font-size: 12px; }
+            .bungalo-display { min-height: 70px; padding: 10px 12px; }
+            .bungalo-display .number { font-size: 24px; letter-spacing: 1px; }
+            .pickup-banner { font-size: 11px; padding: 4px 8px; }
+            .pickup-banner i { font-size: 12px; }
+            .no-access-message { padding: 18px 10px 14px; }
+            .no-access-icon { font-size: 36px; }
+            .no-access-message h2 { font-size: 17px; }
+            .no-access-btn { padding: 8px 10px; gap: 6px; }
+            .no-access-btn .btn-icon { font-size: 22px; width: 30px; }
+            .no-access-btn .btn-title { font-size: 13px; }
+            .no-access-btn .btn-desc { font-size: 10px; }
+            .no-access-info { font-size: 10px; gap: 6px; padding: 6px 10px; }
+            .reviews-modal-content .modal-title { font-size: 17px; padding: 14px 40px 10px; }
+            .reviews-modal-list .review-item-modal { padding: 10px 12px; }
+            .reviews-modal-list .review-item-modal .review-text-modal { font-size: 13px; }
+            .review-modal-content .stars-row .star { font-size: 26px; }
+            .review-modal-content textarea { font-size: 13px; min-height: 60px; }
+            .header-actions .action-btn { font-size: 9px; padding: 2px 8px; }
+            .header-actions .action-btn i { font-size: 10px; }
+            .header-actions .action-btn .badge-new { font-size: 6px; padding: 1px 4px; min-width: 12px; }
+            .reviews-modal-footer .footer-text { font-size: 12px; }
         }
     </style>
 </head>
@@ -2181,7 +2060,7 @@
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО "ВВЕДИТЕ ДАННЫЕ" ===== -->
+    <!-- ===== МОДАЛ АВТОРИЗАЦИИ ===== -->
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -2195,7 +2074,7 @@
         </div>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО ВЫБОРА ПРИСЫПКИ ===== -->
+    <!-- ===== МОДАЛ ТОППИНГОВ ===== -->
     <div class="topping-modal-overlay" id="toppingModal">
         <div class="topping-modal-content">
             <button class="modal-close" onclick="closeToppingModal()">✕</button>
@@ -2211,7 +2090,7 @@
         </div>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО "МОИ ЗАКАЗЫ" ===== -->
+    <!-- ===== МОДАЛ ЗАКАЗОВ ===== -->
     <div class="orders-modal-overlay" id="ordersModal">
         <div class="orders-modal-content">
             <div class="modal-header">
@@ -2221,14 +2100,55 @@
             <div class="orders-content" id="ordersContent">
                 <div class="orders-empty"><i class="fas fa-inbox"></i> Введите телефон, чтобы увидеть заказы</div>
             </div>
-            <div class="orders-footer">
-                <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон">
-                <button class="orders-load-btn" onclick="loadMyOrders()"><i class="fas fa-search"></i> Показать</button>
+            <div class="orders-footer" style="padding:10px 16px 16px;border-top:1px solid #EDE3D8;display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;">
+                <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон" style="flex:1;padding:8px 12px;border:1.5px solid #EDE3D8;border-radius:12px;font-size:13px;outline:none;background:#FDFAF7;min-width:120px;">
+                <button class="orders-load-btn" onclick="loadMyOrders()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(212,56,13,0.15);"><i class="fas fa-search"></i> Показать</button>
             </div>
         </div>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ КАРТИНКИ ===== -->
+    <!-- ===== МОДАЛ ОТЗЫВОВ (ВЕСЬ ЭКРАН) ===== -->
+    <div class="reviews-modal-overlay" id="reviewsModal">
+        <div class="reviews-modal-content">
+            <button class="modal-close" onclick="closeReviewsModal()">✕</button>
+            <div class="modal-title">
+                <i class="fas fa-star" style="color:#FFB300;"></i> Отзывы
+                <span class="sub">Оставьте отзыв после получения заказа!</span>
+            </div>
+            <div class="reviews-modal-list" id="reviewsModalList">
+                <div class="empty-reviews-modal">
+                    <i class="fas fa-star"></i>
+                    ⭐ Пока нет отзывов. Будьте первым!
+                </div>
+            </div>
+            <div class="reviews-modal-footer">
+                <div class="footer-text">
+                    <i class="fas fa-heart"></i> 
+                    Спасибо, что выбираете нас! С вами мы становимся лучше!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== МОДАЛ ОТЗЫВА (ОЦЕНКА) ===== -->
+    <div class="review-modal-overlay" id="reviewModal">
+        <div class="review-modal-content">
+            <button class="modal-close" onclick="closeReviewModal()">✕</button>
+            <div class="modal-title"><i class="fas fa-star"></i> Оцените заказ</div>
+            <div class="modal-subtitle">Спасибо, что выбрали нас! С вами мы становимся лучше! ❤️</div>
+            <div class="stars-row" id="starsRow">
+                <span class="star" data-value="1" onclick="setRating(1)">★</span>
+                <span class="star" data-value="2" onclick="setRating(2)">★</span>
+                <span class="star" data-value="3" onclick="setRating(3)">★</span>
+                <span class="star" data-value="4" onclick="setRating(4)">★</span>
+                <span class="star" data-value="5" onclick="setRating(5)">★</span>
+            </div>
+            <textarea id="reviewText" placeholder="Расскажите о вашем впечатлении..."></textarea>
+            <button class="confirm-btn" id="submitReviewBtn" disabled onclick="submitReview()"><i class="fas fa-paper-plane"></i> Отправить отзыв</button>
+        </div>
+    </div>
+
+    <!-- ===== МОДАЛ КАРТИНКИ ===== -->
     <div class="image-modal-overlay" id="imageModal" onclick="closeImageModal()">
         <div class="image-modal-content">
             <button class="image-close" onclick="closeImageModal()">✕</button>
@@ -2242,6 +2162,21 @@
     <!-- ============================================================ -->
     <div class="app-container">
 
+        <!-- ===== ШАПКА С ДЕЙСТВИЯМИ ===== -->
+        <div class="header-actions">
+            <button class="action-btn" onclick="openSupportChat()" style="position:relative;">
+                <i class="fas fa-headset"></i> Поддержка
+                <span class="badge-new support-badge" id="supportBadge">!</span>
+            </button>
+            <button class="action-btn" onclick="openReviewsModal()">
+                <i class="fas fa-star"></i> Отзывы
+                <span class="badge-new" id="reviewsBadge" style="display:none;">
+                    <span id="reviewsCount">0</span>
+                </span>
+            </button>
+        </div>
+
+        <!-- ===== ШАПКА ===== -->
         <header class="header">
             <div class="header-badge"><i class="fas fa-water"></i> Доставка на пляж</div>
             <span class="logo-icon">🍓</span>
@@ -2250,9 +2185,14 @@
                 <span style="color:var(--text-dark);">in</span>
                 <span class="chocolate-text">Chocolate</span>
             </h1>
-            <p class="subtitle"><i class="fas fa-leaf"></i> Свежая клубника с доставкой в <span>бунгало</span> за 10 минут</p>
+            <p class="subtitle">
+                <i class="fas fa-strawberry"></i> Свежая клубника в шоколаде, напитки и другие фрукты 
+                <span>с доставкой в ваше бунгало</span>
+                <span class="delivery-time">⏱️ за 15 минут!</span>
+            </p>
         </header>
 
+        <!-- ===== ИНДИКАТОР ИНТЕРНЕТА ===== -->
         <div class="online-indicator" id="onlineIndicator">
             <span class="dot"></span>
             <span id="onlineStatus"><i class="fas fa-wifi"></i> Интернет есть</span>
@@ -2264,7 +2204,6 @@
                 <span class="no-access-icon">🔒</span>
                 <h2>Доступ ограничен</h2>
                 <p>Заказ доступен только из бунгало или у нашего киоска</p>
-                
                 <div class="no-access-options">
                     <button class="no-access-btn" onclick="showQRPrompt()">
                         <span class="btn-icon">🏠</span>
@@ -2274,17 +2213,15 @@
                         </span>
                         <span class="btn-arrow"><i class="fas fa-qrcode"></i></span>
                     </button>
-                    
-                    <button class="no-access-btn" onclick="openMap()">
+                    <button class="no-access-btn" onclick="startBeachMode()">
                         <span class="btn-icon">🏖️</span>
                         <span class="btn-text">
                             <span class="btn-title">Я на пляже</span>
-                            <span class="btn-desc">Подойдите к нашему киоску (100 метров от вас)</span>
+                            <span class="btn-desc">Самовывоз из киоска (100 метров от вас)</span>
                         </span>
-                        <span class="btn-arrow"><i class="fas fa-map-marked-alt"></i></span>
+                        <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
                     </button>
                 </div>
-                
                 <div class="no-access-info">
                     <span><i class="fas fa-clock"></i> Работаем: <span class="highlight">9:00 — 1:00 (МСК)</span></span>
                     <span><i class="fas fa-location-dot"></i> Киоск: <span class="highlight">100 м от бунгало</span></span>
@@ -2298,22 +2235,22 @@
                 <span class="break-icon">🔧</span>
                 <h2>Технический перерыв</h2>
                 <p>Мы обновляем меню и готовим для вас что-то вкусное!</p>
-                <p style="font-size:14px; color:#8F7A6E;">Скоро всё заработает, загляните через 5-10 минут</p>
+                <p style="font-size:13px;color:#8F7A6E;">Скоро всё заработает, загляните через 5-10 минут</p>
                 <div class="break-time"><i class="fas fa-clock"></i> ⏳ Скоро открываемся!</div>
-                <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;">
+                <button class="map-btn-top" onclick="openMap()" style="margin-top:14px;">
                     <span class="icon"><i class="fas fa-map-marked-alt"></i></span> Показать на карте
                     <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                 </button>
             </div>
         </div>
 
-        <!-- ===== ЗАКРЫТО (вне часов работы) ===== -->
+        <!-- ===== ЗАКРЫТО ===== -->
         <div id="closedMode" style="display:none;">
             <div class="closed-message">
                 <span class="closed-icon">🔒</span>
                 <h2>Сейчас не принимаем заказы</h2>
                 <p>Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong> ночи по московскому времени.</p>
-                <p style="font-size:14px; color:#8F7A6E; margin-top:4px;"><i class="fas fa-clock"></i> Текущее время: <span id="currentTimeDisplay">--:--</span></p>
+                <p style="font-size:13px;color:#8F7A6E;margin-top:2px;"><i class="fas fa-clock"></i> Текущее время: <span id="currentTimeDisplay">--:--</span></p>
                 <div class="work-time"><i class="fas fa-clock"></i> 🕐 График работы: <span>9:00 — 1:00 (МСК)</span></div>
             </div>
             <button class="map-btn-top" onclick="openMap()">
@@ -2330,10 +2267,13 @@
                 <span class="arrow"><i class="fas fa-arrow-right"></i></span>
             </button>
 
+            <!-- Баннер для пляжа/самовывоза -->
+            <div id="pickupBannerContainer"></div>
+
             <div class="bungalo-display">
-                <div class="label"><i class="fas fa-location-dot"></i> Ваше бунгало</div>
+                <div class="label"><i class="fas fa-location-dot"></i> <span id="bungaloLabel">Ваше бунгало</span></div>
                 <div class="number" id="bungaloNumberDisplay">#7</div>
-                <div class="hint"><i class="fas fa-qrcode"></i> Сканируйте QR-код в вашем бунгало</div>
+                <div class="hint" id="bungaloHint"><i class="fas fa-qrcode"></i> Сканируйте QR-код в вашем бунгало</div>
             </div>
 
             <div class="contact-section">
@@ -2345,8 +2285,8 @@
             </div>
 
             <div class="chips-nav">
-                <button class="chip" data-section="fruits" onclick="switchSection('fruits')"><i class="fas fa-apple-alt"></i> Другие фрукты</button>
-                <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')"><i class="fas fa-strawberry"></i> Клубника в шоколаде</button>
+                <button class="chip" data-section="fruits" onclick="switchSection('fruits')"><i class="fas fa-apple-alt"></i> Фрукты</button>
+                <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')"><i class="fas fa-strawberry"></i> Клубника</button>
                 <button class="chip" data-section="drinks" onclick="switchSection('drinks')"><i class="fas fa-mug-saucer"></i> Напитки</button>
             </div>
 
@@ -2365,11 +2305,13 @@
                 <div class="drinks-grid" id="drinksGrid"></div>
             </div>
 
-            <div style="height: 20px;"></div>
+            <div style="height: 16px;"></div>
         </div>
     </div>
 
+    <!-- ============================================================ -->
     <!-- ===== НИЖНЯЯ ПАНЕЛЬ ===== -->
+    <!-- ============================================================ -->
     <div class="bottom-tab-bar" id="bottomTabBar">
         <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
             <span class="tab-icon"><i class="fas fa-home"></i></span>
@@ -2388,7 +2330,9 @@
         </button>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО КОРЗИНЫ ===== -->
+    <!-- ============================================================ -->
+    <!-- ===== МОДАЛ КОРЗИНЫ ===== -->
+    <!-- ============================================================ -->
     <div class="cart-modal" id="cartModal">
         <div class="modal-header">
             <h2><i class="fas fa-shopping-cart"></i> Корзина</h2>
@@ -2431,10 +2375,10 @@
         // ================================================================
         // ===== КОНФИГУРАЦИЯ =====
         // ================================================================
-        const SESSION_DURATION = 1 * 60 * 1000; // 1 минута для теста (потом 5 * 60 * 60 * 1000)
+        const SESSION_DURATION = 7 * 60 * 60 * 1000; // 7 ЧАСОВ
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
-        
+
         const MY_LOCATION = {
             lat: 44.358193,
             lng: 38.528773,
@@ -2443,6 +2387,30 @@
         };
 
         const WORK_HOURS = { start: 9, end: 1 };
+
+        // ================================================================
+        // ===== ЗВУК ДЛЯ КЛИЕНТА (ТОЛЬКО ВХОДЯЩЕЕ СООБЩЕНИЕ) =====
+        // ================================================================
+
+        // Новое сообщение от админа (двойной радостный) 💬
+        function playClientNewMessageSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                [880, 1100].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.value = 0.12;
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.1);
+                    }, i * 150);
+                });
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
 
         // ================================================================
         // ===== ДАННЫЕ МЕНЮ =====
@@ -2490,11 +2458,18 @@
             cart: [],
             selectedProduct: null,
             selectedTopping: null,
-            settings: { technicalBreak: false, menuItems: {} }
+            settings: { technicalBreak: false, menuItems: {} },
+            reviewRating: 0,
+            reviewOrderId: null
         };
 
         let selectedPayment = 'cash';
         let pendingProduct = null;
+        let isPickupMode = false;
+        let currentReviews = [];
+        let chatUpdateInterval = null;
+        let notificationCheckInterval = null;
+        let lastMessageTime = 0;
 
         // ================================================================
         // ===== СЕССИЯ =====
@@ -2541,6 +2516,51 @@
         }
 
         // ================================================================
+        // ===== РЕЖИМ "Я НА ПЛЯЖЕ" (САМОВЫВОЗ) =====
+        // ================================================================
+        function startBeachMode() {
+            saveSession({ bungalo: 0, isBeach: true, isPickup: true });
+            window.bungaloNumber = 0;
+            isPickupMode = true;
+
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'block';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'flex';
+
+            document.getElementById('bungaloLabel').textContent = '🏖️ Самовывоз из киоска';
+            document.getElementById('bungaloNumberDisplay').textContent = '🏖️';
+            document.getElementById('bungaloHint').textContent = '📍 Подойдите к киоску на пляже';
+
+            showPickupBanner();
+
+            loadSettings().then(settings => {
+                if (settings?.technicalBreak) { showTechBreak(); return; }
+                if (!isWorkingTime()) { showClosedMode(); return; }
+                renderMenu(settings || state.settings);
+                initCart();
+                loadReviews();
+            });
+            setTimeout(updateOrdersBadge, 1000);
+        }
+
+        function showPickupBanner() {
+            const container = document.getElementById('pickupBannerContainer');
+            container.innerHTML = `
+                <div class="pickup-banner">
+                    <i class="fas fa-walking"></i>
+                    🏖️ Самовывоз из киоска
+                    <span class="banner-sub">(ждите у киоска, мы вас встретим)</span>
+                </div>
+            `;
+        }
+
+        function clearPickupBanner() {
+            document.getElementById('pickupBannerContainer').innerHTML = '';
+        }
+
+        // ================================================================
         // ===== ИНТЕРНЕТ =====
         // ================================================================
         function isOnline() { return navigator.onLine; }
@@ -2557,8 +2577,10 @@
             }
         }
 
-        window.addEventListener('online', () => { updateOnlineStatus(); showNotification('🌐 Интернет появился!'); });
-        window.addEventListener('offline', () => { updateOnlineStatus(); showNotification('📴 Нет интернета!', 'error'); });
+        window.addEventListener('online', () => { updateOnlineStatus();
+            showNotification('🌐 Интернет появился!'); });
+        window.addEventListener('offline', () => { updateOnlineStatus();
+            showNotification('📴 Нет интернета!', 'error'); });
 
         // ================================================================
         // ===== ВРЕМЯ РАБОТЫ =====
@@ -2628,20 +2650,23 @@
             document.getElementById('closedMode').style.display = 'none';
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'flex';
-            document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
+
+            if (bungaloNumber > 0) {
+                document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
+                document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
+                document.getElementById('bungaloHint').textContent = '🔒 QR-код в вашем бунгало';
+                clearPickupBanner();
+                isPickupMode = false;
+            }
+
             window.bungaloNumber = bungaloNumber;
 
             loadSettings().then(settings => {
-                if (settings?.technicalBreak) {
-                    showTechBreak();
-                    return;
-                }
-                if (!isWorkingTime()) {
-                    showClosedMode();
-                    return;
-                }
+                if (settings?.technicalBreak) { showTechBreak(); return; }
+                if (!isWorkingTime()) { showClosedMode(); return; }
                 renderMenu(settings || state.settings);
                 initCart();
+                loadReviews();
             });
             setTimeout(updateOrdersBadge, 1000);
         }
@@ -2675,10 +2700,10 @@
                     <button class="modal-close" onclick="closeQRPrompt()">✕</button>
                     <div class="modal-title"><i class="fas fa-qrcode"></i> Отсканируйте QR-код</div>
                     <div class="modal-subtitle">QR-код находится в вашем бунгало</div>
-                    <div style="text-align:center;padding:24px;background:#F5EDE4;border-radius:16px;margin-bottom:16px;">
-                        <i class="fas fa-qrcode" style="font-size:80px;color:#C9A87C;"></i>
+                    <div style="text-align:center;padding:20px;background:#F5EDE4;border-radius:16px;margin-bottom:14px;">
+                        <i class="fas fa-qrcode" style="font-size:72px;color:#C9A87C;"></i>
                     </div>
-                    <p style="text-align:center;color:#8F7A6E;font-size:14px;margin-bottom:16px;">Наведите камеру на QR-код в бунгало</p>
+                    <p style="text-align:center;color:#8F7A6E;font-size:13px;margin-bottom:14px;">Наведите камеру на QR-код в бунгало</p>
                     <button class="confirm-btn" onclick="closeQRPrompt()"><i class="fas fa-check"></i> Понятно</button>
                 </div>
             `;
@@ -2857,7 +2882,8 @@
             e.stopPropagation();
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null); return; }
             const item = this.closest('.drink-item');
             if (!item) return;
             addToCart({ id: parseInt(item.dataset.id), name: item.dataset.name, price: parseInt(item.dataset.price), quantity: 1, category: item.dataset.category || 'напиток', topping: '', toppingName: '' });
@@ -2902,7 +2928,7 @@
         document.getElementById('authModal').addEventListener('click', function(e) { if (e.target === this) closeAuthModal(); });
 
         // ================================================================
-        // ===== ПРИСЫПКИ =====
+        // ===== ТОППИНГИ =====
         // ================================================================
         function openToppingModal(product) {
             state.selectedProduct = product;
@@ -2941,8 +2967,8 @@
         // ================================================================
         function addToCart(item) {
             const existing = state.cart.find(c => c.id === item.id && c.topping === item.topping);
-            if (existing) { existing.quantity += item.quantity || 1; }
-            else { state.cart.push({ ...item, quantity: item.quantity || 1 }); }
+            if (existing) { existing.quantity += item.quantity || 1; } else { state.cart.push({ ...item,
+                    quantity: item.quantity || 1 }); }
             updateCart();
         }
 
@@ -2951,8 +2977,8 @@
             const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const tabCartBadge = document.getElementById('tabCartBadge');
             const tabCartTotal = document.getElementById('tabCartTotal');
-            if (totalItems > 0) { tabCartBadge.textContent = totalItems; tabCartBadge.classList.remove('hidden'); }
-            else { tabCartBadge.classList.add('hidden'); }
+            if (totalItems > 0) { tabCartBadge.textContent = totalItems;
+                tabCartBadge.classList.remove('hidden'); } else { tabCartBadge.classList.add('hidden'); }
             tabCartTotal.textContent = totalPrice + ' ₽';
             document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
 
@@ -2990,13 +3016,16 @@
         function removeItem(index) {
             const item = state.cart[index];
             if (!item) return;
-            if (confirm(`Удалить "${item.name}" из корзины?`)) { state.cart.splice(index, 1); updateCart(); showNotification(`🗑️ "${item.name}" удален`); }
+            if (confirm(`Удалить "${item.name}" из корзины?`)) { state.cart.splice(index, 1);
+                updateCart();
+                showNotification(`🗑️ "${item.name}" удален`); }
         }
 
         function openCart() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null); return; }
             document.getElementById('cartModal').classList.add('open');
             document.getElementById('cartOverlay').classList.add('open');
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
@@ -3020,7 +3049,8 @@
             selectedPayment = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
-            document.getElementById('paymentInfo').textContent = method === 'cash' ? '💡 Оплата наличными при получении' : '💡 Перевод по номеру телефона при получении';
+            document.getElementById('paymentInfo').textContent = method === 'cash' ? '💡 Оплата наличными при получении' :
+                '💡 Перевод по номеру телефона при получении';
         }
 
         // ================================================================
@@ -3035,16 +3065,23 @@
             const bungaloNumber = window.bungaloNumber;
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!bungaloNumber) { showNotification('⚠️ Номер бунгало не определен!', 'error'); return; }
+            if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!',
+                    'error'); return; }
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
             if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
             if (state.cart.length === 0) { showNotification('⚠️ Корзина пуста!', 'error'); return; }
 
             const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом', sbp: '🏦 СБП (скоро)' };
             const order = {
-                bungalow: bungaloNumber, customerName: name, customerPhone: phone,
-                paymentMethod: selectedPayment, paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
-                items: state.cart.map(item => ({ id: item.id, name: item.name + (item.isRomantic ? ' ❤️' : ''), price: item.price, quantity: item.quantity, category: item.category || 'другое', topping: item.toppingName || '' })),
+                bungalow: bungaloNumber || 0,
+                customerName: name,
+                customerPhone: phone,
+                paymentMethod: selectedPayment,
+                paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
+                isPickup: isPickupMode || false,
+                items: state.cart.map(item => ({ id: item.id, name: item.name + (item.isRomantic ? ' ❤️' : ''),
+                    price: item.price, quantity: item.quantity, category: item.category || 'другое',
+                    topping: item.toppingName || '' })),
                 total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 timestamp: new Date().toISOString()
             };
@@ -3053,22 +3090,34 @@
             orderButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
             orderButton.disabled = true;
 
-            fetch('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) })
+            fetch('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(order) })
                 .then(res => res.json())
                 .then(result => {
                     if (result.success) {
-                        showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+                        if (isPickupMode) {
+                            showNotification('🏖️ Заказ ждет вас в киоске! Приходите забирать.');
+                        } else {
+                            showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+                        }
                         state.cart = [];
                         updateCart();
                         selectPayment('cash');
                         closeCart();
                         setTimeout(updateOrdersBadge, 1000);
+
+                        if (result.orderId) {
+                            state.reviewOrderId = result.orderId;
+                        }
                     } else {
                         showNotification('❌ ' + (result.error || 'Ошибка!'), 'error');
                     }
                 })
-                .catch(() => showNotification('❌ Ошибка соединения!', 'error'))
-                .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать'; orderButton.disabled = false; });
+                .catch(() => {
+                    showNotification('❌ Ошибка соединения!', 'error');
+                })
+                .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать';
+                    orderButton.disabled = false; });
         }
 
         // ================================================================
@@ -3077,7 +3126,8 @@
         function openOrdersModal() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null); return; }
             document.getElementById('ordersModal').classList.add('open');
             document.getElementById('ordersPhoneInput').value = phone;
             loadMyOrders();
@@ -3095,14 +3145,18 @@
 
         function loadMyOrders() {
             const phone = document.getElementById('ordersPhoneInput').value.trim();
-            if (!phone) { document.getElementById('ordersContent').innerHTML = '<div class="orders-empty"><i class="fas fa-exclamation-triangle"></i> Введите номер телефона</div>'; return; }
-            document.getElementById('ordersContent').innerHTML = '<div class="orders-empty"><i class="fas fa-spinner fa-spin"></i> Загрузка...</div>';
+            if (!phone) { document.getElementById('ordersContent').innerHTML =
+                    '<div class="orders-empty"><i class="fas fa-exclamation-triangle"></i> Введите номер телефона</div>'; return; }
+            document.getElementById('ordersContent').innerHTML =
+                '<div class="orders-empty"><i class="fas fa-spinner fa-spin"></i> Загрузка...</div>';
 
-            fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
+            fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
                     if (!data.success || data.orders.length === 0) {
-                        document.getElementById('ordersContent').innerHTML = '<div class="orders-empty"><i class="fas fa-inbox"></i> Заказов не найдено</div>';
+                        document.getElementById('ordersContent').innerHTML =
+                            '<div class="orders-empty"><i class="fas fa-inbox"></i> Заказов не найдено</div>';
                         return;
                     }
                     document.getElementById('ordersContent').innerHTML = data.orders.map(order => {
@@ -3114,47 +3168,451 @@
                         const created = new Date(order.createdAt);
                         const minutes = (new Date() - created) / 1000 / 60;
                         const canCancel = order.status === 'ожидает' && minutes <= 5;
-                        const cancelBtn = canCancel ? `<button class="oh-cancel-btn" onclick="cancelMyOrder(${order.id}, '${phone}')"><i class="fas fa-ban"></i> Отменить</button>` :
-                            (order.status === 'ожидает' ? '<button class="oh-cancel-btn" disabled><i class="fas fa-clock"></i> Прошло 5 мин</button>' : '');
+                        const cancelBtn = canCancel ?
+                            `<button class="oh-cancel-btn" onclick="cancelMyOrder(${order.id}, '${phone}')"><i class="fas fa-ban"></i> Отменить</button>` :
+                            (order.status === 'ожидает' ?
+                                '<button class="oh-cancel-btn" disabled><i class="fas fa-clock"></i> Прошло 5 мин</button>' :
+                                '');
+                        const reviewBtn = order.status === 'выполнен' && !order.reviewed ?
+                            `<button class="oh-cancel-btn" onclick="openReviewModal(${order.id})" style="background:#FFB300;color:#3E2723;"><i class="fas fa-star"></i> Оценить</button>` :
+                            '';
                         return `
                             <div class="order-history-item">
                                 <div class="oh-header"><span class="oh-id">#${order.id}</span><span class="oh-status ${statusClass}">${order.status || 'ожидает'}</span></div>
                                 <div class="oh-items">${itemsText}</div>
                                 <div class="oh-total">💰 ${order.total || 0} ₽</div>
                                 <div class="oh-time">${new Date(order.createdAt).toLocaleString()}</div>
-                                ${cancelBtn}
+                                ${cancelBtn} ${reviewBtn}
                             </div>
                         `;
                     }).join('');
                 })
-                .catch(() => { document.getElementById('ordersContent').innerHTML = '<div class="orders-empty"><i class="fas fa-exclamation-circle"></i> Ошибка загрузки</div>'; });
+                .catch(() => { document.getElementById('ordersContent').innerHTML =
+                        '<div class="orders-empty"><i class="fas fa-exclamation-circle"></i> Ошибка загрузки</div>'; });
         }
 
         function cancelMyOrder(orderId, phone) {
             if (!confirm(`❌ Отменить заказ #${orderId}?`)) return;
-            fetch('/api/cancel-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId, phone }) })
+            fetch('/api/cancel-order', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId, phone }) })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); }
-                    else showNotification('❌ ' + (data.error || 'Ошибка'), 'error');
+                    if (data.success) { 
+                        showNotification('✅ Заказ отменен!');
+                        loadMyOrders();
+                        updateOrdersBadge(); 
+                    } else {
+                        showNotification('❌ ' + (data.error || 'Ошибка'), 'error');
+                    }
                 })
-                .catch(() => showNotification('❌ Ошибка соединения', 'error'));
+                .catch(() => {
+                    showNotification('❌ Ошибка соединения', 'error');
+                });
         }
 
         function updateOrdersBadge() {
             const phone = document.getElementById('customerPhone').value.trim();
             const badge = document.getElementById('tabOrdersBadge');
             if (!phone) { badge.classList.add('hidden'); return; }
-            fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
+            fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         const activeOrders = data.orders.filter(o => o.status === 'ожидает').length;
-                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); }
-                        else badge.classList.add('hidden');
+                        if (activeOrders > 0) { badge.textContent = activeOrders;
+                            badge.classList.remove('hidden'); } else badge.classList.add('hidden');
                     }
                 })
                 .catch(() => {});
+        }
+
+        // ================================================================
+        // ===== ОТЗЫВЫ =====
+        // ================================================================
+        async function loadReviews() {
+            try {
+                const res = await fetch('/api/reviews');
+                const data = await res.json();
+                currentReviews = data.reviews || [];
+                renderReviewsModal(currentReviews);
+                updateReviewsBadge();
+                return currentReviews;
+            } catch (e) {
+                console.error('Ошибка загрузки отзывов:', e);
+                return [];
+            }
+        }
+
+        function renderReviewsModal(reviews) {
+            const list = document.getElementById('reviewsModalList');
+
+            if (!reviews || reviews.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-reviews-modal">
+                        <i class="fas fa-star"></i>
+                        ⭐ Пока нет отзывов. Будьте первым!
+                    </div>
+                `;
+                return;
+            }
+
+            const sorted = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            list.innerHTML = sorted.map(review => `
+                <div class="review-item-modal">
+                    <div class="review-header-modal">
+                        <span class="review-name-modal">${review.name || 'Клиент'}</span>
+                        <span class="review-stars-modal">${'⭐'.repeat(review.rating || 5)}</span>
+                    </div>
+                    <div class="review-text-modal">${review.text || 'Без отзыва'}</div>
+                    <span class="review-order-modal">Заказ #${review.orderId || '---'}</span>
+                    <span class="review-time-modal">${new Date(review.createdAt).toLocaleString()}</span>
+                </div>
+            `).join('');
+        }
+
+        function updateReviewsBadge() {
+            const badge = document.getElementById('reviewsBadge');
+            const count = document.getElementById('reviewsCount');
+            if (currentReviews.length > 0) {
+                count.textContent = currentReviews.length;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function openReviewsModal() {
+            document.getElementById('reviewsModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            loadReviews();
+        }
+
+        function closeReviewsModal() {
+            document.getElementById('reviewsModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('reviewsModal').addEventListener('click', function(e) {
+            if (e.target === this) closeReviewsModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeReviewsModal();
+                closeReviewModal();
+            }
+        });
+
+        // ================================================================
+        // ===== МОДАЛ ОТЗЫВА =====
+        // ================================================================
+        function openReviewModal(orderId) {
+            state.reviewOrderId = orderId;
+            state.reviewRating = 0;
+            document.getElementById('reviewText').value = '';
+            document.querySelectorAll('#starsRow .star').forEach(el => el.classList.remove('active'));
+            document.getElementById('submitReviewBtn').disabled = true;
+            document.getElementById('reviewModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function setRating(value) {
+            state.reviewRating = value;
+            document.querySelectorAll('#starsRow .star').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.value) <= value);
+            });
+            document.getElementById('submitReviewBtn').disabled = false;
+        }
+
+        async function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            if (state.reviewRating === 0) {
+                showNotification('⚠️ Поставьте оценку!', 'error');
+                return;
+            }
+            if (!text) {
+                showNotification('⚠️ Напишите отзыв!', 'error');
+                return;
+            }
+
+            const name = document.getElementById('customerName').value.trim() || 'Клиент';
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            const btn = document.getElementById('submitReviewBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/review', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: state.reviewOrderId,
+                        name: name,
+                        phone: phone,
+                        rating: state.reviewRating,
+                        text: text
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showNotification('⭐ Спасибо за отзыв! С вами мы становимся лучше! ❤️');
+                    closeReviewModal();
+                    await loadReviews();
+                    loadMyOrders();
+                } else {
+                    showNotification('❌ ' + (data.error || 'Ошибка'), 'error');
+                }
+            } catch (e) {
+                showNotification('❌ Ошибка соединения', 'error');
+            } finally {
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить отзыв';
+                btn.disabled = false;
+            }
+        }
+
+        // ================================================================
+        // ===== ПОДДЕРЖКА (ЧАТ) С УВЕДОМЛЕНИЯМИ =====
+        // ================================================================
+
+        function updateSupportBadge(count) {
+            const badge = document.getElementById('supportBadge');
+            if (!badge) return;
+            
+            if (count > 0) {
+                badge.textContent = count > 9 ? '9+' : count;
+                badge.classList.add('show');
+                badge.style.animation = 'none';
+                setTimeout(() => {
+                    badge.style.animation = 'pulseBadge 0.5s ease 3';
+                }, 10);
+            } else {
+                badge.classList.remove('show');
+            }
+        }
+function startNotificationCheck() {
+    if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+    
+    notificationCheckInterval = setInterval(async () => {
+        const phone = document.getElementById('customerPhone').value.trim();
+        if (!phone) return;
+        
+        try {
+            const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+            const data = await res.json();
+            
+            if (data.success && data.messages) {
+                const messages = data.messages;
+                
+                // Проверяем только если чат закрыт
+                if (!document.getElementById('supportChatModal')) {
+                    const unreadMessages = messages.filter(msg => 
+                        msg.from === 'admin' && 
+                        new Date(msg.time).getTime() > lastMessageTime
+                    );
+                    
+                    if (unreadMessages.length > 0) {
+                        const lastMsg = unreadMessages[unreadMessages.length - 1];
+                        lastMessageTime = new Date(lastMsg.time).getTime();
+                        
+                        playClientNewMessageSound();
+                        showNotification(`💬 Новое сообщение от поддержки: ${lastMsg.text}`);
+                        
+                        const totalUnread = messages.filter(msg => 
+                            msg.from === 'admin' && 
+                            new Date(msg.time).getTime() > lastMessageTime - 60000
+                        ).length;
+                        updateSupportBadge(totalUnread);
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Ошибка проверки сообщений:', e);
+        }
+    }, 5000);
+}function openSupportChat() {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+
+    if (!name || !phone) {
+        showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+        openAuthModal(null);
+        return;
+    }
+
+    closeSupportChat();
+
+    // Сбрасываем бейдж при открытии чата
+    updateSupportBadge(0);
+    
+    // ОБНУЛЯЕМ ВРЕМЯ - старые сообщения не будут считаться новыми
+    lastMessageTime = Date.now();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'auth-modal-overlay open';
+    overlay.id = 'supportChatModal';
+    overlay.innerHTML = `
+        <div class="auth-modal-content" style="max-width:440px;max-height:80vh;display:flex;flex-direction:column;padding:0;overflow:hidden;" onclick="event.stopPropagation()">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #EDE3D8;flex-shrink:0;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-headset" style="color:#8B0000;font-size:20px;"></i>
+                    <span style="font-weight:600;font-size:16px;color:var(--text-dark);">Поддержка</span>
+                    <span style="font-size:11px;color:#2E7D32;background:#E8F5E9;padding:2px 10px;border-radius:12px;">🟢 онлайн</span>
+                </div>
+                <button class="modal-close" onclick="closeSupportChat()" style="position:static;background:#F5EDE4;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:var(--text-muted);cursor:pointer;">✕</button>
+            </div>
+            <div id="supportMessages" style="flex:1;padding:14px 16px;overflow-y:auto;max-height:50vh;min-height:200px;">
+                <div style="text-align:center;color:#BFAF9E;padding:20px 0;">
+                    <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
+                    Задайте ваш вопрос, мы ответим в ближайшее время
+                </div>
+            </div>
+            <div style="padding:12px 16px;border-top:1px solid #EDE3D8;display:flex;gap:8px;flex-shrink:0;">
+                <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:10px 14px;border:1.5px solid #EDE3D8;border-radius:12px;font-size:14px;outline:none;background:#FDFAF7;" onkeydown="if(event.key==='Enter') sendSupportMessage()">
+                <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:10px 18px;border-radius:12px;font-weight:600;cursor:pointer;">📤</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
+
+    loadSupportMessages(phone);
+    startChatAutoUpdate(phone);
+    startNotificationCheck();
+}
+        function startChatAutoUpdate(phone) {
+            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
+            chatUpdateInterval = setInterval(() => {
+                if (document.getElementById('supportChatModal')) {
+                    loadSupportMessages(phone);
+                } else {
+                    clearInterval(chatUpdateInterval);
+                    chatUpdateInterval = null;
+                }
+            }, 3000);
+        }
+
+        async function loadSupportMessages(phone) {
+            try {
+                const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                const data = await res.json();
+                if (data.success) {
+                    renderSupportMessages(data.messages || []);
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки сообщений:', e);
+            }
+        }
+
+        function renderSupportMessages(messages) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+
+            if (!messages || messages.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center;color:#BFAF9E;padding:20px 0;">
+                        <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
+                        Задайте ваш вопрос, мы ответим в ближайшее время
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = messages.map(msg => `
+                <div style="margin-bottom:8px;display:flex;justify-content:${msg.from === 'client' ? 'flex-start' : 'flex-end'};">
+                    <div style="max-width:80%;padding:8px 14px;border-radius:12px;background:${msg.from === 'client' ? '#F5EDE4' : '#8B0000'};color:${msg.from === 'client' ? '#3E2723' : '#FFFFFF'};">
+                        ${msg.text}
+                        <span style="font-size:9px;display:block;margin-top:2px;opacity:0.6;">${new Date(msg.time).toLocaleTimeString()}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendSupportMessage() {
+            const input = document.getElementById('supportInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const name = document.getElementById('customerName').value.trim() || 'Клиент';
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!phone) {
+                showNotification('⚠️ Введите телефон!', 'error');
+                return;
+            }
+
+            const container = document.getElementById('supportMessages');
+            const placeholder = container.querySelector('div[style*="text-align:center"]');
+            if (placeholder) placeholder.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = 'margin-bottom:8px;display:flex;justify-content:flex-end;';
+            messageDiv.id = 'temp-message-' + Date.now();
+            messageDiv.innerHTML = `
+                <div style="max-width:80%;padding:8px 14px;border-radius:12px;background:#8B0000;color:#FFFFFF;">
+                    ${text}
+                    <span style="font-size:9px;display:block;margin-top:2px;opacity:0.6;">Отправлено...</span>
+                </div>
+            `;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            input.value = '';
+
+            try {
+                const res = await fetch('/api/chat-send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, text, from: 'client', name })
+                });
+                const data = await res.json();
+
+                console.log('Ответ сервера на отправку:', data);
+
+                if (data.success) {
+                    const timeSpan = messageDiv.querySelector('span');
+                    if (timeSpan) timeSpan.textContent = 'Только что';
+
+                    await fetch('/api/chat-read', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone })
+                    });
+
+                    setTimeout(() => loadSupportMessages(phone), 2000);
+                } else {
+                    messageDiv.innerHTML = `
+                        <div style="max-width:80%;padding:8px 14px;border-radius:12px;background:#D32F2F;color:#FFFFFF;">
+                            ❌ Ошибка: ${data.error || 'не отправлено'}
+                        </div>
+                    `;
+                    showNotification('❌ Ошибка отправки: ' + (data.error || 'неизвестная ошибка'), 'error');
+                }
+            } catch (e) {
+                console.error('Ошибка отправки:', e);
+                messageDiv.innerHTML = `
+                    <div style="max-width:80%;padding:8px 14px;border-radius:12px;background:#D32F2F;color:#FFFFFF;">
+                        ❌ Ошибка соединения
+                    </div>
+                `;
+                showNotification('❌ Ошибка соединения', 'error');
+            }
+        }
+
+        function closeSupportChat() {
+            const modal = document.getElementById('supportChatModal');
+            if (modal) modal.remove();
+            if (chatUpdateInterval) {
+                clearInterval(chatUpdateInterval);
+                chatUpdateInterval = null;
+            }
         }
 
         // ================================================================
@@ -3184,7 +3642,10 @@
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if (tab === 'menu') { document.getElementById('tabMenu').classList.add('active'); closeCart(); closeOrdersModal(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            if (tab === 'menu') { document.getElementById('tabMenu').classList.add('active');
+                closeCart();
+                closeOrdersModal();
+                window.scrollTo({ top: 0, behavior: 'smooth' }); }
         }
 
         // ================================================================
@@ -3192,13 +3653,15 @@
         // ================================================================
         function initCart() {
             document.getElementById('confirmToppingBtn').addEventListener('click', function() {
-                if (!state.selectedProduct || !state.selectedTopping) { showNotification('⚠️ Выберите присыпку!', 'error'); return; }
+                if (!state.selectedProduct || !state.selectedTopping) { showNotification('⚠️ Выберите присыпку!',
+                        'error'); return; }
                 const product = state.selectedProduct;
                 const topping = state.selectedTopping;
                 let finalPrice = product.price + (product.isRomantic ? 0 : topping.price);
                 let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
                 const itemName = product.isRomantic ? `${product.name} (2 стаканчика)` : `${product.name}${toppingText}`;
-                addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category, topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
+                addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category,
+                    topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
                 closeToppingModal();
                 showNotification(`✅ ${itemName} добавлен!`);
             });
@@ -3225,25 +3688,32 @@
             const urlBungalo = getBungaloFromURL();
 
             if (existingSession) {
-                // Есть активная сессия
                 console.log('✅ Активная сессия, бунгало:', existingSession.bungalo);
-                if (urlBungalo) cleanURL();
-                const auth = getUserAuth();
-                if (auth) {
-                    document.getElementById('customerName').value = auth.name || '';
-                    document.getElementById('customerPhone').value = auth.phone || '';
+
+                if (existingSession.isPickup) {
+                    isPickupMode = true;
+                    startBeachMode();
+                } else if (existingSession.bungalo > 0) {
+                    if (urlBungalo) cleanURL();
+                    const auth = getUserAuth();
+                    if (auth) {
+                        document.getElementById('customerName').value = auth.name || '';
+                        document.getElementById('customerPhone').value = auth.phone || '';
+                    }
+                    showBungaloMode(existingSession.bungalo);
+                } else {
+                    showNoAccess();
                 }
-                showBungaloMode(existingSession.bungalo);
                 startSessionCheck();
+                startNotificationCheck();
             } else if (urlBungalo) {
-                // Первый вход по QR
                 console.log('🆕 Первый вход по QR, бунгало:', urlBungalo);
                 saveSession({ bungalo: urlBungalo });
                 cleanURL();
                 showBungaloMode(urlBungalo);
                 startSessionCheck();
+                startNotificationCheck();
             } else {
-                // Нет доступа
                 console.log('❌ Нет доступа');
                 showNoAccess();
             }
@@ -3252,6 +3722,8 @@
                 const timeDisplay = document.getElementById('currentTimeDisplay');
                 if (timeDisplay) timeDisplay.textContent = formatTime(getCurrentMskTime());
             }, 60000);
+
+            await loadReviews();
         }
 
         function startSessionCheck() {
@@ -3260,11 +3732,24 @@
                 if (!getSession()) {
                     clearInterval(window._sessionInterval);
                     window.bungaloNumber = null;
+                    isPickupMode = false;
                     showNoAccess();
                     showNotification('⏰ Сессия истекла. Отсканируйте QR-код заново.');
                 }
-            }, 5000);
+            }, 30000);
         }
+
+        // Очищаем интервалы при уходе со страницы
+        window.addEventListener('beforeunload', function() {
+            if (notificationCheckInterval) {
+                clearInterval(notificationCheckInterval);
+                notificationCheckInterval = null;
+            }
+            if (chatUpdateInterval) {
+                clearInterval(chatUpdateInterval);
+                chatUpdateInterval = null;
+            }
+        });
 
         // ================================================================
         // ===== ЗАПУСК =====
@@ -3272,9 +3757,14 @@
         init();
 
         console.log('🍓 Strawberry in Chocolate');
-        console.log('🔒 Доступ только по QR-коду из бунгало');
-        console.log('🏖️ Или подойти к киоску (100 метров)');
-        console.log(`⏱️ Сессия: ${SESSION_DURATION / 60000} мин (тест)`);
+        console.log('🔒 Доступ только по QR-коду из бунгало или самовывоз из киоска');
+        console.log(`⏱️ Сессия: ${SESSION_DURATION / 3600000} часов`);
+        console.log('⭐ Отзывы: весь экран, оставьте отзыв после получения заказа!');
+        console.log('💬 Поддержка: чат с администратором');
+        console.log('🔔 Звук ТОЛЬКО при входящих сообщениях от поддержки!');
+        console.log('🔴 Красная пометка при новых сообщениях!');
+        console.log('📦 Доставка в бунгало за 15 минут!');
     </script>
+
 </body>
 </html>

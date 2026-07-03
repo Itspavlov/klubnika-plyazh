@@ -2,8 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>📋 Админка - Управление</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -69,9 +70,6 @@
         .toggle-btn.on { background: #D32F2F; color: white; }
         .toggle-btn.off { background: #2E7D32; color: white; }
         
-        /* ============================================================ */
-        /* ===== ЧИПСЫ-НАВИГАЦИЯ ===== */
-        /* ============================================================ */
         .chips-nav-admin {
             display: flex;
             gap: 8px;
@@ -102,9 +100,6 @@
         }
         .chips-nav-admin .chip i { font-size: 14px; }
         
-        /* ============================================================ */
-        /* ===== СЕКЦИИ МЕНЮ ===== */
-        /* ============================================================ */
         .menu-section-admin {
             display: none;
             animation: fadeSlide 0.3s ease;
@@ -407,11 +402,327 @@
             margin-left: 4px;
         }
         
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .admin-tabs .tab {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1.5px solid #EDE3D8;
+            background: #FDFAF7;
+            font-size: 13px;
+            font-weight: 500;
+            color: #8F7A6E;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            position: relative;
+        }
+        .admin-tabs .tab:active { transform: scale(0.95); }
+        .admin-tabs .tab.active {
+            border-color: #8B0000;
+            background: #FDFAF7;
+            color: #8B0000;
+            box-shadow: 0 2px 12px rgba(139, 0, 0, 0.10);
+        }
+        .admin-tabs .tab i { margin-right: 6px; }
+        .admin-tabs .tab .tab-badge {
+            background: #D32F2F;
+            color: white;
+            font-size: 9px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin-left: 4px;
+            display: none;
+        }
+        .admin-tabs .tab .tab-badge.show { display: inline-block; }
+        
+        .admin-section {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+        .admin-section.active { display: block; }
+        
+        /* ===== ЧАТЫ С УДАЛЕНИЕМ СВАЙПОМ ===== */
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+        }
+        
+        .chat-item-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            touch-action: pan-y;
+        }
+        
+        .chat-item-wrapper .chat-delete-back {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 80px;
+            background: #D32F2F;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            gap: 6px;
+        }
+        .chat-item-wrapper .chat-delete-back:active { opacity: 0.8; }
+        
+        .chat-item {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid #EDE3D8;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
+            touch-action: pan-y;
+            will-change: transform;
+        }
+        .chat-item:active { transform: scale(0.98); }
+        .chat-item .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .chat-item .chat-customer {
+            font-weight: 600;
+            color: #3E2723;
+            font-size: 15px;
+        }
+        .chat-item .chat-time {
+            font-size: 12px;
+            color: #BFA58A;
+        }
+        .chat-item .chat-preview {
+            font-size: 13px;
+            color: #8D6E63;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-item .chat-unread {
+            background: #D32F2F;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+        
+        .swipe-hint {
+            font-size: 11px;
+            color: #BFA58A;
+            text-align: right;
+            padding: 4px 8px 0 0;
+            opacity: 0.6;
+        }
+        
+        /* ===== МОДАЛЬНОЕ ОКНО ЧАТА ===== */
+        .chat-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .chat-modal-overlay.open { display: flex; }
+        
+        .chat-modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            animation: modalPop 0.3s ease;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .chat-modal .chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #EDE3D8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-modal .chat-header h3 {
+            font-size: 16px;
+            color: #3E2723;
+        }
+        .chat-modal .chat-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #BFA58A;
+            cursor: pointer;
+        }
+        .chat-modal .chat-messages {
+            flex: 1;
+            padding: 16px 20px;
+            overflow-y: auto;
+            max-height: 50vh;
+        }
+        .chat-modal .chat-message {
+            padding: 8px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            max-width: 80%;
+        }
+        .chat-modal .chat-message.from-client {
+            background: #F5EDE4;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chat-modal .chat-message.from-admin {
+            background: #8B0000;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .chat-modal .chat-message .msg-time {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+        }
+        .chat-modal .chat-input-area {
+            padding: 12px 20px;
+            border-top: 1px solid #EDE3D8;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-modal .chat-input-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1.5px solid #EDE3D8;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+        }
+        .chat-modal .chat-input-area input:focus { border-color: #8B0000; }
+        .chat-modal .chat-input-area button {
+            background: #8B0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .chat-modal .chat-input-area button:active { transform: scale(0.95); }
+        
+        /* ===== ОТЗЫВЫ ===== */
+        .reviews-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid #EDE3D8;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .review-card .review-content {
+            flex: 1;
+        }
+        .review-card .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .review-card .review-name {
+            font-weight: 600;
+            color: #3E2723;
+        }
+        .review-card .review-stars {
+            color: #FFB300;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+        .review-card .review-text {
+            font-size: 14px;
+            color: #5D4037;
+            line-height: 1.5;
+        }
+        .review-card .review-time {
+            font-size: 11px;
+            color: #BFA58A;
+            margin-top: 6px;
+            display: block;
+        }
+        .review-card .review-order {
+            font-size: 11px;
+            color: #8D6E63;
+            background: #F5EDE4;
+            padding: 2px 12px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        .review-card .review-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+        .review-card .review-delete-btn {
+            background: #D32F2F;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .review-card .review-delete-btn:active { transform: scale(0.95); }
+        .review-card .review-delete-btn:hover { background: #B71C1C; }
+        
         @media (max-width: 500px) {
             .menu-grid-admin { grid-template-columns: 1fr; }
             .order-card .header { flex-direction: column; align-items: flex-start; }
             .controls .auto-refresh { margin-left: 0; width: 100%; }
             .chips-nav-admin .chip { font-size: 11px; padding: 6px 12px; }
+            .admin-tabs .tab { font-size: 12px; padding: 8px 14px; }
+            .review-card { flex-direction: column; }
+            .review-card .review-actions { margin-left: 0; margin-top: 10px; align-self: flex-end; }
+            .chat-item-wrapper .chat-delete-back { width: 70px; font-size: 12px; }
         }
     </style>
 </head>
@@ -423,112 +734,140 @@
             <span class="tech-break-status" id="techBreakStatus">✅ Работает</span>
         </h1>
         
-        <!-- ============================================================ -->
-        <!-- ===== УПРАВЛЕНИЕ ===== -->
-        <!-- ============================================================ -->
-        
-        <!-- Технический перерыв -->
-        <div class="control-card">
-            <div class="card-title">
-                🔧 Технический перерыв
-                <span class="badge off" id="techBreakBadge">Выключен</span>
-            </div>
-            <button class="toggle-btn off" id="techBreakBtn">⏸️ Включить перерыв</button>
-            <p style="margin-top:8px; font-size:13px; color:#8D6E63;">
-                При включении клиенты не смогут делать заказы. Увидят сообщение о перерыве.
-            </p>
+        <div class="admin-tabs">
+            <button class="tab active" data-tab="orders" onclick="switchAdminTab('orders')">
+                <i class="fas fa-list"></i> Заказы
+            </button>
+            <button class="tab" data-tab="menu" onclick="switchAdminTab('menu')">
+                <i class="fas fa-utensils"></i> Меню
+            </button>
+            <button class="tab" data-tab="chats" onclick="switchAdminTab('chats')">
+                <i class="fas fa-comments"></i> Чаты
+                <span class="tab-badge" id="chatBadge">0</span>
+            </button>
+            <button class="tab" data-tab="reviews" onclick="switchAdminTab('reviews')">
+                <i class="fas fa-star"></i> Отзывы
+                <span class="tab-badge" id="reviewsAdminBadge">0</span>
+            </button>
         </div>
         
-        <!-- Управление меню -->
-        <div class="control-card">
-            <div class="card-title">
-                📋 Меню
-                <span style="font-size:13px; font-weight:400; color:#8D6E63;">— включить/выключить позиции</span>
+        <!-- ===== ЗАКАЗЫ ===== -->
+        <div class="admin-section active" id="section-orders">
+            <div class="control-card">
+                <div class="card-title">
+                    🔧 Технический перерыв
+                    <span class="badge off" id="techBreakBadge">Выключен</span>
+                </div>
+                <button class="toggle-btn off" id="techBreakBtn">⏸️ Включить перерыв</button>
+                <p style="margin-top:8px; font-size:13px; color:#8D6E63;">
+                    При включении клиенты не смогут делать заказы. Увидят сообщение о перерыве.
+                </p>
             </div>
             
-            <!-- ЧИПСЫ-НАВИГАЦИЯ -->
-            <div class="chips-nav-admin">
-                <button class="chip active" data-section="all" onclick="switchMenuSection('all')">
-                    <i class="fas fa-th-list"></i> Все
-                </button>
-                <button class="chip" data-section="strawberry" onclick="switchMenuSection('strawberry')">
-                    <i class="fas fa-strawberry"></i> Клубника
-                </button>
-                <button class="chip" data-section="fruits" onclick="switchMenuSection('fruits')">
-                    <i class="fas fa-apple-alt"></i> Фрукты
-                </button>
-                <button class="chip" data-section="drinks" onclick="switchMenuSection('drinks')">
-                    <i class="fas fa-mug-saucer"></i> Напитки
-                </button>
+            <div class="stats">
+                <div><span>Всего заказов</span><strong id="totalOrders">0</strong></div>
+                <div><span>За сегодня</span><strong id="todayOrders">0</strong></div>
+                <div><span>Активных</span><strong id="activeOrders">0</strong></div>
+                <div><span>Выручка</span><strong id="totalRevenue">0 ₽</strong></div>
             </div>
             
-            <!-- СЕКЦИИ МЕНЮ -->
-            <div id="menuSections">
-                <!-- Все -->
-                <div class="menu-section-admin active" id="section-all">
-                    <div class="menu-grid-admin" id="menuGridAll"></div>
+            <div class="controls">
+                <button onclick="loadAll()">🔄 Обновить</button>
+                <button class="secondary" onclick="clearOrders()">🗑️ Очистить историю</button>
+                <span class="auto-refresh" onclick="toggleAutoRefresh()">
+                    🔄 Автообновление: <span id="refreshStatus">вкл</span>
+                </span>
+            </div>
+            
+            <div id="ordersList">
+                <div class="empty"><span style="font-size:48px;display:block;margin-bottom:12px;">📭</span>Заказов пока нет</div>
+            </div>
+        </div>
+        
+        <!-- ===== МЕНЮ ===== -->
+        <div class="admin-section" id="section-menu">
+            <div class="control-card">
+                <div class="card-title">
+                    📋 Управление меню
+                    <span style="font-size:13px;font-weight:400;color:#8D6E63;">— включить/выключить позиции</span>
                 </div>
                 
-                <!-- Клубника -->
-                <div class="menu-section-admin" id="section-strawberry">
-                    <div class="section-label"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
-                    <div class="menu-grid-admin" id="menuGridStrawberry"></div>
+                <div class="chips-nav-admin">
+                    <button class="chip active" data-section="all" onclick="switchMenuSection('all')">
+                        <i class="fas fa-th-list"></i> Все
+                    </button>
+                    <button class="chip" data-section="strawberry" onclick="switchMenuSection('strawberry')">
+                        <i class="fas fa-strawberry"></i> Клубника
+                    </button>
+                    <button class="chip" data-section="fruits" onclick="switchMenuSection('fruits')">
+                        <i class="fas fa-apple-alt"></i> Фрукты
+                    </button>
+                    <button class="chip" data-section="drinks" onclick="switchMenuSection('drinks')">
+                        <i class="fas fa-mug-saucer"></i> Напитки
+                    </button>
                 </div>
                 
-                <!-- Фрукты -->
-                <div class="menu-section-admin" id="section-fruits">
-                    <div class="section-label"><i class="fas fa-apple-alt"></i> Свежие фрукты (без шоколада)</div>
-                    <div class="menu-grid-admin" id="menuGridFruits"></div>
-                </div>
-                
-                <!-- Напитки -->
-                <div class="menu-section-admin" id="section-drinks">
-                    <div class="section-label"><i class="fas fa-mug-saucer"></i> Напитки и перекус</div>
-                    <div class="menu-grid-admin" id="menuGridDrinks"></div>
+                <div id="menuSections">
+                    <div class="menu-section-admin active" id="section-all">
+                        <div class="menu-grid-admin" id="menuGridAll"></div>
+                    </div>
+                    <div class="menu-section-admin" id="section-strawberry">
+                        <div class="section-label"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+                        <div class="menu-grid-admin" id="menuGridStrawberry"></div>
+                    </div>
+                    <div class="menu-section-admin" id="section-fruits">
+                        <div class="section-label"><i class="fas fa-apple-alt"></i> Свежие фрукты (без шоколада)</div>
+                        <div class="menu-grid-admin" id="menuGridFruits"></div>
+                    </div>
+                    <div class="menu-section-admin" id="section-drinks">
+                        <div class="section-label"><i class="fas fa-mug-saucer"></i> Напитки и перекус</div>
+                        <div class="menu-grid-admin" id="menuGridDrinks"></div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- ============================================================ -->
-        <!-- ===== СТАТИСТИКА ===== -->
-        <!-- ============================================================ -->
-        <div class="stats">
-            <div>
-                <span>Всего заказов</span>
-                <strong id="totalOrders">0</strong>
-            </div>
-            <div>
-                <span>За сегодня</span>
-                <strong id="todayOrders">0</strong>
-            </div>
-            <div>
-                <span>Активных</span>
-                <strong id="activeOrders">0</strong>
-            </div>
-            <div>
-                <span>Выручка</span>
-                <strong id="totalRevenue">0 ₽</strong>
+        <!-- ===== ЧАТЫ С УДАЛЕНИЕМ СВАЙПОМ ===== -->
+        <div class="admin-section" id="section-chats">
+            <div class="control-card">
+                <div class="card-title">
+                    💬 Чаты с клиентами
+                    <span style="font-size:13px;font-weight:400;color:#8D6E63;">— свайп влево для удаления</span>
+                </div>
+                <div id="chatList" class="chat-list">
+                    <div class="empty"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i> Чатов пока нет</div>
+                </div>
+                <div class="swipe-hint">👆 Свайпните чат влево для удаления</div>
             </div>
         </div>
         
-        <!-- ============================================================ -->
-        <!-- ===== КНОПКИ УПРАВЛЕНИЯ ===== -->
-        <!-- ============================================================ -->
-        <div class="controls">
-            <button onclick="loadAll()">🔄 Обновить</button>
-            <button class="secondary" onclick="clearOrders()">🗑️ Очистить историю</button>
-            <span class="auto-refresh" onclick="toggleAutoRefresh()">
-                🔄 Автообновление: <span id="refreshStatus">вкл</span>
-            </span>
+        <!-- ===== ОТЗЫВЫ ===== -->
+        <div class="admin-section" id="section-reviews">
+            <div class="control-card">
+                <div class="card-title">
+                    ⭐ Отзывы клиентов
+                    <span style="font-size:13px;font-weight:400;color:#8D6E63;">— управление отзывами</span>
+                </div>
+                <div id="reviewsList" class="reviews-grid">
+                    <div class="empty"><i class="fas fa-star" style="font-size:32px;display:block;margin-bottom:8px;"></i> Отзывов пока нет</div>
+                </div>
+            </div>
         </div>
-        
-        <!-- ============================================================ -->
-        <!-- ===== СПИСОК ЗАКАЗОВ ===== -->
-        <!-- ============================================================ -->
-        <div id="ordersList">
-            <div class="empty">
-                <span style="font-size:48px; display:block; margin-bottom:12px;">📭</span>
-                Заказов пока нет
+    </div>
+    
+    <!-- ===== МОДАЛЬНОЕ ОКНО ЧАТА ===== -->
+    <div class="chat-modal-overlay" id="chatModal">
+        <div class="chat-modal">
+            <div class="chat-header">
+                <h3 id="chatModalTitle">💬 Чат с клиентом</h3>
+                <button class="close-btn" onclick="closeChatModal()">✕</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="empty" style="padding:20px;">Загрузка...</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()">📤 Отправить</button>
             </div>
         </div>
     </div>
@@ -536,7 +875,6 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // Font Awesome для иконок
         const faLink = document.createElement('link');
         faLink.rel = 'stylesheet';
         faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
@@ -544,12 +882,131 @@
         
         let refreshInterval = null;
         let isAutoRefresh = true;
+        let currentChatId = null;
+        let currentTab = 'orders';
+        let settings = { technicalBreak: false, menuItems: {} };
+        let currentReviews = [];
         
         // ================================================================
-        // ===== ДАННЫЕ О МЕНЮ (ВСЕ ПОЗИЦИИ) =====
+        // ===== ВСЕ ЗВУКИ ДЛЯ АДМИНКИ =====
+        // ================================================================
+
+        // 1. Новое сообщение от клиента (тройной сигнал) 🔔
+        function playNewClientMessageSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                [660, 880, 1100].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.value = 0.12;
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.08);
+                    }, i * 120);
+                });
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
+
+        // 2. Отправка сообщения админом (двойной) 📤
+        function playAdminSendMessageSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                [880, 1100].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.value = 0.1;
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.06);
+                    }, i * 100);
+                });
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
+
+        // 3. Новый заказ (длинный сигнал) 📦
+        function playNewOrderSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                [523, 659].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.value = 0.15;
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.2);
+                    }, i * 180);
+                });
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
+
+        // 4. Подтверждение доставки (короткий "динь") ✅
+        function playConfirmSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.value = 1100;
+                osc.type = 'sine';
+                gain.gain.value = 0.15;
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
+
+        // 5. Ошибка/предупреждение (низкий звук) ⚠️
+        function playErrorSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.value = 300;
+                osc.type = 'sawtooth';
+                gain.gain.value = 0.08;
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
+
+        // 6. Успешное действие (радостный) 🎉
+        function playSuccessSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                [660, 880].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.value = 0.12;
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.1);
+                    }, i * 150);
+                });
+            } catch (e) { console.log('Звук не поддерживается', e); }
+        }
+        
+        // ================================================================
+        // ===== ДАННЫЕ МЕНЮ =====
         // ================================================================
         const MENU_ITEMS = {
-            // Клубника в шоколаде (с присыпками)
             strawberry: [
                 { id: '9', name: 'Для влюбленных', emoji: '❤️', romantic: true, category: 'strawberry' },
                 { id: '1', name: 'Классика', emoji: '🍫', category: 'strawberry' },
@@ -558,7 +1015,6 @@
                 { id: '4', name: 'Микс клубника-банан', emoji: '🍌', category: 'strawberry' },
                 { id: '5', name: 'Банан в шоколаде', emoji: '🍌', category: 'strawberry' }
             ],
-            // Свежие фрукты (БЕЗ шоколада, БЕЗ присыпок)
             fruits: [
                 { id: '11', name: 'Сладкий арбуз', emoji: '🍉', category: 'fruits' },
                 { id: '12', name: 'Дыня', emoji: '🍈', category: 'fruits' },
@@ -566,7 +1022,6 @@
                 { id: '14', name: 'Ежевика', emoji: '🫐', category: 'fruits' },
                 { id: '15', name: 'Голубика', emoji: '🫐', category: 'fruits' }
             ],
-            // Напитки и перекус
             drinks: [
                 { id: '6', name: 'Лимонад', emoji: '🍋', category: 'drinks' },
                 { id: '7', name: 'Кока-Кола', emoji: '🥤', category: 'drinks' },
@@ -575,15 +1030,25 @@
             ]
         };
         
-        // Все позиции для секции "Все"
-        const ALL_ITEMS = [
-            ...MENU_ITEMS.strawberry,
-            ...MENU_ITEMS.fruits,
-            ...MENU_ITEMS.drinks
-        ];
+        const ALL_ITEMS = [...MENU_ITEMS.strawberry, ...MENU_ITEMS.fruits, ...MENU_ITEMS.drinks];
+        let currentMenuSection = 'all';
         
-        let settings = { technicalBreak: false, menuItems: {} };
-        let currentSection = 'all';
+        // ================================================================
+        // ===== ПЕРЕКЛЮЧЕНИЕ ТАБОВ =====
+        // ================================================================
+        function switchAdminTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.admin-tabs .tab').forEach(el => {
+                el.classList.toggle('active', el.dataset.tab === tab);
+            });
+            document.querySelectorAll('.admin-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById('section-' + tab).classList.add('active');
+            
+            if (tab === 'chats') loadChats();
+            if (tab === 'reviews') loadReviewsAdmin();
+        }
         
         // ================================================================
         // ===== ЗАГРУЗКА НАСТРОЕК =====
@@ -594,54 +1059,36 @@
                 const data = await res.json();
                 settings = data;
                 updateUI();
+                return data;
             } catch (e) {
                 console.error('Ошибка загрузки настроек:', e);
+                return null;
             }
-        }
-        
-        // ================================================================
-        // ===== ПЕРЕКЛЮЧЕНИЕ СЕКЦИЙ =====
-        // ================================================================
-        function switchMenuSection(section) {
-            currentSection = section;
-            
-            // Обновляем чипсы
-            document.querySelectorAll('.chips-nav-admin .chip').forEach(el => {
-                el.classList.toggle('active', el.dataset.section === section);
-            });
-            
-            // Обновляем секции
-            document.querySelectorAll('.menu-section-admin').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            const target = document.getElementById('section-' + section);
-            if (target) target.classList.add('active');
-            
-            // Перерисовываем меню для выбранной секции
-            renderMenuSection(section);
         }
         
         // ================================================================
         // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
         // ================================================================
+        function switchMenuSection(section) {
+            currentMenuSection = section;
+            document.querySelectorAll('.chips-nav-admin .chip').forEach(el => {
+                el.classList.toggle('active', el.dataset.section === section);
+            });
+            document.querySelectorAll('.menu-section-admin').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById('section-' + section).classList.add('active');
+            renderMenuSection(section);
+        }
+        
         function renderMenuSection(section) {
             let items = [];
             let gridId = '';
             
-            if (section === 'all') {
-                items = ALL_ITEMS;
-                gridId = 'menuGridAll';
-            } else if (section === 'strawberry') {
-                items = MENU_ITEMS.strawberry;
-                gridId = 'menuGridStrawberry';
-            } else if (section === 'fruits') {
-                items = MENU_ITEMS.fruits;
-                gridId = 'menuGridFruits';
-            } else if (section === 'drinks') {
-                items = MENU_ITEMS.drinks;
-                gridId = 'menuGridDrinks';
-            }
+            if (section === 'all') { items = ALL_ITEMS; gridId = 'menuGridAll'; }
+            else if (section === 'strawberry') { items = MENU_ITEMS.strawberry; gridId = 'menuGridStrawberry'; }
+            else if (section === 'fruits') { items = MENU_ITEMS.fruits; gridId = 'menuGridFruits'; }
+            else if (section === 'drinks') { items = MENU_ITEMS.drinks; gridId = 'menuGridDrinks'; }
             
             const grid = document.getElementById(gridId);
             if (!grid) return;
@@ -686,7 +1133,6 @@
         }
         
         function updateUI() {
-            // Технический перерыв
             const isBreak = settings.technicalBreak;
             const breakBtn = document.getElementById('techBreakBtn');
             const breakBadge = document.getElementById('techBreakBadge');
@@ -708,7 +1154,6 @@
                 breakStatus.className = 'tech-break-status inactive';
             }
             
-            // Перерисовываем все секции меню
             renderMenuSection('all');
             renderMenuSection('strawberry');
             renderMenuSection('fruits');
@@ -718,8 +1163,6 @@
         // ================================================================
         // ===== УПРАВЛЕНИЕ =====
         // ================================================================
-        
-        // Технический перерыв
         document.getElementById('techBreakBtn').addEventListener('click', async function() {
             const newState = !settings.technicalBreak;
             try {
@@ -732,33 +1175,33 @@
                 if (data.success) {
                     settings = data.settings;
                     updateUI();
+                    playSuccessSound();
                     showToast(newState ? '🔧 Технический перерыв включен!' : '✅ Технический перерыв выключен!');
                 }
             } catch (e) {
+                playErrorSound();
                 showToast('❌ Ошибка');
             }
         });
         
-        // Переключение позиции меню
         async function toggleMenuItem(itemId) {
             const newState = settings.menuItems[itemId] === false ? true : false;
             try {
                 const res = await fetch('/api/settings', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        menuItems: { [itemId]: newState }
-                    })
+                    body: JSON.stringify({ menuItems: { [itemId]: newState } })
                 });
                 const data = await res.json();
                 if (data.success) {
                     settings = data.settings;
                     updateUI();
-                    const allItems = ALL_ITEMS;
-                    const item = allItems.find(i => i.id === itemId);
+                    const item = ALL_ITEMS.find(i => i.id === itemId);
+                    playSuccessSound();
                     showToast(`${newState ? '✅' : '❌'} ${item ? item.name : itemId}: ${newState ? 'доступно' : 'скрыто'}`);
                 }
             } catch (e) {
+                playErrorSound();
                 showToast('❌ Ошибка');
             }
         }
@@ -766,10 +1209,20 @@
         // ================================================================
         // ===== ЗАГРУЗКА ЗАКАЗОВ =====
         // ================================================================
+        let lastOrderCount = 0;
+        
         async function loadOrders() {
             try {
                 const response = await fetch('/api/orders');
                 const orders = await response.json();
+                
+                // Проверяем новые заказы
+                if (orders.length > lastOrderCount && lastOrderCount > 0) {
+                    playNewOrderSound();
+                    showToast('📦 Новый заказ!');
+                }
+                lastOrderCount = orders.length;
+                
                 updateStats(orders);
                 renderOrders(orders);
             } catch (error) {
@@ -814,12 +1267,7 @@
             const list = document.getElementById('ordersList');
             
             if (orders.length === 0) {
-                list.innerHTML = `
-                    <div class="empty">
-                        <span style="font-size:48px; display:block; margin-bottom:12px;">📭</span>
-                        Заказов пока нет
-                    </div>
-                `;
+                list.innerHTML = `<div class="empty"><span style="font-size:48px;display:block;margin-bottom:12px;">📭</span>Заказов пока нет</div>`;
                 return;
             }
             
@@ -829,15 +1277,14 @@
                 const itemsHtml = order.items && order.items.length > 0 
                     ? order.items.map(item => {
                         const isRomantic = item.name && item.name.includes('❤️');
-                        const nameDisplay = isRomantic ? item.name : item.name;
                         return `
                             <div class="item-row">
-                                <span class="item-name">${nameDisplay} ${isRomantic ? '❤️' : ''} ×${item.quantity}</span>
+                                <span class="item-name">${item.name} ${isRomantic ? '❤️' : ''} ×${item.quantity}</span>
                                 <span>${(item.price || 0) * (item.quantity || 1)} ₽</span>
                             </div>
                         `;
                     }).join('')
-                    : '<div style="color:#BFA58A; font-size:13px; padding:4px 0;">Нет товаров</div>';
+                    : '<div style="color:#BFA58A;font-size:13px;padding:4px 0;">Нет товаров</div>';
                 
                 const total = order.total || order.items?.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0) || 0;
                 
@@ -856,13 +1303,16 @@
                     `;
                 }
                 
+                const chatBtn = order.customerPhone ? 
+                    `<button style="background:#64B5F6;color:white;border:none;padding:4px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;" onclick="switchAdminTab('chats');openChat('${order.customerPhone}', '${order.customerName || 'Клиент'}')">💬 Написать</button>` : '';
+                
                 return `
                     <div class="order-card">
                         <div class="header">
                             <div>
                                 <span class="bungalow">🏠 Бунгало #${order.bungalow || '?'}</span>
                                 <span class="order-id">#${order.id || '---'}</span>
-                                ${order.confirmCode ? `<span style="background:#FFE8E0; padding:2px 12px; border-radius:12px; font-size:13px; font-weight:700; color:#8B0000; margin-left:8px;">🔑 ${order.confirmCode}</span>` : ''}
+                                ${order.confirmCode ? `<span style="background:#FFE8E0;padding:2px 12px;border-radius:12px;font-size:13px;font-weight:700;color:#8B0000;margin-left:8px;">🔑 ${order.confirmCode}</span>` : ''}
                             </div>
                             <span class="time">${order.createdAt ? new Date(order.createdAt).toLocaleString() : '---'}</span>
                         </div>
@@ -872,12 +1322,11 @@
                                 ${order.customerName ? `👤 ${order.customerName}` : ''}
                                 ${order.customerPhone ? `&nbsp;&nbsp; 📞 ${order.customerPhone}` : ''}
                                 ${order.paymentLabel ? `&nbsp;&nbsp; 💳 ${order.paymentLabel}` : ''}
+                                ${chatBtn}
                             </div>
                         ` : ''}
                         
-                        <div class="items-list">
-                            ${itemsHtml}
-                        </div>
+                        <div class="items-list">${itemsHtml}</div>
                         
                         <div class="footer">
                             <span class="total">💰 ${total} ₽</span>
@@ -902,12 +1351,15 @@
                 });
                 const data = await res.json();
                 if (data.success) {
+                    playConfirmSound();
                     showToast('✅ Доставка подтверждена!');
                     loadOrders();
                 } else {
+                    playErrorSound();
                     showToast('❌ ' + (data.error || 'Ошибка'));
                 }
             } catch (e) {
+                playErrorSound();
                 showToast('❌ Ошибка');
             }
         }
@@ -922,10 +1374,12 @@
                 });
                 const data = await res.json();
                 if (data.success) {
+                    playSuccessSound();
                     showToast('❌ Заказ отменен');
                     loadOrders();
                 }
             } catch (e) {
+                playErrorSound();
                 showToast('❌ Ошибка');
             }
         }
@@ -936,11 +1390,362 @@
                 const res = await fetch('/api/clear-orders', { method: 'POST' });
                 const data = await res.json();
                 if (data.success) {
+                    playSuccessSound();
                     showToast('🗑️ История очищена');
                     loadOrders();
                 }
             } catch (e) {
+                playErrorSound();
                 showToast('❌ Ошибка очистки');
+            }
+        }
+        
+        // ================================================================
+        // ===== ЧАТЫ С УДАЛЕНИЕМ СВАЙПОМ И ЗВУКОМ =====
+        // ================================================================
+        let adminLastMessageCount = {};
+        let adminNotificationInterval = null;
+        
+        function startAdminNotificationCheck() {
+            if (adminNotificationInterval) clearInterval(adminNotificationInterval);
+            
+            adminNotificationInterval = setInterval(async () => {
+                try {
+                    const res = await fetch('/api/chats');
+                    const data = await res.json();
+                    
+                    if (data.chats) {
+                        let hasNew = false;
+                        let totalUnread = 0;
+                        
+                        data.chats.forEach(chat => {
+                            const phone = chat.phone;
+                            const unread = chat.unread || 0;
+                            totalUnread += unread;
+                            
+                            if (unread > 0 && (!adminLastMessageCount[phone] || adminLastMessageCount[phone] < unread)) {
+                                hasNew = true;
+                                adminLastMessageCount[phone] = unread;
+                            }
+                        });
+                        
+                        // Обновляем бейдж в табе
+                        const badge = document.getElementById('chatBadge');
+                        if (badge) {
+                            if (totalUnread > 0) {
+                                badge.textContent = totalUnread;
+                                badge.classList.add('show');
+                            } else {
+                                badge.classList.remove('show');
+                            }
+                        }
+                        
+                        if (hasNew) {
+                            playNewClientMessageSound();
+                            showToast('💬 Новое сообщение от клиента!');
+                            
+                            if (currentTab === 'chats') {
+                                loadChats();
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error('Ошибка проверки чатов:', e);
+                }
+            }, 3000);
+        }
+        
+        async function loadChats() {
+            try {
+                const res = await fetch('/api/chats');
+                const data = await res.json();
+                renderChats(data.chats || []);
+            } catch (e) {
+                console.error('Ошибка загрузки чатов:', e);
+            }
+        }
+        
+        function renderChats(chats) {
+            const list = document.getElementById('chatList');
+            
+            if (chats.length === 0) {
+                list.innerHTML = `<div class="empty"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i> Чатов пока нет</div>
+                    <div class="swipe-hint">👆 Свайпните чат влево для удаления</div>`;
+                return;
+            }
+            
+            const unread = chats.filter(c => c.unread > 0).length;
+            const badge = document.getElementById('chatBadge');
+            if (unread > 0) {
+                badge.textContent = unread;
+                badge.classList.add('show');
+            } else {
+                badge.classList.remove('show');
+            }
+            
+            list.innerHTML = chats.map(chat => `
+                <div class="chat-item-wrapper" data-phone="${chat.phone}">
+                    <div class="chat-delete-back" onclick="deleteChat('${chat.phone}')">
+                        <i class="fas fa-trash"></i> Удалить
+                    </div>
+                    <div class="chat-item" onclick="openChat('${chat.phone}', '${chat.name || 'Клиент'}')">
+                        <div class="chat-header">
+                            <span class="chat-customer">👤 ${chat.name || 'Клиент'} 📞 ${chat.phone}</span>
+                            <span class="chat-time">${chat.lastMessage ? new Date(chat.lastMessage.time).toLocaleTimeString() : ''}</span>
+                        </div>
+                        <div class="chat-preview">
+                            ${chat.lastMessage ? chat.lastMessage.text : 'Нет сообщений'}
+                            ${chat.unread > 0 ? `<span class="chat-unread">${chat.unread} новых</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            initSwipeDelete();
+        }
+        
+        function initSwipeDelete() {
+            document.querySelectorAll('.chat-item-wrapper').forEach(wrapper => {
+                let startX = 0;
+                let isDragging = false;
+                const item = wrapper.querySelector('.chat-item');
+                
+                wrapper.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                }, { passive: true });
+                
+                wrapper.addEventListener('touchmove', function(e) {
+                    if (!isDragging) return;
+                    const touchX = e.touches[0].clientX;
+                    const deltaX = touchX - startX;
+                    
+                    if (deltaX < 0) {
+                        const translateX = Math.max(deltaX, -80);
+                        item.style.transform = `translateX(${translateX}px)`;
+                        item.style.transition = 'none';
+                    } else if (item.style.transform !== 'translateX(0px)') {
+                        item.style.transform = 'translateX(0)';
+                        item.style.transition = 'transform 0.3s ease';
+                    }
+                }, { passive: true });
+                
+                wrapper.addEventListener('touchend', function(e) {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    
+                    const currentTransform = item.style.transform;
+                    const match = currentTransform.match(/translateX\((-?\d+)px\)/);
+                    const offset = match ? parseInt(match[1]) : 0;
+                    
+                    if (offset < -40) {
+                        item.style.transform = 'translateX(-80px)';
+                        item.style.transition = 'transform 0.3s ease';
+                    } else {
+                        item.style.transform = 'translateX(0)';
+                        item.style.transition = 'transform 0.3s ease';
+                    }
+                }, { passive: true });
+                
+                document.addEventListener('click', function(e) {
+                    if (!wrapper.contains(e.target)) {
+                        item.style.transform = 'translateX(0)';
+                        item.style.transition = 'transform 0.3s ease';
+                    }
+                });
+            });
+        }
+        
+        async function deleteChat(phone) {
+            if (!confirm(`🗑️ Удалить чат с ${phone}? Все сообщения будут удалены.`)) {
+                const wrapper = document.querySelector(`.chat-item-wrapper[data-phone="${phone}"]`);
+                if (wrapper) {
+                    const item = wrapper.querySelector('.chat-item');
+                    item.style.transform = 'translateX(0)';
+                    item.style.transition = 'transform 0.3s ease';
+                }
+                return;
+            }
+            
+            try {
+                const res = await fetch(`/api/chat-delete?phone=${encodeURIComponent(phone)}`, { 
+                    method: 'DELETE' 
+                });
+                const data = await res.json();
+                if (data.success) {
+                    playSuccessSound();
+                    showToast('✅ Чат удален');
+                    loadChats();
+                } else {
+                    playErrorSound();
+                    showToast('❌ ' + (data.error || 'Ошибка удаления'));
+                }
+            } catch (e) {
+                playErrorSound();
+                showToast('❌ Ошибка соединения');
+            }
+        }
+        
+        // ================================================================
+        // ===== ОТКРЫТИЕ ЧАТА =====
+        // ================================================================
+        function openChat(phone, name) {
+            currentChatId = phone;
+            document.getElementById('chatModalTitle').textContent = `💬 Чат с ${name || 'клиентом'} (${phone})`;
+            document.getElementById('chatModal').classList.add('open');
+            document.getElementById('chatInput').value = '';
+            
+            fetch('/api/chat-read', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone })
+            });
+            
+            const badge = document.getElementById('chatBadge');
+            if (badge) {
+                const current = parseInt(badge.textContent) || 0;
+                if (current > 0) {
+                    badge.textContent = current - 1;
+                    if (badge.textContent === '0') {
+                        badge.classList.remove('show');
+                    }
+                }
+            }
+            
+            loadChatMessages(phone);
+        }
+        
+        async function loadChatMessages(phone) {
+            try {
+                const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                const data = await res.json();
+                renderChatMessages(data.messages || []);
+            } catch (e) {
+                console.error('Ошибка загрузки сообщений:', e);
+            }
+        }
+        
+        function renderChatMessages(messages) {
+            const container = document.getElementById('chatMessages');
+            
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="empty" style="padding:20px;">Начните диалог</div>`;
+                return;
+            }
+            
+            container.innerHTML = messages.map(msg => `
+                <div class="chat-message ${msg.from === 'client' ? 'from-client' : 'from-admin'}" style="${msg.from === 'client' ? 'text-align:left;' : 'text-align:right;'}">
+                    ${msg.text}
+                    <span class="msg-time">${new Date(msg.time).toLocaleString()}</span>
+                </div>
+            `).join('');
+            
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text || !currentChatId) return;
+            
+            playAdminSendMessageSound();
+            
+            try {
+                const res = await fetch('/api/chat-send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        phone: currentChatId, 
+                        text: text,
+                        from: 'admin'
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    input.value = '';
+                    await loadChatMessages(currentChatId);
+                    loadChats();
+                }
+            } catch (e) {
+                playErrorSound();
+                showToast('❌ Ошибка отправки');
+            }
+        }
+        
+        function closeChatModal() {
+            document.getElementById('chatModal').classList.remove('open');
+            currentChatId = null;
+        }
+        
+        // ================================================================
+        // ===== ОТЗЫВЫ =====
+        // ================================================================
+        async function loadReviewsAdmin() {
+            try {
+                const res = await fetch('/api/reviews');
+                const data = await res.json();
+                currentReviews = data.reviews || [];
+                renderReviewsAdmin(currentReviews);
+                
+                const badge = document.getElementById('reviewsAdminBadge');
+                if (currentReviews.length > 0) {
+                    badge.textContent = currentReviews.length;
+                    badge.classList.add('show');
+                } else {
+                    badge.classList.remove('show');
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки отзывов:', e);
+            }
+        }
+        
+        function renderReviewsAdmin(reviews) {
+            const list = document.getElementById('reviewsList');
+            
+            if (reviews.length === 0) {
+                list.innerHTML = `<div class="empty"><i class="fas fa-star" style="font-size:32px;display:block;margin-bottom:8px;"></i> Отзывов пока нет</div>`;
+                return;
+            }
+            
+            list.innerHTML = reviews.map(review => `
+                <div class="review-card">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <span class="review-name">${review.name || 'Клиент'}</span>
+                            <span class="review-stars">${'⭐'.repeat(review.rating || 5)}</span>
+                        </div>
+                        <div class="review-text">${review.text || 'Без отзыва'}</div>
+                        <span class="review-order">Заказ #${review.orderId || '---'} • ${review.phone || 'телефон не указан'}</span>
+                        <span class="review-time">${new Date(review.createdAt).toLocaleString()}</span>
+                    </div>
+                    <div class="review-actions">
+                        <button class="review-delete-btn" onclick="deleteReview(${review.id})">🗑️ Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function deleteReview(reviewId) {
+            if (!confirm('🗑️ Удалить этот отзыв?')) return;
+            
+            try {
+                const res = await fetch(`/api/review/${reviewId}`, { 
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    playSuccessSound();
+                    showToast('✅ Отзыв удален');
+                    loadReviewsAdmin();
+                } else {
+                    playErrorSound();
+                    showToast('❌ ' + (data.error || 'Ошибка удаления'));
+                }
+            } catch (e) {
+                console.error('Ошибка удаления:', e);
+                playErrorSound();
+                showToast('❌ Ошибка соединения');
             }
         }
         
@@ -979,7 +1784,11 @@
         
         function startAutoRefresh() {
             if (refreshInterval) clearInterval(refreshInterval);
-            refreshInterval = setInterval(loadOrders, 10000);
+            refreshInterval = setInterval(() => {
+                if (currentTab === 'orders') loadOrders();
+                else if (currentTab === 'chats') loadChats();
+                else if (currentTab === 'reviews') loadReviewsAdmin();
+            }, 10000);
         }
         
         // ================================================================
@@ -989,12 +1798,22 @@
         
         loadAll();
         startAutoRefresh();
+        startAdminNotificationCheck();
         
-        console.log('📋 Админка с управлением загружена!');
+        window.addEventListener('beforeunload', function() {
+            if (adminNotificationInterval) {
+                clearInterval(adminNotificationInterval);
+                adminNotificationInterval = null;
+            }
+        });
+        
+        console.log('📋 Админка с чатами и отзывами загружена!');
         console.log('🍓 Клубника в шоколаде (6 позиций)');
         console.log('🍉 Свежие фрукты (5 позиций)');
         console.log('🥤 Напитки и перекус (4 позиции)');
-        console.log('📊 Всего позиций: 15');
+        console.log('💬 Чаты — свайп влево для удаления + звук при новых сообщениях!');
+        console.log('⭐ Отзывы — удаление по кнопке');
+        console.log('🔔 Звуки: новое сообщение 🔔, отправка 📤, новый заказ 📦, успех 🎉, ошибка ⚠️');
     </script>
 </body>
 </html>
