@@ -137,7 +137,6 @@ function generateCode() {
 function isWorkingTime() {
     const now = new Date();
     
-    // Пробуем получить московское время
     let mskTime;
     try {
         const mskString = now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
@@ -149,10 +148,16 @@ function isWorkingTime() {
     const hours = mskTime.getHours();
     const minutes = mskTime.getMinutes();
     const currentMinutes = hours * 60 + minutes;
-    const startMinutes = WORK_HOURS.start * 60;   // 9:00 = 540
-    const endMinutes = WORK_HOURS.end * 60;        // 25:00 = 1500
+    const startMinutes = WORK_HOURS.start * 60;   // 540
+    const endMinutes = WORK_HOURS.end * 60;        // 1500
     
-    const isWorking = currentMinutes >= startMinutes && currentMinutes < endMinutes;
+    // Нормализуем текущее время для сравнения
+    let normalizedCurrent = currentMinutes;
+    if (currentMinutes < startMinutes) {
+        normalizedCurrent = currentMinutes + 24 * 60; // Добавляем сутки
+    }
+    
+    const isWorking = normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
     
     console.log(`🕐 ${hours}:${String(minutes).padStart(2, '0')} | ${WORK_HOURS.start}:00-1:00 | ${isWorking ? '✅ ОТКРЫТО' : '❌ ЗАКРЫТО'}`);
     
