@@ -7,6 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* ===== ВСЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ===== */
         :root {
             --primary: #D4380D;
             --primary-dark: #B8300A;
@@ -226,6 +227,34 @@
             50% { opacity: 0.4; transform: scale(0.8); }
         }
 
+        .session-timer {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            padding: 8px 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #E65100;
+            border: 1px solid #FFB74D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .session-timer i { font-size: 16px; }
+        .session-timer .time-left {
+            font-size: 18px;
+            font-weight: 800;
+            color: #D4380D;
+            min-width: 40px;
+        }
+        .session-timer .session-label {
+            font-size: 11px;
+            font-weight: 400;
+            color: #8D6E63;
+        }
+
         .no-access-message {
             text-align: center;
             padding: 30px 20px 24px;
@@ -310,6 +339,123 @@
         }
         .no-access-info i { color: var(--gold); margin-right: 4px; }
         .no-access-info .highlight { color: var(--primary); font-weight: 600; }
+
+        /* ===== НОВОЕ ОКНО ДЛЯ ПЛЯЖА ===== */
+        .beach-restrict-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.50);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .beach-restrict-modal.open { display: flex; }
+
+        .beach-restrict-content {
+            background: #FFFFFF;
+            border-radius: 28px;
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 24px 28px;
+            position: relative;
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .beach-restrict-content .restrict-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .beach-restrict-content h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .beach-restrict-content .restrict-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .beach-restrict-content .restrict-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .beach-restrict-content .restrict-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: #FFFFFF;
+            border: 2px solid #EDE3D8;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            text-align: left;
+            width: 100%;
+        }
+        .beach-restrict-content .restrict-btn:active {
+            transform: scale(0.98);
+            border-color: var(--gold);
+            background: #FDFAF7;
+        }
+        .beach-restrict-content .restrict-btn .btn-icon { font-size: 28px; width: 40px; text-align: center; flex-shrink: 0; }
+        .beach-restrict-content .restrict-btn .btn-text { flex: 1; }
+        .beach-restrict-content .restrict-btn .btn-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-dark);
+            display: block;
+        }
+        .beach-restrict-content .restrict-btn .btn-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .beach-restrict-content .restrict-btn .btn-arrow {
+            font-size: 18px;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        .beach-restrict-content .restrict-btn:active .btn-arrow {
+            transform: translateX(4px);
+            color: var(--primary);
+        }
+
+        .beach-restrict-content .restrict-close-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(212, 56, 13, 0.20);
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+        .beach-restrict-content .restrict-close-btn i { margin-right: 8px; }
+        .beach-restrict-content .restrict-close-btn:active { transform: scale(0.97); }
 
         .pickup-banner {
             background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
@@ -1196,90 +1342,88 @@
         .orders-content .order-history-item .oh-cancel-btn i { margin-right: 4px; }
         .orders-content .order-history-item .oh-cancel-btn:active { transform: scale(0.95); }
         .orders-content .order-history-item .oh-cancel-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-/* ===== МОДАЛЬНОЕ ОКНО ОТЗЫВОВ (ВЕСЬ ЭКРАН) ===== */
-.reviews-modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.60);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    z-index: 350;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-}
-.reviews-modal-overlay.open { display: flex; }
 
-.reviews-modal-content {
-    background: #FFFFFF;
-    border-radius: 0;
-    max-width: 100%;
-    width: 100%;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-    animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
+        .reviews-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 350;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+        .reviews-modal-overlay.open { display: flex; }
 
-/* Крестик закрытия — теперь внизу экрана, доступный для мобильных */
-.reviews-modal-content .modal-close {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #8B0000;
-    border: none;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    font-size: 24px;
-    color: #FFFFFF;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255,255,255,0.2);
-}
-.reviews-modal-content .modal-close:active { 
-    transform: translateX(-50%) scale(0.90); 
-    background: #D32F2F;
-}
-.reviews-modal-content .modal-close i {
-    font-size: 24px;
-}
+        .reviews-modal-content {
+            background: #FFFFFF;
+            border-radius: 0;
+            max-width: 100%;
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+            overflow: hidden;
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-/* Заголовок - убираем крестик из заголовка */
-.reviews-modal-content .modal-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-dark);
-    text-align: center;
-    letter-spacing: 0.5px;
-    padding: 20px 20px 14px;
-    border-bottom: 1px solid #EDE3D8;
-    flex-shrink: 0;
-    position: relative;
-    background: #FFFFFF;
-}
-.reviews-modal-content .modal-title i { color: #FFB300; margin-right: 8px; }
-.reviews-modal-content .modal-title .sub {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-muted);
-    display: block;
-    margin-top: 4px;
-}
+        .reviews-modal-content .modal-close {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8B0000;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 24px;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .reviews-modal-content .modal-close:active { 
+            transform: translateX(-50%) scale(0.90); 
+            background: #D32F2F;
+        }
+        .reviews-modal-content .modal-close i {
+            font-size: 24px;
+        }
+
+        .reviews-modal-content .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            letter-spacing: 0.5px;
+            padding: 20px 20px 14px;
+            border-bottom: 1px solid #EDE3D8;
+            flex-shrink: 0;
+            position: relative;
+            background: #FFFFFF;
+        }
+        .reviews-modal-content .modal-title i { color: #FFB300; margin-right: 8px; }
+        .reviews-modal-content .modal-title .sub {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 4px;
+        }
         .reviews-modal-list {
             padding: 16px 20px 20px;
             overflow-y: auto;
@@ -1361,7 +1505,6 @@
             margin-right: 4px; 
         }
 
-        /* ===== МОДАЛ ОТЗЫВА (ОЦЕНКА) ===== */
         .review-modal-overlay {
             display: none;
             position: fixed;
@@ -2007,6 +2150,10 @@
             .header-actions .action-btn .badge-new { font-size: 7px; padding: 1px 5px; min-width: 14px; }
             .reviews-modal-list { padding: 12px 14px 16px; }
             .reviews-modal-footer .footer-text { font-size: 13px; }
+            .session-timer { font-size: 12px; padding: 6px 10px; }
+            .session-timer .time-left { font-size: 16px; min-width: 30px; }
+            .beach-restrict-content h2 { font-size: 20px; }
+            .beach-restrict-content .restrict-icon { font-size: 56px; }
         }
 
         @media (max-width: 380px) {
@@ -2063,22 +2210,27 @@
             .header-actions .action-btn i { font-size: 10px; }
             .header-actions .action-btn .badge-new { font-size: 6px; padding: 1px 4px; min-width: 12px; }
             .reviews-modal-footer .footer-text { font-size: 12px; }
-             /* ===== ФИКС КРЕСТИКА В ОТЗЫВАХ (МОБИЛЬНАЯ ВЕРСИЯ) ===== */
-    .reviews-modal-content .modal-close {
-        bottom: 20px !important;
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 22px !important;
-    }
-    .reviews-modal-content .modal-close i {
-        font-size: 22px !important;
-    }
-    .reviews-modal-list {
-        padding: 12px 14px 85px !important;
-    }
-}  
-        
-        
+            .reviews-modal-content .modal-close {
+                bottom: 20px !important;
+                width: 60px !important;
+                height: 60px !important;
+                font-size: 22px !important;
+            }
+            .reviews-modal-content .modal-close i {
+                font-size: 22px !important;
+            }
+            .reviews-modal-list {
+                padding: 12px 14px 85px !important;
+            }
+            .session-timer { font-size: 11px; padding: 4px 8px; }
+            .session-timer .time-left { font-size: 14px; min-width: 24px; }
+            .beach-restrict-content h2 { font-size: 18px; }
+            .beach-restrict-content .restrict-icon { font-size: 48px; }
+            .beach-restrict-content { padding: 24px 16px 20px; }
+            .beach-restrict-content .restrict-btn { padding: 10px 12px; gap: 8px; }
+            .beach-restrict-content .restrict-btn .btn-icon { font-size: 24px; width: 32px; }
+            .beach-restrict-content .restrict-btn .btn-title { font-size: 14px; }
+        }  
     </style>
 </head>
 <body>
@@ -2134,31 +2286,29 @@
     </div>
 
     <!-- ===== МОДАЛ ОТЗЫВОВ (ВЕСЬ ЭКРАН) ===== -->
-<div class="reviews-modal-overlay" id="reviewsModal">
-    <div class="reviews-modal-content">
-        <!-- Заголовок без крестика -->
-        <div class="modal-title">
-            <i class="fas fa-star" style="color:#FFB300;"></i> Отзывы
-            <span class="sub">Оставьте отзыв после получения заказа!</span>
-        </div>
-        <div class="reviews-modal-list" id="reviewsModalList">
-            <div class="empty-reviews-modal">
-                <i class="fas fa-star"></i>
-                ⭐ Пока нет отзывов. Будьте первым!
+    <div class="reviews-modal-overlay" id="reviewsModal">
+        <div class="reviews-modal-content">
+            <div class="modal-title">
+                <i class="fas fa-star" style="color:#FFB300;"></i> Отзывы
+                <span class="sub">Оставьте отзыв после получения заказа!</span>
             </div>
-        </div>
-        <div class="reviews-modal-footer">
-            <div class="footer-text">
-                <i class="fas fa-heart"></i> 
-                Спасибо, что выбираете нас! С вами мы становимся лучше!
+            <div class="reviews-modal-list" id="reviewsModalList">
+                <div class="empty-reviews-modal">
+                    <i class="fas fa-star"></i>
+                    ⭐ Пока нет отзывов. Будьте первым!
+                </div>
             </div>
+            <div class="reviews-modal-footer">
+                <div class="footer-text">
+                    <i class="fas fa-heart"></i> 
+                    Спасибо, что выбираете нас! С вами мы становимся лучше!
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeReviewsModal()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <!-- Крестик внизу экрана -->
-        <button class="modal-close" onclick="closeReviewsModal()">
-            <i class="fas fa-times"></i>
-        </button>
     </div>
-</div>
 
     <!-- ===== МОДАЛ ОТЗЫВА (ОЦЕНКА) ===== -->
     <div class="review-modal-overlay" id="reviewModal">
@@ -2184,6 +2334,39 @@
             <button class="image-close" onclick="closeImageModal()">✕</button>
             <img id="modalImage" src="" alt="Увеличенное изображение">
             <div class="image-caption" id="imageCaption">Клубника</div>
+        </div>
+    </div>
+
+    <!-- ===== МОДАЛ ДЛЯ ПЛЯЖА (ОГРАНИЧЕНИЕ) ===== -->
+    <div class="beach-restrict-modal" id="beachRestrictModal">
+        <div class="beach-restrict-content">
+            <span class="restrict-icon">🏖️</span>
+            <h2>Доступ только из бунгало!</h2>
+            <p class="restrict-desc">
+                Для заказа клубники в шоколаде необходимо находиться в бунгало.<br>
+                Вы можете подойти к нашему киоску на пляже или вернуться в бунгало и отсканировать QR-код.
+            </p>
+            <div class="restrict-options">
+                <button class="restrict-btn" onclick="closeBeachRestrict(); openMap();">
+                    <span class="btn-icon">📍</span>
+                    <span class="btn-text">
+                        <span class="btn-title">Найти киоск на пляже</span>
+                        <span class="btn-desc">Мы находимся в 100 метрах от бунгало</span>
+                    </span>
+                    <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
+                </button>
+                <button class="restrict-btn" onclick="closeBeachRestrict(); showQRPrompt();">
+                    <span class="btn-icon">🏠</span>
+                    <span class="btn-text">
+                        <span class="btn-title">Я в бунгало</span>
+                        <span class="btn-desc">Отсканируйте QR-код для заказа</span>
+                    </span>
+                    <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
+                </button>
+            </div>
+            <button class="restrict-close-btn" onclick="closeBeachRestrict()">
+                <i class="fas fa-times"></i> Закрыть
+            </button>
         </div>
     </div>
 
@@ -2228,6 +2411,14 @@
             <span id="onlineStatus"><i class="fas fa-wifi"></i> Интернет есть</span>
         </div>
 
+        <!-- ===== ТАЙМЕР СЕССИИ ===== -->
+        <div class="session-timer" id="sessionTimer" style="display:none;">
+            <i class="fas fa-clock"></i>
+            <span class="session-label">Осталось:</span>
+            <span class="time-left" id="sessionTimeLeft">1:00</span>
+            <span class="session-label">до окончания сессии</span>
+        </div>
+
         <!-- ===== ЭКРАН "НЕТ ДОСТУПА" ===== -->
         <div id="noAccessMode" style="display:none;">
             <div class="no-access-message">
@@ -2243,7 +2434,7 @@
                         </span>
                         <span class="btn-arrow"><i class="fas fa-qrcode"></i></span>
                     </button>
-                    <button class="no-access-btn" onclick="startBeachMode()">
+                    <button class="no-access-btn" onclick="openBeachRestrict()">
                         <span class="btn-icon">🏖️</span>
                         <span class="btn-text">
                             <span class="btn-title">Я на пляже</span>
@@ -2405,7 +2596,6 @@
         // ================================================================
         // ===== КОНФИГУРАЦИЯ =====
         // ================================================================
-        const SESSION_DURATION = 7 * 60 * 60 * 1000; // 7 ЧАСОВ
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
 
@@ -2422,7 +2612,6 @@
         // ===== ЗВУК ДЛЯ КЛИЕНТА (ТОЛЬКО ВХОДЯЩЕЕ СООБЩЕНИЕ) =====
         // ================================================================
 
-        // Новое сообщение от админа (двойной радостный) 💬
         function playClientNewMessageSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2490,7 +2679,9 @@
             selectedTopping: null,
             settings: { technicalBreak: false, menuItems: {} },
             reviewRating: 0,
-            reviewOrderId: null
+            reviewOrderId: null,
+            bungalowNumber: null,
+            sessionExpiresAt: null
         };
 
         let selectedPayment = 'cash';
@@ -2500,6 +2691,7 @@
         let chatUpdateInterval = null;
         let notificationCheckInterval = null;
         let lastMessageTime = 0;
+        let sessionTimerInterval = null;
 
         // ================================================================
         // ===== СЕССИЯ =====
@@ -2508,17 +2700,19 @@
             try {
                 const data = localStorage.getItem(SESSION_KEY);
                 if (!data) return null;
-                const session = JSON.parse(data);
-                if (Date.now() - session.lastRefresh > SESSION_DURATION) {
-                    localStorage.removeItem(SESSION_KEY);
-                    return null;
-                }
-                return session;
+                return JSON.parse(data);
             } catch { return null; }
         }
 
         function saveSession(sessionData) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify({ ...sessionData, lastRefresh: Date.now() }));
+            localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+        }
+
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+            state.bungalowNumber = null;
+            state.sessionExpiresAt = null;
+            hideSessionTimer();
         }
 
         function getBungaloFromURL() {
@@ -2546,33 +2740,130 @@
         }
 
         // ================================================================
-        // ===== РЕЖИМ "Я НА ПЛЯЖЕ" (САМОВЫВОЗ) =====
+        // ===== ПРОВЕРКА СЕССИИ НА СЕРВЕРЕ =====
         // ================================================================
+        async function checkSessionOnServer(bungalow) {
+            try {
+                const res = await fetch(`/api/check-session?b=${bungalow}`);
+                const data = await res.json();
+                return data;
+            } catch (e) {
+                console.error('Ошибка проверки сессии:', e);
+                return { valid: false, reason: 'error', message: 'Ошибка соединения' };
+            }
+        }
+
+        async function activateSessionOnServer(bungalow, duration) {
+            try {
+                const res = await fetch(`/api/activate-session?b=${bungalow}&d=${duration}`);
+                const data = await res.json();
+                return data;
+            } catch (e) {
+                console.error('Ошибка активации сессии:', e);
+                return { success: false, error: 'Ошибка соединения' };
+            }
+        }
+
+        async function deactivateSessionOnServer(bungalow) {
+            try {
+                const res = await fetch('/api/deactivate-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bungalow })
+                });
+                return await res.json();
+            } catch (e) {
+                console.error('Ошибка деактивации сессии:', e);
+                return { success: false };
+            }
+        }
+
+        // ================================================================
+        // ===== ТАЙМЕР СЕССИИ =====
+        // ================================================================
+        function showSessionTimer(expiresAt) {
+            const timer = document.getElementById('sessionTimer');
+            timer.style.display = 'flex';
+            state.sessionExpiresAt = expiresAt;
+            updateSessionTimer();
+            
+            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+            sessionTimerInterval = setInterval(updateSessionTimer, 1000);
+        }
+
+        function hideSessionTimer() {
+            document.getElementById('sessionTimer').style.display = 'none';
+            if (sessionTimerInterval) {
+                clearInterval(sessionTimerInterval);
+                sessionTimerInterval = null;
+            }
+        }
+
+        function updateSessionTimer() {
+            if (!state.sessionExpiresAt) {
+                hideSessionTimer();
+                return;
+            }
+
+            const now = Date.now();
+            const remaining = Math.max(0, state.sessionExpiresAt - now);
+            
+            if (remaining <= 0) {
+                hideSessionTimer();
+                showNoAccess();
+                clearSession();
+                showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
+                return;
+            }
+
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            
+            const timeLeft = document.getElementById('sessionTimeLeft');
+            timeLeft.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (remaining < 60000) {
+                timeLeft.style.color = '#D32F2F';
+            } else if (remaining < 300000) {
+                timeLeft.style.color = '#E65100';
+            } else {
+                timeLeft.style.color = '#D4380D';
+            }
+        }
+
+        // ================================================================
+        // ===== МОДАЛ ДЛЯ ПЛЯЖА =====
+        // ================================================================
+        function openBeachRestrict() {
+            document.getElementById('beachRestrictModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBeachRestrict() {
+            document.getElementById('beachRestrictModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Закрытие по клику на фон
+        document.getElementById('beachRestrictModal').addEventListener('click', function(e) {
+            if (e.target === this) closeBeachRestrict();
+        });
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeBeachRestrict();
+            }
+        });
+
+        // ================================================================
+        // ===== РЕЖИМ "Я НА ПЛЯЖЕ" (УДАЛЕН - теперь только модалка) =====
+        // ================================================================
+        // Функция больше не используется, но оставлена для совместимости
         function startBeachMode() {
-            saveSession({ bungalo: 0, isBeach: true, isPickup: true });
-            window.bungaloNumber = 0;
-            isPickupMode = true;
-
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'flex';
-
-            document.getElementById('bungaloLabel').textContent = '🏖️ Самовывоз из киоска';
-            document.getElementById('bungaloNumberDisplay').textContent = '🏖️';
-            document.getElementById('bungaloHint').textContent = '📍 Подойдите к киоску на пляже';
-
-            showPickupBanner();
-
-            loadSettings().then(settings => {
-                if (settings?.technicalBreak) { showTechBreak(); return; }
-                if (!isWorkingTime()) { showClosedMode(); return; }
-                renderMenu(settings || state.settings);
-                initCart();
-                loadReviews();
-            });
-            setTimeout(updateOrdersBadge, 1000);
+            // Больше не активируем режим самовывоза
+            // Вместо этого показываем модалку с ограничением
+            openBeachRestrict();
         }
 
         function showPickupBanner() {
@@ -2672,24 +2963,29 @@
             document.getElementById('closedMode').style.display = 'none';
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'none';
+            hideSessionTimer();
         }
 
-        function showBungaloMode(bungaloNumber) {
+        function showBungaloMode(bungalowNumber, expiresAt) {
             document.getElementById('noAccessMode').style.display = 'none';
             document.getElementById('bungaloMode').style.display = 'block';
             document.getElementById('closedMode').style.display = 'none';
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'flex';
 
-            if (bungaloNumber > 0) {
+            state.bungalowNumber = bungalowNumber;
+            
+            if (bungalowNumber > 0) {
                 document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
-                document.getElementById('bungaloNumberDisplay').textContent = `#${bungaloNumber}`;
+                document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
                 document.getElementById('bungaloHint').textContent = '🔒 QR-код в вашем бунгало';
                 clearPickupBanner();
                 isPickupMode = false;
+                
+                if (expiresAt) {
+                    showSessionTimer(expiresAt);
+                }
             }
-
-            window.bungaloNumber = bungaloNumber;
 
             loadSettings().then(settings => {
                 if (settings?.technicalBreak) { showTechBreak(); return; }
@@ -2707,6 +3003,7 @@
             document.getElementById('closedMode').style.display = 'none';
             document.getElementById('techBreakMode').style.display = 'block';
             document.getElementById('bottomTabBar').style.display = 'none';
+            hideSessionTimer();
         }
 
         function showClosedMode() {
@@ -2716,6 +3013,7 @@
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'none';
             document.getElementById('currentTimeDisplay').textContent = formatTime(getCurrentMskTime());
+            hideSessionTimer();
         }
 
         // ================================================================
@@ -2750,6 +3048,8 @@
         // ===== КАРТА =====
         // ================================================================
         function openMap() {
+            closeBeachRestrict();
+            
             const overlay = document.createElement('div');
             overlay.className = 'map-modal-overlay open';
             overlay.id = 'mapModal';
@@ -3092,7 +3392,7 @@
             if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00 ночи (МСК)', 'error'); return; }
             if (!selectedPayment) { showNotification('⚠️ Выберите способ оплаты!', 'error'); return; }
 
-            const bungaloNumber = window.bungaloNumber;
+            const bungaloNumber = state.bungalowNumber;
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!',
@@ -3427,96 +3727,96 @@
                 badge.classList.remove('show');
             }
         }
-function startNotificationCheck() {
-    if (notificationCheckInterval) clearInterval(notificationCheckInterval);
-    
-    notificationCheckInterval = setInterval(async () => {
-        const phone = document.getElementById('customerPhone').value.trim();
-        if (!phone) return;
-        
-        try {
-            const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
-            const data = await res.json();
+
+        function startNotificationCheck() {
+            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
             
-            if (data.success && data.messages) {
-                const messages = data.messages;
+            notificationCheckInterval = setInterval(async () => {
+                const phone = document.getElementById('customerPhone').value.trim();
+                if (!phone) return;
                 
-                // Проверяем только если чат закрыт
-                if (!document.getElementById('supportChatModal')) {
-                    const unreadMessages = messages.filter(msg => 
-                        msg.from === 'admin' && 
-                        new Date(msg.time).getTime() > lastMessageTime
-                    );
+                try {
+                    const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                    const data = await res.json();
                     
-                    if (unreadMessages.length > 0) {
-                        const lastMsg = unreadMessages[unreadMessages.length - 1];
-                        lastMessageTime = new Date(lastMsg.time).getTime();
+                    if (data.success && data.messages) {
+                        const messages = data.messages;
                         
-                        playClientNewMessageSound();
-                        showNotification(`💬 Новое сообщение от поддержки: ${lastMsg.text}`);
-                        
-                        const totalUnread = messages.filter(msg => 
-                            msg.from === 'admin' && 
-                            new Date(msg.time).getTime() > lastMessageTime - 60000
-                        ).length;
-                        updateSupportBadge(totalUnread);
+                        if (!document.getElementById('supportChatModal')) {
+                            const unreadMessages = messages.filter(msg => 
+                                msg.from === 'admin' && 
+                                new Date(msg.time).getTime() > lastMessageTime
+                            );
+                            
+                            if (unreadMessages.length > 0) {
+                                const lastMsg = unreadMessages[unreadMessages.length - 1];
+                                lastMessageTime = new Date(lastMsg.time).getTime();
+                                
+                                playClientNewMessageSound();
+                                showNotification(`💬 Новое сообщение от поддержки: ${lastMsg.text}`);
+                                
+                                const totalUnread = messages.filter(msg => 
+                                    msg.from === 'admin' && 
+                                    new Date(msg.time).getTime() > lastMessageTime - 60000
+                                ).length;
+                                updateSupportBadge(totalUnread);
+                            }
+                        }
                     }
+                } catch (e) {
+                    console.error('Ошибка проверки сообщений:', e);
                 }
-            }
-        } catch (e) {
-            console.error('Ошибка проверки сообщений:', e);
+            }, 5000);
         }
-    }, 5000);
-}function openSupportChat() {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
 
-    if (!name || !phone) {
-        showNotification('⚠️ Сначала введите имя и телефон!', 'error');
-        openAuthModal(null);
-        return;
-    }
+        function openSupportChat() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
 
-    closeSupportChat();
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                openAuthModal(null);
+                return;
+            }
 
-    // Сбрасываем бейдж при открытии чата
-    updateSupportBadge(0);
-    
-    // ОБНУЛЯЕМ ВРЕМЯ - старые сообщения не будут считаться новыми
-    lastMessageTime = Date.now();
+            closeSupportChat();
 
-    const overlay = document.createElement('div');
-    overlay.className = 'auth-modal-overlay open';
-    overlay.id = 'supportChatModal';
-    overlay.innerHTML = `
-        <div class="auth-modal-content" style="max-width:440px;max-height:80vh;display:flex;flex-direction:column;padding:0;overflow:hidden;" onclick="event.stopPropagation()">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #EDE3D8;flex-shrink:0;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <i class="fas fa-headset" style="color:#8B0000;font-size:20px;"></i>
-                    <span style="font-weight:600;font-size:16px;color:var(--text-dark);">Поддержка</span>
-                    <span style="font-size:11px;color:#2E7D32;background:#E8F5E9;padding:2px 10px;border-radius:12px;">🟢 онлайн</span>
+            updateSupportBadge(0);
+            lastMessageTime = Date.now();
+
+            const overlay = document.createElement('div');
+            overlay.className = 'auth-modal-overlay open';
+            overlay.id = 'supportChatModal';
+            overlay.innerHTML = `
+                <div class="auth-modal-content" style="max-width:440px;max-height:80vh;display:flex;flex-direction:column;padding:0;overflow:hidden;" onclick="event.stopPropagation()">
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #EDE3D8;flex-shrink:0;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <i class="fas fa-headset" style="color:#8B0000;font-size:20px;"></i>
+                            <span style="font-weight:600;font-size:16px;color:var(--text-dark);">Поддержка</span>
+                            <span style="font-size:11px;color:#2E7D32;background:#E8F5E9;padding:2px 10px;border-radius:12px;">🟢 онлайн</span>
+                        </div>
+                        <button class="modal-close" onclick="closeSupportChat()" style="position:static;background:#F5EDE4;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:var(--text-muted);cursor:pointer;">✕</button>
+                    </div>
+                    <div id="supportMessages" style="flex:1;padding:14px 16px;overflow-y:auto;max-height:50vh;min-height:200px;">
+                        <div style="text-align:center;color:#BFAF9E;padding:20px 0;">
+                            <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
+                            Задайте ваш вопрос, мы ответим в ближайшее время
+                        </div>
+                    </div>
+                    <div style="padding:12px 16px;border-top:1px solid #EDE3D8;display:flex;gap:8px;flex-shrink:0;">
+                        <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:10px 14px;border:1.5px solid #EDE3D8;border-radius:12px;font-size:14px;outline:none;background:#FDFAF7;" onkeydown="if(event.key==='Enter') sendSupportMessage()">
+                        <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:10px 18px;border-radius:12px;font-weight:600;cursor:pointer;">📤</button>
+                    </div>
                 </div>
-                <button class="modal-close" onclick="closeSupportChat()" style="position:static;background:#F5EDE4;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:var(--text-muted);cursor:pointer;">✕</button>
-            </div>
-            <div id="supportMessages" style="flex:1;padding:14px 16px;overflow-y:auto;max-height:50vh;min-height:200px;">
-                <div style="text-align:center;color:#BFAF9E;padding:20px 0;">
-                    <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
-                    Задайте ваш вопрос, мы ответим в ближайшее время
-                </div>
-            </div>
-            <div style="padding:12px 16px;border-top:1px solid #EDE3D8;display:flex;gap:8px;flex-shrink:0;">
-                <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:10px 14px;border:1.5px solid #EDE3D8;border-radius:12px;font-size:14px;outline:none;background:#FDFAF7;" onkeydown="if(event.key==='Enter') sendSupportMessage()">
-                <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:10px 18px;border-radius:12px;font-weight:600;cursor:pointer;">📤</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
+            `;
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
 
-    loadSupportMessages(phone);
-    startChatAutoUpdate(phone);
-    startNotificationCheck();
-}
+            loadSupportMessages(phone);
+            startChatAutoUpdate(phone);
+            startNotificationCheck();
+        }
+
         function startChatAutoUpdate(phone) {
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             chatUpdateInterval = setInterval(() => {
@@ -3717,34 +4017,55 @@ function startNotificationCheck() {
             const existingSession = getSession();
             const urlBungalo = getBungaloFromURL();
 
-            if (existingSession) {
-                console.log('✅ Активная сессия, бунгало:', existingSession.bungalo);
-
-                if (existingSession.isPickup) {
-                    isPickupMode = true;
-                    startBeachMode();
-                } else if (existingSession.bungalo > 0) {
-                    if (urlBungalo) cleanURL();
+            if (urlBungalo) {
+                const sessionCheck = await checkSessionOnServer(urlBungalo);
+                
+                if (sessionCheck.valid) {
+                    cleanURL();
                     const auth = getUserAuth();
                     if (auth) {
                         document.getElementById('customerName').value = auth.name || '';
                         document.getElementById('customerPhone').value = auth.phone || '';
                     }
-                    showBungaloMode(existingSession.bungalo);
+                    showBungaloMode(urlBungalo, sessionCheck.expiresAt);
+                    saveSession({ bungalow: urlBungalo, expiresAt: sessionCheck.expiresAt });
+                    startSessionCheck(urlBungalo);
+                    startNotificationCheck();
                 } else {
-                    showNoAccess();
+                    if (sessionCheck.reason === 'no_session') {
+                        showNoAccess();
+                        showNotification('🔑 Отсканируйте QR-код в бунгало для активации', '');
+                    } else if (sessionCheck.reason === 'expired') {
+                        showNoAccess();
+                        showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
+                        clearSession();
+                    } else {
+                        showNoAccess();
+                    }
                 }
-                startSessionCheck();
-                startNotificationCheck();
-            } else if (urlBungalo) {
-                console.log('🆕 Первый вход по QR, бунгало:', urlBungalo);
-                saveSession({ bungalo: urlBungalo });
-                cleanURL();
-                showBungaloMode(urlBungalo);
-                startSessionCheck();
-                startNotificationCheck();
+            } else if (existingSession && existingSession.bungalow > 0) {
+                const sessionCheck = await checkSessionOnServer(existingSession.bungalow);
+                
+                if (sessionCheck.valid) {
+                    const auth = getUserAuth();
+                    if (auth) {
+                        document.getElementById('customerName').value = auth.name || '';
+                        document.getElementById('customerPhone').value = auth.phone || '';
+                    }
+                    showBungaloMode(existingSession.bungalow, sessionCheck.expiresAt);
+                    startSessionCheck(existingSession.bungalow);
+                    startNotificationCheck();
+                } else {
+                    if (sessionCheck.reason === 'expired') {
+                        showNoAccess();
+                        showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
+                        clearSession();
+                    } else {
+                        showNoAccess();
+                        clearSession();
+                    }
+                }
             } else {
-                console.log('❌ Нет доступа');
                 showNoAccess();
             }
 
@@ -3756,17 +4077,23 @@ function startNotificationCheck() {
             await loadReviews();
         }
 
-        function startSessionCheck() {
-            if (window._sessionInterval) clearInterval(window._sessionInterval);
-            window._sessionInterval = setInterval(() => {
-                if (!getSession()) {
-                    clearInterval(window._sessionInterval);
-                    window.bungaloNumber = null;
-                    isPickupMode = false;
-                    showNoAccess();
-                    showNotification('⏰ Сессия истекла. Отсканируйте QR-код заново.');
+        function startSessionCheck(bungalow) {
+            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
+            
+            window._sessionCheckInterval = setInterval(async () => {
+                if (!state.bungalowNumber) {
+                    clearInterval(window._sessionCheckInterval);
+                    return;
                 }
-            }, 30000);
+                
+                const check = await checkSessionOnServer(bungalow);
+                if (!check.valid) {
+                    clearInterval(window._sessionCheckInterval);
+                    showNoAccess();
+                    clearSession();
+                    showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
+                }
+            }, 10000);
         }
 
         // Очищаем интервалы при уходе со страницы
@@ -3779,6 +4106,14 @@ function startNotificationCheck() {
                 clearInterval(chatUpdateInterval);
                 chatUpdateInterval = null;
             }
+            if (window._sessionCheckInterval) {
+                clearInterval(window._sessionCheckInterval);
+                window._sessionCheckInterval = null;
+            }
+            if (sessionTimerInterval) {
+                clearInterval(sessionTimerInterval);
+                sessionTimerInterval = null;
+            }
         });
 
         // ================================================================
@@ -3787,12 +4122,12 @@ function startNotificationCheck() {
         init();
 
         console.log('🍓 Strawberry in Chocolate');
-        console.log('🔒 Доступ только по QR-коду из бунгало или самовывоз из киоска');
-        console.log(`⏱️ Сессия: ${SESSION_DURATION / 3600000} часов`);
+        console.log('🔒 Доступ только по QR-коду из бунгало');
+        console.log('⏱️ Тестовый режим: сессия 1 минута!');
+        console.log('🏖️ Кнопка "Я на пляже" показывает модалку с ограничением');
         console.log('⭐ Отзывы: весь экран, оставьте отзыв после получения заказа!');
         console.log('💬 Поддержка: чат с администратором');
         console.log('🔔 Звук ТОЛЬКО при входящих сообщениях от поддержки!');
-        console.log('🔴 Красная пометка при новых сообщениях!');
         console.log('📦 Доставка в бунгало за 15 минут!');
     </script>
 
