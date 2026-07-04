@@ -1230,8 +1230,8 @@
 
     <!-- ===== ORDERS MODAL ===== -->
     <div class="orders-modal-overlay" id="ordersModal">
-        <div class="orders-modal-content" style="max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;">
-            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #F1F5F9; flex-shrink: 0;">
+        <div class="orders-modal-content" style="max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF; border-radius: var(--radius-2xl);">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #F1F5F9; flex-shrink: 0;">
                 <h2 style="font-size: 18px; font-weight: 700; color: var(--text-dark);">
                     <i class="fas fa-list-alt" style="color: var(--primary); margin-right: 8px;"></i> Мои заказы
                 </h2>
@@ -1256,7 +1256,7 @@
 
     <!-- ===== REVIEWS MODAL ===== -->
     <div class="reviews-modal-overlay" id="reviewsModal">
-        <div class="reviews-modal-content" style="max-width: 100%; width: 100%; height: 100vh; max-height: 100vh; border-radius: 0; display: flex; flex-direction: column;">
+        <div class="reviews-modal-content" style="max-width: 100%; width: 100%; height: 100vh; max-height: 100vh; border-radius: 0; display: flex; flex-direction: column; background: #FFFFFF;">
             <div style="padding: 20px; border-bottom: 1px solid #F1F5F9; flex-shrink: 0; position: relative;">
                 <div class="modal-title">
                     <i class="fas fa-star" style="color: #FFB300;"></i> Отзывы
@@ -1351,7 +1351,7 @@
 
     <!-- ===== MAP MODAL ===== -->
     <div class="map-modal-overlay" id="mapModal" onclick="closeMap()">
-        <div class="map-modal-content" onclick="event.stopPropagation()">
+        <div class="map-modal-content" onclick="event.stopPropagation()" style="background: #FFFFFF; border-radius: var(--radius-2xl); padding: 28px 24px 24px;">
             <button class="modal-close" onclick="closeMap()">
                 <i class="fas fa-times"></i>
             </button>
@@ -1407,7 +1407,7 @@
         <!-- ===== WORK HOURS ===== -->
         <div class="work-hours-banner">
             <span><i class="fas fa-truck" style="color: var(--primary);"></i> Доставка: <strong>9:00 — 20:00</strong></span>
-            <span><i class="fas fa-store" style="color: var(--primary);"></i> Киоск: <strong>9:00 — 23:00</strong></span>
+            <span><i class="fas fa-store" style="color: var(--primary);"></i> Киоск: <strong>9:00 — 1:00</strong></span>
         </div>
 
         <!-- ===== ONLINE INDICATOR ===== -->
@@ -1441,7 +1441,7 @@
                     </button>
                 </div>
                 <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary);">
-                    <span><i class="fas fa-clock" style="color: var(--primary);"></i> Работаем: <strong>9:00 — 23:00</strong></span>
+                    <span><i class="fas fa-clock" style="color: var(--primary);"></i> Работаем: <strong>9:00 — 1:00</strong></span>
                     <span><i class="fas fa-location-dot" style="color: var(--primary);"></i> Киоск: <strong>100 м от бунгало</strong></span>
                 </div>
             </div>
@@ -1469,10 +1469,10 @@
             <div class="no-access-message">
                 <span class="no-access-icon">🔒</span>
                 <h2>Сейчас не принимаем заказы</h2>
-                <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 8px;">Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>23:00</strong>.</p>
+                <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 8px;">Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong>.</p>
                 <p style="color: var(--text-muted); font-size: 14px;" id="currentTimeDisplay">--:--</p>
                 <div style="background: #F8FAFC; border-radius: 100px; padding: 10px 20px; display: inline-block; margin: 16px 0; font-weight: 500; color: var(--text-dark);">
-                    <i class="fas fa-clock" style="color: var(--primary);"></i> График работы: <strong>9:00 — 23:00</strong>
+                    <i class="fas fa-clock" style="color: var(--primary);"></i> График работы: <strong>9:00 — 1:00</strong>
                 </div>
                 <button class="map-btn-top" onclick="openMap()" style="margin-top: 16px;">
                     <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
@@ -1627,11 +1627,13 @@
             phoneRaw: '79628557263'
         };
 
-        // Настройки времени работы
-const WORK_HOURS = { 
-    start: 9,  // Начало работы: 9:00
-    end: 25    // Конец работы: 1:00 ночи (25 = 24 + 1)
-};
+        const WORK_HOURS = { 
+            start: 9,  
+            end: 25    // 25 = 1:00 ночи
+        };
+
+        const FORCE_WORKING_TIME = false;
+        let manualTime = null;
 
         // ================================================================
         // ===== DATA =====
@@ -1694,6 +1696,8 @@ const WORK_HOURS = {
         let notificationCheckInterval = null;
         let lastMessageTime = 0;
         let sessionTimerInterval = null;
+        let reviewCheckInterval = null;
+        let lastOrderCheckTime = Date.now();
 
         // ================================================================
         // ===== SESSION =====
@@ -1744,6 +1748,16 @@ const WORK_HOURS = {
             } catch { return null; }
         }
 
+        function setManualTime(hours, minutes) {
+            manualTime = { hours, minutes };
+            console.log(`⏰ Ручное время установлено: ${hours}:${minutes}`);
+        }
+
+        function clearManualTime() {
+            manualTime = null;
+            console.log('⏰ Ручное время очищено');
+        }
+
         // ================================================================
         // ===== SERVER API =====
         // ================================================================
@@ -1791,22 +1805,56 @@ const WORK_HOURS = {
         // ===== WORKING TIME =====
         // ================================================================
         function isWorkingTime() {
-            const now = new Date();
-            const mskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-            const hours = mskTime.getHours();
-            const minutes = mskTime.getMinutes();
+            if (FORCE_WORKING_TIME) {
+                console.log('⚠️ Режим тестирования: всегда работаем');
+                return true;
+            }
+            
+            let now;
+            
+            if (manualTime) {
+                now = new Date();
+                now.setHours(manualTime.hours, manualTime.minutes, 0, 0);
+            } else {
+                try {
+                    const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+                    now = new Date(mskTime);
+                } catch (e) {
+                    now = new Date();
+                }
+            }
+            
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
             const currentMinutes = hours * 60 + minutes;
             const startMinutes = WORK_HOURS.start * 60;
             const endMinutes = WORK_HOURS.end * 60;
-            return currentMinutes >= startMinutes && currentMinutes < endMinutes;
+            
+            const isWorking = currentMinutes >= startMinutes && currentMinutes < endMinutes;
+            
+            console.log(`🕐 ${hours}:${String(minutes).padStart(2, '0')} | ${WORK_HOURS.start}:00-1:00 | ${isWorking ? '✅ ОТКРЫТО' : '❌ ЗАКРЫТО'}`);
+            
+            return isWorking;
         }
 
         function getCurrentMskTime() {
-            return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
+            if (manualTime) {
+                const now = new Date();
+                now.setHours(manualTime.hours, manualTime.minutes);
+                return now;
+            }
+            try {
+                const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+                return new Date(mskTime);
+            } catch (e) {
+                return new Date();
+            }
         }
 
         function formatTime(date) {
-            return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            return `${hours}:${String(minutes).padStart(2, '0')}`;
         }
 
         // ================================================================
@@ -1855,6 +1903,7 @@ const WORK_HOURS = {
                 renderMenu(settings || state.settings);
                 initCart();
                 loadReviews();
+                startReviewCheck();
             });
             setTimeout(updateOrdersBadge, 1000);
         }
@@ -1874,6 +1923,56 @@ const WORK_HOURS = {
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'none';
             document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+        }
+
+        // ================================================================
+        // ===== REVIEW CHECK (АВТОМАТИЧЕСКОЕ ОКНО ОТЗЫВА) =====
+        // ================================================================
+        function startReviewCheck() {
+            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+            
+            reviewCheckInterval = setInterval(async () => {
+                const phone = document.getElementById('customerPhone').value.trim();
+                if (!phone) return;
+                
+                try {
+                    const res = await fetch('/api/my-orders', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.success && data.orders) {
+                        const completedOrders = data.orders.filter(order => 
+                            order.status === 'выполнен' && 
+                            !order.reviewed &&
+                            new Date(order.createdAt).getTime() > lastOrderCheckTime
+                        );
+                        
+                        if (completedOrders.length > 0) {
+                            const latestOrder = completedOrders[0];
+                            
+                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
+                            
+                            setTimeout(() => {
+                                openReviewModal(latestOrder.id);
+                            }, 2000);
+                            
+                            lastOrderCheckTime = Date.now();
+                        }
+                    }
+                } catch (e) {
+                    console.error('Ошибка проверки заказов:', e);
+                }
+            }, 10000);
+        }
+
+        function stopReviewCheck() {
+            if (reviewCheckInterval) {
+                clearInterval(reviewCheckInterval);
+                reviewCheckInterval = null;
+            }
         }
 
         // ================================================================
@@ -1943,7 +2042,6 @@ const WORK_HOURS = {
             const strawberryGrid = document.getElementById('strawberryGrid');
             let html = '';
 
-            // Romantic item
             const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
             html += `
                 <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${ROMANTIC_ITEM.name}" data-price="${ROMANTIC_ITEM.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true" data-original-price="${ROMANTIC_ITEM.originalPrice}">
@@ -1958,7 +2056,6 @@ const WORK_HOURS = {
                 </div>
             `;
 
-            // Strawberry items
             STRAWBERRY_ITEMS.forEach(item => {
                 const available = settings.menuItems[item.id] !== false;
                 html += `
@@ -1976,7 +2073,6 @@ const WORK_HOURS = {
             });
             strawberryGrid.innerHTML = html;
 
-            // Fruits
             document.getElementById('fruitsGrid').innerHTML = FRUITS_ITEMS.map(item => {
                 const available = settings.menuItems[item.id] !== false;
                 return `
@@ -1993,7 +2089,6 @@ const WORK_HOURS = {
                 `;
             }).join('');
 
-            // Drinks
             document.getElementById('drinksGrid').innerHTML = DRINK_ITEMS.map(item => {
                 const available = settings.menuItems[item.id] !== false;
                 return `
@@ -2246,7 +2341,7 @@ const WORK_HOURS = {
         function submitOrder() {
             if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
             if (state.settings.technicalBreak) { showNotification('🔧 Технический перерыв!', 'error'); return; }
-            if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 23:00', 'error'); return; }
+            if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00', 'error'); return; }
             if (!selectedPayment) { showNotification('⚠️ Выберите способ оплаты!', 'error'); return; }
 
             const bungaloNumber = state.bungalowNumber;
@@ -2287,6 +2382,10 @@ const WORK_HOURS = {
                         updateCart();
                         selectPayment('cash');
                         closeCart();
+                        
+                        lastOrderCheckTime = Date.now();
+                        startReviewCheck();
+                        
                         setTimeout(updateOrdersBadge, 1000);
                         if (result.orderId) { state.reviewOrderId = result.orderId; }
                     } else {
@@ -2346,7 +2445,7 @@ const WORK_HOURS = {
                             <div style="background:#F8FAFC;border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:8px;">
                                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
                                     <span style="font-weight:600;color:var(--text-dark);">#${order.id}</span>
-                                    <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:100px;">${order.status || 'ожидает'}</span>
+                                    <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:100px;background:${order.status === 'выполнен' ? '#F0FFF4' : order.status === 'отменен' ? '#FEF2F2' : '#FFF8E1'};color:${order.status === 'выполнен' ? '#4ADE80' : order.status === 'отменен' ? '#EF4444' : '#F59E0B'};">${order.status || 'ожидает'}</span>
                                 </div>
                                 <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${itemsText}</div>
                                 <div style="font-weight:700;color:var(--primary);">💰 ${order.total || 0} ₽</div>
@@ -2457,6 +2556,7 @@ const WORK_HOURS = {
         function closeReviewModal() {
             document.getElementById('reviewModal').classList.remove('open');
             document.body.style.overflow = '';
+            startReviewCheck();
         }
 
         function setRating(value) {
@@ -2489,7 +2589,11 @@ const WORK_HOURS = {
                     showNotification('⭐ Спасибо за отзыв! ❤️');
                     closeReviewModal();
                     await loadReviews();
-                    loadMyOrders();
+                    if (document.getElementById('ordersModal').classList.contains('open')) {
+                        loadMyOrders();
+                    }
+                    lastOrderCheckTime = Date.now();
+                    startReviewCheck();
                 } else {
                     showNotification('❌ ' + (data.error || 'Ошибка'), 'error');
                 }
@@ -2743,6 +2847,7 @@ const WORK_HOURS = {
                     saveSession({ bungalow: urlBungalo, expiresAt: sessionCheck.expiresAt });
                     startSessionCheck(urlBungalo);
                     startNotificationCheck();
+                    startReviewCheck();
                 } else {
                     showNoAccess();
                     if (sessionCheck.reason === 'expired') {
@@ -2761,6 +2866,7 @@ const WORK_HOURS = {
                     showBungaloMode(existingSession.bungalow, sessionCheck.expiresAt);
                     startSessionCheck(existingSession.bungalow);
                     startNotificationCheck();
+                    startReviewCheck();
                 } else {
                     showNoAccess();
                     clearSession();
@@ -2794,13 +2900,15 @@ const WORK_HOURS = {
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
             if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+            stopReviewCheck();
         });
 
         init();
 
         console.log('🍓 Strawberry in Chocolate - Modern Design');
+        console.log('🕐 График работы: 9:00 - 1:00');
+        console.log('⭐ Автоматический показ окна отзыва после доставки');
         console.log('🔒 Доступ только по QR-коду из бунгало');
-        console.log('📞 Телефон: +7 962 855-72-63');
     </script>
 
 </body>

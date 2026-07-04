@@ -1,11 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
+
+// ===== НАСТРОЙКИ =====
+const WORK_HOURS = { 
+    start: 9,   // 9:00
+    end: 25     // 25 = 1:00 ночи следующего дня (24 + 1)
+};
 
 // ===== ЛОГИРОВАНИЕ ЗАПРОСОВ =====
 app.use((req, res, next) => {
@@ -31,7 +38,7 @@ let settings = {
         '6': true, '7': true, '8': true, '9': true, '10': true,
         '11': true, '12': true, '13': true, '14': true, '15': true
     },
-    sessionDuration: 420 // Длительность сессии в минутах (1 для теста, 420 для 7 часов)
+    sessionDuration: 420 // 7 часов (420 минут)
 };
 
 // ===== ЗАГРУЗКА ДАННЫХ =====
@@ -40,9 +47,9 @@ function loadData() {
         const data = fs.readFileSync('settings.json');
         settings = JSON.parse(data);
         console.log('📂 Настройки загружены');
-        console.log(`⏱️ Длительность сессии: ${settings.sessionDuration || 1} мин`);
+        console.log(`⏱️ Длительность сессии: ${settings.sessionDuration || 420} мин`);
     } catch (e) {
-        console.log('📂 Созданы настройки по умолчанию');
+        console.log('📂 Созданы настройки по умолчанию (сессия 7 часов)');
         saveSettings();
     }
 
@@ -78,12 +85,10 @@ function loadData() {
         saveReviews();
     }
 
-    // Загружаем активные сессии
     try {
         const data = fs.readFileSync('sessions.json');
         activeSessions = JSON.parse(data);
         
-        // Очищаем просроченные сессии при загрузке
         const now = Date.now();
         let cleaned = false;
         for (const bungalow in activeSessions) {
@@ -128,9 +133,33 @@ function generateCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
-// ================================================================
-// ===== ОЧИСТКА ПРОСРОЧЕННЫХ СЕССИЙ (каждые 30 секунд) =====
-// ================================================================
+// ===== ПРОВЕРКА РАБОЧЕГО ВРЕМЕНИ =====
+function isWorkingTime() {
+    const now = new Date();
+    
+    // Пробуем получить московское время
+    let mskTime;
+    try {
+        const mskString = now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+        mskTime = new Date(mskString);
+    } catch (e) {
+        mskTime = now;
+    }
+    
+    const hours = mskTime.getHours();
+    const minutes = mskTime.getMinutes();
+    const currentMinutes = hours * 60 + minutes;
+    const startMinutes = WORK_HOURS.start * 60;   // 9:00 = 540
+    const endMinutes = WORK_HOURS.end * 60;        // 25:00 = 1500
+    
+    const isWorking = currentMinutes >= startMinutes && currentMinutes < endMinutes;
+    
+    console.log(`🕐 ${hours}:${String(minutes).padStart(2, '0')} | ${WORK_HOURS.start}:00-1:00 | ${isWorking ? '✅ ОТКРЫТО' : '❌ ЗАКРЫТО'}`);
+    
+    return isWorking;
+}
+
+// ===== ОЧИСТКА ПРОСРОЧЕННЫХ СЕССИЙ =====
 setInterval(() => {
     const now = Date.now();
     let changed = false;
@@ -148,10 +177,31 @@ setInterval(() => {
     }
 }, 30000);
 
-// ================================================================
-// ===== НАСТРОЙКИ =====
-// ================================================================
+// ===== АВТО-АКТИВАЦИЯ ДЛЯ ТЕСТА =====
+app.get('/', (req, res, next) => {
+    const b = parseInt(req.query.b);
+    
+    // Если перешли с параметром b и нет активной сессии - создаем её
+    if (b && b > 0 && !activeSessions[b]) {
+        const now = Date.now();
+        const duration = settings.sessionDuration || 420;
+        const expiresAt = now + (duration * 60 * 1000);
+        
+        activeSessions[b] = {
+            bungalow: b,
+            activatedAt: now,
+            expiresAt: expiresAt,
+            duration: duration
+        };
+        
+        saveSessions();
+        console.log(`✅ Авто-активация для теста: бунгало #${b} на ${duration} мин`);
+    }
+    
+    next();
+});
 
+// ===== API: НАСТРОЙКИ =====
 app.get('/api/settings', (req, res) => {
     res.json(settings);
 });
@@ -178,11 +228,31 @@ app.post('/api/settings', (req, res) => {
     res.json({ success: true, settings });
 });
 
-// ================================================================
-// ===== СЕССИИ БУНГАЛО =====
-// ================================================================
+// ===== API: ПРОВЕРКА РАБОЧЕГО ВРЕМЕНИ =====
+app.get('/api/check-time', (req, res) => {
+    const working = isWorkingTime();
+    const now = new Date();
+    let mskTime;
+    try {
+        mskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
+    } catch (e) {
+        mskTime = now;
+    }
+    
+    res.json({
+        working: working,
+        currentTime: mskTime.toISOString(),
+        hours: mskTime.getHours(),
+        minutes: mskTime.getMinutes(),
+        schedule: {
+            start: WORK_HOURS.start,
+            end: WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end,
+            nextDay: WORK_HOURS.end > 24
+        }
+    });
+});
 
-// Проверка активной сессии
+// ===== API: СЕССИИ БУНГАЛО =====
 app.get('/api/check-session', (req, res) => {
     const bungalow = parseInt(req.query.b);
     
@@ -218,20 +288,22 @@ app.get('/api/check-session', (req, res) => {
 
     const remainingMs = session.expiresAt - now;
     const remainingMinutes = Math.ceil(remainingMs / 60000);
+    const remainingHours = Math.floor(remainingMinutes / 60);
+    const remainingMins = remainingMinutes % 60;
     
     return res.json({ 
         valid: true, 
         bungalow: bungalow,
         expiresAt: session.expiresAt,
         remainingMinutes: remainingMinutes,
-        message: `Сессия активна. Осталось ${remainingMinutes} мин.`
+        remainingTime: remainingHours > 0 ? `${remainingHours}ч ${remainingMins}мин` : `${remainingMins}мин`,
+        message: `Сессия активна. Осталось ${remainingHours > 0 ? remainingHours + 'ч ' : ''}${remainingMins}мин`
     });
 });
 
-// Активация сессии (по QR-коду)
 app.get('/api/activate-session', (req, res) => {
     const bungalow = parseInt(req.query.b);
-    const duration = parseInt(req.query.d) || settings.sessionDuration || 1;
+    const duration = parseInt(req.query.d) || settings.sessionDuration || 420;
     
     if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
         return res.json({ 
@@ -243,7 +315,6 @@ app.get('/api/activate-session', (req, res) => {
     const now = Date.now();
     const expiresAt = now + (duration * 60 * 1000);
     
-    // Проверяем, есть ли уже активная сессия
     const existingSession = activeSessions[bungalow];
     if (existingSession && now < existingSession.expiresAt) {
         const remainingMin = Math.ceil((existingSession.expiresAt - now) / 60000);
@@ -259,12 +330,13 @@ app.get('/api/activate-session', (req, res) => {
     
     saveSessions();
     
+    const expiresDate = new Date(expiresAt);
     console.log(`
 ╔═══════════════════════════════════════════╗
 ║  ✅ СЕССИЯ АКТИВИРОВАНА                  ║
 ║  📍 Бунгало: #${bungalow}                 ║
-║  ⏱️ Длительность: ${duration} мин         ║
-║  ⏰ Истекает: ${new Date(expiresAt).toLocaleString()} ║
+║  ⏱️ Длительность: ${duration} мин (${Math.floor(duration/60)}ч ${duration%60}мин)
+║  ⏰ Истекает: ${expiresDate.toLocaleString()} ║
 ╚═══════════════════════════════════════════╝
     `);
     
@@ -273,64 +345,48 @@ app.get('/api/activate-session', (req, res) => {
         bungalow: bungalow,
         expiresAt: expiresAt,
         duration: duration,
-        message: `Сессия активирована на ${duration} мин`
+        message: `Сессия активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`
     });
 });
 
-// Деактивация сессии (пользователь ушел)
 app.post('/api/deactivate-session', (req, res) => {
     const bungalow = parseInt(req.body.bungalow);
     
     if (!bungalow || isNaN(bungalow)) {
-        return res.json({ 
-            success: false, 
-            error: 'Не указан номер бунгало' 
-        });
+        return res.json({ success: false, error: 'Не указан номер бунгало' });
     }
 
     if (activeSessions[bungalow]) {
         delete activeSessions[bungalow];
         saveSessions();
-        
-        console.log(`👋 Сессия бунгало #${bungalow} деактивирована пользователем`);
-        return res.json({ 
-            success: true, 
-            message: 'Сессия деактивирована' 
-        });
+        console.log(`👋 Сессия бунгало #${bungalow} деактивирована`);
+        return res.json({ success: true, message: 'Сессия деактивирована' });
     }
 
-    return res.json({ 
-        success: true, 
-        message: 'Сессия не найдена' 
-    });
+    return res.json({ success: true, message: 'Сессия не найдена' });
 });
 
-// Получить все активные сессии (для админки)
 app.get('/api/sessions', (req, res) => {
     const sessionsList = Object.values(activeSessions).map(s => ({
         ...s,
         remainingMinutes: Math.max(0, Math.ceil((s.expiresAt - Date.now()) / 60000))
     }));
     
-    res.json({ 
-        success: true, 
-        sessions: sessionsList,
-        count: sessionsList.length
-    });
+    res.json({ success: true, sessions: sessionsList, count: sessionsList.length });
 });
 
-// ================================================================
-// ===== ЗАКАЗЫ (с проверкой сессии) =====
-// ================================================================
-
+// ===== API: ЗАКАЗЫ =====
 app.post('/api/order', (req, res) => {
     if (settings.technicalBreak) {
         return res.json({ success: false, error: '🔧 Технический перерыв!' });
     }
     
+    if (!isWorkingTime()) {
+        return res.json({ success: false, error: '🔒 Сейчас не принимаем заказы. Работаем с 9:00 до 1:00' });
+    }
+    
     const order = req.body;
     
-    // Проверяем сессию бунгало
     if (order.bungalow) {
         const session = activeSessions[order.bungalow];
         if (!session) {
@@ -350,7 +406,6 @@ app.post('/api/order', (req, res) => {
         }
     }
     
-    // Проверяем доступность позиций
     const unavailableItems = order.items.filter(item => {
         const itemId = item.id.toString();
         return settings.menuItems[itemId] === false;
@@ -383,13 +438,13 @@ app.post('/api/order', (req, res) => {
     console.log(`
 ╔═══════════════════════════════════════════╗
 ║  🍓 НОВЫЙ ЗАКАЗ!                         ║
-║  📍 Бунгало: #${order.bungalow || 'самовывоз'}   ║
-║  👤 Имя: ${order.customerName || 'не указано'}  ║
-║  📞 Телефон: ${order.customerPhone || 'не указан'} ║
-║  🔑 КОД: ${confirmCode}                   ║
+║  📍 Бунгало: #${order.bungalow || 'самовывоз'}
+║  👤 Имя: ${order.customerName || 'не указано'}
+║  📞 Телефон: ${order.customerPhone || 'не указан'}
+║  🔑 КОД: ${confirmCode}
 ${itemsText}
-║  💰 Итого: ${order.total} ₽               ║
-║  🕐 Время: ${new Date().toLocaleString()} ║
+║  💰 Итого: ${order.total} ₽
+║  🕐 Время: ${new Date().toLocaleString()}
 ╚═══════════════════════════════════════════╝
     `);
     
@@ -506,10 +561,7 @@ setInterval(() => {
     }
 }, 60000);
 
-// ================================================================
-// ===== ЧАТЫ =====
-// ================================================================
-
+// ===== API: ЧАТЫ =====
 app.get('/api/chats', (req, res) => {
     const chatList = Object.keys(chats).map(phone => ({
         phone,
@@ -545,11 +597,7 @@ app.post('/api/chat-send', (req, res) => {
     }
     
     if (!chats[phone]) {
-        chats[phone] = { 
-            name: name || 'Клиент', 
-            messages: [], 
-            unread: 0 
-        };
+        chats[phone] = { name: name || 'Клиент', messages: [], unread: 0 };
     }
     
     const message = {
@@ -571,7 +619,6 @@ app.post('/api/chat-send', (req, res) => {
     }
     
     saveChats();
-    
     console.log(`💬 [${from}] ${phone}: ${text}`);
     res.json({ success: true });
 });
@@ -587,7 +634,6 @@ app.post('/api/chat-read', (req, res) => {
     res.json({ success: true });
 });
 
-// ===== УДАЛЕНИЕ ЧАТА =====
 app.delete('/api/chat-delete', (req, res) => {
     const { phone } = req.query;
     
@@ -601,15 +647,11 @@ app.delete('/api/chat-delete', (req, res) => {
     
     delete chats[phone];
     saveChats();
-    
     console.log(`🗑️ Чат с ${phone} удален`);
     res.json({ success: true, message: 'Чат удален' });
 });
 
-// ================================================================
-// ===== ОТЗЫВЫ =====
-// ================================================================
-
+// ===== API: ОТЗЫВЫ =====
 app.get('/api/reviews', (req, res) => {
     const sorted = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     res.json({ success: true, reviews: sorted });
@@ -659,15 +701,12 @@ app.post('/api/review', (req, res) => {
     res.json({ success: true, review: review });
 });
 
-// ===== УДАЛЕНИЕ ОТЗЫВА =====
 app.delete('/api/review/:id', (req, res) => {
     const reviewId = parseInt(req.params.id);
-    console.log(`🗑️ Попытка удалить отзыв #${reviewId}`);
     
     const index = reviews.findIndex(r => r.id === reviewId);
     
     if (index === -1) {
-        console.log(`❌ Отзыв #${reviewId} не найден`);
         return res.json({ success: false, error: 'Отзыв не найден' });
     }
     
@@ -679,14 +718,15 @@ app.delete('/api/review/:id', (req, res) => {
     res.json({ success: true, message: 'Отзыв удален' });
 });
 
-// ================================================================
 // ===== ГЕНЕРАЦИЯ QR-КОДА =====
-// ================================================================
 app.get('/generate-qr', (req, res) => {
     const bungalow = req.query.b || 1;
-    const duration = req.query.d || settings.sessionDuration || 1;
+    const duration = req.query.d || settings.sessionDuration || 420;
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const activateUrl = `${baseUrl}/activate?b=${bungalow}&d=${duration}`;
+    const durationHours = Math.floor(duration / 60);
+    const durationMins = duration % 60;
+    const durationText = durationHours > 0 ? `${durationHours}ч ${durationMins}мин` : `${durationMins}мин`;
     
     res.send(`
         <!DOCTYPE html>
@@ -705,25 +745,26 @@ app.get('/generate-qr', (req, res) => {
                     align-items: center;
                     justify-content: center;
                     min-height: 100vh;
-                    background: linear-gradient(135deg, #FFF8F0 0%, #FFE8E0 100%);
+                    background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 100%);
                     padding: 20px;
                 }
                 .qr-card {
                     background: white;
                     padding: 30px;
                     border-radius: 24px;
-                    box-shadow: 0 12px 48px rgba(212, 56, 13, 0.15);
+                    box-shadow: 0 20px 60px rgba(255, 71, 87, 0.15);
                     text-align: center;
                     max-width: 400px;
                     width: 100%;
                 }
                 .qr-card h2 {
-                    color: #D4380D;
+                    color: #FF4757;
                     font-size: 28px;
                     margin-bottom: 8px;
+                    font-weight: 800;
                 }
                 .qr-card .subtitle {
-                    color: #8D6E63;
+                    color: #6B7280;
                     margin-bottom: 20px;
                     font-size: 14px;
                 }
@@ -731,65 +772,66 @@ app.get('/generate-qr', (req, res) => {
                     display: flex;
                     justify-content: center;
                     margin: 20px 0;
-                    padding: 15px;
+                    padding: 20px;
                     background: white;
                     border-radius: 16px;
                     border: 2px dashed #FFE0B2;
                 }
                 .info-box {
                     background: #FFF8E1;
-                    padding: 12px 16px;
-                    border-radius: 12px;
+                    padding: 16px;
+                    border-radius: 16px;
                     margin: 15px 0;
                     border: 1px solid #FFE0B2;
                 }
                 .info-box .duration {
-                    font-size: 24px;
+                    font-size: 32px;
                     font-weight: 800;
-                    color: #E65100;
+                    color: #FF4757;
                 }
                 .info-box .label {
                     font-size: 13px;
-                    color: #8D6E63;
+                    color: #6B7280;
                     margin-top: 4px;
                 }
                 .activate-btn {
                     display: inline-block;
-                    background: linear-gradient(135deg, #D4380D, #B8300A);
+                    background: linear-gradient(135deg, #FF4757, #E63946);
                     color: white;
-                    padding: 14px 32px;
-                    border-radius: 50px;
+                    padding: 16px 32px;
+                    border-radius: 100px;
                     text-decoration: none;
                     font-weight: 700;
                     font-size: 16px;
                     margin-top: 15px;
-                    box-shadow: 0 6px 20px rgba(212, 56, 13, 0.3);
+                    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
                     transition: all 0.3s;
-                }
-                .activate-btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 24px rgba(212, 56, 13, 0.4);
                 }
                 .activate-btn:active {
                     transform: scale(0.95);
                 }
                 .url-display {
-                    background: #F5F5F5;
-                    padding: 10px;
-                    border-radius: 8px;
+                    background: #F8FAFC;
+                    padding: 12px;
+                    border-radius: 12px;
                     margin-top: 15px;
                     font-size: 11px;
                     word-break: break-all;
-                    color: #888;
+                    color: #9CA3AF;
                     font-family: monospace;
                 }
                 .warning {
-                    color: #D32F2F;
+                    color: #EF4444;
                     font-size: 13px;
                     margin-top: 15px;
                     padding: 10px;
-                    background: #FFEBEE;
-                    border-radius: 8px;
+                    background: #FEF2F2;
+                    border-radius: 12px;
+                }
+                .schedule {
+                    font-size: 13px;
+                    color: #6B7280;
+                    margin-top: 12px;
                 }
             </style>
         </head>
@@ -801,13 +843,18 @@ app.get('/generate-qr', (req, res) => {
                 <div id="qrcode"></div>
                 
                 <div class="info-box">
-                    <div class="duration">⏱️ ${duration} мин</div>
-                    <div class="label">Сессия активна ${duration} мин после сканирования</div>
+                    <div class="duration">⏱️ ${durationText}</div>
+                    <div class="label">Сессия активна после сканирования</div>
                 </div>
                 
                 <a href="${activateUrl}" class="activate-btn">
                     🍓 Открыть меню
                 </a>
+                
+                <p class="schedule">
+                    🕐 Доставка: 9:00-20:00<br>
+                    🏪 Киоск: 9:00-1:00
+                </p>
                 
                 <div class="warning">
                     ⚠️ После истечения сессии потребуется повторное сканирование QR-кода
@@ -823,7 +870,7 @@ app.get('/generate-qr', (req, res) => {
                     text: "${activateUrl}",
                     width: 250,
                     height: 250,
-                    colorDark: "#D4380D",
+                    colorDark: "#FF4757",
                     colorLight: "#FFFFFF",
                     correctLevel: QRCode.CorrectLevel.H
                 });
@@ -833,19 +880,17 @@ app.get('/generate-qr', (req, res) => {
     `);
 });
 
-// ================================================================
-// ===== АКТИВАЦИЯ СЕССИИ (переход по QR) =====
-// ================================================================
+// ===== АКТИВАЦИЯ СЕССИИ =====
 app.get('/activate', (req, res) => {
     const bungalow = parseInt(req.query.b);
-    const duration = parseInt(req.query.d) || settings.sessionDuration || 1;
+    const duration = parseInt(req.query.d) || settings.sessionDuration || 420;
     
     if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
         return res.send(`
             <html>
             <head><meta charset="UTF-8"><title>Ошибка</title></head>
-            <body style="font-family:sans-serif; text-align:center; padding:40px;">
-                <h1 style="color:#D32F2F;">❌ Ошибка</h1>
+            <body style="font-family:sans-serif;text-align:center;padding:40px;">
+                <h1 style="color:#EF4444;">❌ Ошибка</h1>
                 <p>Неверный номер бунгало</p>
             </body>
             </html>
@@ -864,32 +909,33 @@ app.get('/activate', (req, res) => {
     
     saveSessions();
     
-    console.log(`✅ Сессия бунгало #${bungalow} активирована через QR на ${duration} мин`);
+    console.log(`✅ Сессия бунгало #${bungalow} активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`);
     
-    // Перенаправляем на главную с параметром b
     res.redirect(`/?b=${bungalow}`);
 });
 
-// ================================================================
-// ===== ЗАПУСК =====
-// ================================================================
-
+// ===== ЗАПУСК СЕРВЕРА =====
 loadData();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
+    const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
+    const sessionHours = Math.floor(settings.sessionDuration / 60);
+    const sessionMins = settings.sessionDuration % 60;
+    
     console.log(`
 ╔═══════════════════════════════════════════╗
+║  🍓 STRAWBERRY IN CHOCOLATE             ║
 ║  🚀 СЕРВЕР ЗАПУЩЕН!                      ║
+╠═══════════════════════════════════════════╣
 ║  📱 http://localhost:${PORT}              ║
 ║  📋 http://localhost:${PORT}/admin.html   ║
 ║  🔑 http://localhost:${PORT}/generate-qr  ║
 ╠═══════════════════════════════════════════╣
-║  💬 Чаты: свайп влево для удаления       ║
-║  ⭐ Отзывы: удаление по кнопке           ║
-║  ⏱️ Сессия: ${settings.sessionDuration || 1} мин                       ║
-║  📦 Доставка: 15 минут                   ║
-║  🔐 Сессии сохраняются в файл            ║
+║  🕐 График: ${WORK_HOURS.start}:00 - ${endHour}:00
+║  ⏱️ Сессия: ${sessionHours}ч ${sessionMins}мин
+║  📦 Доставка: 15 минут
+║  🔐 Сессии сохраняются в файл
 ╚═══════════════════════════════════════════╝
     `);
 });
