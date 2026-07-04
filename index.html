@@ -185,6 +185,31 @@
             font-size: 12px;
         }
 
+        .work-hours-banner {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            padding: 6px 12px;
+            border-radius: 12px;
+            margin: 4px 0 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #2E7D32;
+            border: 1px solid #A5D6A7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .work-hours-banner .item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .work-hours-banner .item i { font-size: 12px; }
+        .work-hours-banner .item .label { font-weight: 400; color: #388E3C; }
+        .work-hours-banner .item .time { font-weight: 700; color: #1B5E20; }
+
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-6px); }
@@ -227,32 +252,9 @@
             50% { opacity: 0.4; transform: scale(0.8); }
         }
 
+        /* Таймер скрыт - никто его не видит */
         .session-timer {
-            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-            padding: 8px 14px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: #E65100;
-            border: 1px solid #FFB74D;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .session-timer i { font-size: 16px; }
-        .session-timer .time-left {
-            font-size: 18px;
-            font-weight: 800;
-            color: #D4380D;
-            min-width: 40px;
-        }
-        .session-timer .session-label {
-            font-size: 11px;
-            font-weight: 400;
-            color: #8D6E63;
+            display: none !important;
         }
 
         .no-access-message {
@@ -1910,13 +1912,22 @@
         .map-modal-content .map-hint {
             text-align: center;
             margin-top: 10px;
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.5;
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.6;
             font-weight: 400;
+            background: #F5EDE4;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #EDE3D8;
         }
-        .map-modal-content .map-hint i { margin-right: 4px; color: var(--gold); }
-        .map-modal-content .map-hint strong { color: var(--text-dark); font-weight: 500; }
+        .map-modal-content .map-hint i { margin-right: 6px; color: var(--gold); }
+        .map-modal-content .map-hint strong { color: var(--primary); font-weight: 600; }
+        .map-modal-content .map-hint .phone-link {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
 
         .image-modal-overlay {
             display: none;
@@ -2150,10 +2161,11 @@
             .header-actions .action-btn .badge-new { font-size: 7px; padding: 1px 5px; min-width: 14px; }
             .reviews-modal-list { padding: 12px 14px 16px; }
             .reviews-modal-footer .footer-text { font-size: 13px; }
-            .session-timer { font-size: 12px; padding: 6px 10px; }
-            .session-timer .time-left { font-size: 16px; min-width: 30px; }
+            .session-timer { display: none !important; }
+            .work-hours-banner { font-size: 11px; padding: 4px 10px; gap: 8px; }
             .beach-restrict-content h2 { font-size: 20px; }
             .beach-restrict-content .restrict-icon { font-size: 56px; }
+            .map-modal-content .map-hint { font-size: 12px; padding: 10px 12px; }
         }
 
         @media (max-width: 380px) {
@@ -2222,14 +2234,15 @@
             .reviews-modal-list {
                 padding: 12px 14px 85px !important;
             }
-            .session-timer { font-size: 11px; padding: 4px 8px; }
-            .session-timer .time-left { font-size: 14px; min-width: 24px; }
+            .session-timer { display: none !important; }
+            .work-hours-banner { font-size: 10px; padding: 3px 8px; gap: 4px; flex-direction: column; }
             .beach-restrict-content h2 { font-size: 18px; }
             .beach-restrict-content .restrict-icon { font-size: 48px; }
             .beach-restrict-content { padding: 24px 16px 20px; }
             .beach-restrict-content .restrict-btn { padding: 10px 12px; gap: 8px; }
             .beach-restrict-content .restrict-btn .btn-icon { font-size: 24px; width: 32px; }
             .beach-restrict-content .restrict-btn .btn-title { font-size: 14px; }
+            .map-modal-content .map-hint { font-size: 11px; padding: 8px 10px; }
         }  
     </style>
 </head>
@@ -2405,14 +2418,28 @@
             </p>
         </header>
 
+        <!-- ===== БАННЕР С ЧАСАМИ РАБОТЫ ===== -->
+        <div class="work-hours-banner">
+            <span class="item">
+                <i class="fas fa-truck"></i>
+                <span class="label">Доставка:</span>
+                <span class="time">9:00 — 20:00</span>
+            </span>
+            <span class="item">
+                <i class="fas fa-store"></i>
+                <span class="label">Киоск:</span>
+                <span class="time">9:00 — 23:00</span>
+            </span>
+        </div>
+
         <!-- ===== ИНДИКАТОР ИНТЕРНЕТА ===== -->
         <div class="online-indicator" id="onlineIndicator">
             <span class="dot"></span>
             <span id="onlineStatus"><i class="fas fa-wifi"></i> Интернет есть</span>
         </div>
 
-        <!-- ===== ТАЙМЕР СЕССИИ ===== -->
-        <div class="session-timer" id="sessionTimer" style="display:none;">
+        <!-- ===== ТАЙМЕР СЕССИИ (СКРЫТ) ===== -->
+        <div class="session-timer" id="sessionTimer" style="display:none !important;">
             <i class="fas fa-clock"></i>
             <span class="session-label">Осталось:</span>
             <span class="time-left" id="sessionTimeLeft">1:00</span>
@@ -2444,7 +2471,7 @@
                     </button>
                 </div>
                 <div class="no-access-info">
-                    <span><i class="fas fa-clock"></i> Работаем: <span class="highlight">9:00 — 1:00 (МСК)</span></span>
+                    <span><i class="fas fa-clock"></i> Работаем: <span class="highlight">9:00 — 23:00</span></span>
                     <span><i class="fas fa-location-dot"></i> Киоск: <span class="highlight">100 м от бунгало</span></span>
                 </div>
             </div>
@@ -2470,9 +2497,9 @@
             <div class="closed-message">
                 <span class="closed-icon">🔒</span>
                 <h2>Сейчас не принимаем заказы</h2>
-                <p>Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong> ночи по московскому времени.</p>
+                <p>Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>23:00</strong>.</p>
                 <p style="font-size:13px;color:#8F7A6E;margin-top:2px;"><i class="fas fa-clock"></i> Текущее время: <span id="currentTimeDisplay">--:--</span></p>
-                <div class="work-time"><i class="fas fa-clock"></i> 🕐 График работы: <span>9:00 — 1:00 (МСК)</span></div>
+                <div class="work-time"><i class="fas fa-clock"></i> 🕐 График работы: <span>9:00 — 23:00</span></div>
             </div>
             <button class="map-btn-top" onclick="openMap()">
                 <span class="icon"><i class="fas fa-map-marked-alt"></i></span> Показать на карте
@@ -2598,15 +2625,17 @@
         // ================================================================
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
+        const ADMIN_EMAIL = 'taras.pavlov.92@mail.ru';
 
         const MY_LOCATION = {
             lat: 44.358193,
             lng: 38.528773,
-            landmark: 'Киоск на пляже, 100 м от бунгало. Ориентир: деревянный пирс, синий зонтик',
-            phone: '+7 999 123-45-67'
+            landmark: 'Напротив бетонного пирса, белый киоск "Strawberry in Chocolate"',
+            phone: '+7 962 855-72-63',
+            phoneRaw: '79628557263'
         };
 
-        const WORK_HOURS = { start: 9, end: 1 };
+        const WORK_HOURS = { start: 9, end: 23 };
 
         // ================================================================
         // ===== ЗВУК ДЛЯ КЛИЕНТА (ТОЛЬКО ВХОДЯЩЕЕ СООБЩЕНИЕ) =====
@@ -2779,20 +2808,17 @@
         }
 
         // ================================================================
-        // ===== ТАЙМЕР СЕССИИ =====
+        // ===== ТАЙМЕР СЕССИИ (СКРЫТ) =====
         // ================================================================
         function showSessionTimer(expiresAt) {
-            const timer = document.getElementById('sessionTimer');
-            timer.style.display = 'flex';
+            // Таймер скрыт от пользователя - ничего не показываем
             state.sessionExpiresAt = expiresAt;
-            updateSessionTimer();
             
             if (sessionTimerInterval) clearInterval(sessionTimerInterval);
             sessionTimerInterval = setInterval(updateSessionTimer, 1000);
         }
 
         function hideSessionTimer() {
-            document.getElementById('sessionTimer').style.display = 'none';
             if (sessionTimerInterval) {
                 clearInterval(sessionTimerInterval);
                 sessionTimerInterval = null;
@@ -2815,20 +2841,6 @@
                 showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
                 return;
             }
-
-            const minutes = Math.floor(remaining / 60000);
-            const seconds = Math.floor((remaining % 60000) / 1000);
-            
-            const timeLeft = document.getElementById('sessionTimeLeft');
-            timeLeft.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            
-            if (remaining < 60000) {
-                timeLeft.style.color = '#D32F2F';
-            } else if (remaining < 300000) {
-                timeLeft.style.color = '#E65100';
-            } else {
-                timeLeft.style.color = '#D4380D';
-            }
         }
 
         // ================================================================
@@ -2844,12 +2856,10 @@
             document.body.style.overflow = '';
         }
 
-        // Закрытие по клику на фон
         document.getElementById('beachRestrictModal').addEventListener('click', function(e) {
             if (e.target === this) closeBeachRestrict();
         });
 
-        // Закрытие по Escape
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeBeachRestrict();
@@ -2859,10 +2869,7 @@
         // ================================================================
         // ===== РЕЖИМ "Я НА ПЛЯЖЕ" (УДАЛЕН - теперь только модалка) =====
         // ================================================================
-        // Функция больше не используется, но оставлена для совместимости
         function startBeachMode() {
-            // Больше не активируем режим самовывоза
-            // Вместо этого показываем модалку с ограничением
             openBeachRestrict();
         }
 
@@ -3061,8 +3068,9 @@
                         <iframe src="https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=18&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag" allowfullscreen></iframe>
                     </div>
                     <div class="map-hint">
-                        <i class="fas fa-heart" style="color:#E91E63;"></i> <strong>Ориентир:</strong> ${MY_LOCATION.landmark}
-                        <br><i class="fas fa-phone"></i> <strong>Телефон:</strong> ${MY_LOCATION.phone}
+                        <i class="fas fa-location-dot" style="color:#D4380D;"></i> <strong>Ориентир:</strong> ${MY_LOCATION.landmark}
+                        <br><i class="fas fa-phone"></i> <strong>Телефон:</strong> <a href="tel:+${MY_LOCATION.phoneRaw}" class="phone-link">${MY_LOCATION.phone}</a>
+                        <br><i class="fas fa-headset"></i> <strong>Поддержка:</strong> напишите в чат
                     </div>
                 </div>
             `;
@@ -3389,7 +3397,7 @@
         function submitOrder() {
             if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
             if (state.settings.technicalBreak) { showNotification('🔧 Технический перерыв!', 'error'); return; }
-            if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00 ночи (МСК)', 'error'); return; }
+            if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 23:00', 'error'); return; }
             if (!selectedPayment) { showNotification('⚠️ Выберите способ оплаты!', 'error'); return; }
 
             const bungaloNumber = state.bungalowNumber;
@@ -3709,7 +3717,7 @@
         }
 
         // ================================================================
-        // ===== ПОДДЕРЖКА (ЧАТ) С УВЕДОМЛЕНИЯМИ =====
+        // ===== ПОДДЕРЖКА (ЧАТ) С УВЕДОМЛЕНИЯМИ И ОТПРАВКОЙ НА ПОЧТУ =====
         // ================================================================
 
         function updateSupportBadge(count) {
@@ -4123,12 +4131,16 @@
 
         console.log('🍓 Strawberry in Chocolate');
         console.log('🔒 Доступ только по QR-коду из бунгало');
-        console.log('⏱️ Тестовый режим: сессия 1 минута!');
+        console.log('⏱️ Тестовый режим: сессия 1 минута (таймер скрыт)');
         console.log('🏖️ Кнопка "Я на пляже" показывает модалку с ограничением');
+        console.log('📍 Ориентир: напротив бетонного пирса, белый киоск "Strawberry in Chocolate"');
+        console.log('📞 Телефон: +7 962 855-72-63');
+        console.log('📧 Уведомления на почту: taras.pavlov.92@mail.ru');
         console.log('⭐ Отзывы: весь экран, оставьте отзыв после получения заказа!');
         console.log('💬 Поддержка: чат с администратором');
         console.log('🔔 Звук ТОЛЬКО при входящих сообщениях от поддержки!');
         console.log('📦 Доставка в бунгало за 15 минут!');
+        console.log('🕐 График работы: доставка 9:00-20:00, киоск 9:00-23:00');
     </script>
 
 </body>
