@@ -2940,38 +2940,73 @@
             document.getElementById('imageModal').classList.remove('open');
             document.body.style.overflow = '';
         }
-
-        // ================================================================
+ // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
+        
         async function sendSupportMessage() {
-    const input = document.getElementById('supportInput');
-    const text = input.value.trim();
-    if (!text) return;
-    const phone = document.getElementById('customerPhone').value.trim();
-    if (!phone) { showNotification('⚠️ Введите телефон!', 'error'); return; }
-    
-    input.value = '';
-    try {
-        await fetch('/api/chat-send', { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) 
-        });
-        loadSupportMessages(phone);
-    } catch (e) {}
-}
-      function closeSupportChat() {
-    const modal = document.getElementById('supportChatModal');
-    if (modal) modal.remove();
-    document.body.style.overflow = '';
-    if (chatUpdateInterval) { 
-        clearInterval(chatUpdateInterval); 
-        chatUpdateInterval = null; 
-    }
-}
+            const input = document.getElementById('supportInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!phone) { showNotification('⚠️ Введите телефон!', 'error'); return; }
+            
+            input.value = '';
+            try {
+                await fetch('/api/chat-send', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) 
+                });
+                loadSupportMessages(phone);
+            } catch (e) {}
+        }
 
-function openSupportChat() {
+        async function loadSupportMessages(phone) {
+            try {
+                const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                const data = await res.json();
+                if (data.success) { renderSupportMessages(data.messages || []); }
+            } catch (e) {}
+        }
+
+        function renderSupportMessages(messages) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            if (!messages || messages.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px 20px;"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>Задайте ваш вопрос</div>';
+                return;
+            }
+            container.innerHTML = messages.map(msg => `
+                <div style="margin-bottom:8px;display:flex;justify-content:${msg.from === 'client' ? 'flex-start' : 'flex-end'};">
+                    <div style="max-width:80%;padding:10px 16px;border-radius:${msg.from === 'client' ? 'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px' : 'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${msg.from === 'client' ? '#F8FAFC' : 'linear-gradient(135deg, var(--primary), var(--primary-dark))'};color:${msg.from === 'client' ? 'var(--text-dark)' : '#FFFFFF'};">
+                        ${msg.text}
+                        <span style="font-size:9px;display:block;margin-top:4px;opacity:0.6;">${new Date(msg.time).toLocaleTimeString()}</span>
+                    </div>
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function startChatAutoUpdate(phone) {
+            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
+            chatUpdateInterval = setInterval(() => {
+                if (document.getElementById('supportChatModal')) { loadSupportMessages(phone); } 
+                else { clearInterval(chatUpdateInterval); chatUpdateInterval = null; }
+            }, 3000);
+        }
+
+        function closeSupportChat() {
+            const modal = document.getElementById('supportChatModal');
+            if (modal) modal.remove();
+            document.body.style.overflow = '';
+            if (chatUpdateInterval) { 
+                clearInterval(chatUpdateInterval); 
+                chatUpdateInterval = null; 
+            }
+        }
+
+        function openSupportChat() {
     const name = document.getElementById('customerName').value.trim();
     const phone = document.getElementById('customerPhone').value.trim();
     if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
