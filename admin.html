@@ -691,48 +691,50 @@
             { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.jpg' }
         ];
 
-        async function loadMenu() {
-            try {
-                const d = await api('/settings');
-                S.settings = d;
-                updateTechUI();
-                S.menu = [];
-                CATALOG.forEach(item => {
-                    S.menu.push({ ...item, available: d.menuItems?.[item.id] !== false });
-                });
-                if (d.customItems && Array.isArray(d.customItems)) {
-                    d.customItems.forEach(ci => {
-                        if (!S.menu.find(x => x.id === ci.id)) {
-                            S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
-                        }
-                    });
+      async function loadMenu() {
+    const list = document.getElementById('menuList');
+    list.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Загрузка меню...</div>';
+    
+    try {
+        const res = await fetch('/api/settings');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const d = await res.json();
+        console.log('📂 Настройки получены:', d);
+        
+        S.settings = d;
+        updateTechUI();
+        
+        // Строим меню
+        S.menu = [];
+        CATALOG.forEach(item => {
+            S.menu.push({ ...item, available: d.menuItems?.[item.id] !== false });
+        });
+        
+        // Добавляем кастомные
+        if (d.customItems && Array.isArray(d.customItems)) {
+            d.customItems.forEach(ci => {
+                if (!S.menu.find(x => x.id === ci.id)) {
+                    S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
                 }
-                renderMenu();
-            } catch(e) { console.error(e); $('menuList').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i>Ошибка загрузки</div>'; }
+            });
         }
-
-        function renderMenu() {
-            const f = $('menuFilter').value;
-            let items = S.menu;
-            if (f !== 'all') items = items.filter(x => x.category === f);
-            const list = $('menuList');
-            if (!items.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-utensils"></i>Нет позиций</div>'; return; }
-
-            list.innerHTML = items.map(x => `
-                <div class="menu-item">
-                    <img src="${x.image}" onerror="this.style.display='none'" loading="lazy">
-                    <div class="info">
-                        <div class="name">${x.emoji||''} ${x.name} ${x.badge ? `<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 6px;border-radius:8px;">${x.badge}</span>` : ''}</div>
-                        <div class="desc">${x.desc} ${x.volume ? '• '+x.volume : ''}</div>
-                        <div class="price">${x.price} ₽</div>
-                    </div>
-                    <div class="actions">
-                        <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
-                        <button class="${x.available ? 'btn-on' : 'btn-off'}" onclick="toggleItem('${x.id}')"><i class="fas ${x.available ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
-                    </div>
-                </div>
-            `).join('');
-        }
+        
+        console.log('📋 Построено позиций:', S.menu.length);
+        renderMenu();
+    } catch(e) {
+        console.error('❌ Ошибка загрузки меню:', e);
+        list.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-circle" style="color:#D32F2F;"></i>
+                <div style="color:#D32F2F;font-weight:600;">Ошибка загрузки меню</div>
+                <div style="font-size:12px;color:var(--text-muted);">Проверьте консоль (F12)</div>
+                <button class="btn btn-primary btn-sm" onclick="loadMenu()" style="margin-top:12px;">
+                    <i class="fas fa-redo"></i> Попробовать снова
+                </button>
+            </div>
+        `;
+    }
+}
 
         async function toggleItem(id) {
             const cur = S.settings.menuItems?.[id] !== false;
