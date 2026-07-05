@@ -339,6 +339,11 @@
             font-weight: 400;
         }
 
+        .contact-row input.invalid {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
         /* ===== MENU GRID ===== */
         .menu-grid {
             display: grid;
@@ -630,6 +635,28 @@
             display: flex;
         }
 
+        /* ===== FULLSCREEN MODALS ===== */
+        .orders-modal-overlay.open,
+        .reviews-modal-overlay.open {
+            display: flex;
+            padding: 0;
+            background: #FFFFFF;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .orders-modal-content,
+        .reviews-modal-content {
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            background: #FFFFFF;
+            box-shadow: none;
+        }
+
         .auth-modal-content,
         .topping-modal-content,
         .beach-restrict-content,
@@ -750,6 +777,11 @@
         .auth-row input::placeholder {
             color: var(--text-muted);
             font-weight: 400;
+        }
+
+        .auth-row input.invalid {
+            border-color: #EF4444;
+            background: #FFF5F5;
         }
 
         /* ===== CART MODAL ===== */
@@ -1029,6 +1061,203 @@
             color: var(--primary);
         }
 
+        /* ===== ORDERS FULLSCREEN ===== */
+        .orders-fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid #F1F5F9;
+            flex-shrink: 0;
+            background: #FFFFFF;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .orders-fullscreen-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .orders-fullscreen-search {
+            padding: 12px 20px;
+            border-bottom: 1px solid #F1F5F9;
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            background: #FFFFFF;
+        }
+
+        .orders-fullscreen-search input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #F1F5F9;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            outline: none;
+            background: #F8FAFC;
+            font-family: var(--font-family);
+        }
+
+        .orders-fullscreen-search input:focus {
+            border-color: var(--primary);
+        }
+
+        .orders-fullscreen-search button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+        }
+
+        .orders-fullscreen-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            background: #F8FAFC;
+        }
+
+        .order-card-full {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #F1F5F9;
+        }
+
+        .order-card-full .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .order-card-full .order-id-block .order-id {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+
+        .order-card-full .order-id-block .order-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .order-status-badge {
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-waiting { background: #FFF8E1; color: #F59E0B; }
+        .status-done { background: #E8F5E9; color: #2E7D32; }
+        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
+
+        .order-items-list {
+            margin-bottom: 12px;
+        }
+
+        .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #F5F5F5;
+        }
+
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-row .item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-item-row .item-icon {
+            font-size: 24px;
+        }
+
+        .order-item-row .item-details .item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .order-item-row .item-details .item-qty {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .order-item-row .item-total {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .order-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #F1F5F9;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .order-card-footer .footer-info {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .order-card-footer .footer-total {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .order-card-footer .footer-actions {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        .order-card-footer .footer-actions button {
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: var(--transition);
+        }
+
+        .btn-cancel-order {
+            background: #EF4444;
+            color: #FFFFFF;
+        }
+
+        .btn-review-order {
+            background: linear-gradient(135deg, #FFB300, #FF8F00);
+            color: #FFFFFF;
+        }
+
         /* ===== NOTIFICATION ===== */
         .notification {
             display: none;
@@ -1180,11 +1409,10 @@
     </style>
 </head>
 <body>
-
+    <!-- ===== TOAST / CART OVERLAY ===== -->
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-
-    <!-- ===== AUTH MODAL ===== -->
+        <!-- ===== AUTH MODAL ===== -->
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">
@@ -1196,9 +1424,9 @@
             <div class="modal-subtitle">Чтобы мы могли связаться с вами</div>
             <div class="auth-row">
                 <input type="text" id="authName" placeholder="Ваше имя">
-                <input type="tel" id="authPhone" placeholder="Номер телефона">
+                <input type="tel" id="authPhone" placeholder="+7 999 123-45-67" oninput="validatePhoneInput(this)">
             </div>
-            <button class="confirm-btn" onclick="confirmAuth()">
+            <button class="confirm-btn" id="authConfirmBtn" onclick="confirmAuth()">
                 <i class="fas fa-check-circle"></i> Продолжить
             </button>
         </div>
@@ -1228,42 +1456,40 @@
         </div>
     </div>
 
-    <!-- ===== ORDERS MODAL ===== -->
+    <!-- ===== ORDERS MODAL (FULLSCREEN) ===== -->
     <div class="orders-modal-overlay" id="ordersModal">
-        <div class="orders-modal-content" style="max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF; border-radius: var(--radius-2xl);">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #F1F5F9; flex-shrink: 0;">
-                <h2 style="font-size: 18px; font-weight: 700; color: var(--text-dark);">
-                    <i class="fas fa-list-alt" style="color: var(--primary); margin-right: 8px;"></i> Мои заказы
-                </h2>
+        <div class="orders-modal-content">
+            <div class="orders-fullscreen-header">
+                <h2><i class="fas fa-list-alt" style="color: var(--primary); margin-right: 8px;"></i>Мои заказы</h2>
                 <button class="modal-close" onclick="closeOrdersModal()" style="position: static;">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="orders-content" id="ordersContent" style="padding: 16px 20px; overflow-y: auto; flex: 1; max-height: 50vh;">
-                <div class="cart-empty">
-                    <i class="fas fa-inbox" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
-                    Введите телефон, чтобы увидеть заказы
-                </div>
-            </div>
-            <div style="padding: 16px 20px; border-top: 1px solid #F1F5F9; display: flex; gap: 8px; flex-shrink: 0;">
-                <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон" style="flex: 1; padding: 12px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); font-size: 14px; outline: none; background: #F8FAFC; font-family: var(--font-family);">
-                <button onclick="loadMyOrders()" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #FFFFFF; border: none; padding: 12px 20px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; font-family: var(--font-family); box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);">
+            <div class="orders-fullscreen-search">
+                <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон" oninput="validatePhoneInput(this)">
+                <button onclick="loadMyOrders()">
                     <i class="fas fa-search"></i> Показать
                 </button>
+            </div>
+            <div class="orders-fullscreen-list" id="ordersContent">
+                <div class="cart-empty">
+                    <i class="fas fa-phone" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
+                    Введите телефон, чтобы увидеть заказы
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== REVIEWS MODAL ===== -->
+    <!-- ===== REVIEWS MODAL (FULLSCREEN) ===== -->
     <div class="reviews-modal-overlay" id="reviewsModal">
-        <div class="reviews-modal-content" style="max-width: 100%; width: 100%; height: 100vh; max-height: 100vh; border-radius: 0; display: flex; flex-direction: column; background: #FFFFFF;">
-            <div style="padding: 20px; border-bottom: 1px solid #F1F5F9; flex-shrink: 0; position: relative;">
-                <div class="modal-title">
-                    <i class="fas fa-star" style="color: #FFB300;"></i> Отзывы
-                    <span style="display: block; font-size: 14px; font-weight: 400; color: var(--text-secondary); margin-top: 4px;">Оставьте отзыв после получения заказа!</span>
-                </div>
+        <div class="reviews-modal-content">
+            <div class="orders-fullscreen-header">
+                <h2><i class="fas fa-star" style="color: #FFB300; margin-right: 8px;"></i>Отзывы</h2>
+                <button class="modal-close" onclick="closeReviewsModal()" style="position: static;">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="reviews-modal-list" id="reviewsModalList" style="padding: 16px 20px 100px; overflow-y: auto; flex: 1;">
+            <div class="orders-fullscreen-list" id="reviewsModalList">
                 <div class="cart-empty">
                     <i class="fas fa-star" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
                     ⭐ Пока нет отзывов. Будьте первым!
@@ -1275,9 +1501,6 @@
                     Спасибо, что выбираете нас! С вами мы становимся лучше!
                 </div>
             </div>
-            <button class="modal-close" onclick="closeReviewsModal()" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); width: 56px; height: 56px; font-size: 24px; color: #FFFFFF; z-index: 20; box-shadow: 0 4px 20px rgba(255, 71, 87, 0.4);">
-                <i class="fas fa-times"></i>
-            </button>
         </div>
     </div>
 
@@ -1368,12 +1591,9 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- ===== MAIN CONTAINER ===== -->
-    <!-- ============================================================ -->
     <div class="app-container">
 
-        <!-- ===== HEADER ACTIONS ===== -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <button onclick="openSupportChat()" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text-dark); cursor: pointer; font-family: var(--font-family); display: flex; align-items: center; gap: 6px;">
                 <i class="fas fa-headset" style="color: var(--primary);"></i> Поддержка
@@ -1387,7 +1607,6 @@
             </button>
         </div>
 
-        <!-- ===== HEADER ===== -->
         <header class="header">
             <div class="header-badge">
                 <i class="fas fa-water"></i> Доставка на пляж
@@ -1404,19 +1623,16 @@
             </p>
         </header>
 
-        <!-- ===== WORK HOURS ===== -->
         <div class="work-hours-banner">
             <span><i class="fas fa-truck" style="color: var(--primary);"></i> Доставка: <strong>9:00 — 20:00</strong></span>
             <span><i class="fas fa-store" style="color: var(--primary);"></i> Киоск: <strong>9:00 — 1:00</strong></span>
         </div>
 
-        <!-- ===== ONLINE INDICATOR ===== -->
         <div class="online-indicator" id="onlineIndicator">
             <span class="dot"></span>
             <span id="onlineStatus"><i class="fas fa-wifi"></i> Интернет есть</span>
         </div>
 
-        <!-- ===== NO ACCESS MODE ===== -->
         <div id="noAccessMode" style="display:none;">
             <div class="no-access-message">
                 <span class="no-access-icon">🔒</span>
@@ -1447,7 +1663,6 @@
             </div>
         </div>
 
-        <!-- ===== TECH BREAK MODE ===== -->
         <div id="techBreakMode" style="display:none;">
             <div class="no-access-message">
                 <span class="no-access-icon">🔧</span>
@@ -1464,7 +1679,6 @@
             </div>
         </div>
 
-        <!-- ===== CLOSED MODE ===== -->
         <div id="closedMode" style="display:none;">
             <div class="no-access-message">
                 <span class="no-access-icon">🔒</span>
@@ -1481,9 +1695,7 @@
             </div>
         </div>
 
-        <!-- ===== BUNGALO MODE ===== -->
         <div id="bungaloMode">
-
             <button class="map-btn-top" onclick="openMap()">
                 <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
                 <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
@@ -1504,7 +1716,7 @@
                 </div>
                 <div class="contact-row">
                     <input type="text" id="customerName" placeholder="Ваше имя">
-                    <input type="tel" id="customerPhone" placeholder="Телефон">
+                    <input type="tel" id="customerPhone" placeholder="+7 999 123-45-67" oninput="validatePhoneInput(this)">
                 </div>
             </div>
 
@@ -1545,9 +1757,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- ===== BOTTOM TAB BAR ===== -->
-    <!-- ============================================================ -->
     <div class="bottom-tab-bar" id="bottomTabBar">
         <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
             <span class="tab-icon"><i class="fas fa-home"></i></span>
@@ -1566,9 +1776,7 @@
         </button>
     </div>
 
-    <!-- ============================================================ -->
     <!-- ===== CART MODAL ===== -->
-    <!-- ============================================================ -->
     <div class="cart-modal" id="cartModal">
         <div class="modal-header">
             <h2><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> Корзина</h2>
@@ -1611,8 +1819,7 @@
             </button>
         </div>
     </div>
-
-    <script>
+        <script>
         // ================================================================
         // ===== CONFIGURATION =====
         // ================================================================
@@ -1700,6 +1907,41 @@
         let lastOrderCheckTime = Date.now();
 
         // ================================================================
+        // ===== PHONE VALIDATION =====
+        // ================================================================
+        function validatePhoneInput(input) {
+            let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
+            
+            // Автоформат: если начинается с 7 или 8, добавляем +7
+            if (value.match(/^[7-8]\d{0,10}$/)) {
+                if (value.length === 11 && (value.startsWith('7') || value.startsWith('8'))) {
+                    input.classList.remove('invalid');
+                } else if (value.length > 0 && value.length < 11) {
+                    input.classList.remove('invalid');
+                }
+            } else if (value.length > 0) {
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+            }
+            
+            input.value = value;
+        }
+
+        function isValidPhone(phone) {
+            const clean = phone.replace(/[\s\-\+\(\)]/g, '');
+            return /^[7-8]\d{10}$/.test(clean);
+        }
+
+        function formatPhone(phone) {
+            const clean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (clean.length === 11) {
+                return `+7 ${clean.substring(1,4)} ${clean.substring(4,7)}-${clean.substring(7,9)}-${clean.substring(9,11)}`;
+            }
+            return phone;
+        }
+
+        // ================================================================
         // ===== SESSION =====
         // ================================================================
         function getSession() {
@@ -1750,12 +1992,10 @@
 
         function setManualTime(hours, minutes) {
             manualTime = { hours, minutes };
-            console.log(`⏰ Ручное время установлено: ${hours}:${minutes}`);
         }
 
         function clearManualTime() {
             manualTime = null;
-            console.log('⏰ Ручное время очищено');
         }
 
         // ================================================================
@@ -1804,45 +2044,35 @@
         // ================================================================
         // ===== WORKING TIME =====
         // ================================================================
-      function isWorkingTime() {
-    if (FORCE_WORKING_TIME) {
-        console.log('⚠️ Режим тестирования: всегда работаем');
-        return true;
-    }
-    
-    let now;
-    
-    if (manualTime) {
-        now = new Date();
-        now.setHours(manualTime.hours, manualTime.minutes, 0, 0);
-    } else {
-        try {
-            const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
-            now = new Date(mskTime);
-        } catch (e) {
-            now = new Date();
+        function isWorkingTime() {
+            if (FORCE_WORKING_TIME) return true;
+            
+            let now;
+            if (manualTime) {
+                now = new Date();
+                now.setHours(manualTime.hours, manualTime.minutes, 0, 0);
+            } else {
+                try {
+                    const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+                    now = new Date(mskTime);
+                } catch (e) {
+                    now = new Date();
+                }
+            }
+            
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentMinutes = hours * 60 + minutes;
+            const startMinutes = WORK_HOURS.start * 60;
+            const endMinutes = WORK_HOURS.end * 60;
+            
+            let normalizedCurrent = currentMinutes;
+            if (currentMinutes < startMinutes) {
+                normalizedCurrent = currentMinutes + 24 * 60;
+            }
+            
+            return normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
         }
-    }
-    
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const currentMinutes = hours * 60 + minutes;
-    const startMinutes = WORK_HOURS.start * 60;   // 540
-    const endMinutes = WORK_HOURS.end * 60;        // 1500
-    
-    // Нормализуем текущее время для сравнения
-    // Если мы после полуночи (0:00 - 8:59), добавляем 24 часа
-    let normalizedCurrent = currentMinutes;
-    if (currentMinutes < startMinutes) {
-        normalizedCurrent = currentMinutes + 24 * 60; // Добавляем сутки
-    }
-    
-    const isWorking = normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
-    
-    console.log(`🕐 ${hours}:${String(minutes).padStart(2, '0')} (норм: ${Math.floor(normalizedCurrent/60)}:${String(normalizedCurrent%60).padStart(2, '0')}) | ${WORK_HOURS.start}:00-1:00 | ${isWorking ? '✅ ОТКРЫТО' : '❌ ЗАКРЫТО'}`);
-    
-    return isWorking;
-}
 
         function getCurrentMskTime() {
             if (manualTime) {
@@ -1862,9 +2092,7 @@
             const hours = date.getHours();
             const minutes = date.getMinutes();
             return `${hours}:${String(minutes).padStart(2, '0')}`;
-        }
-
-        // ================================================================
+        }        // ================================================================
         // ===== NOTIFICATION =====
         // ================================================================
         function showNotification(message, type = '') {
@@ -1896,6 +2124,13 @@
 
             state.bungalowNumber = bungalowNumber;
             isPickupMode = false;
+
+            // Автозаполнение сохранённых данных
+            const savedAuth = getUserAuth();
+            if (savedAuth) {
+                document.getElementById('customerName').value = savedAuth.name || '';
+                document.getElementById('customerPhone').value = savedAuth.phone || '';
+            }
 
             if (bungalowNumber > 0) {
                 document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
@@ -1930,56 +2165,6 @@
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'none';
             document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-        }
-
-        // ================================================================
-        // ===== REVIEW CHECK (АВТОМАТИЧЕСКОЕ ОКНО ОТЗЫВА) =====
-        // ================================================================
-        function startReviewCheck() {
-            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-            
-            reviewCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                
-                try {
-                    const res = await fetch('/api/my-orders', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone })
-                    });
-                    const data = await res.json();
-                    
-                    if (data.success && data.orders) {
-                        const completedOrders = data.orders.filter(order => 
-                            order.status === 'выполнен' && 
-                            !order.reviewed &&
-                            new Date(order.createdAt).getTime() > lastOrderCheckTime
-                        );
-                        
-                        if (completedOrders.length > 0) {
-                            const latestOrder = completedOrders[0];
-                            
-                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
-                            
-                            setTimeout(() => {
-                                openReviewModal(latestOrder.id);
-                            }, 2000);
-                            
-                            lastOrderCheckTime = Date.now();
-                        }
-                    }
-                } catch (e) {
-                    console.error('Ошибка проверки заказов:', e);
-                }
-            }, 10000);
-        }
-
-        function stopReviewCheck() {
-            if (reviewCheckInterval) {
-                clearInterval(reviewCheckInterval);
-                reviewCheckInterval = null;
-            }
         }
 
         // ================================================================
@@ -2045,108 +2230,111 @@
         // ================================================================
         // ===== RENDER MENU =====
         // ================================================================
-       function renderMenu(settings) {
-    const strawberryGrid = document.getElementById('strawberryGrid');
-    let html = '';
+        function renderMenu(settings) {
+            const strawberryGrid = document.getElementById('strawberryGrid');
+            let html = '';
 
-  // Романтик
-let romanticCustom = null;
-if (settings.customItems) {
-    romanticCustom = settings.customItems.find(ci => ci.id === ROMANTIC_ITEM.id);
-}
-const displayRomantic = romanticCustom || ROMANTIC_ITEM;
-const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
+            // Романтик
+            let romanticCustom = null;
+            if (settings.customItems) {
+                romanticCustom = settings.customItems.find(ci => ci.id === ROMANTIC_ITEM.id);
+            }
+            const displayRomantic = romanticCustom || ROMANTIC_ITEM;
+            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
 
-html += `
-    <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
-        <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
-        <div class="item-content">
-            <div class="item-name">${displayRomantic.name}</div>
-            <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
-            <div class="item-price">${displayRomantic.price} ₽ <small style="text-decoration:line-through;color:var(--text-muted);">${ROMANTIC_ITEM.originalPrice} ₽</small></div>
-            <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
-        </div>
-    </div>
-`;
+            html += `
+                <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
+                    <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
+                    <div class="item-content">
+                        <div class="item-name">${displayRomantic.name}</div>
+                        <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
+                        <div class="item-price">${displayRomantic.price} ₽ <small style="text-decoration:line-through;color:var(--text-muted);">${ROMANTIC_ITEM.originalPrice} ₽</small></div>
+                        <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
+                    </div>
+                </div>
+            `;
 
-    // Клубника
-    STRAWBERRY_ITEMS.forEach(item => {
-        let customItem = null;
-        if (settings.customItems) {
-            customItem = settings.customItems.find(ci => ci.id === item.id);
+            // Клубника
+            STRAWBERRY_ITEMS.forEach(item => {
+                let customItem = null;
+                if (settings.customItems) {
+                    customItem = settings.customItems.find(ci => ci.id === item.id);
+                }
+                const displayItem = customItem || item;
+                const available = settings.menuItems[item.id] !== false;
+                
+                html += `
+                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
+                        ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
+                        <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
+                        <div class="item-content">
+                            <div class="item-name">${displayItem.name}</div>
+                            <div class="item-desc">${displayItem.desc || item.desc}</div>
+                            <div class="item-price">${displayItem.price} ₽</div>
+                            <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            strawberryGrid.innerHTML = html;
+
+            // Фрукты
+            let fruitsHtml = '';
+            FRUITS_ITEMS.forEach(item => {
+                let customItem = null;
+                if (settings.customItems) {
+                    customItem = settings.customItems.find(ci => ci.id === item.id);
+                }
+                const displayItem = customItem || item;
+                const available = settings.menuItems[item.id] !== false;
+                
+                fruitsHtml += `
+                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="фрукты" data-has-toppings="false" data-volume="${displayItem.volume || item.volume}">
+                        <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
+                        <div class="item-content">
+                            <div class="item-name">${displayItem.emoji || item.emoji} ${displayItem.name}</div>
+                            <div class="item-desc">${displayItem.desc || item.desc}</div>
+                            <div class="item-price">${displayItem.price} ₽</div>
+                            <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('fruitsGrid').innerHTML = fruitsHtml;
+
+            // Напитки
+            let drinksHtml = '';
+            DRINK_ITEMS.forEach(item => {
+                let customItem = null;
+                if (settings.customItems) {
+                    customItem = settings.customItems.find(ci => ci.id === item.id);
+                }
+                const displayItem = customItem || item;
+                const available = settings.menuItems[item.id] !== false;
+                
+                drinksHtml += `
+                    <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток">
+                        <div class="drink-icon" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')">
+                            <img src="${displayItem.image || item.image}" alt="${displayItem.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${displayItem.emoji || item.emoji}'" loading="lazy">
+                        </div>
+                        <div class="drink-info">
+                            <h4>${displayItem.name}</h4>
+                            <div class="drink-desc">${displayItem.desc || item.desc}</div>
+                        </div>
+                        ${available ? `<span class="drink-price">${displayItem.price} ₽</span>` : '<span style="color:var(--text-muted);">❌</span>'}
+                        <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                    </div>
+                `;
+            });
+            document.getElementById('drinksGrid').innerHTML = drinksHtml;
+
+            attachEvents();
         }
-        const displayItem = customItem || item;
-        const available = settings.menuItems[item.id] !== false;
-        
-        html += `
-            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
-                ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
-                <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
-                <div class="item-content">
-                    <div class="item-name">${displayItem.name}</div>
-                    <div class="item-desc">${displayItem.desc || item.desc}</div>
-                    <div class="item-price">${displayItem.price} ₽</div>
-                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                </div>
-            </div>
-        `;
-    });
 
-    strawberryGrid.innerHTML = html;
-
-    // Фрукты
-    let fruitsHtml = '';
-    FRUITS_ITEMS.forEach(item => {
-        let customItem = null;
-        if (settings.customItems) {
-            customItem = settings.customItems.find(ci => ci.id === item.id);
-        }
-        const displayItem = customItem || item;
-        const available = settings.menuItems[item.id] !== false;
-        
-        fruitsHtml += `
-            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="фрукты" data-has-toppings="false" data-volume="${displayItem.volume || item.volume}">
-                <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
-                <div class="item-content">
-                    <div class="item-name">${displayItem.emoji || item.emoji} ${displayItem.name}</div>
-                    <div class="item-desc">${displayItem.desc || item.desc}</div>
-                    <div class="item-price">${displayItem.price} ₽</div>
-                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                </div>
-            </div>
-        `;
-    });
-    document.getElementById('fruitsGrid').innerHTML = fruitsHtml;
-
-    // Напитки
-    let drinksHtml = '';
-    DRINK_ITEMS.forEach(item => {
-        let customItem = null;
-        if (settings.customItems) {
-            customItem = settings.customItems.find(ci => ci.id === item.id);
-        }
-        const displayItem = customItem || item;
-        const available = settings.menuItems[item.id] !== false;
-            drinksHtml += `
-            <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток">
-                <div class="drink-icon" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')">
-                    <img src="${displayItem.image || item.image}" alt="${displayItem.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${displayItem.emoji || item.emoji}'" loading="lazy">
-                </div>
-                <div class="drink-info">
-                    <h4>${displayItem.name}</h4>
-                    <div class="drink-desc">${displayItem.desc || item.desc}</div>
-                </div>
-                ${available ? `<span class="drink-price">${displayItem.price} ₽</span>` : '<span style="color:var(--text-muted);">❌</span>'}
-                <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-            </div>
-        `;
-    });
-    document.getElementById('drinksGrid').innerHTML = drinksHtml;
-
-    attachEvents();
-}
-
-
+        // ================================================================
+        // ===== ATTACH EVENTS =====
+        // ================================================================
         function attachEvents() {
             document.querySelectorAll('.add-btn:not([disabled])').forEach(btn => {
                 btn.removeEventListener('click', handleAddClick);
@@ -2169,13 +2357,18 @@ html += `
                 price: parseInt(item.dataset.price),
                 category: item.dataset.category || 'стаканчик',
                 isRomantic: item.dataset.isRomantic === 'true',
-                originalPrice: item.dataset.originalPrice ? parseInt(item.dataset.originalPrice) : null,
                 hasToppings
             };
 
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { openAuthModal(product); return; }
+            if (!name || !phone || !isValidPhone(phone)) { 
+                if (phone && !isValidPhone(phone)) {
+                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
+                }
+                openAuthModal(product); 
+                return; 
+            }
             if (!hasToppings) {
                 addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '', isRomantic: product.isRomantic || false });
                 showNotification(`✅ ${product.name} добавлен!`);
@@ -2188,7 +2381,13 @@ html += `
             e.stopPropagation();
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            if (!name || !phone || !isValidPhone(phone)) { 
+                if (phone && !isValidPhone(phone)) {
+                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
+                }
+                openAuthModal(null); 
+                return; 
+            }
             const item = this.closest('.drink-item');
             if (!item) return;
             addToCart({ id: parseInt(item.dataset.id), name: item.dataset.name, price: parseInt(item.dataset.price), quantity: 1, category: item.dataset.category || 'напиток', topping: '', toppingName: '' });
@@ -2200,8 +2399,9 @@ html += `
         // ================================================================
         function openAuthModal(product) {
             pendingProduct = product;
-            document.getElementById('authName').value = '';
-            document.getElementById('authPhone').value = '';
+            const savedAuth = getUserAuth();
+            document.getElementById('authName').value = savedAuth ? savedAuth.name : '';
+            document.getElementById('authPhone').value = savedAuth ? savedAuth.phone : '';
             document.getElementById('authModal').classList.add('open');
         }
 
@@ -2213,12 +2413,21 @@ html += `
         function confirmAuth() {
             const name = document.getElementById('authName').value.trim();
             const phone = document.getElementById('authPhone').value.trim();
+            
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
             if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
+            if (!isValidPhone(phone)) { 
+                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error'); 
+                return; 
+            }
+            
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            
             document.getElementById('customerName').value = name;
-            document.getElementById('customerPhone').value = phone;
-            saveUserAuth(name, phone);
+            document.getElementById('customerPhone').value = phoneClean;
+            saveUserAuth(name, phoneClean);
             closeAuthModal();
+            
             if (pendingProduct) {
                 if (!pendingProduct.hasToppings) {
                     addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '', isRomantic: pendingProduct.isRomantic || false });
@@ -2374,7 +2583,7 @@ html += `
         }
 
         // ================================================================
-        // ===== ORDER =====
+        // ===== ORDER SUBMIT =====
         // ================================================================
         function submitOrder() {
             if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
@@ -2385,16 +2594,20 @@ html += `
             const bungaloNumber = state.bungalowNumber;
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
+            
             if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!', 'error'); return; }
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
-            if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
+            if (!phone || !isValidPhone(phone)) { showNotification('⚠️ Введите корректный номер телефона!', 'error'); return; }
             if (state.cart.length === 0) { showNotification('⚠️ Корзина пуста!', 'error'); return; }
+
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            saveUserAuth(name, phoneClean);
 
             const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом' };
             const order = {
-                bungalow: bungaloNumber || 0,
+                bungalow: bungalowNumber || 0,
                 customerName: name,
-                customerPhone: phone,
+                customerPhone: phoneClean,
                 paymentMethod: selectedPayment,
                 paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
                 isPickup: isPickupMode || false,
@@ -2412,7 +2625,7 @@ html += `
                 .then(result => {
                     if (result.success) {
                         if (isPickupMode) {
-                            showNotification('🏖️ Заказ ждет вас в киоске! Приходите забирать.');
+                            showNotification('🏖️ Заказ ждет вас в киоске!');
                         } else {
                             showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
                         }
@@ -2420,10 +2633,8 @@ html += `
                         updateCart();
                         selectPayment('cash');
                         closeCart();
-                        
                         lastOrderCheckTime = Date.now();
                         startReviewCheck();
-                        
                         setTimeout(updateOrdersBadge, 1000);
                         if (result.orderId) { state.reviewOrderId = result.orderId; }
                     } else {
@@ -2433,67 +2644,112 @@ html += `
                 .catch(() => { showNotification('❌ Ошибка соединения!', 'error'); })
                 .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать'; orderButton.disabled = false; });
         }
-
-        // ================================================================
-        // ===== ORDERS MODAL =====
+                // ================================================================
+        // ===== ORDERS MODAL (FULLSCREEN) =====
         // ================================================================
         function openOrdersModal() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            
             document.getElementById('ordersModal').classList.add('open');
             document.getElementById('ordersPhoneInput').value = phone;
+            document.body.style.overflow = 'hidden';
             loadMyOrders();
+            
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabOrders').classList.add('active');
-            document.body.style.overflow = 'hidden';
         }
 
         function closeOrdersModal() {
             document.getElementById('ordersModal').classList.remove('open');
+            document.body.style.overflow = '';
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabMenu').classList.add('active');
-            document.body.style.overflow = '';
         }
 
         function loadMyOrders() {
             const phone = document.getElementById('ordersPhoneInput').value.trim();
-            if (!phone) { document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-triangle" style="font-size:48px;display:block;margin-bottom:12px;"></i> Введите номер телефона</div>'; return; }
-            document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-spinner fa-spin" style="font-size:48px;display:block;margin-bottom:12px;"></i> Загрузка...</div>';
+            if (!phone) { 
+                document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите номер телефона</div>'; 
+                return; 
+            }
+            
+            document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-spinner fa-spin" style="font-size:48px;display:block;margin-bottom:12px;"></i>Загрузка...</div>';
 
             fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
                     if (!data.success || data.orders.length === 0) {
-                        document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i> Заказов не найдено</div>';
+                        document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-receipt" style="font-size:48px;display:block;margin-bottom:12px;"></i>У вас пока нет заказов<br><small style="color:var(--text-muted);">Закажите что-нибудь вкусное! 🍓</small></div>';
                         return;
                     }
+                    
                     document.getElementById('ordersContent').innerHTML = data.orders.map(order => {
-                        const itemsText = order.items.map(item => `${item.name} ×${item.quantity}`).join(' • ');
-                        let statusClass = 'waiting';
-                        if (order.status === 'выполнен') statusClass = 'done';
-                        if (order.status === 'отменен') statusClass = 'cancelled';
-                        if (order.status === 'отменен (таймаут)') statusClass = 'timeout';
-                        const created = new Date(order.createdAt);
-                        const minutes = (new Date() - created) / 1000 / 60;
-                        const canCancel = order.status === 'ожидает' && minutes <= 5;
-                        const cancelBtn = canCancel ? `<button onclick="cancelMyOrder(${order.id}, '${phone}')" style="background:#EF4444;color:#FFFFFF;border:none;padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-family);"><i class="fas fa-ban"></i> Отменить</button>` : '';
-                        const reviewBtn = order.status === 'выполнен' && !order.reviewed ? `<button onclick="openReviewModal(${order.id})" style="background:#FFB300;color:#1A1A2E;border:none;padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-family);"><i class="fas fa-star"></i> Оценить</button>` : '';
-                        return `
-                            <div style="background:#F8FAFC;border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:8px;">
-                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                                    <span style="font-weight:600;color:var(--text-dark);">#${order.id}</span>
-                                    <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:100px;background:${order.status === 'выполнен' ? '#F0FFF4' : order.status === 'отменен' ? '#FEF2F2' : '#FFF8E1'};color:${order.status === 'выполнен' ? '#4ADE80' : order.status === 'отменен' ? '#EF4444' : '#F59E0B'};">${order.status || 'ожидает'}</span>
+                        const statusMap = {
+                            'ожидает': { bg: '#FFF8E1', color: '#F59E0B', icon: '🕒', text: 'Ожидает' },
+                            'выполнен': { bg: '#E8F5E9', color: '#2E7D32', icon: '✅', text: 'Выполнен' },
+                            'отменен': { bg: '#FFEBEE', color: '#D32F2F', icon: '❌', text: 'Отменён' },
+                            'отменен (таймаут)': { bg: '#FFEBEE', color: '#D32F2F', icon: '⏰', text: 'Отменён (таймаут)' }
+                        };
+                        const st = statusMap[order.status] || statusMap['ожидает'];
+                        
+                        const itemsList = order.items ? order.items.map(item => `
+                            <div class="order-item-row">
+                                <div class="item-left">
+                                    <span class="item-icon">🍓</span>
+                                    <div class="item-details">
+                                        <div class="item-name">${item.name}</div>
+                                        <div class="item-qty">${item.quantity} шт. × ${item.price} ₽</div>
+                                    </div>
                                 </div>
-                                <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${itemsText}</div>
-                                <div style="font-weight:700;color:var(--primary);">💰 ${order.total || 0} ₽</div>
-                                <div style="font-size:11px;color:var(--text-muted);margin:4px 0;">${new Date(order.createdAt).toLocaleString()}</div>
-                                ${cancelBtn} ${reviewBtn}
+                                <div class="item-total">${item.price * item.quantity} ₽</div>
+                            </div>
+                        `).join('') : '';
+                        
+                        const date = new Date(order.createdAt);
+                        const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+                        const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                        
+                        const canCancel = order.status === 'ожидает' && (new Date() - date) / 1000 / 60 <= 5;
+                        const canReview = order.status === 'выполнен' && !order.reviewed;
+                        
+                        let actionButtons = '';
+                        if (canCancel) {
+                            actionButtons += `<button class="btn-cancel-order" onclick="cancelMyOrder(${order.id}, '${phone}')">Отменить заказ</button>`;
+                        }
+                        if (canReview) {
+                            actionButtons += `<button class="btn-review-order" onclick="openReviewModal(${order.id})">⭐ Оставить отзыв</button>`;
+                        }
+                        
+                        return `
+                            <div class="order-card-full">
+                                <div class="order-card-header">
+                                    <div class="order-id-block">
+                                        <div class="order-id">📍 Бунгало #${order.bungalow || '?'} — Заказ #${order.id}</div>
+                                        <div class="order-date">${dateStr} в ${timeStr}</div>
+                                    </div>
+                                    <span class="order-status-badge status-${order.status === 'выполнен' ? 'done' : order.status?.includes('отменен') ? 'cancelled' : 'waiting'}">
+                                        ${st.icon} ${st.text}
+                                    </span>
+                                </div>
+                                
+                                <div class="order-items-list">${itemsList}</div>
+                                
+                                <div class="order-card-footer">
+                                    <div class="footer-info">
+                                        ${order.paymentLabel ? '💳 ' + order.paymentLabel : ''}
+                                    </div>
+                                    <div class="footer-total">💰 ${order.total || 0} ₽</div>
+                                    ${actionButtons ? `<div class="footer-actions">${actionButtons}</div>` : ''}
+                                </div>
                             </div>
                         `;
                     }).join('');
                 })
-                .catch(() => { document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-circle" style="font-size:48px;display:block;margin-bottom:12px;"></i> Ошибка загрузки</div>'; });
+                .catch(() => { 
+                    document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-circle" style="font-size:48px;display:block;margin-bottom:12px;"></i>Ошибка загрузки</div>'; 
+                });
         }
 
         function cancelMyOrder(orderId, phone) {
@@ -2501,7 +2757,8 @@ html += `
             fetch('/api/cancel-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId, phone }) })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); } else { showNotification('❌ ' + (data.error || 'Ошибка'), 'error'); }
+                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); } 
+                    else { showNotification('❌ ' + (data.error || 'Ошибка'), 'error'); }
                 })
                 .catch(() => { showNotification('❌ Ошибка соединения', 'error'); });
         }
@@ -2515,7 +2772,8 @@ html += `
                 .then(data => {
                     if (data.success) {
                         const activeOrders = data.orders.filter(o => o.status === 'ожидает').length;
-                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
+                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); } 
+                        else badge.classList.add('hidden');
                     }
                 })
                 .catch(() => {});
@@ -2531,8 +2789,7 @@ html += `
                 currentReviews = data.reviews || [];
                 renderReviewsModal(currentReviews);
                 updateReviewsBadge();
-                return currentReviews;
-            } catch (e) { return []; }
+            } catch (e) {}
         }
 
         function renderReviewsModal(reviews) {
@@ -2543,15 +2800,15 @@ html += `
             }
             const sorted = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             list.innerHTML = sorted.map(review => `
-                <div style="background:#FFFFFF;border-radius:var(--radius-lg);padding:16px;margin-bottom:8px;box-shadow:var(--shadow-sm);">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <div class="order-card-full">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                         <span style="font-weight:600;color:var(--text-dark);">${review.name || 'Клиент'}</span>
                         <span style="color:#FFB300;font-size:18px;">${'⭐'.repeat(review.rating || 5)}</span>
                     </div>
-                    <div style="font-size:14px;color:var(--text-secondary);line-height:1.5;margin:8px 0;">${review.text || 'Без отзыва'}</div>
+                    <div style="font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px;">${review.text || 'Без отзыва'}</div>
                     <div style="display:flex;justify-content:space-between;align-items:center;">
                         <span style="font-size:11px;color:var(--text-muted);">Заказ #${review.orderId || '---'}</span>
-                        <span style="font-size:11px;color:var(--text-muted);">${new Date(review.createdAt).toLocaleString()}</span>
+                        <span style="font-size:11px;color:var(--text-muted);">${new Date(review.createdAt).toLocaleString('ru-RU')}</span>
                     </div>
                 </div>
             `).join('');
@@ -2580,6 +2837,28 @@ html += `
         }
 
         document.getElementById('reviewsModal').addEventListener('click', function(e) { if (e.target === this) closeReviewsModal(); });
+
+        function startReviewCheck() {
+            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+            reviewCheckInterval = setInterval(async () => {
+                const phone = document.getElementById('customerPhone').value.trim();
+                if (!phone) return;
+                try {
+                    const res = await fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
+                    const data = await res.json();
+                    if (data.success && data.orders) {
+                        const completedOrders = data.orders.filter(order => 
+                            order.status === 'выполнен' && !order.reviewed && new Date(order.createdAt).getTime() > lastOrderCheckTime
+                        );
+                        if (completedOrders.length > 0) {
+                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
+                            setTimeout(() => { openReviewModal(completedOrders[0].id); }, 2000);
+                            lastOrderCheckTime = Date.now();
+                        }
+                    }
+                } catch (e) {}
+            }, 10000);
+        }
 
         function openReviewModal(orderId) {
             state.reviewOrderId = orderId;
@@ -2627,9 +2906,6 @@ html += `
                     showNotification('⭐ Спасибо за отзыв! ❤️');
                     closeReviewModal();
                     await loadReviews();
-                    if (document.getElementById('ordersModal').classList.contains('open')) {
-                        loadMyOrders();
-                    }
                     lastOrderCheckTime = Date.now();
                     startReviewCheck();
                 } else {
@@ -2661,70 +2937,11 @@ html += `
         // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
-        function updateSupportBadge(count) {
-            const badge = document.getElementById('supportBadge');
-            if (!badge) return;
-            if (count > 0) {
-                badge.textContent = count > 9 ? '9+' : count;
-                badge.style.display = 'flex';
-                badge.style.animation = 'none';
-                setTimeout(() => { badge.style.animation = 'pulse 0.5s ease 3'; }, 10);
-            } else {
-                badge.style.display = 'none';
-            }
-        }
-
-        function startNotificationCheck() {
-            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
-            notificationCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                try {
-                    const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
-                    const data = await res.json();
-                    if (data.success && data.messages) {
-                        const messages = data.messages;
-                        if (!document.getElementById('supportChatModal')) {
-                            const unreadMessages = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime);
-                            if (unreadMessages.length > 0) {
-                                const lastMsg = unreadMessages[unreadMessages.length - 1];
-                                lastMessageTime = new Date(lastMsg.time).getTime();
-                                playClientNewMessageSound();
-                                showNotification(`💬 Новое сообщение от поддержки`);
-                                const totalUnread = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime - 60000).length;
-                                updateSupportBadge(totalUnread);
-                            }
-                        }
-                    }
-                } catch (e) {}
-            }, 5000);
-        }
-
-        function playClientNewMessageSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                [880, 1100].forEach((freq, i) => {
-                    setTimeout(() => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.frequency.value = freq;
-                        osc.type = 'sine';
-                        gain.gain.value = 0.12;
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.1);
-                    }, i * 150);
-                });
-            } catch (e) {}
-        }
-
         function openSupportChat() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
             closeSupportChat();
-            updateSupportBadge(0);
             lastMessageTime = Date.now();
 
             const overlay = document.createElement('div');
@@ -2748,7 +2965,7 @@ html += `
                     </div>
                     <div style="padding:12px 20px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;">
                         <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:12px 16px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;background:#F8FAFC;font-family:var(--font-family);" onkeydown="if(event.key==='Enter') sendSupportMessage()">
-                        <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:12px 18px;border-radius:var(--radius-md);font-weight:600;cursor:pointer;font-family:var(--font-family);box-shadow:0 4px 12px rgba(255,71,87,0.3);">📤</button>
+                        <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:12px 18px;border-radius:var(--radius-md);font-weight:600;cursor:pointer;font-family:var(--font-family);">📤</button>
                     </div>
                 </div>
             `;
@@ -2756,14 +2973,19 @@ html += `
             overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
             loadSupportMessages(phone);
             startChatAutoUpdate(phone);
-            startNotificationCheck();
+        }
+
+        function closeSupportChat() {
+            const modal = document.getElementById('supportChatModal');
+            if (modal) modal.remove();
+            if (chatUpdateInterval) { clearInterval(chatUpdateInterval); chatUpdateInterval = null; }
         }
 
         function startChatAutoUpdate(phone) {
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             chatUpdateInterval = setInterval(() => {
-                if (document.getElementById('supportChatModal')) { loadSupportMessages(phone); } else { clearInterval(chatUpdateInterval);
-                    chatUpdateInterval = null; }
+                if (document.getElementById('supportChatModal')) { loadSupportMessages(phone); } 
+                else { clearInterval(chatUpdateInterval); chatUpdateInterval = null; }
             }, 3000);
         }
 
@@ -2779,7 +3001,7 @@ html += `
             const container = document.getElementById('supportMessages');
             if (!container) return;
             if (!messages || messages.length === 0) {
-                container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px 0;"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>Задайте ваш вопрос, мы ответим в ближайшее время</div>';
+                container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px 0;"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>Задайте ваш вопрос</div>';
                 return;
             }
             container.innerHTML = messages.map(msg => `
@@ -2799,36 +3021,12 @@ html += `
             if (!text) return;
             const phone = document.getElementById('customerPhone').value.trim();
             if (!phone) { showNotification('⚠️ Введите телефон!', 'error'); return; }
-            const container = document.getElementById('supportMessages');
-            const placeholder = container.querySelector('div[style*="text-align:center"]');
-            if (placeholder) placeholder.remove();
-            const messageDiv = document.createElement('div');
-            messageDiv.style.cssText = 'margin-bottom:8px;display:flex;justify-content:flex-end;';
-            messageDiv.innerHTML = `<div style="max-width:80%;padding:10px 16px;border-radius:var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);background:linear-gradient(135deg, var(--primary), var(--primary-dark));color:#FFFFFF;">${text}<span style="font-size:9px;display:block;margin-top:4px;opacity:0.6;">Отправлено...</span></div>`;
-            container.appendChild(messageDiv);
-            container.scrollTop = container.scrollHeight;
+            
             input.value = '';
             try {
-                const res = await fetch('/api/chat-send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) });
-                const data = await res.json();
-                if (data.success) {
-                    const timeSpan = messageDiv.querySelector('span');
-                    if (timeSpan) timeSpan.textContent = 'Только что';
-                    await fetch('/api/chat-read', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
-                    setTimeout(() => loadSupportMessages(phone), 2000);
-                } else {
-                    messageDiv.innerHTML = `<div style="max-width:80%;padding:10px 16px;border-radius:var(--radius-lg);background:#EF4444;color:#FFFFFF;">❌ Ошибка</div>`;
-                }
-            } catch (e) {
-                messageDiv.innerHTML = `<div style="max-width:80%;padding:10px 16px;border-radius:var(--radius-lg);background:#EF4444;color:#FFFFFF;">❌ Ошибка соединения</div>`;
-            }
-        }
-
-        function closeSupportChat() {
-            const modal = document.getElementById('supportChatModal');
-            if (modal) modal.remove();
-            if (chatUpdateInterval) { clearInterval(chatUpdateInterval);
-                chatUpdateInterval = null; }
+                await fetch('/api/chat-send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) });
+                loadSupportMessages(phone);
+            } catch (e) {}
         }
 
         // ================================================================
@@ -2843,10 +3041,11 @@ html += `
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if (tab === 'menu') { document.getElementById('tabMenu').classList.add('active');
+            if (tab === 'menu') { 
+                document.getElementById('tabMenu').classList.add('active');
                 closeCart();
                 closeOrdersModal();
-                window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            }
         }
 
         // ================================================================
@@ -2926,11 +3125,30 @@ html += `
             window._sessionCheckInterval = setInterval(async () => {
                 if (!state.bungalowNumber) { clearInterval(window._sessionCheckInterval); return; }
                 const check = await checkSessionOnServer(bungalow);
-                if (!check.valid) { clearInterval(window._sessionCheckInterval);
-                    showNoAccess();
-                    clearSession();
-                    showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error'); }
+                if (!check.valid) { clearInterval(window._sessionCheckInterval); showNoAccess(); clearSession(); showNotification('⏰ Сессия истекла!', 'error'); }
             }, 10000);
+        }
+
+        function startNotificationCheck() {
+            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+            notificationCheckInterval = setInterval(async () => {
+                const phone = document.getElementById('customerPhone').value.trim();
+                if (!phone) return;
+                try {
+                    const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                    const data = await res.json();
+                    if (data.success && data.messages) {
+                        const messages = data.messages;
+                        if (!document.getElementById('supportChatModal')) {
+                            const unreadMessages = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime);
+                            if (unreadMessages.length > 0) {
+                                lastMessageTime = new Date(unreadMessages[unreadMessages.length - 1].time).getTime();
+                                showNotification(`💬 Новое сообщение от поддержки`);
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }, 5000);
         }
 
         window.addEventListener('beforeunload', function() {
@@ -2938,15 +3156,16 @@ html += `
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
             if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-            stopReviewCheck();
+            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
         });
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - Modern Design');
-        console.log('🕐 График работы: 9:00 - 1:00');
-        console.log('⭐ Автоматический показ окна отзыва после доставки');
-        console.log('🔒 Доступ только по QR-коду из бунгало');
+        console.log('🍓 Strawberry in Chocolate - v2');
+        console.log('✅ Валидация телефона');
+        console.log('✅ Автосохранение данных');
+        console.log('✅ Полноэкранные заказы и отзывы');
+        console.log('✅ Красивые карточки заказов');
     </script>
 
 </body>
