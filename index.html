@@ -2944,6 +2944,23 @@
         // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
+        async function sendSupportMessage() {
+    const input = document.getElementById('supportInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const phone = document.getElementById('customerPhone').value.trim();
+    if (!phone) { showNotification('⚠️ Введите телефон!', 'error'); return; }
+    
+    input.value = '';
+    try {
+        await fetch('/api/chat-send', { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) 
+        });
+        loadSupportMessages(phone);
+    } catch (e) {}
+}
       function closeSupportChat() {
     const modal = document.getElementById('supportChatModal');
     if (modal) modal.remove();
