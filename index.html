@@ -2045,76 +2045,147 @@
         // ================================================================
         // ===== RENDER MENU =====
         // ================================================================
-        function renderMenu(settings) {
-            const strawberryGrid = document.getElementById('strawberryGrid');
-            let html = '';
+       function renderMenu(settings) {
+    const strawberryGrid = document.getElementById('strawberryGrid');
+    let html = '';
 
-            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
-            html += `
-                <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${ROMANTIC_ITEM.name}" data-price="${ROMANTIC_ITEM.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true" data-original-price="${ROMANTIC_ITEM.originalPrice}">
-                    ${ROMANTIC_ITEM.badge ? `<span class="badge" style="color: ${ROMANTIC_ITEM.badgeColor};">${ROMANTIC_ITEM.badge}</span>` : ''}
-                    <img src="${ROMANTIC_ITEM.image}" alt="${ROMANTIC_ITEM.name}" class="item-image" onclick="openImageModal('${ROMANTIC_ITEM.image}', '${ROMANTIC_ITEM.name}')" loading="lazy">
-                    <div class="item-content">
-                        <div class="item-name">${ROMANTIC_ITEM.name}</div>
-                        <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
-                        <div class="item-price">${ROMANTIC_ITEM.price} ₽ <small style="text-decoration:line-through;color:var(--text-muted);font-weight:400;">${ROMANTIC_ITEM.originalPrice} ₽</small></div>
-                        <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
-                    </div>
+    // Романтик
+    const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
+    html += `
+        <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${ROMANTIC_ITEM.name}" data-price="${ROMANTIC_ITEM.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true" data-original-price="${ROMANTIC_ITEM.originalPrice}">
+            ${ROMANTIC_ITEM.badge ? `<span class="badge" style="color: ${ROMANTIC_ITEM.badgeColor};">${ROMANTIC_ITEM.badge}</span>` : ''}
+            <img src="${ROMANTIC_ITEM.image}" alt="${ROMANTIC_ITEM.name}" class="item-image" onclick="openImageModal('${ROMANTIC_ITEM.image}', '${ROMANTIC_ITEM.name}')" loading="lazy">
+            <div class="item-content">
+                <div class="item-name">${ROMANTIC_ITEM.name}</div>
+                <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
+                <div class="item-price">${ROMANTIC_ITEM.price} ₽ <small style="text-decoration:line-through;color:var(--text-muted);font-weight:400;">${ROMANTIC_ITEM.originalPrice} ₽</small></div>
+                <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
+            </div>
+        </div>
+    `;
+
+    STRAWBERRY_ITEMS.forEach(item => {
+        const available = settings.menuItems[item.id] !== false;
+        html += `
+            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${item.volume}">
+                ${item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${item.badge}</span>` : ''}
+                <img src="${item.image}" alt="${item.name}" class="item-image" onclick="openImageModal('${item.image}', '${item.name}')" loading="lazy">
+                <div class="item-content">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-desc">${item.desc}</div>
+                    <div class="item-price">${item.price} ₽</div>
+                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
                 </div>
-            `;
+            </div>
+        `;
+    });
 
-            STRAWBERRY_ITEMS.forEach(item => {
+    // 👇 ДОБАВИТЬ КАСТОМНЫЕ ПОЗИЦИИ ИЗ STRAWBERRY
+    if (settings.customItems) {
+        settings.customItems.forEach(item => {
+            if (item.category === 'strawberry' || !item.category) {
                 const available = settings.menuItems[item.id] !== false;
                 html += `
-                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${item.volume}">
-                        ${item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${item.badge}</span>` : ''}
-                        <img src="${item.image}" alt="${item.name}" class="item-image" onclick="openImageModal('${item.image}', '${item.name}')" loading="lazy">
+                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${item.volume || ''}">
+                        ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+                        <img src="${item.image || 'images/placeholder.jpg'}" alt="${item.name}" class="item-image" onclick="openImageModal('${item.image}', '${item.name}')" loading="lazy">
                         <div class="item-content">
-                            <div class="item-name">${item.name}</div>
-                            <div class="item-desc">${item.desc}</div>
+                            <div class="item-name">${item.emoji || ''} ${item.name}</div>
+                            <div class="item-desc">${item.desc || ''}</div>
                             <div class="item-price">${item.price} ₽</div>
                             <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
                         </div>
                     </div>
                 `;
-            });
-            strawberryGrid.innerHTML = html;
+            }
+        });
+    }
 
-            document.getElementById('fruitsGrid').innerHTML = FRUITS_ITEMS.map(item => {
+    strawberryGrid.innerHTML = html;
+
+    // Фрукты
+    document.getElementById('fruitsGrid').innerHTML = FRUITS_ITEMS.map(item => {
+        const available = settings.menuItems[item.id] !== false;
+        return `
+            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="фрукты" data-has-toppings="false" data-volume="${item.volume}">
+                <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.style.display='none';this.parentElement.querySelector('.emoji-fallback').style.display='flex';" onclick="openImageModal('${item.image}', '${item.name}')" loading="lazy">
+                <div class="emoji-fallback" style="display:none; width:100%; aspect-ratio:1; font-size:48px; align-items:center; justify-content:center; background:linear-gradient(135deg, #FCE4EC, #FFF5F5);">${item.emoji}</div>
+                <div class="item-content">
+                    <div class="item-name">${item.emoji} ${item.name}</div>
+                    <div class="item-desc">${item.desc}</div>
+                    <div class="item-price">${item.price} ₽</div>
+                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // 👇 ДОБАВИТЬ КАСТОМНЫЕ ФРУКТЫ
+    if (settings.customItems) {
+        let fruitsHtml = document.getElementById('fruitsGrid').innerHTML;
+        settings.customItems.forEach(item => {
+            if (item.category === 'fruits') {
                 const available = settings.menuItems[item.id] !== false;
-                return `
-                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="фрукты" data-has-toppings="false" data-volume="${item.volume}">
-                        <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.style.display='none';this.parentElement.querySelector('.emoji-fallback').style.display='flex';" onclick="openImageModal('${item.image}', '${item.name}')" loading="lazy">
-                        <div class="emoji-fallback" style="display:none; width:100%; aspect-ratio:1; font-size:48px; align-items:center; justify-content:center; background:linear-gradient(135deg, #FCE4EC, #FFF5F5);">${item.emoji}</div>
+                fruitsHtml += `
+                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="фрукты" data-has-toppings="false" data-volume="${item.volume || ''}">
+                        <img src="${item.image || 'images/placeholder.jpg'}" alt="${item.name}" class="item-image" onclick="openImageModal('${item.image}', '${item.name}')" loading="lazy">
                         <div class="item-content">
-                            <div class="item-name">${item.emoji} ${item.name}</div>
-                            <div class="item-desc">${item.desc}</div>
+                            <div class="item-name">${item.emoji || ''} ${item.name}</div>
+                            <div class="item-desc">${item.desc || ''}</div>
                             <div class="item-price">${item.price} ₽</div>
                             <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
                         </div>
                     </div>
                 `;
-            }).join('');
+            }
+        });
+        document.getElementById('fruitsGrid').innerHTML = fruitsHtml;
+    }
 
-            document.getElementById('drinksGrid').innerHTML = DRINK_ITEMS.map(item => {
+    // Напитки
+    document.getElementById('drinksGrid').innerHTML = DRINK_ITEMS.map(item => {
+        const available = settings.menuItems[item.id] !== false;
+        return `
+            <div class="drink-item ${available ? '' : 'unavailable'} ${item.shaurma ? 'shaurma' : ''}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
+                <div class="drink-icon" onclick="openImageModal('${item.image}', '${item.name}')">
+                    <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" loading="lazy">
+                </div>
+                <div class="drink-info">
+                    <h4>${item.name}</h4>
+                    <div class="drink-desc">${item.desc}</div>
+                </div>
+                ${available ? `<span class="drink-price">${item.price} ₽</span>` : '<span style="color:var(--text-muted);font-size:12px;">❌ Нет в наличии</span>'}
+                <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+            </div>
+        `;
+    }).join('');
+
+    // 👇 ДОБАВИТЬ КАСТОМНЫЕ НАПИТКИ
+    if (settings.customItems) {
+        let drinksHtml = document.getElementById('drinksGrid').innerHTML;
+        settings.customItems.forEach(item => {
+            if (item.category === 'drinks') {
                 const available = settings.menuItems[item.id] !== false;
-                return `
-                    <div class="drink-item ${available ? '' : 'unavailable'} ${item.shaurma ? 'shaurma' : ''}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
+                drinksHtml += `
+                    <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-category="напиток">
                         <div class="drink-icon" onclick="openImageModal('${item.image}', '${item.name}')">
-                            <img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" loading="lazy">
+                            <span style="font-size:28px;">${item.emoji || '🍽️'}</span>
                         </div>
                         <div class="drink-info">
                             <h4>${item.name}</h4>
-                            <div class="drink-desc">${item.desc}</div>
+                            <div class="drink-desc">${item.desc || ''}</div>
                         </div>
                         ${available ? `<span class="drink-price">${item.price} ₽</span>` : '<span style="color:var(--text-muted);font-size:12px;">❌ Нет в наличии</span>'}
                         <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
                     </div>
                 `;
-            }).join('');
+            }
+        });
+        document.getElementById('drinksGrid').innerHTML = drinksHtml;
+    }
 
-            attachEvents();
-        }
+    attachEvents();
+}
 
         function attachEvents() {
             document.querySelectorAll('.add-btn:not([disabled])').forEach(btn => {
