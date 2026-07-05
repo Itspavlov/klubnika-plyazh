@@ -206,13 +206,8 @@ app.get('/', (req, res, next) => {
     next();
 });
 
-// ===== API: НАСТРОЙКИ =====
-app.get('/api/settings', (req, res) => {
-    res.json(settings);
-});
-
 app.post('/api/settings', (req, res) => {
-    const { technicalBreak, menuItems, sessionDuration } = req.body;
+    const { technicalBreak, menuItems, sessionDuration, customItems } = req.body;
     
     if (technicalBreak !== undefined) {
         settings.technicalBreak = technicalBreak;
@@ -227,6 +222,12 @@ app.post('/api/settings', (req, res) => {
     if (sessionDuration !== undefined) {
         settings.sessionDuration = sessionDuration;
         console.log(`⏱️ Длительность сессии изменена на ${sessionDuration} мин`);
+    }
+    
+    // 👇 ВОТ ЭТО ДОБАВИТЬ:
+    if (customItems !== undefined) {
+        settings.customItems = customItems;
+        console.log(`📋 Кастомные позиции обновлены (${customItems.length} шт.)`);
     }
     
     saveSettings();

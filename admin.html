@@ -3,1817 +3,1538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📋 Админка - Управление</title>
+    <title>🍓 Админка - Strawberry in Chocolate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #FF4757;
+            --primary-dark: #E63946;
+            --primary-light: #FF6B81;
+            --accent: #FF8A80;
+            --gold: #FFB74D;
+            --gold-light: #FFE0B2;
+            --bg: #FFF5F5;
+            --card-bg: #FFFFFF;
+            --text-dark: #1A1A2E;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius-2xl: 24px;
+            --radius-xl: 20px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f0eb;
-            padding: 20px;
-            padding-bottom: 40px;
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
+            min-height: 100vh;
+            padding: 0;
+            padding-bottom: 100px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-attachment: fixed;
         }
-        .container { max-width: 800px; margin: 0 auto; }
-        
-        h1 {
-            color: #8B0000;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
         }
-        h1 small {
-            font-size: 14px;
-            font-weight: 400;
-            color: #8D6E63;
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
         }
-        
-        .control-card {
-            background: white;
-            border-radius: 16px;
-            padding: 18px 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-left: 4px solid #8B0000;
-        }
-        .control-card .card-title {
-            font-weight: 700;
-            font-size: 16px;
-            color: #3E2723;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .control-card .card-title .badge {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 12px;
-            border-radius: 12px;
-            margin-left: 8px;
-        }
-        .badge.on { background: #E8F5E9; color: #2E7D32; }
-        .badge.off { background: #FFEBEE; color: #D32F2F; }
-        
-        .toggle-btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-        .toggle-btn:active { transform: scale(0.97); }
-        .toggle-btn.on { background: #D32F2F; color: white; }
-        .toggle-btn.off { background: #2E7D32; color: white; }
-        
-        .chips-nav-admin {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .chips-nav-admin .chip {
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1.5px solid #EDE3D8;
-            background: #FDFAF7;
-            font-size: 12px;
-            font-weight: 500;
-            color: #8F7A6E;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            display: flex;
+
+        .header-badge {
+            display: inline-flex;
             align-items: center;
             gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            box-shadow: var(--shadow-sm);
         }
-        .chips-nav-admin .chip:active { transform: scale(0.95); }
-        .chips-nav-admin .chip.active {
-            border-color: #8B0000;
-            background: #FDFAF7;
-            color: #8B0000;
-            box-shadow: 0 2px 12px rgba(139, 0, 0, 0.10);
+
+        .header h1 {
+            font-size: 28px;
+            color: var(--text-dark);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 4px;
         }
-        .chips-nav-admin .chip i { font-size: 14px; }
-        
-        .menu-section-admin {
+
+        .header h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* ===== STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 14px 12px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .stat-card .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* ===== TABS ===== */
+        .tabs-nav {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tabs-nav .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: var(--radius-lg);
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            letter-spacing: -0.2px;
+            position: relative;
+        }
+
+        .tabs-nav .tab-btn i {
+            font-size: 15px;
+        }
+
+        .tabs-nav .tab-btn.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .tabs-nav .tab-btn .tab-badge {
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tabs-nav .tab-btn .tab-badge.show {
+            display: flex;
+        }
+
+        /* ===== CONTENT SECTION ===== */
+        .content-section {
             display: none;
             animation: fadeSlide 0.3s ease;
         }
-        .menu-section-admin.active { display: block; }
-        
+
+        .content-section.active {
+            display: block;
+        }
+
         @keyframes fadeSlide {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        .menu-grid-admin {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+
+        /* ===== CARDS ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-sm);
         }
-        .menu-item-admin {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #FDF8F3;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid #F0E8E0;
-        }
-        .menu-item-admin.romantic {
-            border-color: #E91E63;
-            background: #FCE4EC;
-        }
-        .menu-item-admin.fruit {
-            border-color: #7A9B7A;
-            background: #F0F7F0;
-        }
-        .menu-item-admin.drink {
-            border-color: #64B5F6;
-            background: #F0F7FF;
-        }
-        .menu-item-admin .item-name {
-            font-weight: 600;
-            font-size: 14px;
-            color: #3E2723;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .menu-item-admin .item-name .emoji { font-size: 18px; }
-        .menu-item-admin .item-status {
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .menu-item-admin .item-status.available { color: #2E7D32; }
-        .menu-item-admin .item-status.unavailable { color: #D32F2F; }
-        
-        .menu-toggle-btn {
-            background: none;
-            border: 1px solid #E0D0C0;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-        .menu-toggle-btn:active { transform: scale(0.95); }
-        .menu-toggle-btn.on { background: #E8F5E9; border-color: #2E7D32; color: #2E7D32; }
-        .menu-toggle-btn.off { background: #FFEBEE; border-color: #D32F2F; color: #D32F2F; }
-        .menu-toggle-btn.romantic { border-color: #E91E63; }
-        .menu-toggle-btn.romantic.on { background: #FCE4EC; border-color: #E91E63; color: #E91E63; }
-        .menu-toggle-btn.romantic.off { background: #FFEBEE; border-color: #E91E63; color: #D32F2F; }
-        .menu-toggle-btn.fruit { border-color: #7A9B7A; }
-        .menu-toggle-btn.fruit.on { background: #E8F5E9; border-color: #2E7D32; color: #2E7D32; }
-        .menu-toggle-btn.fruit.off { background: #FFEBEE; border-color: #D32F2F; color: #D32F2F; }
-        .menu-toggle-btn.drink { border-color: #64B5F6; }
-        .menu-toggle-btn.drink.on { background: #E3F2FD; border-color: #1565C0; color: #1565C0; }
-        .menu-toggle-btn.drink.off { background: #FFEBEE; border-color: #D32F2F; color: #D32F2F; }
-        
-        .section-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #8D6E63;
-            padding: 8px 0 4px;
-            border-bottom: 1px solid #EDE3D8;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .section-label i { font-size: 14px; }
-        
-        .stats {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .stats span { font-size: 14px; color: #666; }
-        .stats strong {
-            font-size: 24px;
-            color: #3E2723;
-            display: block;
-        }
-        
-        .order-card {
-            background: white;
-            padding: 16px 20px;
-            border-radius: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-left: 4px solid #8B0000;
-        }
-        .order-card .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .order-card .bungalow {
+
+        .card-title {
+            font-size: 16px;
             font-weight: 700;
-            color: #8B0000;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary);
             font-size: 18px;
         }
-        .order-card .order-id {
-            color: #BFA58A;
-            font-size: 12px;
+
+        /* ===== TECH BREAK TOGGLE ===== */
+        .tech-break-card {
+            background: linear-gradient(135deg, #FF4757, #E63946);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
         }
-        .order-card .time {
-            color: #999;
+
+        .tech-break-card.active {
+            background: linear-gradient(135deg, #4ADE80, #22C55E);
+        }
+
+        .tech-break-card .tech-status {
             font-size: 13px;
+            opacity: 0.9;
         }
-        .order-card .customer-info {
-            font-size: 14px;
-            color: #5D4037;
-            margin-bottom: 6px;
-        }
-        .order-card .items-list {
-            margin: 6px 0 8px;
-            background: #FDF8F3;
-            border-radius: 12px;
-            padding: 8px 14px;
-        }
-        .order-card .item-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 3px 0;
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            border: none;
             font-size: 13px;
-            color: #3E2723;
-            border-bottom: 1px solid #F0E8E0;
-        }
-        .order-card .item-row:last-child { border-bottom: none; }
-        .order-card .item-row .item-name { font-weight: 500; }
-        
-        .order-card .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 6px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .order-card .total {
-            font-weight: 700;
-            color: #8B0000;
-            font-size: 17px;
-        }
-        .order-card .status {
-            font-size: 12px;
             font-weight: 600;
-            padding: 4px 14px;
-            border-radius: 20px;
-        }
-        .order-card .status.waiting { background: #FFF3E0; color: #E65100; }
-        .order-card .status.done { background: #E8F5E9; color: #2E7D32; }
-        .order-card .status.cancelled { background: #FFEBEE; color: #D32F2F; }
-        
-        .order-card .actions {
-            display: flex;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-family);
+            display: inline-flex;
+            align-items: center;
             gap: 6px;
         }
-        .order-card .actions button {
-            border: none;
-            color: white;
-            padding: 4px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-            transition: all 0.2s;
+
+        .btn:active {
+            transform: scale(0.97);
         }
-        .order-card .actions button:active { transform: scale(0.95); }
-        .order-card .actions .confirm-btn { background: #2E7D32; }
-        .order-card .actions .cancel-btn { background: #D32F2F; }
-        
-        .empty {
-            text-align: center;
-            color: #999;
-            padding: 40px 20px;
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-outline {
             background: white;
-            border-radius: 15px;
+            border: 2px solid #F1F5F9;
+            color: var(--text-dark);
         }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-            align-items: center;
-        }
-        .controls button {
-            background: #8B0000;
+
+        .btn-danger {
+            background: #EF4444;
             color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 11px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             border: none;
-            padding: 10px 24px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        .controls button:active { transform: scale(0.97); }
-        .controls button.secondary { background: #8D6E63; }
-        .controls .auto-refresh {
-            font-size: 13px;
-            color: #8D6E63;
-            margin-left: auto;
-            cursor: pointer;
-            user-select: none;
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2E7D32;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            display: none;
-            z-index: 100;
-        }
-        .toast.show { display: block; animation: slideUp 0.3s ease; }
-        @keyframes slideUp {
-            from { transform: translate(-50%, 40px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-        
-        .tech-break-status {
-            display: inline-block;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 4px 16px;
-            border-radius: 20px;
-            margin-left: 10px;
-        }
-        .tech-break-status.active {
-            background: #FFEBEE;
-            color: #D32F2F;
-        }
-        .tech-break-status.inactive {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-        
-        .romantic-label {
-            color: #E91E63;
-            font-size: 10px;
-            font-weight: 700;
-            background: #FCE4EC;
-            padding: 1px 10px;
-            border-radius: 10px;
-            margin-left: 4px;
-        }
-        .fruit-label {
-            color: #2E7D32;
-            font-size: 10px;
-            font-weight: 700;
-            background: #E8F5E9;
-            padding: 1px 10px;
-            border-radius: 10px;
-            margin-left: 4px;
-        }
-        .drink-label {
-            color: #1565C0;
-            font-size: 10px;
-            font-weight: 700;
-            background: #E3F2FD;
-            padding: 1px 10px;
-            border-radius: 10px;
-            margin-left: 4px;
-        }
-        
-        .admin-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .admin-tabs .tab {
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: 1.5px solid #EDE3D8;
-            background: #FDFAF7;
-            font-size: 13px;
-            font-weight: 500;
-            color: #8F7A6E;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            position: relative;
-        }
-        .admin-tabs .tab:active { transform: scale(0.95); }
-        .admin-tabs .tab.active {
-            border-color: #8B0000;
-            background: #FDFAF7;
-            color: #8B0000;
-            box-shadow: 0 2px 12px rgba(139, 0, 0, 0.10);
-        }
-        .admin-tabs .tab i { margin-right: 6px; }
-        .admin-tabs .tab .tab-badge {
-            background: #D32F2F;
-            color: white;
-            font-size: 9px;
-            padding: 1px 8px;
-            border-radius: 10px;
-            margin-left: 4px;
-            display: none;
-        }
-        .admin-tabs .tab .tab-badge.show { display: inline-block; }
-        
-        .admin-section {
-            display: none;
-            animation: fadeSlide 0.3s ease;
-        }
-        .admin-section.active { display: block; }
-        
-        /* ===== ЧАТЫ С УДАЛЕНИЕМ СВАЙПОМ ===== */
-        .chat-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            overflow: hidden;
-        }
-        
-        .chat-item-wrapper {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            touch-action: pan-y;
-        }
-        
-        .chat-item-wrapper .chat-delete-back {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 80px;
-            background: #D32F2F;
-            color: white;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 0 12px 12px 0;
-            cursor: pointer;
-            transition: all 0.2s;
-            gap: 6px;
         }
-        .chat-item-wrapper .chat-delete-back:active { opacity: 0.8; }
-        
-        .chat-item {
-            background: white;
-            border-radius: 12px;
-            padding: 14px 16px;
-            border: 1px solid #EDE3D8;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            position: relative;
-            z-index: 2;
-            touch-action: pan-y;
-            will-change: transform;
+
+        .btn-icon:active {
+            transform: scale(0.9);
         }
-        .chat-item:active { transform: scale(0.98); }
-        .chat-item .chat-header {
+
+        /* ===== MENU ITEMS IN ADMIN ===== */
+        .menu-admin-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .menu-admin-item {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
+            gap: 14px;
+            border: 1px solid #F1F5F9;
+            transition: var(--transition);
         }
-        .chat-item .chat-customer {
+
+        .menu-admin-item:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .menu-admin-item .item-image-preview {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
+            flex-shrink: 0;
+        }
+
+        .menu-admin-item .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .menu-admin-item .item-name {
             font-weight: 600;
-            color: #3E2723;
-            font-size: 15px;
+            color: var(--text-dark);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .chat-item .chat-time {
+
+        .menu-admin-item .item-desc {
             font-size: 12px;
-            color: #BFA58A;
+            color: var(--text-muted);
+            margin-top: 2px;
         }
-        .chat-item .chat-preview {
+
+        .menu-admin-item .item-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
+            margin-top: 4px;
+        }
+
+        .menu-admin-item .item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .menu-admin-item .item-actions button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
             font-size: 13px;
-            color: #8D6E63;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .chat-item .chat-unread {
-            background: #D32F2F;
-            color: white;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
+
+        .btn-edit {
+            background: #F1F5F9;
+            color: var(--text-secondary);
         }
-        
-        .swipe-hint {
-            font-size: 11px;
-            color: #BFA58A;
-            text-align: right;
-            padding: 4px 8px 0 0;
-            opacity: 0.6;
+
+        .btn-toggle-on {
+            background: #E8F5E9;
+            color: #2E7D32;
         }
-        
-        /* ===== МОДАЛЬНОЕ ОКНО ЧАТА ===== */
-        .chat-modal-overlay {
+
+        .btn-toggle-off {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+
+        .btn-delete {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        .chat-modal-overlay.open { display: flex; }
-        
-        .chat-modal {
-            background: white;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 80vh;
+
+        .modal-overlay.open {
             display: flex;
-            flex-direction: column;
-            animation: modalPop 0.3s ease;
         }
+
+        .modal-content {
+            background: #FFFFFF;
+            border-radius: var(--radius-2xl);
+            max-width: 480px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-lg);
+        }
+
         @keyframes modalPop {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
         }
-        .chat-modal .chat-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #EDE3D8;
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: #F8FAFC;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:active {
+            transform: scale(0.9);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .modal-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #F1F5F9;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            background: #F8FAFC;
+            outline: none;
+            transition: var(--transition);
+            color: var(--text-dark);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
+        }
+
+        .image-upload-area {
+            border: 2px dashed #F1F5F9;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #F8FAFC;
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--primary);
+            background: #FFF5F5;
+        }
+
+        .image-upload-area img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: var(--radius-md);
+            margin-top: 8px;
+        }
+
+        /* ===== ORDER CARD ===== */
+        .order-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #F1F5F9;
+        }
+
+        .order-card .order-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .chat-modal .chat-header h3 {
-            font-size: 16px;
-            color: #3E2723;
-        }
-        .chat-modal .chat-header .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #BFA58A;
-            cursor: pointer;
-        }
-        .chat-modal .chat-messages {
-            flex: 1;
-            padding: 16px 20px;
-            overflow-y: auto;
-            max-height: 50vh;
-        }
-        .chat-modal .chat-message {
-            padding: 8px 14px;
-            border-radius: 12px;
             margin-bottom: 8px;
-            max-width: 80%;
         }
-        .chat-modal .chat-message.from-client {
-            background: #F5EDE4;
-            align-self: flex-start;
-            margin-right: auto;
+
+        .order-card .order-id {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 15px;
         }
-        .chat-modal .chat-message.from-admin {
-            background: #8B0000;
-            color: white;
-            align-self: flex-end;
-            margin-left: auto;
-        }
-        .chat-modal .chat-message .msg-time {
-            font-size: 10px;
-            opacity: 0.6;
-            margin-top: 4px;
-            display: block;
-        }
-        .chat-modal .chat-input-area {
-            padding: 12px 20px;
-            border-top: 1px solid #EDE3D8;
-            display: flex;
-            gap: 10px;
-        }
-        .chat-modal .chat-input-area input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1.5px solid #EDE3D8;
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-        }
-        .chat-modal .chat-input-area input:focus { border-color: #8B0000; }
-        .chat-modal .chat-input-area button {
-            background: #8B0000;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
+
+        .order-card .order-status {
+            font-size: 11px;
             font-weight: 600;
-            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 100px;
         }
-        .chat-modal .chat-input-area button:active { transform: scale(0.95); }
-        
-        /* ===== ОТЗЫВЫ ===== */
-        .reviews-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+
+        .status-waiting { background: #FFF3E0; color: #E65100; }
+        .status-done { background: #E8F5E9; color: #2E7D32; }
+        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
+
+        .order-card .order-items {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #F8FAFC;
+            border-radius: var(--radius-sm);
         }
-        .review-card {
-            background: white;
-            border-radius: 12px;
-            padding: 14px 16px;
-            border: 1px solid #EDE3D8;
+
+        .order-card .order-footer {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
-        .review-card .review-content {
-            flex: 1;
+
+        .order-card .order-total {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
         }
+
+        /* ===== CHAT ===== */
+        .chat-item {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border: 1px solid #F1F5F9;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chat-item:active {
+            transform: scale(0.98);
+        }
+
+        .chat-item .chat-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .chat-item .chat-preview {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .chat-item .chat-unread {
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        /* ===== REVIEW CARD ===== */
+        .review-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border: 1px solid #F1F5F9;
+        }
+
         .review-card .review-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 6px;
-            flex-wrap: wrap;
-            gap: 4px;
         }
-        .review-card .review-name {
-            font-weight: 600;
-            color: #3E2723;
-        }
+
         .review-card .review-stars {
             color: #FFB300;
             font-size: 16px;
-            letter-spacing: 2px;
         }
-        .review-card .review-text {
+
+        /* ===== NOTIFICATION ===== */
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1A1A2E;
+            color: #FFFFFF;
+            padding: 14px 24px;
+            border-radius: 100px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
             font-size: 14px;
-            color: #5D4037;
-            line-height: 1.5;
+            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .review-card .review-time {
-            font-size: 11px;
-            color: #BFA58A;
-            margin-top: 6px;
+
+        .notification.show {
             display: block;
         }
-        .review-card .review-order {
-            font-size: 11px;
-            color: #8D6E63;
-            background: #F5EDE4;
-            padding: 2px 12px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 4px;
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -80px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
         }
-        .review-card .review-actions {
+
+        .controls-row {
             display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-            margin-left: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
         }
-        .review-card .review-delete-btn {
-            background: #D32F2F;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .review-card .review-delete-btn:active { transform: scale(0.95); }
-        .review-card .review-delete-btn:hover { background: #B71C1C; }
-        
+
         @media (max-width: 500px) {
-            .menu-grid-admin { grid-template-columns: 1fr; }
-            .order-card .header { flex-direction: column; align-items: flex-start; }
-            .controls .auto-refresh { margin-left: 0; width: 100%; }
-            .chips-nav-admin .chip { font-size: 11px; padding: 6px 12px; }
-            .admin-tabs .tab { font-size: 12px; padding: 8px 14px; }
-            .review-card { flex-direction: column; }
-            .review-card .review-actions { margin-left: 0; margin-top: 10px; align-self: flex-end; }
-            .chat-item-wrapper .chat-delete-back { width: 70px; font-size: 12px; }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .tabs-nav .tab-btn {
+                font-size: 11px;
+                padding: 8px 6px;
+            }
+            .menu-admin-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .menu-admin-item .item-actions {
+                align-self: flex-end;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>
-            📋 Админка
-            <small>— управление</small>
-            <span class="tech-break-status" id="techBreakStatus">✅ Работает</span>
-        </h1>
-        
-        <div class="admin-tabs">
-            <button class="tab active" data-tab="orders" onclick="switchAdminTab('orders')">
-                <i class="fas fa-list"></i> Заказы
+
+    <div class="notification" id="notification"></div>
+
+    <div class="app-container">
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="header-badge">
+                <i class="fas fa-lock"></i> Панель управления
+            </div>
+            <h1>
+                <span class="highlight">Strawberry</span>
+                <span style="color: var(--text-dark);"> Админка</span>
+            </h1>
+            <p class="subtitle">
+                Управление меню, заказами и клиентами
+            </p>
+        </div>
+
+        <!-- ===== STATS ===== -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalOrders">0</div>
+                <div class="stat-label">Всего заказов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeOrders">0</div>
+                <div class="stat-label">Активных</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="todayOrders">0</div>
+                <div class="stat-label">За сегодня</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalRevenue">0 ₽</div>
+                <div class="stat-label">Выручка</div>
+            </div>
+        </div>
+
+        <!-- ===== TECH BREAK ===== -->
+        <div class="card tech-break-card" id="techBreakCard" onclick="toggleTechBreak()">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <div style="font-weight:700;font-size:18px;">
+                        <span id="techBreakIcon">✅</span> 
+                        <span id="techBreakText">Всё работает</span>
+                    </div>
+                    <div class="tech-status">Нажмите для переключения</div>
+                </div>
+                <div style="font-size:32px;opacity:0.7;">
+                    <i class="fas fa-power-off"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TABS ===== -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('orders')">
+                <i class="fas fa-list-alt"></i> Заказы
             </button>
-            <button class="tab" data-tab="menu" onclick="switchAdminTab('menu')">
+            <button class="tab-btn" onclick="switchTab('menu')">
                 <i class="fas fa-utensils"></i> Меню
             </button>
-            <button class="tab" data-tab="chats" onclick="switchAdminTab('chats')">
+            <button class="tab-btn" onclick="switchTab('chats')">
                 <i class="fas fa-comments"></i> Чаты
                 <span class="tab-badge" id="chatBadge">0</span>
             </button>
-            <button class="tab" data-tab="reviews" onclick="switchAdminTab('reviews')">
+            <button class="tab-btn" onclick="switchTab('reviews')">
                 <i class="fas fa-star"></i> Отзывы
-                <span class="tab-badge" id="reviewsAdminBadge">0</span>
+                <span class="tab-badge" id="reviewsBadge">0</span>
             </button>
         </div>
-        
-        <!-- ===== ЗАКАЗЫ ===== -->
-        <div class="admin-section active" id="section-orders">
-            <div class="control-card">
-                <div class="card-title">
-                    🔧 Технический перерыв
-                    <span class="badge off" id="techBreakBadge">Выключен</span>
-                </div>
-                <button class="toggle-btn off" id="techBreakBtn">⏸️ Включить перерыв</button>
-                <p style="margin-top:8px; font-size:13px; color:#8D6E63;">
-                    При включении клиенты не смогут делать заказы. Увидят сообщение о перерыве.
-                </p>
+
+        <!-- ===== ORDERS SECTION ===== -->
+        <div class="content-section active" id="section-orders">
+            <div class="controls-row">
+                <button class="btn btn-primary btn-sm" onclick="loadOrders()">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="clearAllOrders()">
+                    <i class="fas fa-trash-can"></i> Очистить историю
+                </button>
             </div>
-            
-            <div class="stats">
-                <div><span>Всего заказов</span><strong id="totalOrders">0</strong></div>
-                <div><span>За сегодня</span><strong id="todayOrders">0</strong></div>
-                <div><span>Активных</span><strong id="activeOrders">0</strong></div>
-                <div><span>Выручка</span><strong id="totalRevenue">0 ₽</strong></div>
-            </div>
-            
-            <div class="controls">
-                <button onclick="loadAll()">🔄 Обновить</button>
-                <button class="secondary" onclick="clearOrders()">🗑️ Очистить историю</button>
-                <span class="auto-refresh" onclick="toggleAutoRefresh()">
-                    🔄 Автообновление: <span id="refreshStatus">вкл</span>
-                </span>
-            </div>
-            
             <div id="ordersList">
-                <div class="empty"><span style="font-size:48px;display:block;margin-bottom:12px;">📭</span>Заказов пока нет</div>
-            </div>
-        </div>
-        
-        <!-- ===== МЕНЮ ===== -->
-        <div class="admin-section" id="section-menu">
-            <div class="control-card">
-                <div class="card-title">
-                    📋 Управление меню
-                    <span style="font-size:13px;font-weight:400;color:#8D6E63;">— включить/выключить позиции</span>
-                </div>
-                
-                <div class="chips-nav-admin">
-                    <button class="chip active" data-section="all" onclick="switchMenuSection('all')">
-                        <i class="fas fa-th-list"></i> Все
-                    </button>
-                    <button class="chip" data-section="strawberry" onclick="switchMenuSection('strawberry')">
-                        <i class="fas fa-strawberry"></i> Клубника
-                    </button>
-                    <button class="chip" data-section="fruits" onclick="switchMenuSection('fruits')">
-                        <i class="fas fa-apple-alt"></i> Фрукты
-                    </button>
-                    <button class="chip" data-section="drinks" onclick="switchMenuSection('drinks')">
-                        <i class="fas fa-mug-saucer"></i> Напитки
-                    </button>
-                </div>
-                
-                <div id="menuSections">
-                    <div class="menu-section-admin active" id="section-all">
-                        <div class="menu-grid-admin" id="menuGridAll"></div>
-                    </div>
-                    <div class="menu-section-admin" id="section-strawberry">
-                        <div class="section-label"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
-                        <div class="menu-grid-admin" id="menuGridStrawberry"></div>
-                    </div>
-                    <div class="menu-section-admin" id="section-fruits">
-                        <div class="section-label"><i class="fas fa-apple-alt"></i> Свежие фрукты (без шоколада)</div>
-                        <div class="menu-grid-admin" id="menuGridFruits"></div>
-                    </div>
-                    <div class="menu-section-admin" id="section-drinks">
-                        <div class="section-label"><i class="fas fa-mug-saucer"></i> Напитки и перекус</div>
-                        <div class="menu-grid-admin" id="menuGridDrinks"></div>
-                    </div>
+                <div style="text-align:center;padding:40px;color:var(--text-muted);">
+                    <i class="fas fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Заказов пока нет
                 </div>
             </div>
         </div>
-        
-        <!-- ===== ЧАТЫ С УДАЛЕНИЕМ СВАЙПОМ ===== -->
-        <div class="admin-section" id="section-chats">
-            <div class="control-card">
-                <div class="card-title">
-                    💬 Чаты с клиентами
-                    <span style="font-size:13px;font-weight:400;color:#8D6E63;">— свайп влево для удаления</span>
+
+        <!-- ===== MENU SECTION ===== -->
+        <div class="content-section" id="section-menu">
+            <div class="controls-row">
+                <button class="btn btn-primary btn-sm" onclick="openAddItemModal()">
+                    <i class="fas fa-plus-circle"></i> Добавить позицию
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="loadMenu()">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+                <select id="menuFilter" onchange="renderMenu()" style="padding:8px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:13px;font-family:var(--font-family);background:white;">
+                    <option value="all">Все категории</option>
+                    <option value="strawberry">🍓 Клубника</option>
+                    <option value="fruits">🍉 Фрукты</option>
+                    <option value="drinks">🥤 Напитки</option>
+                </select>
+            </div>
+            <div class="menu-admin-grid" id="menuList">
+                <div style="text-align:center;padding:40px;color:var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin" style="font-size:32px;display:block;margin-bottom:12px;"></i>
+                    Загрузка меню...
                 </div>
-                <div id="chatList" class="chat-list">
-                    <div class="empty"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i> Чатов пока нет</div>
-                </div>
-                <div class="swipe-hint">👆 Свайпните чат влево для удаления</div>
             </div>
         </div>
-        
-        <!-- ===== ОТЗЫВЫ ===== -->
-        <div class="admin-section" id="section-reviews">
-            <div class="control-card">
-                <div class="card-title">
-                    ⭐ Отзывы клиентов
-                    <span style="font-size:13px;font-weight:400;color:#8D6E63;">— управление отзывами</span>
+
+        <!-- ===== CHATS SECTION ===== -->
+        <div class="content-section" id="section-chats">
+            <div class="controls-row">
+                <button class="btn btn-primary btn-sm" onclick="loadChats()">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+            </div>
+            <div id="chatsList">
+                <div style="text-align:center;padding:40px;color:var(--text-muted);">
+                    <i class="fas fa-comment-dots" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Чатов пока нет
                 </div>
-                <div id="reviewsList" class="reviews-grid">
-                    <div class="empty"><i class="fas fa-star" style="font-size:32px;display:block;margin-bottom:8px;"></i> Отзывов пока нет</div>
+            </div>
+        </div>
+
+        <!-- ===== REVIEWS SECTION ===== -->
+        <div class="content-section" id="section-reviews">
+            <div class="controls-row">
+                <button class="btn btn-primary btn-sm" onclick="loadReviews()">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+            </div>
+            <div id="reviewsList">
+                <div style="text-align:center;padding:40px;color:var(--text-muted);">
+                    <i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Отзывов пока нет
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- ===== МОДАЛЬНОЕ ОКНО ЧАТА ===== -->
-    <div class="chat-modal-overlay" id="chatModal">
-        <div class="chat-modal">
-            <div class="chat-header">
-                <h3 id="chatModalTitle">💬 Чат с клиентом</h3>
-                <button class="close-btn" onclick="closeChatModal()">✕</button>
+
+    <!-- ===== MENU ITEM MODAL ===== -->
+    <div class="modal-overlay" id="menuItemModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeMenuItemModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title" id="modalTitle">
+                <i class="fas fa-plus-circle" style="color:var(--primary);"></i> Новая позиция
             </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="empty" style="padding:20px;">Загрузка...</div>
+            <div class="modal-subtitle">Заполните информацию о позиции меню</div>
+            
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" id="itemName" placeholder="Например: Клубника в шоколаде">
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()">📤 Отправить</button>
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="itemDesc" rows="2" placeholder="Краткое описание"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Цена (₽)</label>
+                <input type="number" id="itemPrice" placeholder="350">
+            </div>
+            <div class="form-group">
+                <label>Объём/Вес</label>
+                <input type="text" id="itemVolume" placeholder="300 мл">
+            </div>
+            <div class="form-group">
+                <label>Категория</label>
+                <select id="itemCategory">
+                    <option value="strawberry">🍓 Клубника в шоколаде (с топпингами)</option>
+                    <option value="fruits">🍉 Свежие фрукты</option>
+                    <option value="drinks">🥤 Напитки и перекус</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Эмодзи</label>
+                <input type="text" id="itemEmoji" placeholder="🍓">
+            </div>
+            <div class="form-group">
+                <label>Изображение</label>
+                <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:32px;color:var(--text-muted);display:block;margin-bottom:8px;"></i>
+                    <span style="font-size:13px;color:var(--text-secondary);">Нажмите для загрузки</span>
+                    <img id="imagePreview" style="display:none;">
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
+            </div>
+            <div class="form-group">
+                <label>Бейдж (опционально)</label>
+                <input type="text" id="itemBadge" placeholder="🔥 Хит">
+            </div>
+            <input type="hidden" id="itemId" value="">
+            <input type="hidden" id="itemImageData" value="">
+            
+            <button class="btn btn-primary" style="width:100%;" onclick="saveMenuItem()">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+            <button class="btn btn-danger btn-sm" id="deleteItemBtn" style="width:100%;margin-top:8px;display:none;" onclick="deleteMenuItem()">
+                <i class="fas fa-trash-can"></i> Удалить позицию
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== CHAT MODAL ===== -->
+    <div class="modal-overlay" id="chatModal">
+        <div class="modal-content" style="display:flex;flex-direction:column;max-height:70vh;padding:0;">
+            <div style="padding:16px 20px;border-bottom:1px solid #F1F5F9;display:flex;justify-content:space-between;align-items:center;">
+                <div class="modal-title" style="margin:0;" id="chatModalTitle">💬 Чат с клиентом</div>
+                <button class="modal-close" style="position:static;" onclick="closeChatModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="chatMessages" style="flex:1;padding:16px 20px;overflow-y:auto;max-height:40vh;"></div>
+            <div style="padding:12px 20px;border-top:1px solid #F1F5F9;display:flex;gap:8px;">
+                <input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;font-family:var(--font-family);" onkeydown="if(event.key==='Enter')sendChatMessage()">
+                <button class="btn btn-primary btn-sm" onclick="sendChatMessage()">📤</button>
             </div>
         </div>
     </div>
-    
-    <div class="toast" id="toast"></div>
 
     <script>
-        const faLink = document.createElement('link');
-        faLink.rel = 'stylesheet';
-        faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
-        document.head.appendChild(faLink);
-        
-        let refreshInterval = null;
-        let isAutoRefresh = true;
-        let currentChatId = null;
-        let currentTab = 'orders';
-        let settings = { technicalBreak: false, menuItems: {} };
-        let currentReviews = [];
-        
         // ================================================================
-        // ===== ВСЕ ЗВУКИ ДЛЯ АДМИНКИ =====
+        // ===== STATE =====
         // ================================================================
-
-        // 1. Новое сообщение от клиента (тройной сигнал) 🔔
-        function playNewClientMessageSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                [660, 880, 1100].forEach((freq, i) => {
-                    setTimeout(() => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.frequency.value = freq;
-                        osc.type = 'sine';
-                        gain.gain.value = 0.12;
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.08);
-                    }, i * 120);
-                });
-            } catch (e) { console.log('Звук не поддерживается', e); }
-        }
-
-        // 2. Отправка сообщения админом (двойной) 📤
-        function playAdminSendMessageSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                [880, 1100].forEach((freq, i) => {
-                    setTimeout(() => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.frequency.value = freq;
-                        osc.type = 'sine';
-                        gain.gain.value = 0.1;
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.06);
-                    }, i * 100);
-                });
-            } catch (e) { console.log('Звук не поддерживается', e); }
-        }
-
-        // 3. Новый заказ (длинный сигнал) 📦
-        function playNewOrderSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                [523, 659].forEach((freq, i) => {
-                    setTimeout(() => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.frequency.value = freq;
-                        osc.type = 'sine';
-                        gain.gain.value = 0.15;
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.2);
-                    }, i * 180);
-                });
-            } catch (e) { console.log('Звук не поддерживается', e); }
-        }
-
-        // 4. Подтверждение доставки (короткий "динь") ✅
-        function playConfirmSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.frequency.value = 1100;
-                osc.type = 'sine';
-                gain.gain.value = 0.15;
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            } catch (e) { console.log('Звук не поддерживается', e); }
-        }
-
-        // 5. Ошибка/предупреждение (низкий звук) ⚠️
-        function playErrorSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.frequency.value = 300;
-                osc.type = 'sawtooth';
-                gain.gain.value = 0.08;
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.2);
-            } catch (e) { console.log('Звук не поддерживается', e); }
-        }
-
-        // 6. Успешное действие (радостный) 🎉
-        function playSuccessSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                [660, 880].forEach((freq, i) => {
-                    setTimeout(() => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.frequency.value = freq;
-                        osc.type = 'sine';
-                        gain.gain.value = 0.12;
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.1);
-                    }, i * 150);
-                });
-            } catch (e) { console.log('Звук не поддерживается', e); }
-        }
-        
-        // ================================================================
-        // ===== ДАННЫЕ МЕНЮ =====
-        // ================================================================
-        const MENU_ITEMS = {
-            strawberry: [
-                { id: '9', name: 'Для влюбленных', emoji: '❤️', romantic: true, category: 'strawberry' },
-                { id: '1', name: 'Классика', emoji: '🍫', category: 'strawberry' },
-                { id: '2', name: 'Белый шоколад', emoji: '🤍', category: 'strawberry' },
-                { id: '3', name: 'Тиффани', emoji: '💎', category: 'strawberry' },
-                { id: '4', name: 'Микс клубника-банан', emoji: '🍌', category: 'strawberry' },
-                { id: '5', name: 'Банан в шоколаде', emoji: '🍌', category: 'strawberry' }
-            ],
-            fruits: [
-                { id: '11', name: 'Сладкий арбуз', emoji: '🍉', category: 'fruits' },
-                { id: '12', name: 'Дыня', emoji: '🍈', category: 'fruits' },
-                { id: '13', name: 'Малина', emoji: '🍓', category: 'fruits' },
-                { id: '14', name: 'Ежевика', emoji: '🫐', category: 'fruits' },
-                { id: '15', name: 'Голубика', emoji: '🫐', category: 'fruits' }
-            ],
-            drinks: [
-                { id: '6', name: 'Лимонад', emoji: '🍋', category: 'drinks' },
-                { id: '7', name: 'Кока-Кола', emoji: '🥤', category: 'drinks' },
-                { id: '8', name: 'Пиво', emoji: '🍺', category: 'drinks' },
-                { id: '10', name: 'Шаурма с курицей', emoji: '🌯', category: 'drinks' }
-            ]
+        let state = {
+            settings: { technicalBreak: false, menuItems: {} },
+            menuData: [],
+            currentTab: 'orders',
+            currentChatPhone: null,
+            editingItem: null,
+            allOrders: []
         };
-        
-        const ALL_ITEMS = [...MENU_ITEMS.strawberry, ...MENU_ITEMS.fruits, ...MENU_ITEMS.drinks];
-        let currentMenuSection = 'all';
-        
+
         // ================================================================
-        // ===== ПЕРЕКЛЮЧЕНИЕ ТАБОВ =====
+        // ===== API HELPERS =====
         // ================================================================
-        function switchAdminTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.admin-tabs .tab').forEach(el => {
-                el.classList.toggle('active', el.dataset.tab === tab);
-            });
-            document.querySelectorAll('.admin-section').forEach(el => {
-                el.classList.remove('active');
-            });
+        async function api(path, method = 'GET', body = null) {
+            const opts = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) opts.body = JSON.stringify(body);
+            const res = await fetch('/api' + path, opts);
+            return res.json();
+        }
+
+        // ================================================================
+        // ===== NOTIFICATION =====
+        // ================================================================
+        function showNotification(msg) {
+            const n = document.getElementById('notification');
+            n.textContent = msg;
+            n.classList.add('show');
+            clearTimeout(n._t);
+            n._t = setTimeout(() => n.classList.remove('show'), 3000);
+        }
+
+        // ================================================================
+        // ===== TABS =====
+        // ================================================================
+        function switchTab(tab) {
+            state.currentTab = tab;
+            document.querySelectorAll('.tabs-nav .tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tabs-nav .tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById('section-' + tab).classList.add('active');
             
+            if (tab === 'orders') loadOrders();
+            if (tab === 'menu') loadMenu();
             if (tab === 'chats') loadChats();
-            if (tab === 'reviews') loadReviewsAdmin();
+            if (tab === 'reviews') loadReviews();
         }
-        
+
         // ================================================================
-        // ===== ЗАГРУЗКА НАСТРОЕК =====
+        // ===== TECH BREAK =====
         // ================================================================
-        async function loadSettings() {
-            try {
-                const res = await fetch('/api/settings');
-                const data = await res.json();
-                settings = data;
-                updateUI();
-                return data;
-            } catch (e) {
-                console.error('Ошибка загрузки настроек:', e);
-                return null;
+        async function toggleTechBreak() {
+            const newState = !state.settings.technicalBreak;
+            const data = await api('/settings', 'POST', { technicalBreak: newState });
+            if (data.success) {
+                state.settings = data.settings;
+                updateTechBreakUI();
+                showNotification(newState ? '🔧 Техперерыв включён' : '✅ Работаем!');
             }
         }
-        
-        // ================================================================
-        // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
-        // ================================================================
-        function switchMenuSection(section) {
-            currentMenuSection = section;
-            document.querySelectorAll('.chips-nav-admin .chip').forEach(el => {
-                el.classList.toggle('active', el.dataset.section === section);
-            });
-            document.querySelectorAll('.menu-section-admin').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.getElementById('section-' + section).classList.add('active');
-            renderMenuSection(section);
-        }
-        
-        function renderMenuSection(section) {
-            let items = [];
-            let gridId = '';
-            
-            if (section === 'all') { items = ALL_ITEMS; gridId = 'menuGridAll'; }
-            else if (section === 'strawberry') { items = MENU_ITEMS.strawberry; gridId = 'menuGridStrawberry'; }
-            else if (section === 'fruits') { items = MENU_ITEMS.fruits; gridId = 'menuGridFruits'; }
-            else if (section === 'drinks') { items = MENU_ITEMS.drinks; gridId = 'menuGridDrinks'; }
-            
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            
-            grid.innerHTML = items.map(item => {
-                const available = settings.menuItems[item.id] !== false;
-                const isRomantic = item.romantic || false;
-                const category = item.category || '';
-                
-                let categoryClass = '';
-                let labelHtml = '';
-                if (isRomantic) {
-                    categoryClass = 'romantic';
-                    labelHtml = '<span class="romantic-label">❤️ Романтика</span>';
-                } else if (category === 'fruits') {
-                    categoryClass = 'fruit';
-                    labelHtml = '<span class="fruit-label">🍉 Фрукт</span>';
-                } else if (category === 'drinks') {
-                    categoryClass = 'drink';
-                    labelHtml = '<span class="drink-label">🥤 Напиток</span>';
-                }
-                
-                const toggleClass = isRomantic ? 'romantic' : (category === 'fruits' ? 'fruit' : (category === 'drinks' ? 'drink' : ''));
-                
-                return `
-                    <div class="menu-item-admin ${categoryClass}">
-                        <span class="item-name">
-                            <span class="emoji">${item.emoji}</span>
-                            ${item.name}
-                            ${labelHtml}
-                            <span class="item-status ${available ? 'available' : 'unavailable'}">
-                                ${available ? '✅' : '❌'}
-                            </span>
-                        </span>
-                        <button class="menu-toggle-btn ${available ? 'on' : 'off'} ${toggleClass}" 
-                                onclick="toggleMenuItem('${item.id}')">
-                            ${available ? 'Доступно' : 'Скрыто'}
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function updateUI() {
-            const isBreak = settings.technicalBreak;
-            const breakBtn = document.getElementById('techBreakBtn');
-            const breakBadge = document.getElementById('techBreakBadge');
-            const breakStatus = document.getElementById('techBreakStatus');
-            
-            if (isBreak) {
-                breakBtn.textContent = '▶️ Выключить перерыв';
-                breakBtn.className = 'toggle-btn on';
-                breakBadge.textContent = 'Включен';
-                breakBadge.className = 'badge on';
-                breakStatus.textContent = '🔧 Технический перерыв';
-                breakStatus.className = 'tech-break-status active';
+
+        function updateTechBreakUI() {
+            const card = document.getElementById('techBreakCard');
+            const icon = document.getElementById('techBreakIcon');
+            const text = document.getElementById('techBreakText');
+            if (state.settings.technicalBreak) {
+                card.classList.add('active');
+                icon.textContent = '🔧';
+                text.textContent = 'Технический перерыв';
             } else {
-                breakBtn.textContent = '⏸️ Включить перерыв';
-                breakBtn.className = 'toggle-btn off';
-                breakBadge.textContent = 'Выключен';
-                breakBadge.className = 'badge off';
-                breakStatus.textContent = '✅ Работает';
-                breakStatus.className = 'tech-break-status inactive';
-            }
-            
-            renderMenuSection('all');
-            renderMenuSection('strawberry');
-            renderMenuSection('fruits');
-            renderMenuSection('drinks');
-        }
-        
-        // ================================================================
-        // ===== УПРАВЛЕНИЕ =====
-        // ================================================================
-        document.getElementById('techBreakBtn').addEventListener('click', async function() {
-            const newState = !settings.technicalBreak;
-            try {
-                const res = await fetch('/api/settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ technicalBreak: newState })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    settings = data.settings;
-                    updateUI();
-                    playSuccessSound();
-                    showToast(newState ? '🔧 Технический перерыв включен!' : '✅ Технический перерыв выключен!');
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка');
-            }
-        });
-        
-        async function toggleMenuItem(itemId) {
-            const newState = settings.menuItems[itemId] === false ? true : false;
-            try {
-                const res = await fetch('/api/settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ menuItems: { [itemId]: newState } })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    settings = data.settings;
-                    updateUI();
-                    const item = ALL_ITEMS.find(i => i.id === itemId);
-                    playSuccessSound();
-                    showToast(`${newState ? '✅' : '❌'} ${item ? item.name : itemId}: ${newState ? 'доступно' : 'скрыто'}`);
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка');
+                card.classList.remove('active');
+                icon.textContent = '✅';
+                text.textContent = 'Всё работает';
             }
         }
-        
+
         // ================================================================
-        // ===== ЗАГРУЗКА ЗАКАЗОВ =====
+        // ===== ORDERS =====
         // ================================================================
-        let lastOrderCount = 0;
-        
         async function loadOrders() {
-            try {
-                const response = await fetch('/api/orders');
-                const orders = await response.json();
-                
-                // Проверяем новые заказы
-                if (orders.length > lastOrderCount && lastOrderCount > 0) {
-                    playNewOrderSound();
-                    showToast('📦 Новый заказ!');
-                }
-                lastOrderCount = orders.length;
-                
-                updateStats(orders);
-                renderOrders(orders);
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
-            }
+            const orders = await api('/orders');
+            state.allOrders = orders;
+            updateStats(orders);
+            renderOrders(orders);
         }
-        
-        async function loadAll() {
-            await loadSettings();
-            await loadOrders();
-        }
-        
-        // ================================================================
-        // ===== СТАТИСТИКА =====
-        // ================================================================
+
         function updateStats(orders) {
-            const total = orders.length;
-            document.getElementById('totalOrders').textContent = total;
-            
             const today = new Date().toDateString();
             const todayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === today);
-            document.getElementById('todayOrders').textContent = todayOrders.length;
-            
             const active = orders.filter(o => o.status === 'ожидает');
-            document.getElementById('activeOrders').textContent = active.length;
-            
-            let totalRevenue = 0;
-            orders.forEach(order => {
-                if (order.items) {
-                    order.items.forEach(item => {
-                        totalRevenue += (item.price || 0) * (item.quantity || 0);
-                    });
-                }
+            let revenue = 0;
+            orders.forEach(o => {
+                if (o.items) o.items.forEach(i => revenue += (i.price || 0) * (i.quantity || 1));
             });
-            document.getElementById('totalRevenue').textContent = totalRevenue + ' ₽';
+            
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('activeOrders').textContent = active.length;
+            document.getElementById('todayOrders').textContent = todayOrders.length;
+            document.getElementById('totalRevenue').textContent = revenue + ' ₽';
         }
-        
-        // ================================================================
-        // ===== ОТОБРАЖЕНИЕ ЗАКАЗОВ =====
-        // ================================================================
+
         function renderOrders(orders) {
             const list = document.getElementById('ordersList');
-            
-            if (orders.length === 0) {
-                list.innerHTML = `<div class="empty"><span style="font-size:48px;display:block;margin-bottom:12px;">📭</span>Заказов пока нет</div>`;
+            if (!orders.length) {
+                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i>Заказов пока нет</div>';
                 return;
             }
-            
-            const sorted = [...orders].reverse();
-            
-            list.innerHTML = sorted.map(order => {
-                const itemsHtml = order.items && order.items.length > 0 
-                    ? order.items.map(item => {
-                        const isRomantic = item.name && item.name.includes('❤️');
-                        return `
-                            <div class="item-row">
-                                <span class="item-name">${item.name} ${isRomantic ? '❤️' : ''} ×${item.quantity}</span>
-                                <span>${(item.price || 0) * (item.quantity || 1)} ₽</span>
-                            </div>
-                        `;
-                    }).join('')
-                    : '<div style="color:#BFA58A;font-size:13px;padding:4px 0;">Нет товаров</div>';
+            list.innerHTML = [...orders].reverse().map(o => {
+                const items = o.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
+                let sClass = 'status-waiting';
+                if (o.status === 'выполнен') sClass = 'status-done';
+                if (o.status?.includes('отменен')) sClass = 'status-cancelled';
                 
-                const total = order.total || order.items?.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0) || 0;
-                
-                let statusClass = 'waiting';
-                let statusText = order.status || 'ожидает';
-                if (statusText === 'выполнен') { statusClass = 'done'; }
-                if (statusText === 'отменен' || statusText === 'отменен (таймаут)') { statusClass = 'cancelled'; }
-                
-                let actionsHtml = '';
-                if (order.status === 'ожидает') {
-                    actionsHtml = `
-                        <div class="actions">
-                            <button class="confirm-btn" onclick="confirmOrder(${order.id}, '${order.confirmCode}')">✅ Доставлено</button>
-                            <button class="cancel-btn" onclick="cancelOrder(${order.id})">❌ Отменить</button>
-                        </div>
-                    `;
-                }
-                
-                const chatBtn = order.customerPhone ? 
-                    `<button style="background:#64B5F6;color:white;border:none;padding:4px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;" onclick="switchAdminTab('chats');openChat('${order.customerPhone}', '${order.customerName || 'Клиент'}')">💬 Написать</button>` : '';
+                const actions = o.status === 'ожидает' ? `
+                    <button class="btn btn-primary btn-sm" onclick="confirmOrder(${o.id},'${o.confirmCode}')">✅ Доставлено</button>
+                    <button class="btn btn-danger btn-sm" onclick="cancelOrder(${o.id})">❌ Отменить</button>
+                ` : '';
                 
                 return `
                     <div class="order-card">
-                        <div class="header">
-                            <div>
-                                <span class="bungalow">🏠 Бунгало #${order.bungalow || '?'}</span>
-                                <span class="order-id">#${order.id || '---'}</span>
-                                ${order.confirmCode ? `<span style="background:#FFE8E0;padding:2px 12px;border-radius:12px;font-size:13px;font-weight:700;color:#8B0000;margin-left:8px;">🔑 ${order.confirmCode}</span>` : ''}
-                            </div>
-                            <span class="time">${order.createdAt ? new Date(order.createdAt).toLocaleString() : '---'}</span>
+                        <div class="order-header">
+                            <span class="order-id">🏠 Бунгало #${o.bungalow||'?'} — Заказ #${o.id}</span>
+                            <span class="order-status ${sClass}">${o.status||'ожидает'}</span>
                         </div>
-                        
-                        ${order.customerName || order.customerPhone ? `
-                            <div class="customer-info">
-                                ${order.customerName ? `👤 ${order.customerName}` : ''}
-                                ${order.customerPhone ? `&nbsp;&nbsp; 📞 ${order.customerPhone}` : ''}
-                                ${order.paymentLabel ? `&nbsp;&nbsp; 💳 ${order.paymentLabel}` : ''}
-                                ${chatBtn}
-                            </div>
-                        ` : ''}
-                        
-                        <div class="items-list">${itemsHtml}</div>
-                        
-                        <div class="footer">
-                            <span class="total">💰 ${total} ₽</span>
-                            <span class="status ${statusClass}">${statusText}</span>
-                            ${actionsHtml}
+                        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;">
+                            👤 ${o.customerName||'---'} &nbsp; 📞 ${o.customerPhone||'---'}
+                            ${o.confirmCode ? ` &nbsp; 🔑 <b>${o.confirmCode}</b>` : ''}
+                        </div>
+                        <div class="order-items">${items}</div>
+                        <div class="order-footer">
+                            <span class="order-total">💰 ${o.total||0} ₽</span>
+                            <span style="font-size:11px;color:var(--text-muted);">${new Date(o.createdAt).toLocaleString()}</span>
+                            <div style="display:flex;gap:6px;">${actions}</div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
-        
-        // ================================================================
-        // ===== ДЕЙСТВИЯ С ЗАКАЗАМИ =====
-        // ================================================================
+
         async function confirmOrder(orderId, code) {
-            if (!confirm(`✅ Подтвердить доставку заказа #${orderId}?`)) return;
-            try {
-                const res = await fetch('/api/confirm', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId, code })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    playConfirmSound();
-                    showToast('✅ Доставка подтверждена!');
-                    loadOrders();
-                } else {
-                    playErrorSound();
-                    showToast('❌ ' + (data.error || 'Ошибка'));
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка');
-            }
+            if (!confirm('Подтвердить доставку?')) return;
+            const data = await api('/confirm', 'POST', { orderId, code });
+            if (data.success) { showNotification('✅ Доставлено!'); loadOrders(); }
+            else showNotification('❌ ' + (data.error || 'Ошибка'));
         }
-        
+
         async function cancelOrder(orderId) {
-            if (!confirm(`❌ Отменить заказ #${orderId}?`)) return;
-            try {
-                const res = await fetch('/api/cancel', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    playSuccessSound();
-                    showToast('❌ Заказ отменен');
-                    loadOrders();
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка');
+            if (!confirm('Отменить заказ?')) return;
+            const data = await api('/cancel', 'POST', { orderId });
+            if (data.success) { showNotification('❌ Отменён'); loadOrders(); }
+        }
+
+        async function clearAllOrders() {
+            if (!confirm('Удалить ВСЕ заказы?')) return;
+            const data = await api('/clear-orders', 'POST');
+            if (data.success) { showNotification('🗑️ Очищено'); loadOrders(); }
+        }
+
+        // ================================================================
+        // ===== MENU =====
+        // ================================================================
+        async function loadMenu() {
+            const data = await api('/settings');
+            if (data) {
+                state.settings = data;
+                updateTechBreakUI();
+                state.menuData = buildMenuList(data);
+                renderMenu();
             }
         }
-        
-        async function clearOrders() {
-            if (!confirm('🗑️ Удалить все заказы?')) return;
-            try {
-                const res = await fetch('/api/clear-orders', { method: 'POST' });
-                const data = await res.json();
-                if (data.success) {
-                    playSuccessSound();
-                    showToast('🗑️ История очищена');
-                    loadOrders();
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка очистки');
-            }
-        }
-        
-        // ================================================================
-        // ===== ЧАТЫ С УДАЛЕНИЕМ СВАЙПОМ И ЗВУКОМ =====
-        // ================================================================
-        let adminLastMessageCount = {};
-        let adminNotificationInterval = null;
-        
-        function startAdminNotificationCheck() {
-            if (adminNotificationInterval) clearInterval(adminNotificationInterval);
+
+        function buildMenuList(settings) {
+            const items = [];
+            const catalog = [
+                { id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика', price: 699, volume: '300 мл', emoji: '❤️', category: 'strawberry', image: 'images/romantic.jpg', badge: '❤️ Романтика' },
+                { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', emoji: '🍫', category: 'strawberry', image: 'images/klassika.jpg', badge: '🔥 Хит' },
+                { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, volume: '300 мл', emoji: '🤍', category: 'strawberry', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное' },
+                { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, volume: '300 мл', emoji: '💎', category: 'strawberry', image: 'images/tiffani.jpg', badge: '✨ Новинка' },
+                { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', emoji: '🍌', category: 'strawberry', image: 'images/miks.jpg' },
+                { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', emoji: '🍌', category: 'strawberry', image: 'images/banan.jpg' },
+                { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', emoji: '🍉', category: 'fruits', image: 'images/watermelon.jpg' },
+                { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, volume: '300 мл', emoji: '🍈', category: 'fruits', image: 'images/melon.jpg' },
+                { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, volume: '200 мл', emoji: '🍓', category: 'fruits', image: 'images/raspberry.jpg' },
+                { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, volume: '200 мл', emoji: '🫐', category: 'fruits', image: 'images/blackberry.jpg' },
+                { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', emoji: '🫐', category: 'fruits', image: 'images/blueberry.jpg' },
+                { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, volume: '', emoji: '🍋', category: 'drinks', image: 'images/limonad.jpg' },
+                { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, volume: '', emoji: '🥤', category: 'drinks', image: 'images/kola.jpg' },
+                { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, volume: '', emoji: '🍺', category: 'drinks', image: 'images/pivo.jpg' },
+                { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, volume: '', emoji: '🌯', category: 'drinks', image: 'images/shaurma.jpg' }
+            ];
             
-            adminNotificationInterval = setInterval(async () => {
-                try {
-                    const res = await fetch('/api/chats');
-                    const data = await res.json();
-                    
-                    if (data.chats) {
-                        let hasNew = false;
-                        let totalUnread = 0;
-                        
-                        data.chats.forEach(chat => {
-                            const phone = chat.phone;
-                            const unread = chat.unread || 0;
-                            totalUnread += unread;
-                            
-                            if (unread > 0 && (!adminLastMessageCount[phone] || adminLastMessageCount[phone] < unread)) {
-                                hasNew = true;
-                                adminLastMessageCount[phone] = unread;
-                            }
-                        });
-                        
-                        // Обновляем бейдж в табе
-                        const badge = document.getElementById('chatBadge');
-                        if (badge) {
-                            if (totalUnread > 0) {
-                                badge.textContent = totalUnread;
-                                badge.classList.add('show');
-                            } else {
-                                badge.classList.remove('show');
-                            }
-                        }
-                        
-                        if (hasNew) {
-                            playNewClientMessageSound();
-                            showToast('💬 Новое сообщение от клиента!');
-                            
-                            if (currentTab === 'chats') {
-                                loadChats();
-                            }
-                        }
+            catalog.forEach(item => {
+                const available = settings.menuItems?.[item.id] !== false;
+                items.push({ ...item, available });
+            });
+            
+            // Добавляем кастомные позиции из settings, которых нет в каталоге
+            if (settings.customItems) {
+                settings.customItems.forEach(ci => {
+                    if (!items.find(i => i.id === ci.id)) {
+                        items.push({ ...ci, available: settings.menuItems?.[ci.id] !== false, isCustom: true });
                     }
-                } catch (e) {
-                    console.error('Ошибка проверки чатов:', e);
-                }
-            }, 3000);
-        }
-        
-        async function loadChats() {
-            try {
-                const res = await fetch('/api/chats');
-                const data = await res.json();
-                renderChats(data.chats || []);
-            } catch (e) {
-                console.error('Ошибка загрузки чатов:', e);
+                });
             }
-        }
-        
-        function renderChats(chats) {
-            const list = document.getElementById('chatList');
             
-            if (chats.length === 0) {
-                list.innerHTML = `<div class="empty"><i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i> Чатов пока нет</div>
-                    <div class="swipe-hint">👆 Свайпните чат влево для удаления</div>`;
+            return items;
+        }
+
+        function renderMenu() {
+            const filter = document.getElementById('menuFilter').value;
+            let items = state.menuData;
+            if (filter !== 'all') items = items.filter(i => i.category === filter);
+            
+            const list = document.getElementById('menuList');
+            if (!items.length) {
+                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">Позиций нет</div>';
                 return;
             }
             
-            const unread = chats.filter(c => c.unread > 0).length;
-            const badge = document.getElementById('chatBadge');
-            if (unread > 0) {
-                badge.textContent = unread;
-                badge.classList.add('show');
-            } else {
-                badge.classList.remove('show');
-            }
-            
-            list.innerHTML = chats.map(chat => `
-                <div class="chat-item-wrapper" data-phone="${chat.phone}">
-                    <div class="chat-delete-back" onclick="deleteChat('${chat.phone}')">
-                        <i class="fas fa-trash"></i> Удалить
+            list.innerHTML = items.map(item => `
+                <div class="menu-admin-item">
+                    <img src="${item.image}" class="item-image-preview" onerror="this.style.display='none'" loading="lazy">
+                    <div class="item-info">
+                        <div class="item-name">
+                            ${item.emoji} ${item.name}
+                            ${item.badge ? `<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;">${item.badge}</span>` : ''}
+                        </div>
+                        <div class="item-desc">${item.desc} ${item.volume ? '• ' + item.volume : ''}</div>
+                        <div class="item-price">${item.price} ₽</div>
                     </div>
-                    <div class="chat-item" onclick="openChat('${chat.phone}', '${chat.name || 'Клиент'}')">
-                        <div class="chat-header">
-                            <span class="chat-customer">👤 ${chat.name || 'Клиент'} 📞 ${chat.phone}</span>
-                            <span class="chat-time">${chat.lastMessage ? new Date(chat.lastMessage.time).toLocaleTimeString() : ''}</span>
-                        </div>
-                        <div class="chat-preview">
-                            ${chat.lastMessage ? chat.lastMessage.text : 'Нет сообщений'}
-                            ${chat.unread > 0 ? `<span class="chat-unread">${chat.unread} новых</span>` : ''}
-                        </div>
+                    <div class="item-actions">
+                        <button class="btn-edit" onclick="openEditItemModal('${item.id}')" title="Редактировать">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="${item.available ? 'btn-toggle-on' : 'btn-toggle-off'}" onclick="toggleMenuItem('${item.id}')" title="${item.available ? 'Скрыть' : 'Показать'}">
+                            <i class="fas ${item.available ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                        </button>
+                        <button class="btn-delete" onclick="confirmDeleteItem('${item.id}')" title="Удалить">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        async function toggleMenuItem(id) {
+            const current = state.settings.menuItems?.[id] !== false;
+            const data = await api('/settings', 'POST', { menuItems: { [id]: !current } });
+            if (data.success) {
+                state.settings = data.settings;
+                state.menuData = buildMenuList(data.settings);
+                renderMenu();
+                showNotification(current ? '❌ Скрыто' : '✅ Показано');
+            }
+        }
+
+        function openAddItemModal() {
+            state.editingItem = null;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus-circle" style="color:var(--primary);"></i> Новая позиция';
+            document.getElementById('itemId').value = '';
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemDesc').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemVolume').value = '';
+            document.getElementById('itemCategory').value = 'strawberry';
+            document.getElementById('itemEmoji').value = '';
+            document.getElementById('itemBadge').value = '';
+            document.getElementById('itemImageData').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('deleteItemBtn').style.display = 'none';
+            document.getElementById('menuItemModal').classList.add('open');
+        }
+
+        function openEditItemModal(id) {
+            const item = state.menuData.find(i => i.id === id);
+            if (!item) return;
+            state.editingItem = item;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-pen" style="color:var(--primary);"></i> Редактирование';
+            document.getElementById('itemId').value = item.id;
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemDesc').value = item.desc;
+            document.getElementById('itemPrice').value = item.price;
+            document.getElementById('itemVolume').value = item.volume || '';
+            document.getElementById('itemCategory').value = item.category || 'strawberry';
+            document.getElementById('itemEmoji').value = item.emoji || '';
+            document.getElementById('itemBadge').value = item.badge || '';
+            document.getElementById('itemImageData').value = item.image || '';
             
-            initSwipeDelete();
+            const preview = document.getElementById('imagePreview');
+            if (item.image) {
+                preview.src = item.image;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+            document.getElementById('deleteItemBtn').style.display = 'block';
+            document.getElementById('menuItemModal').classList.add('open');
         }
-        
-        function initSwipeDelete() {
-            document.querySelectorAll('.chat-item-wrapper').forEach(wrapper => {
-                let startX = 0;
-                let isDragging = false;
-                const item = wrapper.querySelector('.chat-item');
-                
-                wrapper.addEventListener('touchstart', function(e) {
-                    startX = e.touches[0].clientX;
-                    isDragging = true;
-                }, { passive: true });
-                
-                wrapper.addEventListener('touchmove', function(e) {
-                    if (!isDragging) return;
-                    const touchX = e.touches[0].clientX;
-                    const deltaX = touchX - startX;
-                    
-                    if (deltaX < 0) {
-                        const translateX = Math.max(deltaX, -80);
-                        item.style.transform = `translateX(${translateX}px)`;
-                        item.style.transition = 'none';
-                    } else if (item.style.transform !== 'translateX(0px)') {
-                        item.style.transform = 'translateX(0)';
-                        item.style.transition = 'transform 0.3s ease';
-                    }
-                }, { passive: true });
-                
-                wrapper.addEventListener('touchend', function(e) {
-                    if (!isDragging) return;
-                    isDragging = false;
-                    
-                    const currentTransform = item.style.transform;
-                    const match = currentTransform.match(/translateX\((-?\d+)px\)/);
-                    const offset = match ? parseInt(match[1]) : 0;
-                    
-                    if (offset < -40) {
-                        item.style.transform = 'translateX(-80px)';
-                        item.style.transition = 'transform 0.3s ease';
-                    } else {
-                        item.style.transform = 'translateX(0)';
-                        item.style.transition = 'transform 0.3s ease';
-                    }
-                }, { passive: true });
-                
-                document.addEventListener('click', function(e) {
-                    if (!wrapper.contains(e.target)) {
-                        item.style.transform = 'translateX(0)';
-                        item.style.transition = 'transform 0.3s ease';
-                    }
-                });
-            });
+
+        function closeMenuItemModal() {
+            document.getElementById('menuItemModal').classList.remove('open');
+            state.editingItem = null;
         }
-        
-        async function deleteChat(phone) {
-            if (!confirm(`🗑️ Удалить чат с ${phone}? Все сообщения будут удалены.`)) {
-                const wrapper = document.querySelector(`.chat-item-wrapper[data-phone="${phone}"]`);
-                if (wrapper) {
-                    const item = wrapper.querySelector('.chat-item');
-                    item.style.transform = 'translateX(0)';
-                    item.style.transition = 'transform 0.3s ease';
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('itemImageData').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function saveMenuItem() {
+            const id = document.getElementById('itemId').value;
+            const name = document.getElementById('itemName').value.trim();
+            const desc = document.getElementById('itemDesc').value.trim();
+            const price = parseInt(document.getElementById('itemPrice').value);
+            const volume = document.getElementById('itemVolume').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            const emoji = document.getElementById('itemEmoji').value.trim();
+            const badge = document.getElementById('itemBadge').value.trim();
+            const image = document.getElementById('itemImageData').value;
+
+            if (!name || !price) {
+                showNotification('❌ Заполните название и цену!');
+                return;
+            }
+
+            if (id) {
+                // Обновление существующей
+                const item = state.menuData.find(i => i.id === id);
+                if (item) {
+                    item.name = name;
+                    item.desc = desc;
+                    item.price = price;
+                    item.volume = volume;
+                    item.emoji = emoji;
+                    item.badge = badge;
+                    item.category = category;
+                    if (image) item.image = image;
                 }
+            } else {
+                // Новая позиция
+                const newId = String(Date.now());
+                const newItem = {
+                    id: newId,
+                    name,
+                    desc,
+                    price,
+                    volume,
+                    emoji,
+                    badge,
+                    category,
+                    image: image || 'images/placeholder.jpg',
+                    available: true,
+                    isCustom: true
+                };
+                
+                if (!state.settings.customItems) state.settings.customItems = [];
+                state.settings.customItems.push(newItem);
+                state.menuData.push(newItem);
+                state.settings.menuItems = state.settings.menuItems || {};
+                state.settings.menuItems[newId] = true;
+            }
+
+            // Сохраняем кастомные позиции в настройки
+            const customItems = state.menuData.filter(i => i.isCustom);
+            await api('/settings', 'POST', { 
+                customItems,
+                menuItems: state.settings.menuItems 
+            });
+
+            closeMenuItemModal();
+            state.menuData = buildMenuList(state.settings);
+            renderMenu();
+            showNotification('✅ Сохранено!');
+        }
+
+        function confirmDeleteItem(id) {
+            const item = state.menuData.find(i => i.id === id);
+            if (!item) return;
+            if (!confirm(`Удалить "${item.name}"?`)) return;
+            deleteItem(id);
+        }
+
+        async function deleteMenuItem() {
+            const id = document.getElementById('itemId').value;
+            if (!id || !confirm('Точно удалить?')) return;
+            deleteItem(id);
+            closeMenuItemModal();
+        }
+
+        async function deleteItem(id) {
+            // Удаляем из customItems
+            if (state.settings.customItems) {
+                state.settings.customItems = state.settings.customItems.filter(i => i.id !== id);
+            }
+            // Помечаем как недоступное
+            state.settings.menuItems = state.settings.menuItems || {};
+            state.settings.menuItems[id] = false;
+            
+            await api('/settings', 'POST', { 
+                customItems: state.settings.customItems,
+                menuItems: state.settings.menuItems 
+            });
+            
+            state.menuData = buildMenuList(state.settings);
+            renderMenu();
+            showNotification('🗑️ Удалено');
+        }
+
+        // ================================================================
+        // ===== CHATS =====
+        // ================================================================
+        async function loadChats() {
+            const data = await api('/chats');
+            const chats = data.chats || [];
+            const list = document.getElementById('chatsList');
+            const badge = document.getElementById('chatBadge');
+            
+            const unread = chats.filter(c => c.unread > 0).length;
+            if (unread > 0) { badge.textContent = unread; badge.classList.add('show'); }
+            else badge.classList.remove('show');
+            
+            if (!chats.length) {
+                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-comment-dots" style="font-size:48px;display:block;margin-bottom:12px;"></i>Чатов пока нет</div>';
                 return;
             }
             
-            try {
-                const res = await fetch(`/api/chat-delete?phone=${encodeURIComponent(phone)}`, { 
-                    method: 'DELETE' 
-                });
-                const data = await res.json();
-                if (data.success) {
-                    playSuccessSound();
-                    showToast('✅ Чат удален');
-                    loadChats();
-                } else {
-                    playErrorSound();
-                    showToast('❌ ' + (data.error || 'Ошибка удаления'));
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка соединения');
-            }
+            list.innerHTML = chats.map(c => `
+                <div class="chat-item" onclick="openChat('${c.phone}', '${c.name||'Клиент'}')">
+                    <div class="chat-name">👤 ${c.name||'Клиент'} 📞 ${c.phone}</div>
+                    <div class="chat-preview">${c.lastMessage?.text || 'Нет сообщений'}</div>
+                    ${c.unread > 0 ? `<span class="chat-unread">${c.unread} новых</span>` : ''}
+                </div>
+            `).join('');
         }
-        
-        // ================================================================
-        // ===== ОТКРЫТИЕ ЧАТА =====
-        // ================================================================
-        function openChat(phone, name) {
-            currentChatId = phone;
-            document.getElementById('chatModalTitle').textContent = `💬 Чат с ${name || 'клиентом'} (${phone})`;
+
+        async function openChat(phone, name) {
+            state.currentChatPhone = phone;
+            document.getElementById('chatModalTitle').textContent = `💬 ${name} (${phone})`;
             document.getElementById('chatModal').classList.add('open');
             document.getElementById('chatInput').value = '';
             
-            fetch('/api/chat-read', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone })
-            });
+            await api('/chat-read', 'POST', { phone });
+            loadChatMessages(phone);
             
             const badge = document.getElementById('chatBadge');
-            if (badge) {
-                const current = parseInt(badge.textContent) || 0;
-                if (current > 0) {
-                    badge.textContent = current - 1;
-                    if (badge.textContent === '0') {
-                        badge.classList.remove('show');
-                    }
-                }
+            const current = parseInt(badge.textContent) || 0;
+            if (current > 0) {
+                badge.textContent = current - 1;
+                if (badge.textContent === '0') badge.classList.remove('show');
             }
-            
-            loadChatMessages(phone);
         }
-        
+
         async function loadChatMessages(phone) {
-            try {
-                const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
-                const data = await res.json();
-                renderChatMessages(data.messages || []);
-            } catch (e) {
-                console.error('Ошибка загрузки сообщений:', e);
-            }
-        }
-        
-        function renderChatMessages(messages) {
+            const data = await api('/chat-messages?phone=' + encodeURIComponent(phone));
+            const msgs = data.messages || [];
             const container = document.getElementById('chatMessages');
             
-            if (messages.length === 0) {
-                container.innerHTML = `<div class="empty" style="padding:20px;">Начните диалог</div>`;
-                return;
+            if (!msgs.length) {
+                container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">Начните диалог</div>';
+            } else {
+                container.innerHTML = msgs.map(m => `
+                    <div style="margin-bottom:8px;display:flex;justify-content:${m.from === 'client' ? 'flex-start' : 'flex-end'};">
+                        <div style="max-width:80%;padding:10px 16px;border-radius:${m.from === 'client' ? 'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px' : 'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from === 'client' ? '#F8FAFC' : 'linear-gradient(135deg, var(--primary), var(--primary-dark))'};color:${m.from === 'client' ? 'var(--text-dark)' : 'white'};">
+                            ${m.text}
+                            <span style="font-size:9px;display:block;margin-top:4px;opacity:0.6;">${new Date(m.time).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                `).join('');
             }
-            
-            container.innerHTML = messages.map(msg => `
-                <div class="chat-message ${msg.from === 'client' ? 'from-client' : 'from-admin'}" style="${msg.from === 'client' ? 'text-align:left;' : 'text-align:right;'}">
-                    ${msg.text}
-                    <span class="msg-time">${new Date(msg.time).toLocaleString()}</span>
-                </div>
-            `).join('');
-            
             container.scrollTop = container.scrollHeight;
         }
-        
+
         async function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if (!text || !currentChatId) return;
+            const text = document.getElementById('chatInput').value.trim();
+            if (!text || !state.currentChatPhone) return;
             
-            playAdminSendMessageSound();
-            
-            try {
-                const res = await fetch('/api/chat-send', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        phone: currentChatId, 
-                        text: text,
-                        from: 'admin'
-                    })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    input.value = '';
-                    await loadChatMessages(currentChatId);
-                    loadChats();
-                }
-            } catch (e) {
-                playErrorSound();
-                showToast('❌ Ошибка отправки');
-            }
+            await api('/chat-send', 'POST', { phone: state.currentChatPhone, text, from: 'admin' });
+            document.getElementById('chatInput').value = '';
+            loadChatMessages(state.currentChatPhone);
+            loadChats();
         }
-        
+
         function closeChatModal() {
             document.getElementById('chatModal').classList.remove('open');
-            currentChatId = null;
+            state.currentChatPhone = null;
         }
-        
+
         // ================================================================
-        // ===== ОТЗЫВЫ =====
+        // ===== REVIEWS =====
         // ================================================================
-        async function loadReviewsAdmin() {
-            try {
-                const res = await fetch('/api/reviews');
-                const data = await res.json();
-                currentReviews = data.reviews || [];
-                renderReviewsAdmin(currentReviews);
-                
-                const badge = document.getElementById('reviewsAdminBadge');
-                if (currentReviews.length > 0) {
-                    badge.textContent = currentReviews.length;
-                    badge.classList.add('show');
-                } else {
-                    badge.classList.remove('show');
-                }
-            } catch (e) {
-                console.error('Ошибка загрузки отзывов:', e);
-            }
-        }
-        
-        function renderReviewsAdmin(reviews) {
+        async function loadReviews() {
+            const data = await api('/reviews');
+            const reviews = data.reviews || [];
             const list = document.getElementById('reviewsList');
+            const badge = document.getElementById('reviewsBadge');
             
-            if (reviews.length === 0) {
-                list.innerHTML = `<div class="empty"><i class="fas fa-star" style="font-size:32px;display:block;margin-bottom:8px;"></i> Отзывов пока нет</div>`;
+            if (reviews.length > 0) { badge.textContent = reviews.length; badge.classList.add('show'); }
+            else badge.classList.remove('show');
+            
+            if (!reviews.length) {
+                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>Отзывов пока нет</div>';
                 return;
             }
             
-            list.innerHTML = reviews.map(review => `
+            list.innerHTML = reviews.map(r => `
                 <div class="review-card">
-                    <div class="review-content">
-                        <div class="review-header">
-                            <span class="review-name">${review.name || 'Клиент'}</span>
-                            <span class="review-stars">${'⭐'.repeat(review.rating || 5)}</span>
-                        </div>
-                        <div class="review-text">${review.text || 'Без отзыва'}</div>
-                        <span class="review-order">Заказ #${review.orderId || '---'} • ${review.phone || 'телефон не указан'}</span>
-                        <span class="review-time">${new Date(review.createdAt).toLocaleString()}</span>
+                    <div class="review-header">
+                        <span style="font-weight:600;color:var(--text-dark);">${r.name||'Клиент'}</span>
+                        <span class="review-stars">${'⭐'.repeat(r.rating||5)}</span>
                     </div>
-                    <div class="review-actions">
-                        <button class="review-delete-btn" onclick="deleteReview(${review.id})">🗑️ Удалить</button>
+                    <div style="font-size:14px;color:var(--text-secondary);line-height:1.5;">${r.text||''}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                        <span style="font-size:11px;color:var(--text-muted);">Заказ #${r.orderId} • ${new Date(r.createdAt).toLocaleString()}</span>
+                        <button class="btn btn-danger btn-sm" onclick="deleteReview(${r.id})">🗑️</button>
                     </div>
                 </div>
             `).join('');
         }
-        
-        async function deleteReview(reviewId) {
-            if (!confirm('🗑️ Удалить этот отзыв?')) return;
-            
-            try {
-                const res = await fetch(`/api/review/${reviewId}`, { 
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const data = await res.json();
-                if (data.success) {
-                    playSuccessSound();
-                    showToast('✅ Отзыв удален');
-                    loadReviewsAdmin();
-                } else {
-                    playErrorSound();
-                    showToast('❌ ' + (data.error || 'Ошибка удаления'));
-                }
-            } catch (e) {
-                console.error('Ошибка удаления:', e);
-                playErrorSound();
-                showToast('❌ Ошибка соединения');
-            }
+
+        async function deleteReview(id) {
+            if (!confirm('Удалить отзыв?')) return;
+            await fetch(`/api/review/${id}`, { method: 'DELETE' });
+            showNotification('🗑️ Удалён');
+            loadReviews();
         }
-        
+
         // ================================================================
-        // ===== TOAST =====
+        // ===== MODAL CLOSE ON OVERLAY CLICK =====
         // ================================================================
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        // ================================================================
-        // ===== АВТООБНОВЛЕНИЕ =====
-        // ================================================================
-        function toggleAutoRefresh() {
-            if (isAutoRefresh) {
-                clearInterval(refreshInterval);
-                refreshInterval = null;
-                isAutoRefresh = false;
-                document.getElementById('refreshStatus').textContent = 'выкл';
-                document.getElementById('refreshStatus').style.color = '#D32F2F';
-                showToast('⏸️ Автообновление выключено');
-            } else {
-                startAutoRefresh();
-                isAutoRefresh = true;
-                document.getElementById('refreshStatus').textContent = 'вкл';
-                document.getElementById('refreshStatus').style.color = '#2E7D32';
-                showToast('▶️ Автообновление включено');
-            }
-        }
-        
-        function startAutoRefresh() {
-            if (refreshInterval) clearInterval(refreshInterval);
-            refreshInterval = setInterval(() => {
-                if (currentTab === 'orders') loadOrders();
-                else if (currentTab === 'chats') loadChats();
-                else if (currentTab === 'reviews') loadReviewsAdmin();
-            }, 10000);
-        }
-        
-        // ================================================================
-        // ===== ЗАПУСК =====
-        // ================================================================
-        document.getElementById('refreshStatus').addEventListener('click', toggleAutoRefresh);
-        
-        loadAll();
-        startAutoRefresh();
-        startAdminNotificationCheck();
-        
-        window.addEventListener('beforeunload', function() {
-            if (adminNotificationInterval) {
-                clearInterval(adminNotificationInterval);
-                adminNotificationInterval = null;
-            }
+        document.getElementById('menuItemModal').addEventListener('click', function(e) {
+            if (e.target === this) closeMenuItemModal();
         });
-        
-        console.log('📋 Админка с чатами и отзывами загружена!');
-        console.log('🍓 Клубника в шоколаде (6 позиций)');
-        console.log('🍉 Свежие фрукты (5 позиций)');
-        console.log('🥤 Напитки и перекус (4 позиции)');
-        console.log('💬 Чаты — свайп влево для удаления + звук при новых сообщениях!');
-        console.log('⭐ Отзывы — удаление по кнопке');
-        console.log('🔔 Звуки: новое сообщение 🔔, отправка 📤, новый заказ 📦, успех 🎉, ошибка ⚠️');
+        document.getElementById('chatModal').addEventListener('click', function(e) {
+            if (e.target === this) closeChatModal();
+        });
+
+        // ================================================================
+        // ===== AUTO REFRESH =====
+        // ================================================================
+        let lastOrderCount = 0;
+        setInterval(async () => {
+            try {
+                const orders = await api('/orders');
+                if (orders.length > lastOrderCount && lastOrderCount > 0) {
+                    showNotification('📦 Новый заказ!');
+                }
+                lastOrderCount = orders.length;
+                
+                if (state.currentTab === 'orders') {
+                    state.allOrders = orders;
+                    updateStats(orders);
+                    renderOrders(orders);
+                }
+                
+                // Обновляем чаты в фоне
+                const chatsData = await api('/chats');
+                const chats = chatsData.chats || [];
+                const badge = document.getElementById('chatBadge');
+                const unread = chats.filter(c => c.unread > 0).length;
+                if (unread > 0) { badge.textContent = unread; badge.classList.add('show'); }
+                
+                // Обновляем отзывы
+                const revData = await api('/reviews');
+                const revBadge = document.getElementById('reviewsBadge');
+                const revCount = (revData.reviews || []).length;
+                if (revCount > 0) { revBadge.textContent = revCount; revBadge.classList.add('show'); }
+                
+            } catch(e) {}
+        }, 10000);
+
+        // ================================================================
+        // ===== INIT =====
+        // ================================================================
+        async function init() {
+            await loadMenu();
+            await loadOrders();
+            lastOrderCount = state.allOrders.length;
+        }
+
+        init();
+        console.log('🍓 Админка готова!');
+        console.log('✅ Добавление/удаление позиций');
+        console.log('✅ Изменение цен и описаний');
+        console.log('✅ Загрузка картинок');
+        console.log('✅ Онлайн-обновление каждые 10 сек');
     </script>
 </body>
 </html>
