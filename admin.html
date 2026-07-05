@@ -3,72 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍓 Админка - Strawberry in Chocolate</title>
+    <title>🍓 Админ-панель</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF4757;
             --primary-dark: #E63946;
-            --primary-light: #FF6B81;
-            --accent: #FF8A80;
-            --gold: #FFB74D;
-            --gold-light: #FFE0B2;
             --bg: #FFF5F5;
             --card-bg: #FFFFFF;
             --text-dark: #1A1A2E;
             --text-secondary: #6B7280;
             --text-muted: #9CA3AF;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
             --radius-2xl: 24px;
             --radius-xl: 20px;
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        
         body {
-            font-family: var(--font-family);
+            font-family: var(--font);
             background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
             min-height: 100vh;
-            padding: 0;
+            padding: 16px;
             padding-bottom: 100px;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             background-attachment: fixed;
         }
 
-        .app-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 16px;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 20px 0;
-            position: relative;
         }
 
         .header-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             color: var(--primary);
@@ -76,156 +58,131 @@
             font-weight: 600;
             padding: 6px 16px;
             border-radius: 100px;
-            letter-spacing: 0.5px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255,71,87,0.2);
             box-shadow: var(--shadow-sm);
         }
 
         .header h1 {
             font-size: 28px;
-            color: var(--text-dark);
             font-weight: 800;
+            color: var(--text-dark);
             letter-spacing: -0.5px;
-            line-height: 1.2;
-            margin-bottom: 4px;
         }
 
-        .header h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+        .header h1 span {
+            background: linear-gradient(135deg, var(--primary), #FF8A80);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .header .subtitle {
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        /* ===== STATS ===== */
-        .stats-grid {
+        .stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4,1fr);
             gap: 8px;
             margin-bottom: 16px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255,255,255,0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 14px 12px;
+            padding: 14px 10px;
             border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: var(--shadow-sm);
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: var(--shadow-sm);
         }
 
-        .stat-card .stat-value {
+        .stat-card .val {
             font-size: 24px;
             font-weight: 800;
             color: var(--text-dark);
         }
 
-        .stat-card .stat-label {
+        .stat-card .lbl {
             font-size: 10px;
             color: var(--text-muted);
-            font-weight: 500;
             margin-top: 2px;
         }
 
-        /* ===== TABS ===== */
-        .tabs-nav {
+        .tabs {
             display: flex;
             gap: 6px;
             margin-bottom: 16px;
             padding: 4px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255,255,255,0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        .tabs-nav .tab-btn {
+        .tabs button {
             flex: 1;
-            padding: 10px 12px;
+            padding: 10px 8px;
             border-radius: var(--radius-lg);
             border: none;
             background: transparent;
-            text-align: center;
             font-size: 12px;
             font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
             transition: var(--transition);
-            font-family: var(--font-family);
+            font-family: var(--font);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            letter-spacing: -0.2px;
+            gap: 5px;
             position: relative;
         }
 
-        .tabs-nav .tab-btn i {
-            font-size: 15px;
-        }
-
-        .tabs-nav .tab-btn.active {
-            background: #FFFFFF;
+        .tabs button i { font-size: 14px; }
+        .tabs button.active {
+            background: #fff;
             color: var(--primary);
             font-weight: 600;
             box-shadow: var(--shadow);
         }
 
-        .tabs-nav .tab-btn .tab-badge {
+        .tabs button .badge {
             position: absolute;
             top: 2px;
-            right: 8px;
+            right: 6px;
             background: var(--primary);
-            color: #FFFFFF;
+            color: #fff;
             font-size: 9px;
-            font-weight: 700;
             min-width: 16px;
             height: 16px;
             border-radius: 50%;
             display: none;
             align-items: center;
             justify-content: center;
+            font-weight: 700;
         }
 
-        .tabs-nav .tab-btn .tab-badge.show {
-            display: flex;
-        }
+        .tabs button .badge.show { display: flex; }
 
-        /* ===== CONTENT SECTION ===== */
-        .content-section {
+        .panel {
             display: none;
-            animation: fadeSlide 0.3s ease;
+            animation: fadeIn 0.3s ease;
         }
 
-        .content-section.active {
-            display: block;
+        .panel.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity:0; transform:translateY(10px); }
+            to { opacity:1; transform:translateY(0); }
         }
 
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== CARDS ===== */
         .card {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255,255,255,0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-xl);
             padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
             box-shadow: var(--shadow-sm);
         }
 
@@ -233,225 +190,198 @@
             font-size: 16px;
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-            font-size: 18px;
-        }
-
-        /* ===== TECH BREAK TOGGLE ===== */
-        .tech-break-card {
-            background: linear-gradient(135deg, #FF4757, #E63946);
-            color: white;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .tech-break-card.active {
-            background: linear-gradient(135deg, #4ADE80, #22C55E);
-        }
-
-        .tech-break-card .tech-status {
-            font-size: 13px;
-            opacity: 0.9;
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn {
-            padding: 10px 20px;
-            border-radius: var(--radius-md);
-            border: none;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn:active {
-            transform: scale(0.97);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-        }
-
-        .btn-outline {
-            background: white;
-            border: 2px solid #F1F5F9;
-            color: var(--text-dark);
-        }
-
-        .btn-danger {
-            background: #EF4444;
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-icon:active {
-            transform: scale(0.9);
-        }
-
-        /* ===== MENU ITEMS IN ADMIN ===== */
-        .menu-admin-grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        .menu-admin-item {
-            background: #FFFFFF;
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            border: 1px solid #F1F5F9;
-            transition: var(--transition);
-        }
-
-        .menu-admin-item:hover {
-            box-shadow: var(--shadow);
-        }
-
-        .menu-admin-item .item-image-preview {
-            width: 64px;
-            height: 64px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
-            flex-shrink: 0;
-        }
-
-        .menu-admin-item .item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .menu-admin-item .item-name {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 14px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .menu-admin-item .item-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+        .card-title i { color: var(--primary); }
 
-        .menu-admin-item .item-price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 16px;
-            margin-top: 4px;
-        }
-
-        .menu-admin-item .item-actions {
-            display: flex;
+        .btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font);
+            display: inline-flex;
+            align-items: center;
             gap: 6px;
+        }
+
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; box-shadow: 0 4px 12px rgba(255,71,87,0.3); }
+        .btn-outline { background: #fff; border: 2px solid #F1F5F9; color: var(--text-dark); }
+        .btn-danger { background: #EF4444; color: #fff; }
+        .btn-sm { padding: 6px 12px; font-size: 11px; }
+        .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
+
+        .tech-card {
+            background: linear-gradient(135deg, #4ADE80, #22C55E);
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tech-card.off {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .menu-item {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #F1F5F9;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover { box-shadow: var(--shadow); }
+
+        .menu-item img {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            background: #FCE4EC;
             flex-shrink: 0;
         }
 
-        .menu-admin-item .item-actions button {
-            width: 32px;
-            height: 32px;
+        .menu-item .info { flex: 1; min-width: 0; }
+        .menu-item .info .name { font-weight: 600; font-size: 14px; color: var(--text-dark); }
+        .menu-item .info .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .menu-item .info .price { font-weight: 700; color: var(--primary); font-size: 15px; margin-top: 4px; }
+
+        .menu-item .actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .menu-item .actions button {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            transition: var(--transition);
-            font-size: 13px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: var(--transition);
         }
 
-        .btn-edit {
-            background: #F1F5F9;
+        .menu-item .actions button:active { transform: scale(0.9); }
+
+        .btn-edit { background: #F1F5F9; color: #6B7280; }
+        .btn-on { background: #E8F5E9; color: #2E7D32; }
+        .btn-off { background: #FFEBEE; color: #D32F2F; }
+
+        .order-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid #F1F5F9;
+        }
+
+        .order-card .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .order-card .oid { font-weight: 700; color: var(--primary); }
+        .order-card .status {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+
+        .status-waiting { background: #FFF3E0; color: #E65100; }
+        .status-done { background: #E8F5E9; color: #2E7D32; }
+        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
+
+        .order-card .items {
+            font-size: 12px;
             color: var(--text-secondary);
+            background: #F8FAFC;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
         }
 
-        .btn-toggle-on {
-            background: #E8F5E9;
-            color: #2E7D32;
+        .order-card .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .btn-toggle-off {
-            background: #FFEBEE;
-            color: #D32F2F;
+        .order-card .total { font-weight: 700; color: var(--primary); }
+
+        .chat-item {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            margin-bottom: 8px;
+            border: 1px solid #F1F5F9;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .btn-delete {
-            background: #FFEBEE;
-            color: #D32F2F;
+        .chat-item:active { transform: scale(0.98); }
+        .chat-item .cname { font-weight: 600; font-size: 14px; color: var(--text-dark); }
+        .chat-item .cpreview { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .review-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            margin-bottom: 8px;
+            border: 1px solid #F1F5F9;
         }
 
-        /* ===== MODAL ===== */
+        .review-card .stars { color: #FFB300; font-size: 16px; }
+
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.4);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        .modal-overlay.open {
-            display: flex;
-        }
+        .modal-overlay.open { display: flex; }
 
-        .modal-content {
-            background: #FFFFFF;
+        .modal {
+            background: #fff;
             border-radius: var(--radius-2xl);
-            max-width: 480px;
+            max-width: 460px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
             padding: 24px;
-            position: relative;
-            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: pop 0.3s ease;
             box-shadow: var(--shadow-lg);
         }
 
-        @keyframes modalPop {
-            from { transform: scale(0.9) translateY(20px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
+        @keyframes pop {
+            from { transform: scale(0.9); opacity:0; }
+            to { transform: scale(1); opacity:1; }
         }
 
         .modal-close {
@@ -460,1081 +390,548 @@
             right: 14px;
             background: #F8FAFC;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            font-size: 18px;
-            color: var(--text-secondary);
+            font-size: 16px;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .modal-close:active {
-            transform: scale(0.9);
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .modal-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 6px;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 2px solid #F1F5F9;
             border-radius: var(--radius-md);
             font-size: 14px;
             background: #F8FAFC;
             outline: none;
-            transition: var(--transition);
-            color: var(--text-dark);
-            font-family: var(--font-family);
+            font-family: var(--font);
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
+            box-shadow: 0 0 0 3px rgba(255,71,87,0.1);
         }
 
-        .image-upload-area {
+        .img-upload {
             border: 2px dashed #F1F5F9;
             border-radius: var(--radius-lg);
             padding: 20px;
             text-align: center;
             cursor: pointer;
-            transition: var(--transition);
             background: #F8FAFC;
         }
 
-        .image-upload-area:hover {
-            border-color: var(--primary);
-            background: #FFF5F5;
-        }
+        .img-upload img { max-width: 100%; max-height: 150px; border-radius: var(--radius-md); margin-top: 8px; }
 
-        .image-upload-area img {
-            max-width: 100%;
-            max-height: 150px;
-            border-radius: var(--radius-md);
-            margin-top: 8px;
-        }
-
-        /* ===== ORDER CARD ===== */
-        .order-card {
-            background: #FFFFFF;
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            margin-bottom: 10px;
-            border: 1px solid #F1F5F9;
-        }
-
-        .order-card .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .order-card .order-id {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 15px;
-        }
-
-        .order-card .order-status {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 100px;
-        }
-
-        .status-waiting { background: #FFF3E0; color: #E65100; }
-        .status-done { background: #E8F5E9; color: #2E7D32; }
-        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
-
-        .order-card .order-items {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            padding: 8px 12px;
-            background: #F8FAFC;
-            border-radius: var(--radius-sm);
-        }
-
-        .order-card .order-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .order-card .order-total {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 16px;
-        }
-
-        /* ===== CHAT ===== */
-        .chat-item {
-            background: #FFFFFF;
-            border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            border: 1px solid #F1F5F9;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .chat-item:active {
-            transform: scale(0.98);
-        }
-
-        .chat-item .chat-name {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 14px;
-        }
-
-        .chat-item .chat-preview {
-            font-size: 12px;
+        .empty-state {
+            text-align: center;
+            padding: 40px;
             color: var(--text-muted);
-            margin-top: 4px;
         }
 
-        .chat-item .chat-unread {
-            background: var(--primary);
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 4px;
-        }
+        .empty-state i { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* ===== REVIEW CARD ===== */
-        .review-card {
-            background: #FFFFFF;
-            border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            border: 1px solid #F1F5F9;
-        }
-
-        .review-card .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .review-card .review-stars {
-            color: #FFB300;
-            font-size: 16px;
-        }
-
-        /* ===== NOTIFICATION ===== */
-        .notification {
-            display: none;
+        .toast {
             position: fixed;
-            top: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             background: #1A1A2E;
-            color: #FFFFFF;
-            padding: 14px 24px;
+            color: #fff;
+            padding: 12px 24px;
             border-radius: 100px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            z-index: 2000;
-            max-width: 90%;
-            text-align: center;
+            font-size: 13px;
             font-weight: 500;
-            font-size: 14px;
-            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 2000;
+            display: none;
+            animation: slideUp 0.3s ease;
         }
 
-        .notification.show {
-            display: block;
+        .toast.show { display: block; }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 40px); opacity:0; }
+            to { transform: translate(-50%, 0); opacity:1; }
         }
 
-        @keyframes slideDown {
-            from { transform: translate(-50%, -80px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
+        .row-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 
         @media (max-width: 500px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .tabs-nav .tab-btn {
-                font-size: 11px;
-                padding: 8px 6px;
-            }
-            .menu-admin-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .menu-admin-item .item-actions {
-                align-self: flex-end;
-            }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .tabs button { font-size: 11px; padding: 8px 4px; }
+            .menu-item { flex-direction: column; align-items: flex-start; }
+            .menu-item .actions { align-self: flex-end; }
         }
     </style>
 </head>
 <body>
 
-    <div class="notification" id="notification"></div>
+    <div class="toast" id="toast"></div>
 
-    <div class="app-container">
-        <!-- ===== HEADER ===== -->
+    <div class="container">
         <div class="header">
-            <div class="header-badge">
-                <i class="fas fa-lock"></i> Панель управления
-            </div>
-            <h1>
-                <span class="highlight">Strawberry</span>
-                <span style="color: var(--text-dark);"> Админка</span>
-            </h1>
-            <p class="subtitle">
-                Управление меню, заказами и клиентами
-            </p>
+            <div class="header-badge"><i class="fas fa-lock"></i> Панель управления</div>
+            <h1><span>Strawberry</span> Админка</h1>
         </div>
 
-        <!-- ===== STATS ===== -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value" id="totalOrders">0</div>
-                <div class="stat-label">Всего заказов</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="activeOrders">0</div>
-                <div class="stat-label">Активных</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="todayOrders">0</div>
-                <div class="stat-label">За сегодня</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="totalRevenue">0 ₽</div>
-                <div class="stat-label">Выручка</div>
-            </div>
+        <!-- Статистика -->
+        <div class="stats">
+            <div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl">Всего заказов</div></div>
+            <div class="stat-card"><div class="val" id="statActive">0</div><div class="lbl">Активных</div></div>
+            <div class="stat-card"><div class="val" id="statToday">0</div><div class="lbl">Сегодня</div></div>
+            <div class="stat-card"><div class="val" id="statRevenue">0 ₽</div><div class="lbl">Выручка</div></div>
         </div>
 
-        <!-- ===== TECH BREAK ===== -->
-        <div class="card tech-break-card" id="techBreakCard" onclick="toggleTechBreak()">
+        <!-- Технический перерыв -->
+        <div class="card tech-card" id="techCard" onclick="toggleTechBreak()">
             <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div>
-                    <div style="font-weight:700;font-size:18px;">
-                        <span id="techBreakIcon">✅</span> 
-                        <span id="techBreakText">Всё работает</span>
-                    </div>
-                    <div class="tech-status">Нажмите для переключения</div>
+                    <div style="font-weight:700;font-size:18px;" id="techLabel">✅ Всё работает</div>
+                    <div style="font-size:12px;opacity:0.8;">Нажмите для переключения</div>
                 </div>
-                <div style="font-size:32px;opacity:0.7;">
-                    <i class="fas fa-power-off"></i>
-                </div>
+                <div style="font-size:28px;opacity:0.6;"><i class="fas fa-power-off"></i></div>
             </div>
         </div>
 
-        <!-- ===== TABS ===== -->
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="switchTab('orders')">
-                <i class="fas fa-list-alt"></i> Заказы
-            </button>
-            <button class="tab-btn" onclick="switchTab('menu')">
-                <i class="fas fa-utensils"></i> Меню
-            </button>
-            <button class="tab-btn" onclick="switchTab('chats')">
-                <i class="fas fa-comments"></i> Чаты
-                <span class="tab-badge" id="chatBadge">0</span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('reviews')">
-                <i class="fas fa-star"></i> Отзывы
-                <span class="tab-badge" id="reviewsBadge">0</span>
-            </button>
+        <!-- Табы -->
+        <div class="tabs">
+            <button class="active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
+            <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
+            <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="badge" id="chatBadge">0</span></button>
+            <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
         </div>
 
-        <!-- ===== ORDERS SECTION ===== -->
-        <div class="content-section active" id="section-orders">
-            <div class="controls-row">
-                <button class="btn btn-primary btn-sm" onclick="loadOrders()">
-                    <i class="fas fa-sync-alt"></i> Обновить
-                </button>
-                <button class="btn btn-outline btn-sm" onclick="clearAllOrders()">
-                    <i class="fas fa-trash-can"></i> Очистить историю
-                </button>
+        <!-- Панель Заказов -->
+        <div class="panel active" id="panel-orders">
+            <div class="row-btns">
+                <button class="btn btn-primary btn-sm" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                <button class="btn btn-outline btn-sm" onclick="clearOrders()"><i class="fas fa-trash"></i> Очистить</button>
             </div>
-            <div id="ordersList">
-                <div style="text-align:center;padding:40px;color:var(--text-muted);">
-                    <i class="fas fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i>
-                    Заказов пока нет
-                </div>
-            </div>
+            <div id="ordersList"></div>
         </div>
 
-        <!-- ===== MENU SECTION ===== -->
-        <div class="content-section" id="section-menu">
-            <div class="controls-row">
-                <button class="btn btn-primary btn-sm" onclick="openAddItemModal()">
-                    <i class="fas fa-plus-circle"></i> Добавить позицию
-                </button>
-                <button class="btn btn-outline btn-sm" onclick="loadMenu()">
-                    <i class="fas fa-sync-alt"></i> Обновить
-                </button>
-                <select id="menuFilter" onchange="renderMenu()" style="padding:8px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:13px;font-family:var(--font-family);background:white;">
-                    <option value="all">Все категории</option>
+        <!-- Панель Меню -->
+        <div class="panel" id="panel-menu">
+            <div class="row-btns">
+                <button class="btn btn-primary btn-sm" onclick="openMenuItemModal()"><i class="fas fa-plus"></i> Добавить</button>
+                <button class="btn btn-outline btn-sm" onclick="loadMenu()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                <select id="menuFilter" onchange="renderMenu()" style="padding:6px 12px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:13px;font-family:var(--font);background:#fff;">
+                    <option value="all">Все</option>
                     <option value="strawberry">🍓 Клубника</option>
                     <option value="fruits">🍉 Фрукты</option>
                     <option value="drinks">🥤 Напитки</option>
                 </select>
             </div>
-            <div class="menu-admin-grid" id="menuList">
-                <div style="text-align:center;padding:40px;color:var(--text-muted);">
-                    <i class="fas fa-spinner fa-spin" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    Загрузка меню...
-                </div>
-            </div>
+            <div id="menuList"></div>
         </div>
 
-        <!-- ===== CHATS SECTION ===== -->
-        <div class="content-section" id="section-chats">
-            <div class="controls-row">
-                <button class="btn btn-primary btn-sm" onclick="loadChats()">
-                    <i class="fas fa-sync-alt"></i> Обновить
-                </button>
+        <!-- Панель Чатов -->
+        <div class="panel" id="panel-chats">
+            <div class="row-btns">
+                <button class="btn btn-primary btn-sm" onclick="loadChats()"><i class="fas fa-sync-alt"></i> Обновить</button>
             </div>
-            <div id="chatsList">
-                <div style="text-align:center;padding:40px;color:var(--text-muted);">
-                    <i class="fas fa-comment-dots" style="font-size:48px;display:block;margin-bottom:12px;"></i>
-                    Чатов пока нет
-                </div>
-            </div>
+            <div id="chatsList"></div>
         </div>
 
-        <!-- ===== REVIEWS SECTION ===== -->
-        <div class="content-section" id="section-reviews">
-            <div class="controls-row">
-                <button class="btn btn-primary btn-sm" onclick="loadReviews()">
-                    <i class="fas fa-sync-alt"></i> Обновить
-                </button>
+        <!-- Панель Отзывов -->
+        <div class="panel" id="panel-reviews">
+            <div class="row-btns">
+                <button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Обновить</button>
             </div>
-            <div id="reviewsList">
-                <div style="text-align:center;padding:40px;color:var(--text-muted);">
-                    <i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>
-                    Отзывов пока нет
-                </div>
-            </div>
+            <div id="reviewsList"></div>
         </div>
     </div>
 
-    <!-- ===== MENU ITEM MODAL ===== -->
-    <div class="modal-overlay" id="menuItemModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeMenuItemModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-title" id="modalTitle">
-                <i class="fas fa-plus-circle" style="color:var(--primary);"></i> Новая позиция
-            </div>
-            <div class="modal-subtitle">Заполните информацию о позиции меню</div>
-            
-            <div class="form-group">
-                <label>Название</label>
-                <input type="text" id="itemName" placeholder="Например: Клубника в шоколаде">
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="itemDesc" rows="2" placeholder="Краткое описание"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Цена (₽)</label>
-                <input type="number" id="itemPrice" placeholder="350">
-            </div>
-            <div class="form-group">
-                <label>Объём/Вес</label>
-                <input type="text" id="itemVolume" placeholder="300 мл">
-            </div>
-            <div class="form-group">
-                <label>Категория</label>
-                <select id="itemCategory">
-                    <option value="strawberry">🍓 Клубника в шоколаде (с топпингами)</option>
-                    <option value="fruits">🍉 Свежие фрукты</option>
-                    <option value="drinks">🥤 Напитки и перекус</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Эмодзи</label>
-                <input type="text" id="itemEmoji" placeholder="🍓">
-            </div>
+    <!-- Модалка товара -->
+    <div class="modal-overlay" id="itemModal">
+        <div class="modal" style="position:relative;">
+            <button class="modal-close" onclick="closeItemModal()"><i class="fas fa-times"></i></button>
+            <div class="card-title" id="modalTitle"><i class="fas fa-plus-circle"></i> Новая позиция</div>
+            <div class="form-group"><label>Название</label><input type="text" id="fName"></div>
+            <div class="form-group"><label>Описание</label><textarea id="fDesc" rows="2"></textarea></div>
+            <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice"></div>
+            <div class="form-group"><label>Объём</label><input type="text" id="fVolume" placeholder="300 мл"></div>
+            <div class="form-group"><label>Категория</label><select id="fCategory"><option value="strawberry">🍓 Клубника</option><option value="fruits">🍉 Фрукты</option><option value="drinks">🥤 Напитки</option></select></div>
+            <div class="form-group"><label>Эмодзи</label><input type="text" id="fEmoji" placeholder="🍓"></div>
+            <div class="form-group"><label>Бейдж</label><input type="text" id="fBadge" placeholder="🔥 Хит"></div>
             <div class="form-group">
                 <label>Изображение</label>
-                <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
-                    <i class="fas fa-cloud-upload-alt" style="font-size:32px;color:var(--text-muted);display:block;margin-bottom:8px;"></i>
-                    <span style="font-size:13px;color:var(--text-secondary);">Нажмите для загрузки</span>
-                    <img id="imagePreview" style="display:none;">
+                <div class="img-upload" onclick="document.getElementById('fImageInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:32px;color:var(--text-muted);"></i>
+                    <div style="font-size:12px;color:var(--text-secondary);">Нажмите для загрузки</div>
+                    <img id="fImagePreview" style="display:none;">
                 </div>
-                <input type="file" id="imageInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
+                <input type="file" id="fImageInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
             </div>
-            <div class="form-group">
-                <label>Бейдж (опционально)</label>
-                <input type="text" id="itemBadge" placeholder="🔥 Хит">
-            </div>
-            <input type="hidden" id="itemId" value="">
-            <input type="hidden" id="itemImageData" value="">
-            
-            <button class="btn btn-primary" style="width:100%;" onclick="saveMenuItem()">
-                <i class="fas fa-save"></i> Сохранить
-            </button>
-            <button class="btn btn-danger btn-sm" id="deleteItemBtn" style="width:100%;margin-top:8px;display:none;" onclick="deleteMenuItem()">
-                <i class="fas fa-trash-can"></i> Удалить позицию
-            </button>
+            <input type="hidden" id="fId">
+            <input type="hidden" id="fImageData">
+            <button class="btn btn-primary" style="width:100%;" onclick="saveItem()"><i class="fas fa-save"></i> Сохранить</button>
+            <button class="btn btn-danger btn-sm" id="fDeleteBtn" style="width:100%;margin-top:8px;display:none;" onclick="deleteItem()"><i class="fas fa-trash"></i> Удалить</button>
         </div>
     </div>
 
-    <!-- ===== CHAT MODAL ===== -->
+    <!-- Модалка чата -->
     <div class="modal-overlay" id="chatModal">
-        <div class="modal-content" style="display:flex;flex-direction:column;max-height:70vh;padding:0;">
-            <div style="padding:16px 20px;border-bottom:1px solid #F1F5F9;display:flex;justify-content:space-between;align-items:center;">
-                <div class="modal-title" style="margin:0;" id="chatModalTitle">💬 Чат с клиентом</div>
-                <button class="modal-close" style="position:static;" onclick="closeChatModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+        <div class="modal" style="display:flex;flex-direction:column;max-height:70vh;padding:0;">
+            <div style="padding:14px 20px;border-bottom:1px solid #F1F5F9;display:flex;justify-content:space-between;align-items:center;">
+                <div class="card-title" style="margin:0;" id="chatTitle">💬 Чат</div>
+                <button class="modal-close" style="position:static;" onclick="closeChatModal()"><i class="fas fa-times"></i></button>
             </div>
             <div id="chatMessages" style="flex:1;padding:16px 20px;overflow-y:auto;max-height:40vh;"></div>
             <div style="padding:12px 20px;border-top:1px solid #F1F5F9;display:flex;gap:8px;">
-                <input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;font-family:var(--font-family);" onkeydown="if(event.key==='Enter')sendChatMessage()">
-                <button class="btn btn-primary btn-sm" onclick="sendChatMessage()">📤</button>
+                <input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-family:var(--font);" onkeydown="if(event.key==='Enter')sendChat()">
+                <button class="btn btn-primary btn-sm" onclick="sendChat()">📤</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ================================================================
         // ===== STATE =====
-        // ================================================================
-        let state = {
-            settings: { technicalBreak: false, menuItems: {} },
-            menuData: [],
-            currentTab: 'orders',
-            currentChatPhone: null,
-            editingItem: null,
-            allOrders: []
+        const S = {
+            settings: {},
+            menu: [],
+            tab: 'orders',
+            chatPhone: null,
+            orders: []
         };
 
-        // ================================================================
-        // ===== API HELPERS =====
-        // ================================================================
-        async function api(path, method = 'GET', body = null) {
-            const opts = { method, headers: { 'Content-Type': 'application/json' } };
-            if (body) opts.body = JSON.stringify(body);
-            const res = await fetch('/api' + path, opts);
-            return res.json();
-        }
+        // ===== HELPERS =====
+        const $ = id => document.getElementById(id);
+        const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2500); };
+        const api = async (url, method = 'GET', body) => {
+            const o = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) o.body = JSON.stringify(body);
+            const r = await fetch('/api' + url, o);
+            return r.json();
+        };
 
-        // ================================================================
-        // ===== NOTIFICATION =====
-        // ================================================================
-        function showNotification(msg) {
-            const n = document.getElementById('notification');
-            n.textContent = msg;
-            n.classList.add('show');
-            clearTimeout(n._t);
-            n._t = setTimeout(() => n.classList.remove('show'), 3000);
-        }
-
-        // ================================================================
         // ===== TABS =====
-        // ================================================================
-        function switchTab(tab) {
-            state.currentTab = tab;
-            document.querySelectorAll('.tabs-nav .tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.tabs-nav .tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById('section-' + tab).classList.add('active');
-            
-            if (tab === 'orders') loadOrders();
-            if (tab === 'menu') loadMenu();
-            if (tab === 'chats') loadChats();
-            if (tab === 'reviews') loadReviews();
-        }
-
-        // ================================================================
-        // ===== TECH BREAK =====
-        // ================================================================
-        async function toggleTechBreak() {
-            const newState = !state.settings.technicalBreak;
-            const data = await api('/settings', 'POST', { technicalBreak: newState });
-            if (data.success) {
-                state.settings = data.settings;
-                updateTechBreakUI();
-                showNotification(newState ? '🔧 Техперерыв включён' : '✅ Работаем!');
-            }
-        }
-
-        function updateTechBreakUI() {
-            const card = document.getElementById('techBreakCard');
-            const icon = document.getElementById('techBreakIcon');
-            const text = document.getElementById('techBreakText');
-            if (state.settings.technicalBreak) {
-                card.classList.add('active');
-                icon.textContent = '🔧';
-                text.textContent = 'Технический перерыв';
-            } else {
-                card.classList.remove('active');
-                icon.textContent = '✅';
-                text.textContent = 'Всё работает';
-            }
-        }
-
-        // ================================================================
-        // ===== ORDERS =====
-        // ================================================================
-        async function loadOrders() {
-            const orders = await api('/orders');
-            state.allOrders = orders;
-            updateStats(orders);
-            renderOrders(orders);
-        }
-
-        function updateStats(orders) {
-            const today = new Date().toDateString();
-            const todayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === today);
-            const active = orders.filter(o => o.status === 'ожидает');
-            let revenue = 0;
-            orders.forEach(o => {
-                if (o.items) o.items.forEach(i => revenue += (i.price || 0) * (i.quantity || 1));
+        document.querySelectorAll('.tabs button').forEach(b => {
+            b.addEventListener('click', () => {
+                S.tab = b.dataset.tab;
+                document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                $('panel-' + S.tab).classList.add('active');
+                if (S.tab === 'orders') loadOrders();
+                if (S.tab === 'menu') loadMenu();
+                if (S.tab === 'chats') loadChats();
+                if (S.tab === 'reviews') loadReviews();
             });
-            
-            document.getElementById('totalOrders').textContent = orders.length;
-            document.getElementById('activeOrders').textContent = active.length;
-            document.getElementById('todayOrders').textContent = todayOrders.length;
-            document.getElementById('totalRevenue').textContent = revenue + ' ₽';
+        });
+
+        // ===== TECH BREAK =====
+        async function toggleTechBreak() {
+            const v = !S.settings.technicalBreak;
+            const d = await api('/settings', 'POST', { technicalBreak: v });
+            if (d.success) { S.settings = d.settings; updateTechUI(); toast(v ? '🔧 Перерыв включен' : '✅ Работаем'); }
         }
 
-        function renderOrders(orders) {
-            const list = document.getElementById('ordersList');
-            if (!orders.length) {
-                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-inbox" style="font-size:48px;display:block;margin-bottom:12px;"></i>Заказов пока нет</div>';
-                return;
-            }
-            list.innerHTML = [...orders].reverse().map(o => {
-                const items = o.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
-                let sClass = 'status-waiting';
-                if (o.status === 'выполнен') sClass = 'status-done';
-                if (o.status?.includes('отменен')) sClass = 'status-cancelled';
-                
-                const actions = o.status === 'ожидает' ? `
-                    <button class="btn btn-primary btn-sm" onclick="confirmOrder(${o.id},'${o.confirmCode}')">✅ Доставлено</button>
-                    <button class="btn btn-danger btn-sm" onclick="cancelOrder(${o.id})">❌ Отменить</button>
-                ` : '';
-                
-                return `
-                    <div class="order-card">
-                        <div class="order-header">
-                            <span class="order-id">🏠 Бунгало #${o.bungalow||'?'} — Заказ #${o.id}</span>
-                            <span class="order-status ${sClass}">${o.status||'ожидает'}</span>
-                        </div>
-                        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;">
-                            👤 ${o.customerName||'---'} &nbsp; 📞 ${o.customerPhone||'---'}
-                            ${o.confirmCode ? ` &nbsp; 🔑 <b>${o.confirmCode}</b>` : ''}
-                        </div>
-                        <div class="order-items">${items}</div>
-                        <div class="order-footer">
-                            <span class="order-total">💰 ${o.total||0} ₽</span>
-                            <span style="font-size:11px;color:var(--text-muted);">${new Date(o.createdAt).toLocaleString()}</span>
-                            <div style="display:flex;gap:6px;">${actions}</div>
-                        </div>
-                    </div>
-                `;
+        function updateTechUI() {
+            const c = $('techCard');
+            const l = $('techLabel');
+            if (S.settings.technicalBreak) { c.classList.add('off'); l.textContent = '🔧 Технический перерыв'; }
+            else { c.classList.remove('off'); l.textContent = '✅ Всё работает'; }
+        }
+
+        // ===== ORDERS =====
+        async function loadOrders() {
+            const o = await api('/orders');
+            S.orders = o;
+            const today = new Date().toDateString();
+            const active = o.filter(x => x.status === 'ожидает');
+            let rev = 0;
+            o.forEach(x => { if (x.items) x.items.forEach(i => rev += (i.price||0)*(i.quantity||1)); });
+            $('statTotal').textContent = o.length;
+            $('statActive').textContent = active.length;
+            $('statToday').textContent = o.filter(x => new Date(x.createdAt).toDateString() === today).length;
+            $('statRevenue').textContent = rev + ' ₽';
+
+            const list = $('ordersList');
+            if (!o.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
+
+            list.innerHTML = [...o].reverse().map(x => {
+                const items = x.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
+                let sc = 'status-waiting';
+                if (x.status === 'выполнен') sc = 'status-done';
+                if (x.status?.includes('отменен')) sc = 'status-cancelled';
+                const acts = x.status === 'ожидает' ? `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${x.id},'${x.confirmCode}')">✅</button><button class="btn btn-danger btn-xs" onclick="cancelOrder(${x.id})">❌</button>` : '';
+                return `<div class="order-card">
+                    <div class="top"><span class="oid">🏠 #${x.bungalow||'?'} — Заказ #${x.id}</span><span class="status ${sc}">${x.status||'ожидает'}</span></div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">👤 ${x.customerName||'-'} 📞 ${x.customerPhone||'-'} ${x.confirmCode ? '🔑 <b>'+x.confirmCode+'</b>' : ''}</div>
+                    <div class="items">${items}</div>
+                    <div class="bottom"><span class="total">💰 ${x.total||0} ₽</span><span style="font-size:10px;color:var(--text-muted);">${new Date(x.createdAt).toLocaleString()}</span><div style="display:flex;gap:4px;">${acts}</div></div>
+                </div>`;
             }).join('');
         }
 
-        async function confirmOrder(orderId, code) {
-            if (!confirm('Подтвердить доставку?')) return;
-            const data = await api('/confirm', 'POST', { orderId, code });
-            if (data.success) { showNotification('✅ Доставлено!'); loadOrders(); }
-            else showNotification('❌ ' + (data.error || 'Ошибка'));
-        }
+        async function confirmOrder(id, code) { if (!confirm('Подтвердить?')) return; await api('/confirm', 'POST', { orderId: id, code }); toast('✅ Доставлено'); loadOrders(); }
+        async function cancelOrder(id) { if (!confirm('Отменить?')) return; await api('/cancel', 'POST', { orderId: id }); toast('❌ Отменён'); loadOrders(); }
+        async function clearOrders() { if (!confirm('Удалить все заказы?')) return; await api('/clear-orders', 'POST'); toast('🗑️ Очищено'); loadOrders(); }
 
-        async function cancelOrder(orderId) {
-            if (!confirm('Отменить заказ?')) return;
-            const data = await api('/cancel', 'POST', { orderId });
-            if (data.success) { showNotification('❌ Отменён'); loadOrders(); }
-        }
-
-        async function clearAllOrders() {
-            if (!confirm('Удалить ВСЕ заказы?')) return;
-            const data = await api('/clear-orders', 'POST');
-            if (data.success) { showNotification('🗑️ Очищено'); loadOrders(); }
-        }
-
-        // ================================================================
         // ===== MENU =====
-        // ================================================================
-        async function loadMenu() {
-            const data = await api('/settings');
-            if (data) {
-                state.settings = data;
-                updateTechBreakUI();
-                state.menuData = buildMenuList(data);
-                renderMenu();
-            }
-        }
+        const CATALOG = [
+            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️ Романтика' },
+            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
+            { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐ Популярное' },
+            { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨ Новинка' },
+            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
+            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
+            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
+            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
+            { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
+            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
+            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
+            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.jpg' },
+            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
+            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.jpg' },
+            { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.jpg' }
+        ];
 
-        function buildMenuList(settings) {
-            const items = [];
-            const catalog = [
-                { id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика', price: 699, volume: '300 мл', emoji: '❤️', category: 'strawberry', image: 'images/romantic.jpg', badge: '❤️ Романтика' },
-                { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', emoji: '🍫', category: 'strawberry', image: 'images/klassika.jpg', badge: '🔥 Хит' },
-                { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, volume: '300 мл', emoji: '🤍', category: 'strawberry', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное' },
-                { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, volume: '300 мл', emoji: '💎', category: 'strawberry', image: 'images/tiffani.jpg', badge: '✨ Новинка' },
-                { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', emoji: '🍌', category: 'strawberry', image: 'images/miks.jpg' },
-                { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', emoji: '🍌', category: 'strawberry', image: 'images/banan.jpg' },
-                { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', emoji: '🍉', category: 'fruits', image: 'images/watermelon.jpg' },
-                { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, volume: '300 мл', emoji: '🍈', category: 'fruits', image: 'images/melon.jpg' },
-                { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, volume: '200 мл', emoji: '🍓', category: 'fruits', image: 'images/raspberry.jpg' },
-                { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, volume: '200 мл', emoji: '🫐', category: 'fruits', image: 'images/blackberry.jpg' },
-                { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', emoji: '🫐', category: 'fruits', image: 'images/blueberry.jpg' },
-                { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, volume: '', emoji: '🍋', category: 'drinks', image: 'images/limonad.jpg' },
-                { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, volume: '', emoji: '🥤', category: 'drinks', image: 'images/kola.jpg' },
-                { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, volume: '', emoji: '🍺', category: 'drinks', image: 'images/pivo.jpg' },
-                { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, volume: '', emoji: '🌯', category: 'drinks', image: 'images/shaurma.jpg' }
-            ];
-            
-            catalog.forEach(item => {
-                const available = settings.menuItems?.[item.id] !== false;
-                items.push({ ...item, available });
-            });
-            
-            // Добавляем кастомные позиции из settings, которых нет в каталоге
-            if (settings.customItems) {
-                settings.customItems.forEach(ci => {
-                    if (!items.find(i => i.id === ci.id)) {
-                        items.push({ ...ci, available: settings.menuItems?.[ci.id] !== false, isCustom: true });
-                    }
+        async function loadMenu() {
+            try {
+                const d = await api('/settings');
+                S.settings = d;
+                updateTechUI();
+                S.menu = [];
+                CATALOG.forEach(item => {
+                    S.menu.push({ ...item, available: d.menuItems?.[item.id] !== false });
                 });
-            }
-            
-            return items;
+                if (d.customItems && Array.isArray(d.customItems)) {
+                    d.customItems.forEach(ci => {
+                        if (!S.menu.find(x => x.id === ci.id)) {
+                            S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
+                        }
+                    });
+                }
+                renderMenu();
+            } catch(e) { console.error(e); $('menuList').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i>Ошибка загрузки</div>'; }
         }
 
         function renderMenu() {
-            const filter = document.getElementById('menuFilter').value;
-            let items = state.menuData;
-            if (filter !== 'all') items = items.filter(i => i.category === filter);
-            
-            const list = document.getElementById('menuList');
-            if (!items.length) {
-                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">Позиций нет</div>';
-                return;
-            }
-            
-            list.innerHTML = items.map(item => `
-                <div class="menu-admin-item">
-                    <img src="${item.image}" class="item-image-preview" onerror="this.style.display='none'" loading="lazy">
-                    <div class="item-info">
-                        <div class="item-name">
-                            ${item.emoji} ${item.name}
-                            ${item.badge ? `<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;">${item.badge}</span>` : ''}
-                        </div>
-                        <div class="item-desc">${item.desc} ${item.volume ? '• ' + item.volume : ''}</div>
-                        <div class="item-price">${item.price} ₽</div>
+            const f = $('menuFilter').value;
+            let items = S.menu;
+            if (f !== 'all') items = items.filter(x => x.category === f);
+            const list = $('menuList');
+            if (!items.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-utensils"></i>Нет позиций</div>'; return; }
+
+            list.innerHTML = items.map(x => `
+                <div class="menu-item">
+                    <img src="${x.image}" onerror="this.style.display='none'" loading="lazy">
+                    <div class="info">
+                        <div class="name">${x.emoji||''} ${x.name} ${x.badge ? `<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 6px;border-radius:8px;">${x.badge}</span>` : ''}</div>
+                        <div class="desc">${x.desc} ${x.volume ? '• '+x.volume : ''}</div>
+                        <div class="price">${x.price} ₽</div>
                     </div>
-                    <div class="item-actions">
-                        <button class="btn-edit" onclick="openEditItemModal('${item.id}')" title="Редактировать">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <button class="${item.available ? 'btn-toggle-on' : 'btn-toggle-off'}" onclick="toggleMenuItem('${item.id}')" title="${item.available ? 'Скрыть' : 'Показать'}">
-                            <i class="fas ${item.available ? 'fa-eye' : 'fa-eye-slash'}"></i>
-                        </button>
-                        <button class="btn-delete" onclick="confirmDeleteItem('${item.id}')" title="Удалить">
-                            <i class="fas fa-trash-can"></i>
-                        </button>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
+                        <button class="${x.available ? 'btn-on' : 'btn-off'}" onclick="toggleItem('${x.id}')"><i class="fas ${x.available ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        async function toggleMenuItem(id) {
-            const current = state.settings.menuItems?.[id] !== false;
-            const data = await api('/settings', 'POST', { menuItems: { [id]: !current } });
-            if (data.success) {
-                state.settings = data.settings;
-                state.menuData = buildMenuList(data.settings);
-                renderMenu();
-                showNotification(current ? '❌ Скрыто' : '✅ Показано');
-            }
+        async function toggleItem(id) {
+            const cur = S.settings.menuItems?.[id] !== false;
+            const d = await api('/settings', 'POST', { menuItems: { [id]: !cur } });
+            if (d.success) { S.settings = d.settings; S.menu.find(x => x.id === id).available = !cur; renderMenu(); toast(cur ? '❌ Скрыто' : '✅ Показано'); }
         }
 
-        function openAddItemModal() {
-            state.editingItem = null;
-            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus-circle" style="color:var(--primary);"></i> Новая позиция';
-            document.getElementById('itemId').value = '';
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemDesc').value = '';
-            document.getElementById('itemPrice').value = '';
-            document.getElementById('itemVolume').value = '';
-            document.getElementById('itemCategory').value = 'strawberry';
-            document.getElementById('itemEmoji').value = '';
-            document.getElementById('itemBadge').value = '';
-            document.getElementById('itemImageData').value = '';
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('deleteItemBtn').style.display = 'none';
-            document.getElementById('menuItemModal').classList.add('open');
+        function openMenuItemModal(item = null) {
+            $('fId').value = item ? item.id : '';
+            $('fName').value = item ? item.name : '';
+            $('fDesc').value = item ? item.desc : '';
+            $('fPrice').value = item ? item.price : '';
+            $('fVolume').value = item ? (item.volume || '') : '';
+            $('fCategory').value = item ? (item.category || 'strawberry') : 'strawberry';
+            $('fEmoji').value = item ? (item.emoji || '') : '';
+            $('fBadge').value = item ? (item.badge || '') : '';
+            $('fImageData').value = item ? (item.image || '') : '';
+            $('fDeleteBtn').style.display = item ? 'block' : 'none';
+            $('modalTitle').innerHTML = item ? '<i class="fas fa-pen"></i> Редактирование' : '<i class="fas fa-plus-circle"></i> Новая позиция';
+            const prev = $('fImagePreview');
+            if (item && item.image) { prev.src = item.image; prev.style.display = 'block'; }
+            else { prev.style.display = 'none'; }
+            $('itemModal').classList.add('open');
         }
 
-        function openEditItemModal(id) {
-            const item = state.menuData.find(i => i.id === id);
-            if (!item) return;
-            state.editingItem = item;
-            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-pen" style="color:var(--primary);"></i> Редактирование';
-            document.getElementById('itemId').value = item.id;
-            document.getElementById('itemName').value = item.name;
-            document.getElementById('itemDesc').value = item.desc;
-            document.getElementById('itemPrice').value = item.price;
-            document.getElementById('itemVolume').value = item.volume || '';
-            document.getElementById('itemCategory').value = item.category || 'strawberry';
-            document.getElementById('itemEmoji').value = item.emoji || '';
-            document.getElementById('itemBadge').value = item.badge || '';
-            document.getElementById('itemImageData').value = item.image || '';
-            
-            const preview = document.getElementById('imagePreview');
-            if (item.image) {
-                preview.src = item.image;
-                preview.style.display = 'block';
-            } else {
-                preview.style.display = 'none';
-            }
-            document.getElementById('deleteItemBtn').style.display = 'block';
-            document.getElementById('menuItemModal').classList.add('open');
+        function editItem(id) {
+            const item = S.menu.find(x => x.id === id);
+            if (item) openMenuItemModal(item);
         }
 
-        function closeMenuItemModal() {
-            document.getElementById('menuItemModal').classList.remove('open');
-            state.editingItem = null;
+        function closeItemModal() { $('itemModal').classList.remove('open'); }
+
+        function previewImage(e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => { $('fImagePreview').src = ev.target.result; $('fImagePreview').style.display = 'block'; $('fImageData').value = ev.target.result; };
+            r.readAsDataURL(f);
         }
 
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('itemImageData').value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+        async function saveItem() {
+            const id = $('fId').value;
+            const name = $('fName').value.trim();
+            const price = parseInt($('fPrice').value);
+            if (!name || !price) return toast('❌ Заполните название и цену');
+
+            const item = {
+                id: id || String(Date.now()),
+                name,
+                desc: $('fDesc').value.trim(),
+                price,
+                volume: $('fVolume').value.trim(),
+                category: $('fCategory').value,
+                emoji: $('fEmoji').value.trim(),
+                badge: $('fBadge').value.trim(),
+                image: $('fImageData').value || 'images/placeholder.jpg',
+                isCustom: true
+            };
+
+            if (!S.settings.customItems) S.settings.customItems = [];
+            const idx = S.settings.customItems.findIndex(x => x.id === item.id);
+            if (idx >= 0) S.settings.customItems[idx] = item;
+            else S.settings.customItems.push(item);
+
+            S.settings.menuItems = S.settings.menuItems || {};
+            S.settings.menuItems[item.id] = true;
+
+            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
+            if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('✅ Сохранено'); }
+            else toast('❌ Ошибка');
         }
 
-        async function saveMenuItem() {
-            const id = document.getElementById('itemId').value;
-            const name = document.getElementById('itemName').value.trim();
-            const desc = document.getElementById('itemDesc').value.trim();
-            const price = parseInt(document.getElementById('itemPrice').value);
-            const volume = document.getElementById('itemVolume').value.trim();
-            const category = document.getElementById('itemCategory').value;
-            const emoji = document.getElementById('itemEmoji').value.trim();
-            const badge = document.getElementById('itemBadge').value.trim();
-            const image = document.getElementById('itemImageData').value;
-
-            if (!name || !price) {
-                showNotification('❌ Заполните название и цену!');
-                return;
-            }
-
-            if (id) {
-                // Обновление существующей
-                const item = state.menuData.find(i => i.id === id);
-                if (item) {
-                    item.name = name;
-                    item.desc = desc;
-                    item.price = price;
-                    item.volume = volume;
-                    item.emoji = emoji;
-                    item.badge = badge;
-                    item.category = category;
-                    if (image) item.image = image;
-                }
-            } else {
-                // Новая позиция
-                const newId = String(Date.now());
-                const newItem = {
-                    id: newId,
-                    name,
-                    desc,
-                    price,
-                    volume,
-                    emoji,
-                    badge,
-                    category,
-                    image: image || 'images/placeholder.jpg',
-                    available: true,
-                    isCustom: true
-                };
-                
-                if (!state.settings.customItems) state.settings.customItems = [];
-                state.settings.customItems.push(newItem);
-                state.menuData.push(newItem);
-                state.settings.menuItems = state.settings.menuItems || {};
-                state.settings.menuItems[newId] = true;
-            }
-
-            // Сохраняем кастомные позиции в настройки
-            const customItems = state.menuData.filter(i => i.isCustom);
-            await api('/settings', 'POST', { 
-                customItems,
-                menuItems: state.settings.menuItems 
-            });
-
-            closeMenuItemModal();
-            state.menuData = buildMenuList(state.settings);
-            renderMenu();
-            showNotification('✅ Сохранено!');
+        async function deleteItem() {
+            const id = $('fId').value;
+            if (!id || !confirm('Удалить?')) return;
+            if (S.settings.customItems) S.settings.customItems = S.settings.customItems.filter(x => x.id !== id);
+            S.settings.menuItems = S.settings.menuItems || {};
+            S.settings.menuItems[id] = false;
+            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
+            if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('🗑️ Удалено'); }
         }
 
-        function confirmDeleteItem(id) {
-            const item = state.menuData.find(i => i.id === id);
-            if (!item) return;
-            if (!confirm(`Удалить "${item.name}"?`)) return;
-            deleteItem(id);
-        }
-
-        async function deleteMenuItem() {
-            const id = document.getElementById('itemId').value;
-            if (!id || !confirm('Точно удалить?')) return;
-            deleteItem(id);
-            closeMenuItemModal();
-        }
-
-        async function deleteItem(id) {
-            // Удаляем из customItems
-            if (state.settings.customItems) {
-                state.settings.customItems = state.settings.customItems.filter(i => i.id !== id);
-            }
-            // Помечаем как недоступное
-            state.settings.menuItems = state.settings.menuItems || {};
-            state.settings.menuItems[id] = false;
-            
-            await api('/settings', 'POST', { 
-                customItems: state.settings.customItems,
-                menuItems: state.settings.menuItems 
-            });
-            
-            state.menuData = buildMenuList(state.settings);
-            renderMenu();
-            showNotification('🗑️ Удалено');
-        }
-
-        // ================================================================
         // ===== CHATS =====
-        // ================================================================
         async function loadChats() {
-            const data = await api('/chats');
-            const chats = data.chats || [];
-            const list = document.getElementById('chatsList');
-            const badge = document.getElementById('chatBadge');
-            
+            const d = await api('/chats');
+            const chats = d.chats || [];
+            const b = $('chatBadge');
             const unread = chats.filter(c => c.unread > 0).length;
-            if (unread > 0) { badge.textContent = unread; badge.classList.add('show'); }
-            else badge.classList.remove('show');
-            
-            if (!chats.length) {
-                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-comment-dots" style="font-size:48px;display:block;margin-bottom:12px;"></i>Чатов пока нет</div>';
-                return;
-            }
-            
+            if (unread) { b.textContent = unread; b.classList.add('show'); } else b.classList.remove('show');
+
+            const list = $('chatsList');
+            if (!chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
             list.innerHTML = chats.map(c => `
-                <div class="chat-item" onclick="openChat('${c.phone}', '${c.name||'Клиент'}')">
-                    <div class="chat-name">👤 ${c.name||'Клиент'} 📞 ${c.phone}</div>
-                    <div class="chat-preview">${c.lastMessage?.text || 'Нет сообщений'}</div>
-                    ${c.unread > 0 ? `<span class="chat-unread">${c.unread} новых</span>` : ''}
+                <div class="chat-item" onclick="openChat('${c.phone}','${c.name||'Клиент'}')">
+                    <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone}</div>
+                    <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'} ${c.unread ? `<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>` : ''}</div>
                 </div>
             `).join('');
         }
 
         async function openChat(phone, name) {
-            state.currentChatPhone = phone;
-            document.getElementById('chatModalTitle').textContent = `💬 ${name} (${phone})`;
-            document.getElementById('chatModal').classList.add('open');
-            document.getElementById('chatInput').value = '';
-            
+            S.chatPhone = phone;
+            $('chatTitle').textContent = `💬 ${name} (${phone})`;
+            $('chatModal').classList.add('open');
             await api('/chat-read', 'POST', { phone });
-            loadChatMessages(phone);
-            
-            const badge = document.getElementById('chatBadge');
-            const current = parseInt(badge.textContent) || 0;
-            if (current > 0) {
-                badge.textContent = current - 1;
-                if (badge.textContent === '0') badge.classList.remove('show');
-            }
+            loadMessages();
         }
 
-        async function loadChatMessages(phone) {
-            const data = await api('/chat-messages?phone=' + encodeURIComponent(phone));
-            const msgs = data.messages || [];
-            const container = document.getElementById('chatMessages');
-            
-            if (!msgs.length) {
-                container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">Начните диалог</div>';
-            } else {
-                container.innerHTML = msgs.map(m => `
-                    <div style="margin-bottom:8px;display:flex;justify-content:${m.from === 'client' ? 'flex-start' : 'flex-end'};">
-                        <div style="max-width:80%;padding:10px 16px;border-radius:${m.from === 'client' ? 'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px' : 'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from === 'client' ? '#F8FAFC' : 'linear-gradient(135deg, var(--primary), var(--primary-dark))'};color:${m.from === 'client' ? 'var(--text-dark)' : 'white'};">
-                            ${m.text}
-                            <span style="font-size:9px;display:block;margin-top:4px;opacity:0.6;">${new Date(m.time).toLocaleTimeString()}</span>
-                        </div>
+        async function loadMessages() {
+            const d = await api('/chat-messages?phone=' + S.chatPhone);
+            const msgs = d.messages || [];
+            const c = $('chatMessages');
+            if (!msgs.length) { c.innerHTML = '<div class="empty-state">Начните диалог</div>'; return; }
+            c.innerHTML = msgs.map(m => `
+                <div style="margin-bottom:8px;display:flex;justify-content:${m.from==='client'?'flex-start':'flex-end'};">
+                    <div style="max-width:80%;padding:10px 14px;border-radius:${m.from==='client'?'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px':'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from==='client'?'#F8FAFC':'linear-gradient(135deg,var(--primary),var(--primary-dark))'};color:${m.from==='client'?'var(--text-dark)':'#fff'};">
+                        ${m.text}<span style="font-size:9px;display:block;margin-top:4px;opacity:0.6;">${new Date(m.time).toLocaleTimeString()}</span>
                     </div>
-                `).join('');
-            }
-            container.scrollTop = container.scrollHeight;
+                </div>`).join('');
+            c.scrollTop = c.scrollHeight;
         }
 
-        async function sendChatMessage() {
-            const text = document.getElementById('chatInput').value.trim();
-            if (!text || !state.currentChatPhone) return;
-            
-            await api('/chat-send', 'POST', { phone: state.currentChatPhone, text, from: 'admin' });
-            document.getElementById('chatInput').value = '';
-            loadChatMessages(state.currentChatPhone);
+        async function sendChat() {
+            const t = $('chatInput').value.trim();
+            if (!t || !S.chatPhone) return;
+            await api('/chat-send', 'POST', { phone: S.chatPhone, text: t, from: 'admin' });
+            $('chatInput').value = '';
+            loadMessages();
             loadChats();
         }
 
-        function closeChatModal() {
-            document.getElementById('chatModal').classList.remove('open');
-            state.currentChatPhone = null;
-        }
+        function closeChatModal() { $('chatModal').classList.remove('open'); S.chatPhone = null; }
 
-        // ================================================================
         // ===== REVIEWS =====
-        // ================================================================
         async function loadReviews() {
-            const data = await api('/reviews');
-            const reviews = data.reviews || [];
-            const list = document.getElementById('reviewsList');
-            const badge = document.getElementById('reviewsBadge');
-            
-            if (reviews.length > 0) { badge.textContent = reviews.length; badge.classList.add('show'); }
-            else badge.classList.remove('show');
-            
-            if (!reviews.length) {
-                list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>Отзывов пока нет</div>';
-                return;
-            }
-            
-            list.innerHTML = reviews.map(r => `
+            const d = await api('/reviews');
+            const revs = d.reviews || [];
+            const list = $('reviewsList');
+            if (!revs.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Отзывов нет</div>'; return; }
+            list.innerHTML = revs.map(r => `
                 <div class="review-card">
-                    <div class="review-header">
-                        <span style="font-weight:600;color:var(--text-dark);">${r.name||'Клиент'}</span>
-                        <span class="review-stars">${'⭐'.repeat(r.rating||5)}</span>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-weight:600;">${r.name||'Клиент'}</span>
+                        <span class="stars">${'⭐'.repeat(r.rating||5)}</span>
                     </div>
-                    <div style="font-size:14px;color:var(--text-secondary);line-height:1.5;">${r.text||''}</div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-                        <span style="font-size:11px;color:var(--text-muted);">Заказ #${r.orderId} • ${new Date(r.createdAt).toLocaleString()}</span>
-                        <button class="btn btn-danger btn-sm" onclick="deleteReview(${r.id})">🗑️</button>
+                    <div style="font-size:13px;color:var(--text-secondary);margin:6px 0;">${r.text||''}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:10px;color:var(--text-muted);">Заказ #${r.orderId} • ${new Date(r.createdAt).toLocaleString()}</span>
+                        <button class="btn btn-danger btn-xs" onclick="deleteReview(${r.id})">🗑️</button>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
-        async function deleteReview(id) {
-            if (!confirm('Удалить отзыв?')) return;
-            await fetch(`/api/review/${id}`, { method: 'DELETE' });
-            showNotification('🗑️ Удалён');
-            loadReviews();
-        }
+        async function deleteReview(id) { if (!confirm('Удалить?')) return; await fetch('/api/review/'+id, { method:'DELETE' }); toast('🗑️ Удалён'); loadReviews(); }
 
-        // ================================================================
-        // ===== MODAL CLOSE ON OVERLAY CLICK =====
-        // ================================================================
-        document.getElementById('menuItemModal').addEventListener('click', function(e) {
-            if (e.target === this) closeMenuItemModal();
-        });
-        document.getElementById('chatModal').addEventListener('click', function(e) {
-            if (e.target === this) closeChatModal();
-        });
+        // ===== MODAL CLOSE =====
+        document.getElementById('itemModal').addEventListener('click', function(e) { if (e.target === this) closeItemModal(); });
+        document.getElementById('chatModal').addEventListener('click', function(e) { if (e.target === this) closeChatModal(); });
 
-        // ================================================================
         // ===== AUTO REFRESH =====
-        // ================================================================
-        let lastOrderCount = 0;
+        let lastCount = 0;
         setInterval(async () => {
             try {
-                const orders = await api('/orders');
-                if (orders.length > lastOrderCount && lastOrderCount > 0) {
-                    showNotification('📦 Новый заказ!');
-                }
-                lastOrderCount = orders.length;
-                
-                if (state.currentTab === 'orders') {
-                    state.allOrders = orders;
-                    updateStats(orders);
-                    renderOrders(orders);
-                }
-                
-                // Обновляем чаты в фоне
-                const chatsData = await api('/chats');
-                const chats = chatsData.chats || [];
-                const badge = document.getElementById('chatBadge');
-                const unread = chats.filter(c => c.unread > 0).length;
-                if (unread > 0) { badge.textContent = unread; badge.classList.add('show'); }
-                
-                // Обновляем отзывы
-                const revData = await api('/reviews');
-                const revBadge = document.getElementById('reviewsBadge');
-                const revCount = (revData.reviews || []).length;
-                if (revCount > 0) { revBadge.textContent = revCount; revBadge.classList.add('show'); }
-                
+                const o = await api('/orders');
+                if (o.length > lastCount && lastCount > 0) toast('📦 Новый заказ!');
+                lastCount = o.length;
+                if (S.tab === 'orders') { S.orders = o; const today = new Date().toDateString(); const active = o.filter(x => x.status === 'ожидает'); let rev = 0; o.forEach(x => { if (x.items) x.items.forEach(i => rev += (i.price||0)*(i.quantity||1)); }); $('statTotal').textContent = o.length; $('statActive').textContent = active.length; $('statToday').textContent = o.filter(x => new Date(x.createdAt).toDateString() === today).length; $('statRevenue').textContent = rev + ' ₽'; renderOrdersList(); }
+                if (S.tab === 'chats') loadChats();
             } catch(e) {}
         }, 10000);
 
-        // ================================================================
+        function renderOrdersList() {
+            const o = S.orders;
+            const list = $('ordersList');
+            if (!o.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
+            list.innerHTML = [...o].reverse().map(x => {
+                const items = x.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
+                let sc = 'status-waiting';
+                if (x.status === 'выполнен') sc = 'status-done';
+                if (x.status?.includes('отменен')) sc = 'status-cancelled';
+                const acts = x.status === 'ожидает' ? `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${x.id},'${x.confirmCode}')">✅</button><button class="btn btn-danger btn-xs" onclick="cancelOrder(${x.id})">❌</button>` : '';
+                return `<div class="order-card">
+                    <div class="top"><span class="oid">🏠 #${x.bungalow||'?'} — Заказ #${x.id}</span><span class="status ${sc}">${x.status||'ожидает'}</span></div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">👤 ${x.customerName||'-'} 📞 ${x.customerPhone||'-'} ${x.confirmCode ? '🔑 <b>'+x.confirmCode+'</b>' : ''}</div>
+                    <div class="items">${items}</div>
+                    <div class="bottom"><span class="total">💰 ${x.total||0} ₽</span><span style="font-size:10px;color:var(--text-muted);">${new Date(x.createdAt).toLocaleString()}</span><div style="display:flex;gap:4px;">${acts}</div></div>
+                </div>`;
+            }).join('');
+        }
+
         // ===== INIT =====
-        // ================================================================
         async function init() {
             await loadMenu();
             await loadOrders();
-            lastOrderCount = state.allOrders.length;
+            lastCount = S.orders.length;
         }
 
         init();
-        console.log('🍓 Админка готова!');
-        console.log('✅ Добавление/удаление позиций');
-        console.log('✅ Изменение цен и описаний');
-        console.log('✅ Загрузка картинок');
-        console.log('✅ Онлайн-обновление каждые 10 сек');
+        console.log('🍓 Админка v2 готова');
     </script>
 </body>
 </html>
