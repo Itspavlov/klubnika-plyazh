@@ -2742,13 +2742,15 @@
                                 </div>
                                 
                                 <div class="order-items-list">${itemsList}</div>
-                                
-                                <div class="order-card-footer">
+                                                             <div class="order-card-footer">
                                     <div class="footer-info">
                                         ${order.paymentLabel ? '💳 ' + order.paymentLabel : ''}
                                     </div>
                                     <div class="footer-total">💰 ${order.total || 0} ₽</div>
                                     ${actionButtons ? `<div class="footer-actions">${actionButtons}</div>` : ''}
+                                    <button onclick="openSupportChatWithOrder(${order.id})" style="width:100%;margin-top:8px;padding:10px;background:#FFF8E1;border:1px solid #FFE0B2;border-radius:var(--radius-md);font-size:13px;font-weight:500;color:#E65100;cursor:pointer;font-family:var(--font-family);display:flex;align-items:center;justify-content:center;gap:6px;">
+                                        💬 Вопрос по заказу #${order.id}
+                                    </button>
                                 </div>
                             </div>
                         `;
@@ -3005,7 +3007,21 @@
                 chatUpdateInterval = null; 
             }
         }
-
+function openSupportChatWithOrder(orderId) {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); return; }
+    
+    openSupportChat();
+    
+    setTimeout(() => {
+        const input = document.getElementById('supportInput');
+        if (input) {
+            input.value = `❓ Вопрос по заказу #${orderId}`;
+            sendSupportMessage();
+        }
+    }, 500);
+}
         function openSupportChat() {
     const name = document.getElementById('customerName').value.trim();
     const phone = document.getElementById('customerPhone').value.trim();
