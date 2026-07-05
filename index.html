@@ -2944,7 +2944,17 @@
         // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
-       function openSupportChat() {
+      function closeSupportChat() {
+    const modal = document.getElementById('supportChatModal');
+    if (modal) modal.remove();
+    document.body.style.overflow = '';
+    if (chatUpdateInterval) { 
+        clearInterval(chatUpdateInterval); 
+        chatUpdateInterval = null; 
+    }
+}
+
+function openSupportChat() {
     const name = document.getElementById('customerName').value.trim();
     const phone = document.getElementById('customerPhone').value.trim();
     if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
@@ -2976,7 +2986,7 @@
                     Задайте ваш вопрос, мы ответим в ближайшее время
                 </div>
             </div>
-            <div style="padding:10px 18px 16px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;background:#FFFFFF;">
+            <div style="padding:12px 18px 24px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;background:#FFFFFF;">
                 <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:12px 16px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;background:#F8FAFC;font-family:var(--font-family);" onkeydown="if(event.key==='Enter') sendSupportMessage()">
                 <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:12px 20px;border-radius:var(--radius-md);font-weight:600;cursor:pointer;font-family:var(--font-family);">📤</button>
             </div>
@@ -2989,6 +2999,7 @@
     loadSupportMessages(phone);
     startChatAutoUpdate(phone);
 }
+
 
         // ================================================================
         // ===== NAVIGATION =====
