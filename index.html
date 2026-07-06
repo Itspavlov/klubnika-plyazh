@@ -608,7 +608,8 @@
         .review-modal-overlay,
         .map-modal-overlay,
         .image-modal-overlay,
-        .beach-restrict-modal {
+        .beach-restrict-modal,
+        .age-verify-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -631,7 +632,8 @@
         .review-modal-overlay.open,
         .map-modal-overlay.open,
         .image-modal-overlay.open,
-        .beach-restrict-modal.open {
+        .beach-restrict-modal.open,
+        .age-verify-overlay.open {
             display: flex;
         }
 
@@ -660,7 +662,8 @@
         .auth-modal-content,
         .topping-modal-content,
         .beach-restrict-content,
-        .review-modal-content {
+        .review-modal-content,
+        .age-verify-content {
             background: #FFFFFF;
             border-radius: var(--radius-2xl);
             max-width: 420px;
@@ -784,6 +787,58 @@
             background: #FFF5F5;
         }
 
+        /* ===== AGE VERIFY ===== */
+        .age-verify-overlay {
+            z-index: 600;
+        }
+
+        .age-warning-box {
+            background: #FFF8E1;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            margin: 16px 0;
+            text-align: left;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .age-warning-box span:first-child {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .age-warning-text {
+            font-size: 13px;
+            color: #E65100;
+            line-height: 1.5;
+        }
+
+        .age-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 12px 16px;
+            background: #F8FAFC;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            user-select: none;
+        }
+
+        .age-checkbox-label input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .age-checkbox-label span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
         /* ===== CART MODAL ===== */
         .cart-overlay {
             display: none;
@@ -802,7 +857,7 @@
             display: block;
         }
 
-                .cart-modal {
+        .cart-modal {
             display: none;
             position: fixed;
             bottom: 0;
@@ -815,7 +870,6 @@
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
             max-width: 480px;
             margin: 0 auto;
-            
         }
 
         .cart-modal.open {
@@ -978,7 +1032,7 @@
         }
 
         /* ===== BOTTOM TAB BAR ===== */
-                     .bottom-tab-bar {
+        .bottom-tab-bar {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -998,7 +1052,7 @@
             box-shadow: 0 -4px 20px rgba(255, 71, 87, 0.05);
             width: calc(100% - 16px);
         }
-        
+
         .tab-item {
             display: flex;
             flex-direction: column;
@@ -1062,19 +1116,20 @@
             font-weight: 600;
             color: var(--primary);
         }
-/* ===== ORDERS FULLSCREEN ===== */
-       .orders-fullscreen-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 18px 10px;
-    border-bottom: 1px solid #F1F5F9;
-    flex-shrink: 0;
-    background: #FFFFFF;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+
+        /* ===== ORDERS FULLSCREEN ===== */
+        .orders-fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 10px;
+            border-bottom: 1px solid #F1F5F9;
+            flex-shrink: 0;
+            background: #FFFFFF;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
         .orders-fullscreen-header h2 {
             font-size: 17px;
@@ -1082,17 +1137,18 @@
             color: var(--text-dark);
             margin: 0;
         }
-.orders-fullscreen-search {
-    padding: 14px 18px 14px;
-    border-bottom: 1px solid #F1F5F9;
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-    background: #FFFFFF;
-    position: sticky;
-    top: 48px;
-    z-index: 9;
-}
+
+        .orders-fullscreen-search {
+            padding: 14px 18px 14px;
+            border-bottom: 1px solid #F1F5F9;
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            background: #FFFFFF;
+            position: sticky;
+            top: 48px;
+            z-index: 9;
+        }
 
         .orders-fullscreen-search input {
             flex: 1;
@@ -1123,12 +1179,12 @@
         }
 
         .orders-fullscreen-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 80px 16px 20px;
-    background: #F8FAFC;
-    -webkit-overflow-scrolling: touch;
-}
+            flex: 1;
+            overflow-y: auto;
+            padding: 80px 16px 20px;
+            background: #F8FAFC;
+            -webkit-overflow-scrolling: touch;
+        }
 
         .order-card-full {
             background: #FFFFFF;
@@ -1405,7 +1461,7 @@
             }
         }
 
-                @media (max-width: 340px) {
+        @media (max-width: 340px) {
             .menu-grid {
                 grid-template-columns: 1fr;
             }
@@ -1420,7 +1476,8 @@
     <!-- ===== TOAST / CART OVERLAY ===== -->
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-        <!-- ===== AUTH MODAL ===== -->
+
+    <!-- ===== AUTH MODAL ===== -->
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">
@@ -1460,6 +1517,37 @@
             <div class="topping-options" id="toppingOptions" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
             <button class="confirm-btn" id="confirmToppingBtn" disabled>
                 <i class="fas fa-plus-circle"></i> Добавить в корзину
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== AGE VERIFICATION MODAL ===== -->
+    <div class="age-verify-overlay" id="ageVerifyModal">
+        <div class="age-verify-content">
+            <span style="font-size: 48px; display: block; text-align: center; margin-bottom: 12px;">🍺</span>
+            <div class="modal-title">Подтверждение возраста</div>
+            <div class="modal-subtitle" style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+                Спиртные напитки отпускаются<br><strong>строго совершеннолетним</strong>
+            </div>
+            
+            <div class="age-warning-box">
+                <span>⚠️</span>
+                <span class="age-warning-text">
+                    При получении заказа необходимо <strong>предъявить документ</strong>, удостоверяющий личность и возраст
+                </span>
+            </div>
+
+            <label class="age-checkbox-label" onclick="toggleAgeCheckbox()">
+                <input type="checkbox" id="ageCheckbox">
+                <span>Мне есть 18 лет</span>
+            </label>
+
+            <button class="confirm-btn" id="ageConfirmBtn" disabled onclick="confirmAge()">
+                <i class="fas fa-check-circle"></i> Подтверждаю
+            </button>
+            
+            <button onclick="closeAgeVerify()" style="width: 100%; padding: 12px; background: none; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; margin-top: 8px; font-family: var(--font-family);">
+                Отмена
             </button>
         </div>
     </div>
@@ -1827,7 +1915,8 @@
             </button>
         </div>
     </div>
-        <script>
+
+    <script>
         // ================================================================
         // ===== CONFIGURATION =====
         // ================================================================
@@ -1842,10 +1931,10 @@
             phoneRaw: '79628557263'
         };
 
-       const WORK_HOURS = { 
-    start: 9,  
-    end: 28    // 28 = 4:00 утра
-};
+        const WORK_HOURS = { 
+            start: 9,  
+            end: 28    // 28 = 4:00 утра
+        };
 
         const FORCE_WORKING_TIME = false;
         let manualTime = null;
@@ -1870,14 +1959,15 @@
         ];
 
         const ROMANTIC_ITEM = {
-    id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
-    price: 699, oldPrice: 770, volume: '300 мл',
-    image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
-};
+            id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
+            price: 699, oldPrice: 770, volume: '300 мл',
+            image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
+        };
+
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.jpg', emoji: '🍋' },
             { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'images/kola.jpg', emoji: '🥤' },
-            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.jpg', emoji: '🍺' },
+            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.jpg', emoji: '🍺', alcohol: true },
             { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, image: 'images/shaurma.jpg', emoji: '🌯', shaurma: true }
         ];
 
@@ -1904,6 +1994,7 @@
 
         let selectedPayment = 'cash';
         let pendingProduct = null;
+        let pendingAlcoholProduct = null;
         let isPickupMode = false;
         let currentReviews = [];
         let chatUpdateInterval = null;
@@ -1919,7 +2010,6 @@
         function validatePhoneInput(input) {
             let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
             
-            // Автоформат: если начинается с 7 или 8, добавляем +7
             if (value.match(/^[7-8]\d{0,10}$/)) {
                 if (value.length === 11 && (value.startsWith('7') || value.startsWith('8'))) {
                     input.classList.remove('invalid');
@@ -2099,7 +2189,9 @@
             const hours = date.getHours();
             const minutes = date.getMinutes();
             return `${hours}:${String(minutes).padStart(2, '0')}`;
-        }        // ================================================================
+        }
+
+        // ================================================================
         // ===== NOTIFICATION =====
         // ================================================================
         function showNotification(message, type = '') {
@@ -2132,7 +2224,6 @@
             state.bungalowNumber = bungalowNumber;
             isPickupMode = false;
 
-            // Автозаполнение сохранённых данных
             const savedAuth = getUserAuth();
             if (savedAuth) {
                 document.getElementById('customerName').value = savedAuth.name || '';
@@ -2207,6 +2298,70 @@
         });
 
         // ================================================================
+        // ===== AGE VERIFICATION =====
+        // ================================================================
+        function toggleAgeCheckbox() {
+            const checkbox = document.getElementById('ageCheckbox');
+            checkbox.checked = !checkbox.checked;
+            document.getElementById('ageConfirmBtn').disabled = !checkbox.checked;
+        }
+
+        function openAgeVerify(product) {
+            pendingAlcoholProduct = product;
+            document.getElementById('ageCheckbox').checked = false;
+            document.getElementById('ageConfirmBtn').disabled = true;
+            document.getElementById('ageVerifyModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAgeVerify() {
+            document.getElementById('ageVerifyModal').classList.remove('open');
+            document.body.style.overflow = '';
+            pendingAlcoholProduct = null;
+        }
+
+   function confirmAge() {
+    if (!document.getElementById('ageCheckbox').checked) return;
+    
+    const product = pendingAlcoholProduct; // ← сохраняем в локальную переменную
+    
+    if (!product) {
+        closeAgeVerify();
+        return;
+    }
+    
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    
+    closeAgeVerify();
+    pendingAlcoholProduct = null;
+    
+    if (!name || !phone || !isValidPhone(phone)) {
+        if (phone && !isValidPhone(phone)) {
+            showNotification('⚠️ Введите корректный номер телефона!', 'error');
+        }
+        openAuthModal({ ...product, isAlcohol: true });
+        return;
+    }
+    
+    // Имя и телефон есть — сразу добавляем
+    addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        category: product.category || 'напиток',
+        topping: '',
+        toppingName: '',
+        isAlcohol: true
+    });
+    showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
+}
+        document.getElementById('ageVerifyModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAgeVerify();
+        });
+
+        // ================================================================
         // ===== QR PROMPT =====
         // ================================================================
         function showQRPrompt() {
@@ -2241,30 +2396,28 @@
             const strawberryGrid = document.getElementById('strawberryGrid');
             let html = '';
 
-            // Романтик
             let romanticCustom = null;
             if (settings.customItems) {
                 romanticCustom = settings.customItems.find(ci => ci.id === ROMANTIC_ITEM.id);
             }
             const displayRomantic = romanticCustom || ROMANTIC_ITEM;
-const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
+            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
 
-html += `
-    <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
-        <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
-        <div class="item-content">
-            <div class="item-name">${displayRomantic.name}</div>
-            <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
-            <div class="item-price">
-                ${displayRomantic.price} ₽
-                ${displayRomantic.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${displayRomantic.oldPrice} ₽</small>` : ''}
-            </div>
-            <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
-        </div>
-    </div>
-`;
+            html += `
+                <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
+                    <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
+                    <div class="item-content">
+                        <div class="item-name">${displayRomantic.name}</div>
+                        <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
+                        <div class="item-price">
+                            ${displayRomantic.price} ₽
+                            ${displayRomantic.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${displayRomantic.oldPrice} ₽</small>` : ''}
+                        </div>
+                        <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
+                    </div>
+                </div>
+            `;
 
-            // Клубника
             STRAWBERRY_ITEMS.forEach(item => {
                 let customItem = null;
                 if (settings.customItems) {
@@ -2289,7 +2442,6 @@ html += `
 
             strawberryGrid.innerHTML = html;
 
-            // Фрукты
             let fruitsHtml = '';
             FRUITS_ITEMS.forEach(item => {
                 let customItem = null;
@@ -2313,7 +2465,6 @@ html += `
             });
             document.getElementById('fruitsGrid').innerHTML = fruitsHtml;
 
-            // Напитки
             let drinksHtml = '';
             DRINK_ITEMS.forEach(item => {
                 let customItem = null;
@@ -2324,7 +2475,7 @@ html += `
                 const available = settings.menuItems[item.id] !== false;
                 
                 drinksHtml += `
-                    <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток">
+                    <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток" data-alcohol="${item.alcohol ? 'true' : 'false'}">
                         <div class="drink-icon" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')">
                             <img src="${displayItem.image || item.image}" alt="${displayItem.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${displayItem.emoji || item.emoji}'" loading="lazy">
                         </div>
@@ -2389,6 +2540,22 @@ html += `
 
         function handleDrinkAdd(e) {
             e.stopPropagation();
+            const item = this.closest('.drink-item');
+            if (!item) return;
+            
+            const product = {
+                id: parseInt(item.dataset.id),
+                name: item.dataset.name,
+                price: parseInt(item.dataset.price),
+                category: item.dataset.category || 'напиток'
+            };
+            
+            const isAlcohol = item.dataset.alcohol === 'true';
+            if (isAlcohol) {
+                openAgeVerify(product);
+                return;
+            }
+            
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone || !isValidPhone(phone)) { 
@@ -2398,10 +2565,17 @@ html += `
                 openAuthModal(null); 
                 return; 
             }
-            const item = this.closest('.drink-item');
-            if (!item) return;
-            addToCart({ id: parseInt(item.dataset.id), name: item.dataset.name, price: parseInt(item.dataset.price), quantity: 1, category: item.dataset.category || 'напиток', topping: '', toppingName: '' });
-            showNotification(`✅ ${item.dataset.name} добавлен!`);
+            
+            addToCart({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+                category: product.category,
+                topping: '',
+                toppingName: ''
+            });
+            showNotification(`✅ ${product.name} добавлен!`);
         }
 
         // ================================================================
@@ -2439,7 +2613,19 @@ html += `
             closeAuthModal();
             
             if (pendingProduct) {
-                if (!pendingProduct.hasToppings) {
+                if (pendingProduct.isAlcohol) {
+                    addToCart({
+                        id: pendingProduct.id,
+                        name: pendingProduct.name,
+                        price: pendingProduct.price,
+                        quantity: 1,
+                        category: pendingProduct.category || 'напиток',
+                        topping: '',
+                        toppingName: '',
+                        isAlcohol: true
+                    });
+                    showNotification(`🍺 ${pendingProduct.name} добавлен! Предъявите паспорт курьеру.`);
+                } else if (!pendingProduct.hasToppings) {
                     addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '', isRomantic: pendingProduct.isRomantic || false });
                     showNotification(`✅ ${pendingProduct.name} добавлен!`);
                 } else {
@@ -2533,7 +2719,7 @@ html += `
                 document.getElementById('cartItems').innerHTML = state.cart.map((item, index) => `
                     <div class="cart-item" data-index="${index}">
                         <div class="item-info-cart">
-                            <div class="item-name-cart">${item.name}${item.isRomantic ? ' ❤️' : ''}</div>
+                            <div class="item-name-cart">${item.name}${item.isRomantic ? ' ❤️' : ''}${item.isAlcohol ? ' 🍺 18+' : ''}</div>
                             <div class="item-price-cart">${item.price} ₽ × ${item.quantity}</div>
                         </div>
                         <div class="item-actions">
@@ -2563,26 +2749,26 @@ html += `
             if (confirm(`Удалить "${item.name}" из корзины?`)) { state.cart.splice(index, 1); updateCart(); showNotification(`🗑️ "${item.name}" удален`); }
         }
 
-       function openCart() {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-    document.getElementById('cartModal').classList.add('open');
-    document.getElementById('cartOverlay').classList.add('open');
-    document.getElementById('bottomTabBar').style.display = 'none'; // ← скрываем таб-бар
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabCart').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+        function openCart() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            document.getElementById('cartModal').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('open');
+            document.getElementById('bottomTabBar').style.display = 'none';
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabCart').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
         function closeCart() {
-    document.getElementById('cartModal').classList.remove('open');
-    document.getElementById('cartOverlay').classList.remove('open');
-    document.getElementById('bottomTabBar').style.display = 'flex'; // ← показываем обратно
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabMenu').classList.add('active');
-    document.body.style.overflow = '';
-}
+            document.getElementById('cartModal').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('open');
+            document.getElementById('bottomTabBar').style.display = 'flex';
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabMenu').classList.add('active');
+            document.body.style.overflow = '';
+        }
 
         // ================================================================
         // ===== PAYMENT =====
@@ -2597,105 +2783,109 @@ html += `
         // ================================================================
         // ===== ORDER SUBMIT =====
         // ================================================================
-           async function submitOrder() {
-    const bungaloNumber = state.bungalowNumber;
-    
-    if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
-    if (state.settings.technicalBreak) { showNotification('🔧 Технический перерыв!', 'error'); return; }
-    if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00', 'error'); return; }
-    if (!selectedPayment) { showNotification('⚠️ Выберите способ оплаты!', 'error'); return; }
+        async function submitOrder() {
+            const bungaloNumber = state.bungalowNumber;
+            
+            if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
+            if (state.settings.technicalBreak) { showNotification('🔧 Технический перерыв!', 'error'); return; }
+            if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00', 'error'); return; }
+            if (!selectedPayment) { showNotification('⚠️ Выберите способ оплаты!', 'error'); return; }
 
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    
-    if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!', 'error'); return; }
-    if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
-    if (!phone || !isValidPhone(phone)) { showNotification('⚠️ Введите корректный номер телефона!', 'error'); return; }
-    if (state.cart.length === 0) { showNotification('⚠️ Корзина пуста!', 'error'); return; }
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            
+            if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!', 'error'); return; }
+            if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
+            if (!phone || !isValidPhone(phone)) { showNotification('⚠️ Введите корректный номер телефона!', 'error'); return; }
+            if (state.cart.length === 0) { showNotification('⚠️ Корзина пуста!', 'error'); return; }
 
-    const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-    saveUserAuth(name, phoneClean);
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            saveUserAuth(name, phoneClean);
 
-    // 🔒 Проверяем, нет ли уже активного заказа
-    try {
-        const checkRes = await fetch('/api/my-orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: phoneClean })
-        });
-        const checkData = await checkRes.json();
-        if (checkData.success && checkData.orders) {
-            const activeOrder = checkData.orders.find(o => o.status === 'ожидает');
-            if (activeOrder) {
-                showNotification('⚠️ У вас уже есть активный заказ №' + activeOrder.id + '! Дождитесь доставки.', 'error');
-                return;
-            }
-        }
-    } catch (e) {
-        // Если не смогли проверить — продолжаем, сервер всё равно проверит
-    }
-
-    const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом' };
-    const order = {
-        bungalow: bungaloNumber || 0,
-        customerName: name,
-        customerPhone: phoneClean,
-        paymentMethod: selectedPayment,
-        paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
-        isPickup: isPickupMode || false,
-        items: state.cart.map(item => ({ id: item.id, name: item.name + (item.isRomantic ? ' ❤️' : ''), price: item.price, quantity: item.quantity, category: item.category || 'другое', topping: item.toppingName || '' })),
-        total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        timestamp: new Date().toISOString()
-    };
-
-    const orderButton = document.getElementById('orderButton');
-    orderButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
-    orderButton.disabled = true;
-
-    fetch('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) })
-        .then(res => res.json())
-        .then(result => {
-            if (result.success) {
-                if (isPickupMode) {
-                    showNotification('🏖️ Заказ ждет вас в киоске!');
-                } else {
-                    showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+            try {
+                const checkRes = await fetch('/api/my-orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phoneClean })
+                });
+                const checkData = await checkRes.json();
+                if (checkData.success && checkData.orders) {
+                    const activeOrder = checkData.orders.find(o => o.status === 'ожидает');
+                    if (activeOrder) {
+                        showNotification('⚠️ У вас уже есть активный заказ №' + activeOrder.id + '! Дождитесь доставки.', 'error');
+                        return;
+                    }
                 }
-                state.cart = [];
-                updateCart();
-                selectPayment('cash');
-                closeCart();
-                lastOrderCheckTime = Date.now();
-                startReviewCheck();
-                setTimeout(updateOrdersBadge, 1000);
-                if (result.orderId) { state.reviewOrderId = result.orderId; }
-            } else {
-                showNotification('❌ ' + (result.error || 'Ошибка!'), 'error');
-            }
-        })
-        .catch(() => { showNotification('❌ Ошибка соединения!', 'error'); })
-        .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать'; orderButton.disabled = false; });
-}
+            } catch (e) {}
 
-  // ================================================================
+            const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом' };
+            const order = {
+                bungalow: bungaloNumber || 0,
+                customerName: name,
+                customerPhone: phoneClean,
+                paymentMethod: selectedPayment,
+                paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
+                isPickup: isPickupMode || false,
+                items: state.cart.map(item => ({ 
+                    id: item.id, 
+                    name: item.name + (item.isRomantic ? ' ❤️' : '') + (item.isAlcohol ? ' 🍺 18+' : ''), 
+                    price: item.price, 
+                    quantity: item.quantity, 
+                    category: item.category || 'другое', 
+                    topping: item.toppingName || '' 
+                })),
+                total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toISOString(),
+                hasAlcohol: state.cart.some(item => item.isAlcohol)
+            };
+
+            const orderButton = document.getElementById('orderButton');
+            orderButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+            orderButton.disabled = true;
+
+            fetch('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        if (isPickupMode) {
+                            showNotification('🏖️ Заказ ждет вас в киоске!');
+                        } else {
+                            showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+                        }
+                        state.cart = [];
+                        updateCart();
+                        selectPayment('cash');
+                        closeCart();
+                        lastOrderCheckTime = Date.now();
+                        startReviewCheck();
+                        setTimeout(updateOrdersBadge, 1000);
+                        if (result.orderId) { state.reviewOrderId = result.orderId; }
+                    } else {
+                        showNotification('❌ ' + (result.error || 'Ошибка!'), 'error');
+                    }
+                })
+                .catch(() => { showNotification('❌ Ошибка соединения!', 'error'); })
+                .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать'; orderButton.disabled = false; });
+        }
+
+        // ================================================================
         // ===== ORDERS MODAL (FULLSCREEN) =====
         // ================================================================
-       function openOrdersModal() {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-    
-    // Очищаем телефон от +, пробелов и скобок
-    const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-    
-    document.getElementById('ordersModal').classList.add('open');
-    document.getElementById('ordersPhoneInput').value = phoneClean; // ← чистая версия
-    document.body.style.overflow = 'hidden';
-    loadMyOrders();
-    
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabOrders').classList.add('active');
-}
+        function openOrdersModal() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            
+            document.getElementById('ordersModal').classList.add('open');
+            document.getElementById('ordersPhoneInput').value = phoneClean;
+            document.body.style.overflow = 'hidden';
+            loadMyOrders();
+            
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabOrders').classList.add('active');
+        }
 
         function closeOrdersModal() {
             document.getElementById('ordersModal').classList.remove('open');
@@ -2733,7 +2923,7 @@ html += `
                         const itemsList = order.items ? order.items.map(item => `
                             <div class="order-item-row">
                                 <div class="item-left">
-                                    <span class="item-icon">🍓</span>
+                                    <span class="item-icon">${item.name.includes('🍺') ? '🍺' : '🍓'}</span>
                                     <div class="item-details">
                                         <div class="item-name">${item.name}</div>
                                         <div class="item-qty">${item.quantity} шт. × ${item.price} ₽</div>
@@ -2771,9 +2961,11 @@ html += `
                                 </div>
                                 
                                 <div class="order-items-list">${itemsList}</div>
-                                                             <div class="order-card-footer">
+                                
+                                <div class="order-card-footer">
                                     <div class="footer-info">
                                         ${order.paymentLabel ? '💳 ' + order.paymentLabel : ''}
+                                        ${order.hasAlcohol ? ' 🍺 18+' : ''}
                                     </div>
                                     <div class="footer-total">💰 ${order.total || 0} ₽</div>
                                     ${actionButtons ? `<div class="footer-actions">${actionButtons}</div>` : ''}
@@ -2801,10 +2993,10 @@ html += `
                 .catch(() => { showNotification('❌ Ошибка соединения', 'error'); });
         }
 
-       function updateOrdersBadge() {
-    const phone = document.getElementById('customerPhone').value.trim().replace(/[\s\-\+\(\)]/g, '');
-    const badge = document.getElementById('tabOrdersBadge');
-    if (!phone) { badge.classList.add('hidden'); return; }
+        function updateOrdersBadge() {
+            const phone = document.getElementById('customerPhone').value.trim().replace(/[\s\-\+\(\)]/g, '');
+            const badge = document.getElementById('tabOrdersBadge');
+            if (!phone) { badge.classList.add('hidden'); return; }
             fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
@@ -2971,10 +3163,10 @@ html += `
             document.getElementById('imageModal').classList.remove('open');
             document.body.style.overflow = '';
         }
- // ================================================================
+
+        // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
-        
         async function sendSupportMessage() {
             const input = document.getElementById('supportInput');
             const text = input.value.trim();
@@ -3036,67 +3228,68 @@ html += `
                 chatUpdateInterval = null; 
             }
         }
-function openSupportChatWithOrder(orderId) {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); return; }
-    
-    openSupportChat();
-    
-    setTimeout(() => {
-        const input = document.getElementById('supportInput');
-        if (input) {
-            input.value = `❓ Вопрос по заказу #${orderId}`;
-            sendSupportMessage();
-        }
-    }, 500);
-}
-        function openSupportChat() {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-    
-    closeSupportChat();
-    lastMessageTime = Date.now();
 
-    const overlay = document.createElement('div');
-    overlay.className = 'auth-modal-overlay open';
-    overlay.id = 'supportChatModal';
-    overlay.style.padding = '0';
-    overlay.style.background = '#FFFFFF';
-    overlay.style.backdropFilter = 'none';
-    overlay.innerHTML = `
-        <div style="width:100%;height:100%;display:flex;flex-direction:column;background:#FFFFFF;max-width:100%;border-radius:0;" onclick="event.stopPropagation()">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #F1F5F9;flex-shrink:0;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <i class="fas fa-headset" style="color:var(--primary);font-size:20px;"></i>
-                    <div>
-                        <div style="font-weight:700;font-size:16px;color:var(--text-dark);">Поддержка</div>
-                        <div style="font-size:12px;color:var(--text-muted);">Задайте любой вопрос</div>
+        function openSupportChatWithOrder(orderId) {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); return; }
+            
+            openSupportChat();
+            
+            setTimeout(() => {
+                const input = document.getElementById('supportInput');
+                if (input) {
+                    input.value = `❓ Вопрос по заказу #${orderId}`;
+                    sendSupportMessage();
+                }
+            }, 500);
+        }
+
+        function openSupportChat() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+            
+            closeSupportChat();
+            lastMessageTime = Date.now();
+
+            const overlay = document.createElement('div');
+            overlay.className = 'auth-modal-overlay open';
+            overlay.id = 'supportChatModal';
+            overlay.style.padding = '0';
+            overlay.style.background = '#FFFFFF';
+            overlay.style.backdropFilter = 'none';
+            overlay.innerHTML = `
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;background:#FFFFFF;max-width:100%;border-radius:0;" onclick="event.stopPropagation()">
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #F1F5F9;flex-shrink:0;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <i class="fas fa-headset" style="color:var(--primary);font-size:20px;"></i>
+                            <div>
+                                <div style="font-weight:700;font-size:16px;color:var(--text-dark);">Поддержка</div>
+                                <div style="font-size:12px;color:var(--text-muted);">Задайте любой вопрос</div>
+                            </div>
+                        </div>
+                        <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
+                    </div>
+                    <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;background:#F8FAFC;">
+                        <div style="text-align:center;color:var(--text-muted);padding:40px 0;">
+                            <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
+                            Задайте ваш вопрос, мы ответим в ближайшее время
+                        </div>
+                    </div>
+                    <div style="padding:12px 18px 24px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;background:#FFFFFF;">
+                        <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:12px 16px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;background:#F8FAFC;font-family:var(--font-family);" onkeydown="if(event.key==='Enter') sendSupportMessage()">
+                        <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:12px 20px;border-radius:var(--radius-md);font-weight:600;cursor:pointer;font-family:var(--font-family);">📤</button>
                     </div>
                 </div>
-                <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
-            </div>
-            <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;background:#F8FAFC;">
-                <div style="text-align:center;color:var(--text-muted);padding:40px 0;">
-                    <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
-                    Задайте ваш вопрос, мы ответим в ближайшее время
-                </div>
-            </div>
-            <div style="padding:12px 18px 24px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;background:#FFFFFF;">
-                <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:12px 16px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;background:#F8FAFC;font-family:var(--font-family);" onkeydown="if(event.key==='Enter') sendSupportMessage()">
-                <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:12px 20px;border-radius:var(--radius-md);font-weight:600;cursor:pointer;font-family:var(--font-family);">📤</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-    document.body.style.overflow = 'hidden';
-    overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
-    
-    loadSupportMessages(phone);
-    startChatAutoUpdate(phone);
-}
-
+            `;
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+            overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
+            
+            loadSupportMessages(phone);
+            startChatAutoUpdate(phone);
+        }
 
         // ================================================================
         // ===== NAVIGATION =====
@@ -3230,11 +3423,13 @@ function openSupportChatWithOrder(orderId) {
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v2');
+        console.log('🍓 Strawberry in Chocolate - v3');
         console.log('✅ Валидация телефона');
         console.log('✅ Автосохранение данных');
         console.log('✅ Полноэкранные заказы и отзывы');
         console.log('✅ Красивые карточки заказов');
+        console.log('✅ Проверка возраста 18+ для алкоголя');
+        console.log('✅ oldPrice из админки');
     </script>
 
 </body>
