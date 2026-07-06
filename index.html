@@ -1870,11 +1870,10 @@
         ];
 
         const ROMANTIC_ITEM = {
-            id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
-            price: 699, originalPrice: 770, volume: '300 мл',
-            image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
-        };
-
+    id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
+    price: 699, oldPrice: 770, volume: '300 мл',
+    image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
+};
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.jpg', emoji: '🍋' },
             { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'images/kola.jpg', emoji: '🥤' },
@@ -2248,19 +2247,22 @@
                 romanticCustom = settings.customItems.find(ci => ci.id === ROMANTIC_ITEM.id);
             }
             const displayRomantic = romanticCustom || ROMANTIC_ITEM;
-            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
+const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
 
-            html += `
-                <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
-                    <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
-                    <div class="item-content">
-                        <div class="item-name">${displayRomantic.name}</div>
-                        <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
-                        <div class="item-price">${displayRomantic.price} ₽ <small style="text-decoration:line-through;color:var(--text-muted);">${ROMANTIC_ITEM.originalPrice} ₽</small></div>
-                        <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
-                    </div>
-                </div>
-            `;
+html += `
+    <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
+        <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
+        <div class="item-content">
+            <div class="item-name">${displayRomantic.name}</div>
+            <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
+            <div class="item-price">
+                ${displayRomantic.price} ₽
+                ${displayRomantic.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${displayRomantic.oldPrice} ₽</small>` : ''}
+            </div>
+            <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
+        </div>
+    </div>
+`;
 
             // Клубника
             STRAWBERRY_ITEMS.forEach(item => {

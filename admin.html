@@ -103,6 +103,7 @@
         .menu-item .info .name { font-weight: 600; font-size: 14px; color: var(--text-dark); }
         .menu-item .info .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         .menu-item .info .price { font-weight: 700; color: var(--primary); font-size: 15px; margin-top: 4px; }
+        .menu-item .info .price .old-price { text-decoration: line-through; color: var(--text-muted); font-weight: 500; font-size: 13px; margin-left: 6px; }
         .menu-item .actions { display: flex; gap: 4px; flex-shrink: 0; }
         .menu-item .actions button {
             width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
@@ -266,6 +267,7 @@
             <div class="form-group"><label>Название</label><input type="text" id="fName" placeholder="Например: Клубника в шоколаде"></div>
             <div class="form-group"><label>Описание</label><textarea id="fDesc" rows="2" placeholder="Краткое описание"></textarea></div>
             <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice" placeholder="350"></div>
+            <div class="form-group"><label>Старая цена (₽) — перечёркнутая</label><input type="number" id="fOldPrice" placeholder="770 (оставьте пустым если не нужна)"></div>
             <div class="form-group"><label>Объём/Вес</label><input type="text" id="fVolume" placeholder="300 мл"></div>
             <div class="form-group"><label>Категория</label>
                 <select id="fCategory">
@@ -401,7 +403,7 @@
 
         // ===== MENU =====
         const CATALOG = [
-            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
+            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, oldPrice:770, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
             { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
             { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
             { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
@@ -462,7 +464,10 @@
                             ${x.isCustom ? `<span style="font-size:10px;background:#E3F2FD;color:#1565C0;padding:2px 8px;border-radius:10px;margin-left:4px;">изменено</span>` : ''}
                         </div>
                         <div class="desc">${x.desc} ${x.volume ? '• ' + x.volume : ''}</div>
-                        <div class="price">${x.price} ₽</div>
+                        <div class="price">
+                            ${x.price} ₽
+                            ${x.oldPrice ? `<span class="old-price">${x.oldPrice} ₽</span>` : ''}
+                        </div>
                     </div>
                     <div class="actions">
                         <button class="btn-edit" onclick="editItem('${x.id}')" title="Редактировать"><i class="fas fa-pen"></i></button>
@@ -477,6 +482,7 @@
             $('fName').value = item ? item.name : '';
             $('fDesc').value = item ? item.desc : '';
             $('fPrice').value = item ? item.price : '';
+            $('fOldPrice').value = item ? (item.oldPrice || '') : '';
             $('fVolume').value = item ? (item.volume || '') : '';
             $('fCategory').value = item ? (item.category || 'strawberry') : 'strawberry';
             $('fEmoji').value = item ? (item.emoji || '') : '';
@@ -523,6 +529,7 @@
             const id = $('fId').value;
             const name = $('fName').value.trim();
             const price = parseInt($('fPrice').value);
+            const oldPrice = parseInt($('fOldPrice').value) || null;
             
             if (!name || !price || isNaN(price)) {
                 toast('❌ Заполните название и цену');
@@ -534,6 +541,7 @@
                 name: name,
                 desc: $('fDesc').value.trim(),
                 price: price,
+                oldPrice: oldPrice,
                 volume: $('fVolume').value.trim(),
                 category: $('fCategory').value,
                 emoji: $('fEmoji').value.trim(),
@@ -676,7 +684,7 @@
             await loadMenu();
             await loadOrders();
             lastCount = S.orders.length;
-            console.log('🍓 Админка v6 готова');
+            console.log('🍓 Админка v7 — с поддержкой старой цены');
         }
         init();
     </script>
