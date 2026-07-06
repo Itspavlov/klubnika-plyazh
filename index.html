@@ -815,7 +815,7 @@
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
             max-width: 480px;
             margin: 0 auto;
-            padding-bottom: 100px;
+            
         }
 
         .cart-modal.open {
@@ -2559,24 +2559,26 @@
             if (confirm(`Удалить "${item.name}" из корзины?`)) { state.cart.splice(index, 1); updateCart(); showNotification(`🗑️ "${item.name}" удален`); }
         }
 
-        function openCart() {
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            document.getElementById('cartModal').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('open');
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabCart').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+       function openCart() {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+    document.getElementById('cartModal').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('bottomTabBar').style.display = 'none'; // ← скрываем таб-бар
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabCart').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
 
         function closeCart() {
-            document.getElementById('cartModal').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('open');
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabMenu').classList.add('active');
-            document.body.style.overflow = '';
-        }
+    document.getElementById('cartModal').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('bottomTabBar').style.display = 'flex'; // ← показываем обратно
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabMenu').classList.add('active');
+    document.body.style.overflow = '';
+}
 
         // ================================================================
         // ===== PAYMENT =====
