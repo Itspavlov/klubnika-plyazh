@@ -839,6 +839,16 @@
             color: var(--text-dark);
         }
 
+        /* ===== FLYING STRAWBERRY ===== */
+        .flying-strawberry {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            font-size: 32px;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.4));
+        }
+
         /* ===== CART MODAL ===== */
         .cart-overlay {
             display: none;
@@ -2204,6 +2214,39 @@
         }
 
         // ================================================================
+        // ===== ANIMATION =====
+        // ================================================================
+        function animateStrawberryToCart(clickEvent) {
+            const strawberry = document.createElement('div');
+            strawberry.className = 'flying-strawberry';
+            strawberry.innerHTML = '🍓';
+            document.body.appendChild(strawberry);
+            
+            const startX = clickEvent.clientX;
+            const startY = clickEvent.clientY;
+            
+            strawberry.style.left = startX + 'px';
+            strawberry.style.top = startY + 'px';
+            strawberry.style.transform = 'translate(-50%, -50%) scale(1)';
+            
+            const cartIcon = document.getElementById('tabCart');
+            const cartRect = cartIcon.getBoundingClientRect();
+            const endX = cartRect.left + cartRect.width / 2;
+            const endY = cartRect.top + cartRect.height / 2;
+            
+            requestAnimationFrame(() => {
+                strawberry.style.left = endX + 'px';
+                strawberry.style.top = endY + 'px';
+                strawberry.style.transform = 'translate(-50%, -50%) scale(0.3)';
+                strawberry.style.opacity = '0.6';
+            });
+            
+            setTimeout(() => {
+                strawberry.remove();
+            }, 800);
+        }
+
+        // ================================================================
         // ===== MODES =====
         // ================================================================
         function showNoAccess() {
@@ -2320,43 +2363,46 @@
             pendingAlcoholProduct = null;
         }
 
-   function confirmAge() {
-    if (!document.getElementById('ageCheckbox').checked) return;
-    
-    const product = pendingAlcoholProduct; // ← сохраняем в локальную переменную
-    
-    if (!product) {
-        closeAgeVerify();
-        return;
-    }
-    
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    
-    closeAgeVerify();
-    pendingAlcoholProduct = null;
-    
-    if (!name || !phone || !isValidPhone(phone)) {
-        if (phone && !isValidPhone(phone)) {
-            showNotification('⚠️ Введите корректный номер телефона!', 'error');
+        function confirmAge() {
+            if (!document.getElementById('ageCheckbox').checked) return;
+            
+            const product = pendingAlcoholProduct;
+            
+            if (!product) {
+                closeAgeVerify();
+                return;
+            }
+            
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            
+            closeAgeVerify();
+            pendingAlcoholProduct = null;
+            
+            if (!name || !phone || !isValidPhone(phone)) {
+                if (phone && !isValidPhone(phone)) {
+                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
+                }
+                openAuthModal({ ...product, isAlcohol: true });
+                return;
+            }
+            
+            addToCart({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+                category: product.category || 'напиток',
+                topping: '',
+                toppingName: '',
+                isAlcohol: true
+            });
+            showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
+            
+            const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+            animateStrawberryToCart(fakeEvent);
         }
-        openAuthModal({ ...product, isAlcohol: true });
-        return;
-    }
-    
-    // Имя и телефон есть — сразу добавляем
-    addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        quantity: 1,
-        category: product.category || 'напиток',
-        topping: '',
-        toppingName: '',
-        isAlcohol: true
-    });
-    showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
-}
+
         document.getElementById('ageVerifyModal').addEventListener('click', function(e) {
             if (e.target === this) closeAgeVerify();
         });
@@ -2533,6 +2579,7 @@
             if (!hasToppings) {
                 addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '', isRomantic: product.isRomantic || false });
                 showNotification(`✅ ${product.name} добавлен!`);
+                animateStrawberryToCart(e);
                 return;
             }
             openToppingModal(product);
@@ -2576,6 +2623,7 @@
                 toppingName: ''
             });
             showNotification(`✅ ${product.name} добавлен!`);
+            animateStrawberryToCart(e);
         }
 
         // ================================================================
@@ -2625,9 +2673,13 @@
                         isAlcohol: true
                     });
                     showNotification(`🍺 ${pendingProduct.name} добавлен! Предъявите паспорт курьеру.`);
+                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+                    animateStrawberryToCart(fakeEvent);
                 } else if (!pendingProduct.hasToppings) {
                     addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '', isRomantic: pendingProduct.isRomantic || false });
                     showNotification(`✅ ${pendingProduct.name} добавлен!`);
+                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+                    animateStrawberryToCart(fakeEvent);
                 } else {
                     openToppingModal(pendingProduct);
                 }
@@ -2692,6 +2744,8 @@
             addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category, topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
             closeToppingModal();
             showNotification(`✅ ${itemName} добавлен!`);
+            const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+            animateStrawberryToCart(fakeEvent);
         });
 
         // ================================================================
@@ -3423,13 +3477,14 @@
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v3');
+        console.log('🍓 Strawberry in Chocolate - v4');
         console.log('✅ Валидация телефона');
         console.log('✅ Автосохранение данных');
         console.log('✅ Полноэкранные заказы и отзывы');
         console.log('✅ Красивые карточки заказов');
         console.log('✅ Проверка возраста 18+ для алкоголя');
         console.log('✅ oldPrice из админки');
+        console.log('✅ Анимация клубнички в корзину');
     </script>
 
 </body>
