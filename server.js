@@ -7,22 +7,12 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(express.static('.'));
 
 // ===== НАСТРОЙКИ =====
 const WORK_HOURS = { 
     start: 9,
     end: 28     // 28 = 4:00 утра
 };
-
-// ===== ЛОГИРОВАНИЕ ЗАПРОСОВ =====
-app.use((req, res, next) => {
-    console.log(`📨 ${req.method} ${req.url}`);
-    if (req.method === 'POST' && req.body && Object.keys(req.body).length > 0) {
-        console.log('📦 Body:', JSON.stringify(req.body, null, 2));
-    }
-    next();
-});
 
 let orders = [];
 let orderCounter = 1000;
@@ -39,8 +29,33 @@ let settings = {
         '6': true, '7': true, '8': true, '9': true, '10': true,
         '11': true, '12': true, '13': true, '14': true, '15': true
     },
-    sessionDuration: 420 // 7 часов (420 минут)
+    sessionDuration: 420 // 7 часов
 };
+
+// ===== ФУНКЦИИ СОХРАНЕНИЯ =====
+function saveSettings() {
+    try { fs.writeFileSync('settings.json', JSON.stringify(settings, null, 2)); } catch (e) {}
+}
+
+function saveOrders() {
+    try { fs.writeFileSync('orders.json', JSON.stringify(orders, null, 2)); } catch (e) {}
+}
+
+function saveChats() {
+    try { fs.writeFileSync('chats.json', JSON.stringify(chats, null, 2)); } catch (e) {}
+}
+
+function saveReviews() {
+    try { fs.writeFileSync('reviews.json', JSON.stringify(reviews, null, 2)); } catch (e) {}
+}
+
+function saveSessions() {
+    try { fs.writeFileSync('sessions.json', JSON.stringify(activeSessions, null, 2)); } catch (e) {}
+}
+
+function generateCode() {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+}
 
 // ===== ЗАГРУЗКА ДАННЫХ =====
 function loadData() {
@@ -98,9 +113,7 @@ function loadData() {
                 cleaned = true;
             }
         }
-        if (cleaned) {
-            saveSessions();
-        }
+        if (cleaned) saveSessions();
         
         console.log(`📂 Загружено ${Object.keys(activeSessions).length} активных сессий`);
     } catch (e) {
@@ -108,30 +121,6 @@ function loadData() {
         activeSessions = {};
         saveSessions();
     }
-}
-
-function saveSettings() {
-    try { fs.writeFileSync('settings.json', JSON.stringify(settings, null, 2)); } catch (e) {}
-}
-
-function saveOrders() {
-    try { fs.writeFileSync('orders.json', JSON.stringify(orders, null, 2)); } catch (e) {}
-}
-
-function saveChats() {
-    try { fs.writeFileSync('chats.json', JSON.stringify(chats, null, 2)); } catch (e) {}
-}
-
-function saveReviews() {
-    try { fs.writeFileSync('reviews.json', JSON.stringify(reviews, null, 2)); } catch (e) {}
-}
-
-function saveSessions() {
-    try { fs.writeFileSync('sessions.json', JSON.stringify(activeSessions, null, 2)); } catch (e) {}
-}
-
-function generateCode() {
-    return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
 // ===== ПРОВЕРКА РАБОЧЕГО ВРЕМЕНИ =====
@@ -149,13 +138,12 @@ function isWorkingTime() {
     const hours = mskTime.getHours();
     const minutes = mskTime.getMinutes();
     const currentMinutes = hours * 60 + minutes;
-    const startMinutes = WORK_HOURS.start * 60;   // 540
-    const endMinutes = WORK_HOURS.end * 60;        // 1500
+    const startMinutes = WORK_HOURS.start * 60;
+    const endMinutes = WORK_HOURS.end * 60;
     
-    // Нормализуем текущее время для сравнения
     let normalizedCurrent = currentMinutes;
     if (currentMinutes < startMinutes) {
-        normalizedCurrent = currentMinutes + 24 * 60; // Добавляем сутки
+        normalizedCurrent = currentMinutes + 24 * 60;
     }
     
     const isWorking = normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
@@ -165,47 +153,35 @@ function isWorkingTime() {
     return isWorking;
 }
 
-// ===== ОЧИСТКА ПРОСРОЧЕННЫХ СЕССИЙ =====
-setInterval(() => {
-    const now = Date.now();
-    let changed = false;
-    
-    for (const bungalow in activeSessions) {
-        if (now > activeSessions[bungalow].expiresAt) {
-            console.log(`⏰ Сессия бунгало #${bungalow} истекла и удалена`);
-            delete activeSessions[bungalow];
-            changed = true;
-        }
+// ===== ЛОГИРОВАНИЕ ЗАПРОСОВ =====
+app.use((req, res, next) => {
+    console.log(`📨 ${req.method} ${req.url}`);
+    if (req.method === 'POST' && req.body && Object.keys(req.body).length > 0) {
+        console.log('📦 Body:', JSON.stringify(req.body, null, 2));
     }
-    
-    if (changed) {
-        saveSessions();
-    }
-}, 30000);
+    next();
+});
 
 // ===== АВТО-АКТИВАЦИЯ ДЛЯ ТЕСТА =====
 app.get('/', (req, res, next) => {
     const b = parseInt(req.query.b);
-    
-    // Если перешли с параметром b и нет активной сессии - создаем её
     if (b && b > 0 && !activeSessions[b]) {
         const now = Date.now();
         const duration = settings.sessionDuration || 420;
         const expiresAt = now + (duration * 60 * 1000);
-        
         activeSessions[b] = {
             bungalow: b,
             activatedAt: now,
             expiresAt: expiresAt,
             duration: duration
         };
-        
         saveSessions();
-        console.log(`✅ Авто-активация для теста: бунгало #${b} на ${duration} мин`);
+        console.log(`✅ Авто-активация: бунгало #${b} на ${duration} мин`);
     }
-    
     next();
 });
+
+app.use(express.static('.'));
 
 // ===== API: НАСТРОЙКИ =====
 app.get('/api/settings', (req, res) => {
@@ -289,7 +265,6 @@ app.get('/api/check-session', (req, res) => {
     if (now > session.expiresAt) {
         delete activeSessions[bungalow];
         saveSessions();
-        
         return res.json({ 
             valid: false, 
             reason: 'expired',
@@ -317,20 +292,11 @@ app.get('/api/activate-session', (req, res) => {
     const duration = parseInt(req.query.d) || settings.sessionDuration || 420;
     
     if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
-        return res.json({ 
-            success: false, 
-            error: 'Неверный номер бунгало' 
-        });
+        return res.json({ success: false, error: 'Неверный номер бунгало' });
     }
 
     const now = Date.now();
     const expiresAt = now + (duration * 60 * 1000);
-    
-    const existingSession = activeSessions[bungalow];
-    if (existingSession && now < existingSession.expiresAt) {
-        const remainingMin = Math.ceil((existingSession.expiresAt - now) / 60000);
-        console.log(`🔄 Продление сессии бунгало #${bungalow} (было ${remainingMin} мин)`);
-    }
     
     activeSessions[bungalow] = {
         bungalow: bungalow,
@@ -340,16 +306,7 @@ app.get('/api/activate-session', (req, res) => {
     };
     
     saveSessions();
-    
-    const expiresDate = new Date(expiresAt);
-    console.log(`
-╔═══════════════════════════════════════════╗
-║  ✅ СЕССИЯ АКТИВИРОВАНА                  ║
-║  📍 Бунгало: #${bungalow}                 ║
-║  ⏱️ Длительность: ${duration} мин (${Math.floor(duration/60)}ч ${duration%60}мин)
-║  ⏰ Истекает: ${expiresDate.toLocaleString()} ║
-╚═══════════════════════════════════════════╝
-    `);
+    console.log(`✅ Сессия бунгало #${bungalow} активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`);
     
     return res.json({ 
         success: true, 
@@ -415,6 +372,20 @@ app.post('/api/order', (req, res) => {
                 error: '⏰ Сессия истекла. Отсканируйте QR-код заново.' 
             });
         }
+    }
+    
+    // 🔒 Проверка: нет ли уже активного заказа у этого телефона
+    const existingActive = orders.find(o => 
+        o.customerPhone === order.customerPhone && 
+        o.status === 'ожидает'
+    );
+
+    if (existingActive) {
+        console.log(`⛔ Повторный заказ с телефона ${order.customerPhone} (активен #${existingActive.id})`);
+        return res.json({ 
+            success: false, 
+            error: '⚠️ У вас уже есть активный заказ №' + existingActive.id + '. Дождитесь доставки или отмены!' 
+        });
     }
     
     const unavailableItems = order.items.filter(item => {
@@ -567,9 +538,7 @@ setInterval(() => {
         }
     });
     
-    if (changed) {
-        saveOrders();
-    }
+    if (changed) saveOrders();
 }, 60000);
 
 // ===== API: ЧАТЫ =====
@@ -625,9 +594,7 @@ app.post('/api/chat-send', (req, res) => {
         chats[phone].unread = 0;
     }
     
-    if (name) {
-        chats[phone].name = name;
-    }
+    if (name) chats[phone].name = name;
     
     saveChats();
     console.log(`💬 [${from}] ${phone}: ${text}`);
@@ -636,25 +603,17 @@ app.post('/api/chat-send', (req, res) => {
 
 app.post('/api/chat-read', (req, res) => {
     const { phone } = req.body;
-    
     if (phone && chats[phone]) {
         chats[phone].unread = 0;
         saveChats();
     }
-    
     res.json({ success: true });
 });
 
 app.delete('/api/chat-delete', (req, res) => {
     const { phone } = req.query;
-    
-    if (!phone) {
-        return res.json({ success: false, error: 'Телефон не указан' });
-    }
-    
-    if (!chats[phone]) {
-        return res.json({ success: false, error: 'Чат не найден' });
-    }
+    if (!phone) return res.json({ success: false, error: 'Телефон не указан' });
+    if (!chats[phone]) return res.json({ success: false, error: 'Чат не найден' });
     
     delete chats[phone];
     saveChats();
@@ -676,21 +635,10 @@ app.post('/api/review', (req, res) => {
     }
     
     const order = orders.find(o => o.id === orderId);
-    if (!order) {
-        return res.json({ success: false, error: 'Заказ не найден' });
-    }
-    
-    if (order.status !== 'выполнен') {
-        return res.json({ success: false, error: 'Заказ еще не выполнен' });
-    }
-    
-    if (order.reviewed) {
-        return res.json({ success: false, error: 'Вы уже оставили отзыв' });
-    }
-    
-    if (order.customerPhone !== phone) {
-        return res.json({ success: false, error: 'Это не ваш заказ' });
-    }
+    if (!order) return res.json({ success: false, error: 'Заказ не найден' });
+    if (order.status !== 'выполнен') return res.json({ success: false, error: 'Заказ еще не выполнен' });
+    if (order.reviewed) return res.json({ success: false, error: 'Вы уже оставили отзыв' });
+    if (order.customerPhone !== phone) return res.json({ success: false, error: 'Это не ваш заказ' });
     
     const review = {
         id: Date.now(),
@@ -714,12 +662,9 @@ app.post('/api/review', (req, res) => {
 
 app.delete('/api/review/:id', (req, res) => {
     const reviewId = parseInt(req.params.id);
-    
     const index = reviews.findIndex(r => r.id === reviewId);
     
-    if (index === -1) {
-        return res.json({ success: false, error: 'Отзыв не найден' });
-    }
+    if (index === -1) return res.json({ success: false, error: 'Отзыв не найден' });
     
     const deleted = reviews[index];
     reviews.splice(index, 1);
@@ -751,138 +696,48 @@ app.get('/generate-qr', (req, res) => {
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 100vh;
-                    background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 100%);
-                    padding: 20px;
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    min-height: 100vh; background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 100%); padding: 20px;
                 }
                 .qr-card {
-                    background: white;
-                    padding: 30px;
-                    border-radius: 24px;
-                    box-shadow: 0 20px 60px rgba(255, 71, 87, 0.15);
-                    text-align: center;
-                    max-width: 400px;
-                    width: 100%;
+                    background: white; padding: 30px; border-radius: 24px;
+                    box-shadow: 0 20px 60px rgba(255, 71, 87, 0.15); text-align: center; max-width: 400px; width: 100%;
                 }
-                .qr-card h2 {
-                    color: #FF4757;
-                    font-size: 28px;
-                    margin-bottom: 8px;
-                    font-weight: 800;
-                }
-                .qr-card .subtitle {
-                    color: #6B7280;
-                    margin-bottom: 20px;
-                    font-size: 14px;
-                }
-                #qrcode {
-                    display: flex;
-                    justify-content: center;
-                    margin: 20px 0;
-                    padding: 20px;
-                    background: white;
-                    border-radius: 16px;
-                    border: 2px dashed #FFE0B2;
-                }
-                .info-box {
-                    background: #FFF8E1;
-                    padding: 16px;
-                    border-radius: 16px;
-                    margin: 15px 0;
-                    border: 1px solid #FFE0B2;
-                }
-                .info-box .duration {
-                    font-size: 32px;
-                    font-weight: 800;
-                    color: #FF4757;
-                }
-                .info-box .label {
-                    font-size: 13px;
-                    color: #6B7280;
-                    margin-top: 4px;
-                }
+                .qr-card h2 { color: #FF4757; font-size: 28px; margin-bottom: 8px; font-weight: 800; }
+                .qr-card .subtitle { color: #6B7280; margin-bottom: 20px; font-size: 14px; }
+                #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 20px; background: white; border-radius: 16px; border: 2px dashed #FFE0B2; }
+                .info-box { background: #FFF8E1; padding: 16px; border-radius: 16px; margin: 15px 0; border: 1px solid #FFE0B2; }
+                .info-box .duration { font-size: 32px; font-weight: 800; color: #FF4757; }
+                .info-box .label { font-size: 13px; color: #6B7280; margin-top: 4px; }
                 .activate-btn {
-                    display: inline-block;
-                    background: linear-gradient(135deg, #FF4757, #E63946);
-                    color: white;
-                    padding: 16px 32px;
-                    border-radius: 100px;
-                    text-decoration: none;
-                    font-weight: 700;
-                    font-size: 16px;
-                    margin-top: 15px;
-                    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
-                    transition: all 0.3s;
+                    display: inline-block; background: linear-gradient(135deg, #FF4757, #E63946); color: white;
+                    padding: 16px 32px; border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 16px;
+                    margin-top: 15px; box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3); transition: all 0.3s;
                 }
-                .activate-btn:active {
-                    transform: scale(0.95);
-                }
-                .url-display {
-                    background: #F8FAFC;
-                    padding: 12px;
-                    border-radius: 12px;
-                    margin-top: 15px;
-                    font-size: 11px;
-                    word-break: break-all;
-                    color: #9CA3AF;
-                    font-family: monospace;
-                }
-                .warning {
-                    color: #EF4444;
-                    font-size: 13px;
-                    margin-top: 15px;
-                    padding: 10px;
-                    background: #FEF2F2;
-                    border-radius: 12px;
-                }
-                .schedule {
-                    font-size: 13px;
-                    color: #6B7280;
-                    margin-top: 12px;
-                }
+                .activate-btn:active { transform: scale(0.95); }
+                .url-display { background: #F8FAFC; padding: 12px; border-radius: 12px; margin-top: 15px; font-size: 11px; word-break: break-all; color: #9CA3AF; font-family: monospace; }
+                .warning { color: #EF4444; font-size: 13px; margin-top: 15px; padding: 10px; background: #FEF2F2; border-radius: 12px; }
+                .schedule { font-size: 13px; color: #6B7280; margin-top: 12px; }
             </style>
         </head>
         <body>
             <div class="qr-card">
                 <h2>🏖️ Бунгало #${bungalow}</h2>
                 <p class="subtitle">Отсканируйте для заказа клубники 🍓</p>
-                
                 <div id="qrcode"></div>
-                
                 <div class="info-box">
                     <div class="duration">⏱️ ${durationText}</div>
                     <div class="label">Сессия активна после сканирования</div>
                 </div>
-                
-                <a href="${activateUrl}" class="activate-btn">
-                    🍓 Открыть меню
-                </a>
-                
-                <p class="schedule">
-                    🕐 Доставка: 9:00-20:00<br>
-                    🏪 Киоск: 9:00-1:00
-                </p>
-                
-                <div class="warning">
-                    ⚠️ После истечения сессии потребуется повторное сканирование QR-кода
-                </div>
-                
-                <div class="url-display">
-                    ${activateUrl}
-                </div>
+                <a href="${activateUrl}" class="activate-btn">🍓 Открыть меню</a>
+                <p class="schedule">🕐 Доставка: 9:00-20:00<br>🏪 Киоск: 9:00-1:00</p>
+                <div class="warning">⚠️ После истечения сессии потребуется повторное сканирование QR-кода</div>
+                <div class="url-display">${activateUrl}</div>
             </div>
-            
             <script>
                 new QRCode(document.getElementById("qrcode"), {
-                    text: "${activateUrl}",
-                    width: 250,
-                    height: 250,
-                    colorDark: "#FF4757",
-                    colorLight: "#FFFFFF",
+                    text: "${activateUrl}", width: 250, height: 250,
+                    colorDark: "#FF4757", colorLight: "#FFFFFF",
                     correctLevel: QRCode.CorrectLevel.H
                 });
             </script>
@@ -897,15 +752,7 @@ app.get('/activate', (req, res) => {
     const duration = parseInt(req.query.d) || settings.sessionDuration || 420;
     
     if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
-        return res.send(`
-            <html>
-            <head><meta charset="UTF-8"><title>Ошибка</title></head>
-            <body style="font-family:sans-serif;text-align:center;padding:40px;">
-                <h1 style="color:#EF4444;">❌ Ошибка</h1>
-                <p>Неверный номер бунгало</p>
-            </body>
-            </html>
-        `);
+        return res.send(`<html><head><meta charset="UTF-8"><title>Ошибка</title></head><body style="font-family:sans-serif;text-align:center;padding:40px;"><h1 style="color:#EF4444;">❌ Ошибка</h1><p>Неверный номер бунгало</p></body></html>`);
     }
     
     const now = Date.now();
@@ -919,11 +766,25 @@ app.get('/activate', (req, res) => {
     };
     
     saveSessions();
-    
     console.log(`✅ Сессия бунгало #${bungalow} активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`);
-    
     res.redirect(`/?b=${bungalow}`);
 });
+
+// ===== ОЧИСТКА ПРОСРОЧЕННЫХ СЕССИЙ =====
+setInterval(() => {
+    const now = Date.now();
+    let changed = false;
+    
+    for (const bungalow in activeSessions) {
+        if (now > activeSessions[bungalow].expiresAt) {
+            console.log(`⏰ Сессия бунгало #${bungalow} истекла и удалена`);
+            delete activeSessions[bungalow];
+            changed = true;
+        }
+    }
+    
+    if (changed) saveSessions();
+}, 30000);
 
 // ===== ЗАПУСК СЕРВЕРА =====
 loadData();

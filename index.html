@@ -1403,7 +1403,7 @@
             }
         }
 
-        @media (max-width: 360px) {
+                @media (max-width: 340px) {
             .menu-grid {
                 grid-template-columns: 1fr;
             }
@@ -2591,7 +2591,7 @@
         // ================================================================
         // ===== ORDER SUBMIT =====
         // ================================================================
-      function submitOrder() {
+           async function submitOrder() {
     const bungaloNumber = state.bungalowNumber;
     
     if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
@@ -2609,6 +2609,25 @@
 
     const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
     saveUserAuth(name, phoneClean);
+
+    // 🔒 Проверяем, нет ли уже активного заказа
+    try {
+        const checkRes = await fetch('/api/my-orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: phoneClean })
+        });
+        const checkData = await checkRes.json();
+        if (checkData.success && checkData.orders) {
+            const activeOrder = checkData.orders.find(o => o.status === 'ожидает');
+            if (activeOrder) {
+                showNotification('⚠️ У вас уже есть активный заказ №' + activeOrder.id + '! Дождитесь доставки.', 'error');
+                return;
+            }
+        }
+    } catch (e) {
+        // Если не смогли проверить — продолжаем, сервер всё равно проверит
+    }
 
     const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом' };
     const order = {
@@ -2651,22 +2670,26 @@
         .catch(() => { showNotification('❌ Ошибка соединения!', 'error'); })
         .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать'; orderButton.disabled = false; });
 }
+
   // ================================================================
         // ===== ORDERS MODAL (FULLSCREEN) =====
         // ================================================================
-        function openOrdersModal() {
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            
-            document.getElementById('ordersModal').classList.add('open');
-            document.getElementById('ordersPhoneInput').value = phone;
-            document.body.style.overflow = 'hidden';
-            loadMyOrders();
-            
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabOrders').classList.add('active');
-        }
+       function openOrdersModal() {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
+    
+    // Очищаем телефон от +, пробелов и скобок
+    const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+    
+    document.getElementById('ordersModal').classList.add('open');
+    document.getElementById('ordersPhoneInput').value = phoneClean; // ← чистая версия
+    document.body.style.overflow = 'hidden';
+    loadMyOrders();
+    
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabOrders').classList.add('active');
+}
 
         function closeOrdersModal() {
             document.getElementById('ordersModal').classList.remove('open');
@@ -2772,10 +2795,10 @@
                 .catch(() => { showNotification('❌ Ошибка соединения', 'error'); });
         }
 
-        function updateOrdersBadge() {
-            const phone = document.getElementById('customerPhone').value.trim();
-            const badge = document.getElementById('tabOrdersBadge');
-            if (!phone) { badge.classList.add('hidden'); return; }
+       function updateOrdersBadge() {
+    const phone = document.getElementById('customerPhone').value.trim().replace(/[\s\-\+\(\)]/g, '');
+    const badge = document.getElementById('tabOrdersBadge');
+    if (!phone) { badge.classList.add('hidden'); return; }
             fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
