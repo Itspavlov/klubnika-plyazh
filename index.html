@@ -978,25 +978,27 @@
         }
 
         /* ===== BOTTOM TAB BAR ===== */
-        .bottom-tab-bar {
+                     .bottom-tab-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.85);
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.15), rgba(255, 138, 128, 0.1));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 8px 0 12px;
+            padding: 8px 0 20px;
             z-index: 100;
             max-width: 480px;
-            margin: 0 auto;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+            margin: 0 auto 8px;
+            box-shadow: 0 -4px 20px rgba(255, 71, 87, 0.05);
+            width: calc(100% - 16px);
         }
-
+        
         .tab-item {
             display: flex;
             flex-direction: column;
