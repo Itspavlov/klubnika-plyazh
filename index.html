@@ -1831,10 +1831,10 @@
                     <i class="fas fa-apple-alt"></i>Больше фруктов
                 </button>
                 <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')">
-                    <i class="fas fa-strawberry"></i> Клубника
+                    <i class="fas fa-strawberry"></i> Клубника в Шоколаде
                 </button>
                 <button class="chip" data-section="drinks" onclick="switchSection('drinks')">
-                    <i class="fas fa-mug-saucer"></i> Напитки
+                    <i class="fas fa-mug-saucer"></i> Напитки перекус
                 </button>
             </div>
 
@@ -3239,7 +3239,7 @@
         async function submitReview() {
             const text = document.getElementById('reviewText').value.trim();
             if (state.reviewRating === 0) { showNotification('⚠️ Поставьте оценку!', 'error'); return; }
-            if (!text) { showNotification('⚠️ Напишите отзыв!', 'error'); return; }
+           if (!text) { /* комментарий не обязателен */ }
 
             const name = document.getElementById('customerName').value.trim() || 'Клиент';
             const phone = document.getElementById('customerPhone').value.trim();

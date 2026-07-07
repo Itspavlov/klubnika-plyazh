@@ -1,1 +1,8 @@
-{}
+{
+  "1": {
+    "bungalow": 1,
+    "activatedAt": 1783435979425,
+    "expiresAt": 1783461179425,
+    "duration": 420
+  }
+}
