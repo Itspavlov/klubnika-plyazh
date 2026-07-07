@@ -1483,7 +1483,7 @@
     </style>
 </head>
 <body>
-    <!-- ===== TOAST / CART OVERLAY ===== -->
+        <!-- ===== TOAST / CART OVERLAY ===== -->
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
@@ -1831,7 +1831,7 @@
                     <i class="fas fa-apple-alt"></i>Больше фруктов
                 </button>
                 <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')">
-                    <i class="fas fa-strawberry"></i> Клубника в шоколаде
+                    <i class="fas fa-strawberry"></i> Клубника
                 </button>
                 <button class="chip" data-section="drinks" onclick="switchSection('drinks')">
                     <i class="fas fa-mug-saucer"></i> Напитки
@@ -1957,11 +1957,9 @@
             { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, volume: '300 мл', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
             { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, volume: '300 мл', image: 'images/tiffani.jpg', badge: '✨ Новинка', badgeColor: '#4ADE80' },
             { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', image: 'images/miks.jpg' },
-           { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
-{ id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
         ];
-
-        
 
         const FRUITS_ITEMS = [
             { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', image: 'images/watermelon.jpg', emoji: '🍉' },
@@ -1977,19 +1975,19 @@
             image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
         };
 
-       const DRINK_ITEMS = [
-    { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.webp', emoji: '🍋' },
-    { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'images/kola.jpg', emoji: '🥤' },
-    { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.webp', emoji: '🍺', alcohol: true },
-    { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, image: 'images/shaurma.webp', emoji: '🌯', shaurma: true }
-];
+        const DRINK_ITEMS = [
+            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.webp', emoji: '🍋' },
+            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'images/kola.jpg', emoji: '🥤' },
+            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.webp', emoji: '🍺', alcohol: true },
+            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, image: 'images/shaurma.webp', emoji: '🌯', shaurma: true }
+        ];
 
-const TOPPINGS = [
-    { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban', price: 0 },
-    { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling', price: 30 },
-    { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut', price: 25 },
-    { id: 'gold', name: 'Золотая пыль', icon: 'fas fa-star', price: 50 }
-];
+        const TOPPINGS = [
+            { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban', price: 0 },
+            { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling', price: 30 },
+            { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut', price: 25 },
+            { id: 'gold', name: 'Золотая пыль', icon: 'fas fa-star', price: 50 }
+        ];
 
         // ================================================================
         // ===== STATE =====
@@ -2489,6 +2487,29 @@ const TOPPINGS = [
                 `;
             });
 
+            // Кастомные позиции клубники из админки
+            if (settings.customItems) {
+                settings.customItems.forEach(ci => {
+                    if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id) && ci.id !== ROMANTIC_ITEM.id) {
+                        const available = settings.menuItems[ci.id] !== false;
+                        html += `
+                            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="стаканчик" data-has-toppings="true">
+                                <img src="${ci.image}" alt="${ci.name}" class="item-image" onclick="openImageModal('${ci.image}', '${ci.name}')" loading="lazy">
+                                <div class="item-content">
+                                    <div class="item-name">${ci.emoji || ''} ${ci.name}</div>
+                                    <div class="item-desc">${ci.desc || ''}</div>
+                                    <div class="item-price">
+                                        ${ci.price} ₽
+                                        ${ci.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${ci.oldPrice} ₽</small>` : ''}
+                                    </div>
+                                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
             strawberryGrid.innerHTML = html;
 
             let fruitsHtml = '';
@@ -2512,6 +2533,27 @@ const TOPPINGS = [
                     </div>
                 `;
             });
+
+            // Кастомные фрукты из админки
+            if (settings.customItems) {
+                settings.customItems.forEach(ci => {
+                    if (ci.category === 'fruits' && !FRUITS_ITEMS.find(f => f.id === ci.id)) {
+                        const available = settings.menuItems[ci.id] !== false;
+                        fruitsHtml += `
+                            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="фрукты" data-has-toppings="false">
+                                <img src="${ci.image}" alt="${ci.name}" class="item-image" onclick="openImageModal('${ci.image}', '${ci.name}')" loading="lazy">
+                                <div class="item-content">
+                                    <div class="item-name">${ci.emoji || ''} ${ci.name}</div>
+                                    <div class="item-desc">${ci.desc || ''}</div>
+                                    <div class="item-price">${ci.price} ₽</div>
+                                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
             document.getElementById('fruitsGrid').innerHTML = fruitsHtml;
 
             let drinksHtml = '';
@@ -2537,6 +2579,29 @@ const TOPPINGS = [
                     </div>
                 `;
             });
+
+            // Кастомные напитки из админки
+            if (settings.customItems) {
+                settings.customItems.forEach(ci => {
+                    if (ci.category === 'drinks' && !DRINK_ITEMS.find(d => d.id === ci.id)) {
+                        const available = settings.menuItems[ci.id] !== false;
+                        drinksHtml += `
+                            <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="напиток" data-alcohol="false">
+                                <div class="drink-icon" onclick="openImageModal('${ci.image}', '${ci.name}')">
+                                    <img src="${ci.image}" alt="${ci.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${ci.emoji || '🥤'}'" loading="lazy">
+                                </div>
+                                <div class="drink-info">
+                                    <h4>${ci.name}</h4>
+                                    <div class="drink-desc">${ci.desc || ''}</div>
+                                </div>
+                                ${available ? `<span class="drink-price">${ci.price} ₽</span>` : '<span style="color:var(--text-muted);">❌</span>'}
+                                <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
             document.getElementById('drinksGrid').innerHTML = drinksHtml;
 
             attachEvents();
@@ -3480,7 +3545,7 @@ const TOPPINGS = [
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v4');
+        console.log('🍓 Strawberry in Chocolate - v5');
         console.log('✅ Валидация телефона');
         console.log('✅ Автосохранение данных');
         console.log('✅ Полноэкранные заказы и отзывы');
@@ -3488,6 +3553,7 @@ const TOPPINGS = [
         console.log('✅ Проверка возраста 18+ для алкоголя');
         console.log('✅ oldPrice из админки');
         console.log('✅ Анимация клубнички в корзину');
+        console.log('✅ Кастомные позиции из админки');
     </script>
 
 </body>
