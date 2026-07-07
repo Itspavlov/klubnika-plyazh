@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
+const { Pool } = require('pg');
 const path = require('path');
 
 const app = express();
@@ -8,175 +8,123 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// ===== ПОДКЛЮЧЕНИЕ К БАЗЕ =====
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
+
 // ===== НАСТРОЙКИ =====
 const WORK_HOURS = { 
     start: 9,
-    end: 28     // 28 = 4:00 утра
+    end: 28
 };
-
-let orders = [];
-let orderCounter = 1000;
-let chats = {};
-let reviews = [];
-
-// ===== ХРАНИЛИЩЕ АКТИВНЫХ СЕССИЙ БУНГАЛО =====
-let activeSessions = {};
 
 let settings = {
     technicalBreak: false,
-    menuItems: {
-        '1': true, '2': true, '3': true, '4': true, '5': true,
-        '6': true, '7': true, '8': true, '9': true, '10': true,
-        '11': true, '12': true, '13': true, '14': true, '15': true
-    },
-    sessionDuration: 420 // 7 часов
+    menuItems: {},
+    sessionDuration: 420
 };
 
-// ===== ФУНКЦИИ СОХРАНЕНИЯ =====
-function saveSettings() {
-    try { fs.writeFileSync('settings.json', JSON.stringify(settings, null, 2)); } catch (e) {}
-}
-
-function saveOrders() {
-    try { fs.writeFileSync('orders.json', JSON.stringify(orders, null, 2)); } catch (e) {}
-}
-
-function saveChats() {
-    try { fs.writeFileSync('chats.json', JSON.stringify(chats, null, 2)); } catch (e) {}
-}
-
-function saveReviews() {
-    try { fs.writeFileSync('reviews.json', JSON.stringify(reviews, null, 2)); } catch (e) {}
-}
-
-function saveSessions() {
-    try { fs.writeFileSync('sessions.json', JSON.stringify(activeSessions, null, 2)); } catch (e) {}
+// ===== СОЗДАНИЕ ТАБЛИЦ =====
+async function initDB() {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS settings (
+                key TEXT PRIMARY KEY,
+                value JSONB
+            );
+            CREATE TABLE IF NOT EXISTS orders (
+                id SERIAL PRIMARY KEY,
+                data JSONB,
+                status TEXT DEFAULT 'ожидает',
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS sessions (
+                bungalow INTEGER PRIMARY KEY,
+                data JSONB,
+                expires_at BIGINT
+            );
+            CREATE TABLE IF NOT EXISTS chats (
+                phone TEXT PRIMARY KEY,
+                data JSONB
+            );
+            CREATE TABLE IF NOT EXISTS reviews (
+                id SERIAL PRIMARY KEY,
+                data JSONB,
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            );
+        `);
+        console.log('📦 Таблицы созданы');
+    } catch (e) {
+        console.error('Ошибка создания таблиц:', e.message);
+    }
 }
 
 function generateCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
-// ===== ЗАГРУЗКА ДАННЫХ =====
-function loadData() {
+async function loadSettings() {
     try {
-        const data = fs.readFileSync('settings.json');
-        settings = JSON.parse(data);
-        console.log('📂 Настройки загружены');
-        console.log(`⏱️ Длительность сессии: ${settings.sessionDuration || 420} мин`);
-    } catch (e) {
-        console.log('📂 Созданы настройки по умолчанию (сессия 7 часов)');
-        saveSettings();
-    }
-
-    try {
-        const data = fs.readFileSync('orders.json');
-        const savedOrders = JSON.parse(data);
-        orders = savedOrders;
-        if (orders.length > 0) {
-            const maxId = Math.max(...orders.map(o => o.id || 0));
-            orderCounter = Math.max(orderCounter, maxId + 1);
+        const res = await pool.query("SELECT value FROM settings WHERE key = 'main'");
+        if (res.rows.length > 0) {
+            settings = res.rows[0].value;
+            console.log('📂 Настройки загружены из БД');
+        } else {
+            await saveSettings();
+            console.log('📂 Настройки по умолчанию');
         }
-        console.log(`📂 Загружено ${orders.length} заказов`);
     } catch (e) {
-        console.log('📂 Новый файл заказов');
-        saveOrders();
-    }
-
-    try {
-        const data = fs.readFileSync('chats.json');
-        chats = JSON.parse(data);
-        console.log(`📂 Загружено ${Object.keys(chats).length} чатов`);
-    } catch (e) {
-        console.log('📂 Новый файл чатов');
-        saveChats();
-    }
-
-    try {
-        const data = fs.readFileSync('reviews.json');
-        reviews = JSON.parse(data);
-        console.log(`📂 Загружено ${reviews.length} отзывов`);
-    } catch (e) {
-        console.log('📂 Новый файл отзывов');
-        saveReviews();
-    }
-
-    try {
-        const data = fs.readFileSync('sessions.json');
-        activeSessions = JSON.parse(data);
-        
-        const now = Date.now();
-        let cleaned = false;
-        for (const bungalow in activeSessions) {
-            if (now > activeSessions[bungalow].expiresAt) {
-                delete activeSessions[bungalow];
-                cleaned = true;
-            }
-        }
-        if (cleaned) saveSessions();
-        
-        console.log(`📂 Загружено ${Object.keys(activeSessions).length} активных сессий`);
-    } catch (e) {
-        console.log('📂 Новый файл сессий');
-        activeSessions = {};
-        saveSessions();
+        console.error('Ошибка загрузки настроек:', e.message);
     }
 }
 
-// ===== ПРОВЕРКА РАБОЧЕГО ВРЕМЕНИ =====
+async function saveSettings() {
+    await pool.query(
+        "INSERT INTO settings (key, value) VALUES ('main', $1) ON CONFLICT (key) DO UPDATE SET value = $1",
+        [JSON.stringify(settings)]
+    ).catch(e => console.error(e.message));
+}
+
 function isWorkingTime() {
     const now = new Date();
-    
     let mskTime;
-    try {
-        const mskString = now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
-        mskTime = new Date(mskString);
-    } catch (e) {
-        mskTime = now;
-    }
+    try { mskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' })); }
+    catch (e) { mskTime = now; }
     
     const hours = mskTime.getHours();
     const minutes = mskTime.getMinutes();
     const currentMinutes = hours * 60 + minutes;
     const startMinutes = WORK_HOURS.start * 60;
     const endMinutes = WORK_HOURS.end * 60;
-    
-    let normalizedCurrent = currentMinutes;
-    if (currentMinutes < startMinutes) {
-        normalizedCurrent = currentMinutes + 24 * 60;
-    }
-    
-    const isWorking = normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
-    
-    console.log(`🕐 ${hours}:${String(minutes).padStart(2, '0')} | ${WORK_HOURS.start}:00-1:00 | ${isWorking ? '✅ ОТКРЫТО' : '❌ ЗАКРЫТО'}`);
-    
-    return isWorking;
+    let normalized = currentMinutes < startMinutes ? currentMinutes + 24 * 60 : currentMinutes;
+    return normalized >= startMinutes && normalized < endMinutes;
 }
 
-// ===== ЛОГИРОВАНИЕ ЗАПРОСОВ =====
+// ===== ЛОГИРОВАНИЕ =====
 app.use((req, res, next) => {
     console.log(`📨 ${req.method} ${req.url}`);
-    if (req.method === 'POST' && req.body && Object.keys(req.body).length > 0) {
-        console.log('📦 Body:', JSON.stringify(req.body, null, 2));
-    }
     next();
 });
 
-// ===== АВТО-АКТИВАЦИЯ ДЛЯ ТЕСТА =====
-app.get('/', (req, res, next) => {
+// ===== АВТО-АКТИВАЦИЯ =====
+app.get('/', async (req, res, next) => {
     const b = parseInt(req.query.b);
-    if (b && b > 0 && !activeSessions[b]) {
-        const now = Date.now();
-        const duration = settings.sessionDuration || 420;
-        const expiresAt = now + (duration * 60 * 1000);
-        activeSessions[b] = {
-            bungalow: b,
-            activatedAt: now,
-            expiresAt: expiresAt,
-            duration: duration
-        };
-        saveSessions();
-        console.log(`✅ Авто-активация: бунгало #${b} на ${duration} мин`);
+    if (b && b > 0) {
+        try {
+            const exist = await pool.query('SELECT * FROM sessions WHERE bungalow = $1 AND expires_at > $2', [b, Date.now()]);
+            if (exist.rows.length === 0) {
+                const now = Date.now();
+                const duration = settings.sessionDuration || 420;
+                const exp = now + (duration * 60 * 1000);
+                await pool.query(
+                    'INSERT INTO sessions (bungalow, data, expires_at) VALUES ($1, $2, $3) ON CONFLICT (bungalow) DO UPDATE SET expires_at = $3',
+                    [b, JSON.stringify({ bungalow: b, activatedAt: now, duration }), exp]
+                );
+                console.log(`✅ Авто-активация: бунгало #${b}`);
+            }
+        } catch (e) {}
     }
     next();
 });
@@ -184,630 +132,208 @@ app.get('/', (req, res, next) => {
 app.use(express.static('.'));
 
 // ===== API: НАСТРОЙКИ =====
-app.get('/api/settings', (req, res) => {
-    res.json(settings);
-});
+app.get('/api/settings', (req, res) => res.json(settings));
 
-app.post('/api/settings', (req, res) => {
+app.post('/api/settings', async (req, res) => {
     const { technicalBreak, menuItems, sessionDuration, customItems } = req.body;
-    
-    if (technicalBreak !== undefined) {
-        settings.technicalBreak = technicalBreak;
-        console.log(`🔧 Технический перерыв: ${technicalBreak ? 'ВКЛЮЧЕН' : 'ВЫКЛЮЧЕН'}`);
-    }
-    
-    if (menuItems) {
-        settings.menuItems = { ...settings.menuItems, ...menuItems };
-        console.log('📋 Меню обновлено');
-    }
-    
-    if (sessionDuration !== undefined) {
-        settings.sessionDuration = sessionDuration;
-        console.log(`⏱️ Длительность сессии изменена на ${sessionDuration} мин`);
-    }
-    
-    if (customItems !== undefined) {
-        settings.customItems = customItems;
-        console.log(`📋 Кастомные позиции обновлены (${customItems.length} шт.)`);
-    }
-    
-    saveSettings();
+    if (technicalBreak !== undefined) settings.technicalBreak = technicalBreak;
+    if (menuItems) settings.menuItems = { ...settings.menuItems, ...menuItems };
+    if (sessionDuration !== undefined) settings.sessionDuration = sessionDuration;
+    if (customItems !== undefined) settings.customItems = customItems;
+    await saveSettings();
     res.json({ success: true, settings });
 });
 
-// ===== API: ПРОВЕРКА РАБОЧЕГО ВРЕМЕНИ =====
-app.get('/api/check-time', (req, res) => {
-    const working = isWorkingTime();
-    const now = new Date();
-    let mskTime;
+// ===== API: СЕССИИ =====
+app.get('/api/check-session', async (req, res) => {
+    const b = parseInt(req.query.b);
+    if (!b || b <= 0) return res.json({ valid: false, reason: 'no_bungalow' });
     try {
-        mskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-    } catch (e) {
-        mskTime = now;
-    }
-    
-    res.json({
-        working: working,
-        currentTime: mskTime.toISOString(),
-        hours: mskTime.getHours(),
-        minutes: mskTime.getMinutes(),
-        schedule: {
-            start: WORK_HOURS.start,
-            end: WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end,
-            nextDay: WORK_HOURS.end > 24
+        const r = await pool.query('SELECT * FROM sessions WHERE bungalow = $1', [b]);
+        if (r.rows.length === 0) return res.json({ valid: false, reason: 'no_session' });
+        if (Date.now() > r.rows[0].expires_at) {
+            await pool.query('DELETE FROM sessions WHERE bungalow = $1', [b]);
+            return res.json({ valid: false, reason: 'expired' });
         }
-    });
+        const rem = Math.ceil((r.rows[0].expires_at - Date.now()) / 60000);
+        res.json({ valid: true, bungalow: b, expiresAt: r.rows[0].expires_at, remainingMinutes: rem });
+    } catch (e) {
+        res.json({ valid: false, reason: 'error' });
+    }
 });
 
-// ===== API: СЕССИИ БУНГАЛО =====
-app.get('/api/check-session', (req, res) => {
-    const bungalow = parseInt(req.query.b);
-    
-    if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
-        return res.json({ 
-            valid: false, 
-            reason: 'no_bungalow',
-            message: 'Номер бунгало не указан'
-        });
-    }
-
-    const session = activeSessions[bungalow];
-    
-    if (!session) {
-        return res.json({ 
-            valid: false, 
-            reason: 'no_session',
-            message: 'Нет активной сессии. Отсканируйте QR-код в бунгало.'
-        });
-    }
-
-    const now = Date.now();
-    if (now > session.expiresAt) {
-        delete activeSessions[bungalow];
-        saveSessions();
-        return res.json({ 
-            valid: false, 
-            reason: 'expired',
-            message: 'Сессия истекла. Отсканируйте QR-код заново.'
-        });
-    }
-
-    const remainingMs = session.expiresAt - now;
-    const remainingMinutes = Math.ceil(remainingMs / 60000);
-    const remainingHours = Math.floor(remainingMinutes / 60);
-    const remainingMins = remainingMinutes % 60;
-    
-    return res.json({ 
-        valid: true, 
-        bungalow: bungalow,
-        expiresAt: session.expiresAt,
-        remainingMinutes: remainingMinutes,
-        remainingTime: remainingHours > 0 ? `${remainingHours}ч ${remainingMins}мин` : `${remainingMins}мин`,
-        message: `Сессия активна. Осталось ${remainingHours > 0 ? remainingHours + 'ч ' : ''}${remainingMins}мин`
-    });
-});
-
-app.get('/api/activate-session', (req, res) => {
-    const bungalow = parseInt(req.query.b);
-    const duration = parseInt(req.query.d) || settings.sessionDuration || 420;
-    
-    if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
-        return res.json({ success: false, error: 'Неверный номер бунгало' });
-    }
-
-    const now = Date.now();
-    const expiresAt = now + (duration * 60 * 1000);
-    
-    activeSessions[bungalow] = {
-        bungalow: bungalow,
-        activatedAt: now,
-        expiresAt: expiresAt,
-        duration: duration
-    };
-    
-    saveSessions();
-    console.log(`✅ Сессия бунгало #${bungalow} активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`);
-    
-    return res.json({ 
-        success: true, 
-        bungalow: bungalow,
-        expiresAt: expiresAt,
-        duration: duration,
-        message: `Сессия активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`
-    });
-});
-
-app.post('/api/deactivate-session', (req, res) => {
-    const bungalow = parseInt(req.body.bungalow);
-    
-    if (!bungalow || isNaN(bungalow)) {
-        return res.json({ success: false, error: 'Не указан номер бунгало' });
-    }
-
-    if (activeSessions[bungalow]) {
-        delete activeSessions[bungalow];
-        saveSessions();
-        console.log(`👋 Сессия бунгало #${bungalow} деактивирована`);
-        return res.json({ success: true, message: 'Сессия деактивирована' });
-    }
-
-    return res.json({ success: true, message: 'Сессия не найдена' });
-});
-
-app.get('/api/sessions', (req, res) => {
-    const sessionsList = Object.values(activeSessions).map(s => ({
-        ...s,
-        remainingMinutes: Math.max(0, Math.ceil((s.expiresAt - Date.now()) / 60000))
-    }));
-    
-    res.json({ success: true, sessions: sessionsList, count: sessionsList.length });
+app.get('/api/activate-session', async (req, res) => {
+    const b = parseInt(req.query.b);
+    const d = parseInt(req.query.d) || settings.sessionDuration || 420;
+    if (!b || b <= 0) return res.json({ success: false });
+    const exp = Date.now() + (d * 60 * 1000);
+    await pool.query(
+        'INSERT INTO sessions (bungalow, data, expires_at) VALUES ($1, $2, $3) ON CONFLICT (bungalow) DO UPDATE SET expires_at = $3',
+        [b, JSON.stringify({ bungalow: b }), exp]
+    );
+    res.json({ success: true, bungalow: b, expiresAt: exp });
 });
 
 // ===== API: ЗАКАЗЫ =====
-app.post('/api/order', (req, res) => {
-    if (settings.technicalBreak) {
-        return res.json({ success: false, error: '🔧 Технический перерыв!' });
-    }
-    
-    if (!isWorkingTime()) {
-        return res.json({ success: false, error: '🔒 Сейчас не принимаем заказы. Работаем с 9:00 до 1:00' });
-    }
+app.post('/api/order', async (req, res) => {
+    if (settings.technicalBreak) return res.json({ success: false, error: '🔧 Технический перерыв!' });
+    if (!isWorkingTime()) return res.json({ success: false, error: '🔒 Не принимаем заказы' });
     
     const order = req.body;
     
     if (order.bungalow) {
-        const session = activeSessions[order.bungalow];
-        if (!session) {
-            return res.json({ 
-                success: false, 
-                error: '❌ Нет активной сессии. Отсканируйте QR-код в бунгало.' 
-            });
-        }
-        
-        if (Date.now() > session.expiresAt) {
-            delete activeSessions[order.bungalow];
-            saveSessions();
-            return res.json({ 
-                success: false, 
-                error: '⏰ Сессия истекла. Отсканируйте QR-код заново.' 
-            });
-        }
+        const s = await pool.query('SELECT * FROM sessions WHERE bungalow = $1', [order.bungalow]);
+        if (s.rows.length === 0 || Date.now() > s.rows[0].expires_at)
+            return res.json({ success: false, error: '❌ Сессия недействительна' });
     }
     
-    // 🔒 Проверка: нет ли уже активного заказа у этого телефона
-    const existingActive = orders.find(o => 
-        o.customerPhone === order.customerPhone && 
-        o.status === 'ожидает'
+    const exist = await pool.query(
+        "SELECT id FROM orders WHERE data->>'customerPhone' = $1 AND status = 'ожидает'",
+        [order.customerPhone]
     );
-
-    if (existingActive) {
-        console.log(`⛔ Повторный заказ с телефона ${order.customerPhone} (активен #${existingActive.id})`);
-        return res.json({ 
-            success: false, 
-            error: '⚠️ У вас уже есть активный заказ №' + existingActive.id + '. Дождитесь доставки или отмены!' 
-        });
+    if (exist.rows.length > 0)
+        return res.json({ success: false, error: '⚠️ У вас уже есть активный заказ' });
+    
+    const code = generateCode();
+    try {
+        const r = await pool.query(
+            "INSERT INTO orders (data, status) VALUES ($1, 'ожидает') RETURNING id",
+            [JSON.stringify({ ...order, confirmCode: code })]
+        );
+        console.log(`🍓 Новый заказ #${r.rows[0].id} | ${order.customerName} | ${order.total} ₽`);
+        res.json({ success: true, orderId: r.rows[0].id, confirmCode: code });
+    } catch (e) {
+        res.json({ success: false, error: 'Ошибка сервера' });
     }
-    
-    const unavailableItems = order.items.filter(item => {
-        const itemId = item.id.toString();
-        return settings.menuItems[itemId] === false;
-    });
-    
-    if (unavailableItems.length > 0) {
-        const names = unavailableItems.map(i => i.name).join(', ');
-        return res.json({ success: false, error: `❌ Недоступно: ${names}` });
-    }
-    
-    const confirmCode = generateCode();
-    
-    const newOrder = {
-        id: orderCounter++,
-        ...order,
-        confirmCode: confirmCode,
-        status: 'ожидает',
-        createdAt: new Date().toISOString(),
-        cancelAvailable: true,
-        reviewed: false
-    };
-    
-    orders.push(newOrder);
-    saveOrders();
-    
-    const itemsText = order.items.map(item => 
-        `  • ${item.name} x${item.quantity} = ${item.price * item.quantity} ₽`
-    ).join('\n');
-    
-    console.log(`
-╔═══════════════════════════════════════════╗
-║  🍓 НОВЫЙ ЗАКАЗ!                         ║
-║  📍 Бунгало: #${order.bungalow || 'самовывоз'}
-║  👤 Имя: ${order.customerName || 'не указано'}
-║  📞 Телефон: ${order.customerPhone || 'не указан'}
-║  🔑 КОД: ${confirmCode}
-${itemsText}
-║  💰 Итого: ${order.total} ₽
-║  🕐 Время: ${new Date().toLocaleString()}
-╚═══════════════════════════════════════════╝
-    `);
-    
-    res.json({ success: true, orderId: newOrder.id, confirmCode });
 });
 
-app.post('/api/my-orders', (req, res) => {
+app.post('/api/my-orders', async (req, res) => {
     const { phone } = req.body;
-    if (!phone) {
-        return res.json({ success: false, error: 'Телефон не указан' });
+    if (!phone) return res.json({ success: false });
+    try {
+        const r = await pool.query(
+            "SELECT id, data, status, created_at FROM orders WHERE data->>'customerPhone' = $1 ORDER BY created_at DESC",
+            [phone]
+        );
+        const orders = r.rows.map(row => ({ id: row.id, ...row.data, status: row.status, createdAt: row.created_at }));
+        res.json({ success: true, orders });
+    } catch (e) {
+        res.json({ success: false, orders: [] });
     }
-    
-    const userOrders = orders
-        .filter(o => o.customerPhone === phone)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
-    res.json({ success: true, orders: userOrders });
 });
 
-app.post('/api/cancel-order', (req, res) => {
+app.post('/api/cancel-order', async (req, res) => {
     const { orderId, phone } = req.body;
-    const order = orders.find(o => o.id === orderId);
-    
-    if (!order) {
-        return res.json({ success: false, error: 'Заказ не найден' });
-    }
-    
-    if (order.customerPhone !== phone) {
-        return res.json({ success: false, error: 'Это не ваш заказ' });
-    }
-    
-    const created = new Date(order.createdAt);
-    const now = new Date();
-    const minutes = (now - created) / 1000 / 60;
-    
-    if (minutes > 5) {
-        return res.json({ success: false, error: '⏰ Прошло больше 5 минут' });
-    }
-    
-    if (order.status !== 'ожидает') {
-        return res.json({ success: false, error: 'Заказ уже нельзя отменить' });
-    }
-    
-    order.status = 'отменен';
-    order.cancelAvailable = false;
-    saveOrders();
-    
-    console.log(`❌ Заказ #${orderId} отменен!`);
+    const r = await pool.query('SELECT * FROM orders WHERE id = $1', [orderId]);
+    if (r.rows.length === 0) return res.json({ success: false, error: 'Не найден' });
+    if (r.rows[0].data.customerPhone !== phone) return res.json({ success: false, error: 'Не ваш' });
+    await pool.query("UPDATE orders SET status = 'отменен' WHERE id = $1", [orderId]);
     res.json({ success: true });
 });
 
-app.post('/api/confirm', (req, res) => {
+app.post('/api/confirm', async (req, res) => {
     const { orderId, code } = req.body;
-    const order = orders.find(o => o.id === orderId);
-    
-    if (!order) {
-        return res.json({ success: false, error: 'Заказ не найден' });
-    }
-    if (order.confirmCode !== code) {
-        return res.json({ success: false, error: 'Неверный код' });
-    }
-    
-    order.status = 'выполнен';
-    order.cancelAvailable = false;
-    saveOrders();
-    
-    console.log(`✅ Заказ #${orderId} выполнен!`);
-    res.json({ success: true, orderId: orderId });
-});
-
-app.post('/api/cancel', (req, res) => {
-    const { orderId } = req.body;
-    const order = orders.find(o => o.id === orderId);
-    
-    if (!order) {
-        return res.json({ success: false, error: 'Заказ не найден' });
-    }
-    
-    order.status = 'отменен';
-    order.cancelAvailable = false;
-    saveOrders();
+    const r = await pool.query('SELECT * FROM orders WHERE id = $1', [orderId]);
+    if (r.rows.length === 0) return res.json({ success: false });
+    if (r.rows[0].data.confirmCode !== code) return res.json({ success: false, error: 'Неверный код' });
+    await pool.query("UPDATE orders SET status = 'выполнен' WHERE id = $1", [orderId]);
+    console.log(`✅ Заказ #${orderId} выполнен`);
     res.json({ success: true });
 });
 
-app.get('/api/orders', (req, res) => {
-    res.json(orders);
-});
-
-app.post('/api/clear-orders', (req, res) => {
-    orders = [];
-    saveOrders();
+app.post('/api/cancel', async (req, res) => {
+    await pool.query("UPDATE orders SET status = 'отменен' WHERE id = $1", [req.body.orderId]);
     res.json({ success: true });
 });
 
-// Автоотмена через 15 минут
-setInterval(() => {
-    const now = new Date();
-    let changed = false;
-    
-    orders.forEach(order => {
-        if (order.status === 'ожидает') {
-            const created = new Date(order.createdAt);
-            const minutes = (now - created) / 1000 / 60;
-            if (minutes > 15) {
-                order.status = 'отменен (таймаут)';
-                order.cancelAvailable = false;
-                changed = true;
-            }
-        }
-    });
-    
-    if (changed) saveOrders();
+app.get('/api/orders', async (req, res) => {
+    const r = await pool.query('SELECT id, data, status, created_at FROM orders ORDER BY created_at DESC');
+    res.json(r.rows.map(row => ({ id: row.id, ...row.data, status: row.status, createdAt: row.created_at })));
+});
+
+app.post('/api/clear-orders', async (req, res) => {
+    await pool.query('DELETE FROM orders');
+    res.json({ success: true });
+});
+
+setInterval(async () => {
+    await pool.query("UPDATE orders SET status = 'отменен (таймаут)' WHERE status = 'ожидает' AND created_at < NOW() - INTERVAL '15 minutes'").catch(() => {});
 }, 60000);
 
 // ===== API: ЧАТЫ =====
-app.get('/api/chats', (req, res) => {
-    const chatList = Object.keys(chats).map(phone => ({
-        phone,
-        name: chats[phone].name || 'Клиент',
-        lastMessage: chats[phone].messages.length > 0 ? chats[phone].messages[chats[phone].messages.length - 1] : null,
-        unread: chats[phone].unread || 0
-    }));
-    
-    chatList.sort((a, b) => {
-        const timeA = a.lastMessage ? new Date(a.lastMessage.time) : new Date(0);
-        const timeB = b.lastMessage ? new Date(b.lastMessage.time) : new Date(0);
-        return timeB - timeA;
-    });
-    
-    res.json({ chats: chatList });
+app.get('/api/chats', async (req, res) => {
+    const r = await pool.query('SELECT phone, data FROM chats');
+    res.json({ chats: r.rows.map(row => ({ phone: row.phone, name: row.data?.name, lastMessage: row.data?.messages?.slice(-1)[0], unread: row.data?.unread || 0 })) });
 });
 
-app.get('/api/chat-messages', (req, res) => {
-    const { phone } = req.query;
-    if (!phone) {
-        return res.json({ success: false, error: 'Телефон не указан' });
-    }
-    
-    const chat = chats[phone] || { messages: [], unread: 0 };
-    res.json({ success: true, messages: chat.messages || [] });
+app.get('/api/chat-messages', async (req, res) => {
+    const r = await pool.query('SELECT data FROM chats WHERE phone = $1', [req.query.phone]);
+    res.json({ success: true, messages: r.rows[0]?.data?.messages || [] });
 });
 
-app.post('/api/chat-send', (req, res) => {
+app.post('/api/chat-send', async (req, res) => {
     const { phone, text, from, name } = req.body;
-    
-    if (!phone || !text) {
-        return res.json({ success: false, error: 'Недостаточно данных' });
-    }
-    
-    if (!chats[phone]) {
-        chats[phone] = { name: name || 'Клиент', messages: [], unread: 0 };
-    }
-    
-    const message = {
-        text: text,
-        from: from || 'client',
-        time: new Date().toISOString()
-    };
-    
-    chats[phone].messages.push(message);
-    
-    if (from === 'client') {
-        chats[phone].unread = (chats[phone].unread || 0) + 1;
-    } else {
-        chats[phone].unread = 0;
-    }
-    
-    if (name) chats[phone].name = name;
-    
-    saveChats();
-    console.log(`💬 [${from}] ${phone}: ${text}`);
+    if (!phone || !text) return res.json({ success: false });
+    const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
+    let data = exist.rows[0]?.data || { name: name || 'Клиент', messages: [], unread: 0 };
+    data.messages.push({ text, from: from || 'client', time: new Date().toISOString() });
+    data.unread = from === 'client' ? (data.unread || 0) + 1 : 0;
+    if (name) data.name = name;
+    await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
     res.json({ success: true });
-});
-
-app.post('/api/chat-read', (req, res) => {
-    const { phone } = req.body;
-    if (phone && chats[phone]) {
-        chats[phone].unread = 0;
-        saveChats();
-    }
-    res.json({ success: true });
-});
-
-app.delete('/api/chat-delete', (req, res) => {
-    const { phone } = req.query;
-    if (!phone) return res.json({ success: false, error: 'Телефон не указан' });
-    if (!chats[phone]) return res.json({ success: false, error: 'Чат не найден' });
-    
-    delete chats[phone];
-    saveChats();
-    console.log(`🗑️ Чат с ${phone} удален`);
-    res.json({ success: true, message: 'Чат удален' });
 });
 
 // ===== API: ОТЗЫВЫ =====
-app.get('/api/reviews', (req, res) => {
-    const sorted = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    res.json({ success: true, reviews: sorted });
+app.get('/api/reviews', async (req, res) => {
+    const r = await pool.query('SELECT data FROM reviews ORDER BY created_at DESC');
+    res.json({ success: true, reviews: r.rows.map(r => r.data) });
 });
 
-app.post('/api/review', (req, res) => {
+app.post('/api/review', async (req, res) => {
     const { orderId, name, phone, rating, text } = req.body;
-    
-    if (!orderId || !rating || !text) {
-        return res.json({ success: false, error: 'Недостаточно данных' });
-    }
-    
-    const order = orders.find(o => o.id === orderId);
-    if (!order) return res.json({ success: false, error: 'Заказ не найден' });
-    if (order.status !== 'выполнен') return res.json({ success: false, error: 'Заказ еще не выполнен' });
-    if (order.reviewed) return res.json({ success: false, error: 'Вы уже оставили отзыв' });
-    if (order.customerPhone !== phone) return res.json({ success: false, error: 'Это не ваш заказ' });
-    
-    const review = {
-        id: Date.now(),
-        orderId: orderId,
-        name: name || order.customerName || 'Клиент',
-        phone: phone,
-        rating: Math.min(5, Math.max(1, rating)),
-        text: text.trim(),
-        createdAt: new Date().toISOString()
-    };
-    
-    reviews.push(review);
-    order.reviewed = true;
-    
-    saveReviews();
-    saveOrders();
-    
-    console.log(`⭐ Новый отзыв на заказ #${orderId}: ${rating}⭐`);
-    res.json({ success: true, review: review });
+    if (!orderId || !rating || !text) return res.json({ success: false, error: 'Нет данных' });
+    const review = { id: Date.now(), orderId, name, phone, rating: Math.min(5, Math.max(1, rating)), text: text.trim(), createdAt: new Date().toISOString() };
+    await pool.query('INSERT INTO reviews (data) VALUES ($1)', [JSON.stringify(review)]);
+    await pool.query("UPDATE orders SET data = jsonb_set(data, '{reviewed}', 'true') WHERE id = $1", [orderId]);
+    res.json({ success: true, review });
 });
 
-app.delete('/api/review/:id', (req, res) => {
-    const reviewId = parseInt(req.params.id);
-    const index = reviews.findIndex(r => r.id === reviewId);
-    
-    if (index === -1) return res.json({ success: false, error: 'Отзыв не найден' });
-    
-    const deleted = reviews[index];
-    reviews.splice(index, 1);
-    saveReviews();
-    
-    console.log(`🗑️ Удален отзыв #${reviewId} от ${deleted.name}`);
-    res.json({ success: true, message: 'Отзыв удален' });
+app.delete('/api/review/:id', async (req, res) => {
+    await pool.query("DELETE FROM reviews WHERE data->>'id' = $1", [req.params.id]);
+    res.json({ success: true });
 });
 
-// ===== ГЕНЕРАЦИЯ QR-КОДА =====
+// ===== QR-КОД =====
 app.get('/generate-qr', (req, res) => {
     const bungalow = req.query.b || 1;
     const duration = req.query.d || settings.sessionDuration || 420;
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const activateUrl = `${baseUrl}/activate?b=${bungalow}&d=${duration}`;
-    const durationHours = Math.floor(duration / 60);
-    const durationMins = duration % 60;
-    const durationText = durationHours > 0 ? `${durationHours}ч ${durationMins}мин` : `${durationMins}мин`;
+    const durH = Math.floor(duration / 60), durM = duration % 60;
+    const durText = durH > 0 ? `${durH}ч ${durM}мин` : `${durM}мин`;
     
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>QR-код для бунгало #${bungalow}</title>
-            <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body {
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    display: flex; flex-direction: column; align-items: center; justify-content: center;
-                    min-height: 100vh; background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 100%); padding: 20px;
-                }
-                .qr-card {
-                    background: white; padding: 30px; border-radius: 24px;
-                    box-shadow: 0 20px 60px rgba(255, 71, 87, 0.15); text-align: center; max-width: 400px; width: 100%;
-                }
-                .qr-card h2 { color: #FF4757; font-size: 28px; margin-bottom: 8px; font-weight: 800; }
-                .qr-card .subtitle { color: #6B7280; margin-bottom: 20px; font-size: 14px; }
-                #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 20px; background: white; border-radius: 16px; border: 2px dashed #FFE0B2; }
-                .info-box { background: #FFF8E1; padding: 16px; border-radius: 16px; margin: 15px 0; border: 1px solid #FFE0B2; }
-                .info-box .duration { font-size: 32px; font-weight: 800; color: #FF4757; }
-                .info-box .label { font-size: 13px; color: #6B7280; margin-top: 4px; }
-                .activate-btn {
-                    display: inline-block; background: linear-gradient(135deg, #FF4757, #E63946); color: white;
-                    padding: 16px 32px; border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 16px;
-                    margin-top: 15px; box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3); transition: all 0.3s;
-                }
-                .activate-btn:active { transform: scale(0.95); }
-                .url-display { background: #F8FAFC; padding: 12px; border-radius: 12px; margin-top: 15px; font-size: 11px; word-break: break-all; color: #9CA3AF; font-family: monospace; }
-                .warning { color: #EF4444; font-size: 13px; margin-top: 15px; padding: 10px; background: #FEF2F2; border-radius: 12px; }
-                .schedule { font-size: 13px; color: #6B7280; margin-top: 12px; }
-            </style>
-        </head>
-        <body>
-            <div class="qr-card">
-                <h2>🏖️ Бунгало #${bungalow}</h2>
-                <p class="subtitle">Отсканируйте для заказа клубники 🍓</p>
-                <div id="qrcode"></div>
-                <div class="info-box">
-                    <div class="duration">⏱️ ${durationText}</div>
-                    <div class="label">Сессия активна после сканирования</div>
-                </div>
-                <a href="${activateUrl}" class="activate-btn">🍓 Открыть меню</a>
-                <p class="schedule">🕐 Доставка: 9:00-20:00<br>🏪 Киоск: 9:00-1:00</p>
-                <div class="warning">⚠️ После истечения сессии потребуется повторное сканирование QR-кода</div>
-                <div class="url-display">${activateUrl}</div>
-            </div>
-            <script>
-                new QRCode(document.getElementById("qrcode"), {
-                    text: "${activateUrl}", width: 250, height: 250,
-                    colorDark: "#FF4757", colorLight: "#FFFFFF",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            </script>
-        </body>
-        </html>
-    `);
+    res.send(`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>QR #${bungalow}</title><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#FFF5F5,#FFE8EC);padding:20px}.qr-card{background:#fff;padding:30px;border-radius:24px;box-shadow:0 20px 60px rgba(255,71,87,0.15);text-align:center;max-width:400px;width:100%}.qr-card h2{color:#FF4757;font-size:28px;margin-bottom:8px;font-weight:800}.subtitle{color:#6B7280;margin-bottom:20px;font-size:14px}#qrcode{display:flex;justify-content:center;margin:20px 0;padding:20px;background:#fff;border-radius:16px;border:2px dashed #FFE0B2}.info-box{background:#FFF8E1;padding:16px;border-radius:16px;margin:15px 0;border:1px solid #FFE0B2}.duration{font-size:32px;font-weight:800;color:#FF4757}.label{font-size:13px;color:#6B7280;margin-top:4px}.activate-btn{display:inline-block;background:linear-gradient(135deg,#FF4757,#E63946);color:#fff;padding:16px 32px;border-radius:100px;text-decoration:none;font-weight:700;font-size:16px;margin-top:15px;box-shadow:0 6px 20px rgba(255,71,87,0.3)}.url-display{background:#F8FAFC;padding:12px;border-radius:12px;margin-top:15px;font-size:11px;word-break:break-all;color:#9CA3AF;font-family:monospace}.warning{color:#EF4444;font-size:13px;margin-top:15px;padding:10px;background:#FEF2F2;border-radius:12px}.schedule{font-size:13px;color:#6B7280;margin-top:12px}</style></head><body><div class="qr-card"><h2>🏖️ Бунгало #${bungalow}</h2><p class="subtitle">Отсканируйте для заказа 🍓</p><div id="qrcode"></div><div class="info-box"><div class="duration">⏱️ ${durText}</div><div class="label">Сессия после сканирования</div></div><a href="${activateUrl}" class="activate-btn">🍓 Открыть меню</a><p class="schedule">🕐 Доставка: 9:00-20:00<br>🏪 Киоск: 9:00-1:00</p><div class="warning">⚠️ После истечения — повторное сканирование</div><div class="url-display">${activateUrl}</div></div><script>new QRCode(document.getElementById("qrcode"),{text:"${activateUrl}",width:250,height:250,colorDark:"#FF4757",colorLight:"#FFFFFF",correctLevel:QRCode.CorrectLevel.H})</script></body></html>`);
 });
 
-// ===== АКТИВАЦИЯ СЕССИИ =====
-app.get('/activate', (req, res) => {
-    const bungalow = parseInt(req.query.b);
-    const duration = parseInt(req.query.d) || settings.sessionDuration || 420;
-    
-    if (!bungalow || isNaN(bungalow) || bungalow <= 0) {
-        return res.send(`<html><head><meta charset="UTF-8"><title>Ошибка</title></head><body style="font-family:sans-serif;text-align:center;padding:40px;"><h1 style="color:#EF4444;">❌ Ошибка</h1><p>Неверный номер бунгало</p></body></html>`);
-    }
-    
-    const now = Date.now();
-    const expiresAt = now + (duration * 60 * 1000);
-    
-    activeSessions[bungalow] = {
-        bungalow: bungalow,
-        activatedAt: now,
-        expiresAt: expiresAt,
-        duration: duration
-    };
-    
-    saveSessions();
-    console.log(`✅ Сессия бунгало #${bungalow} активирована на ${Math.floor(duration/60)}ч ${duration%60}мин`);
-    res.redirect(`/?b=${bungalow}`);
+// ===== АКТИВАЦИЯ =====
+app.get('/activate', async (req, res) => {
+    const b = parseInt(req.query.b);
+    const d = parseInt(req.query.d) || settings.sessionDuration || 420;
+    if (!b || b <= 0) return res.send('<h1>❌ Неверный номер бунгало</h1>');
+    const exp = Date.now() + (d * 60 * 1000);
+    await pool.query('INSERT INTO sessions (bungalow, data, expires_at) VALUES ($1,$2,$3) ON CONFLICT (bungalow) DO UPDATE SET expires_at=$3', [b, JSON.stringify({ bungalow: b }), exp]);
+    res.redirect(`/?b=${b}`);
 });
 
-// ===== ОЧИСТКА ПРОСРОЧЕННЫХ СЕССИЙ =====
-setInterval(() => {
-    const now = Date.now();
-    let changed = false;
-    
-    for (const bungalow in activeSessions) {
-        if (now > activeSessions[bungalow].expiresAt) {
-            console.log(`⏰ Сессия бунгало #${bungalow} истекла и удалена`);
-            delete activeSessions[bungalow];
-            changed = true;
-        }
-    }
-    
-    if (changed) saveSessions();
+// ===== ОЧИСТКА СЕССИЙ =====
+setInterval(async () => {
+    await pool.query('DELETE FROM sessions WHERE expires_at < $1', [Date.now()]).catch(() => {});
 }, 30000);
 
-// ===== ЗАПУСК СЕРВЕРА =====
-loadData();
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-    const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
-    const sessionHours = Math.floor(settings.sessionDuration / 60);
-    const sessionMins = settings.sessionDuration % 60;
-    
-    console.log(`
-╔═══════════════════════════════════════════╗
-║  🍓 STRAWBERRY IN CHOCOLATE             ║
-║  🚀 СЕРВЕР ЗАПУЩЕН!                      ║
-╠═══════════════════════════════════════════╣
-║  📱 http://localhost:${PORT}              ║
-║  📋 http://localhost:${PORT}/admin.html   ║
-║  🔑 http://localhost:${PORT}/generate-qr  ║
-╠═══════════════════════════════════════════╣
-║  🕐 График: ${WORK_HOURS.start}:00 - ${endHour}:00
-║  ⏱️ Сессия: ${sessionHours}ч ${sessionMins}мин
-║  📦 Доставка: 15 минут
-║  🔐 Сессии сохраняются в файл
-╚═══════════════════════════════════════════╝
-    `);
-});
+// ===== СТАРТ =====
+(async () => {
+    await initDB();
+    await loadSettings();
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, '0.0.0.0', () => console.log(`🍓 Сервер на порту ${PORT} | База подключена`));
+})();
