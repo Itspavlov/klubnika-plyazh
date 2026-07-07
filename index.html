@@ -1332,34 +1332,36 @@
             color: #FFFFFF;
         }
 
-        /* ===== NOTIFICATION ===== */
-        .notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1A1A2E;
-            color: #FFFFFF;
-            padding: 14px 24px;
-            border-radius: 100px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            max-width: 90%;
-            text-align: center;
-            font-weight: 500;
-            font-size: 14px;
-            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .notification.show {
-            display: block;
-        }
-
-        .notification.error {
-            background: #EF4444;
-        }
-
+       .notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120px);
+    background: #1A1A2E;
+    color: #FFFFFF;
+    padding: 14px 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    max-width: 90%;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+.notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+.notification.hide {
+    transform: translateX(-50%) translateY(-120px);
+    opacity: 0;
+}
+.notification.error { background: #EF4444; }
+.notification.success { background: #10B981; }
         @keyframes slideDown {
             from {
                 transform: translate(-50%, -80px);
@@ -2206,14 +2208,18 @@
         // ===== NOTIFICATION =====
         // ================================================================
         function showNotification(message, type = '') {
-            const notification = document.getElementById('notification');
-            notification.innerHTML = message;
-            notification.className = 'notification show';
-            if (type) notification.classList.add(type);
-            clearTimeout(notification._timeout);
-            notification._timeout = setTimeout(() => notification.classList.remove('show'), 3000);
-        }
-
+    const notification = document.getElementById('notification');
+    clearTimeout(notification._timeout);
+    notification.className = 'notification';
+    notification.innerHTML = message;
+    if (type === 'error') notification.classList.add('error');
+    else if (type === 'success') notification.classList.add('success');
+    requestAnimationFrame(() => { notification.classList.add('show'); });
+    notification._timeout = setTimeout(() => {
+        notification.classList.add('hide');
+        setTimeout(() => { notification.classList.remove('show', 'hide', 'error', 'success'); }, 400);
+    }, 4000);
+}
         // ================================================================
         // ===== ANIMATION =====
         // ================================================================
@@ -3189,28 +3195,25 @@
         }
 
         document.getElementById('reviewsModal').addEventListener('click', function(e) { if (e.target === this) closeReviewsModal(); });
-
-        function startReviewCheck() {
-            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-            reviewCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                try {
-                    const res = await fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
-                    const data = await res.json();
-                    if (data.success && data.orders) {
-                        const completedOrders = data.orders.filter(order => 
-                            order.status === 'выполнен' && !order.reviewed && new Date(order.createdAt).getTime() > lastOrderCheckTime
-                        );
-                        if (completedOrders.length > 0) {
-                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
-                            setTimeout(() => { openReviewModal(completedOrders[0].id); }, 2000);
-                            lastOrderCheckTime = Date.now();
-                        }
-                    }
-                } catch (e) {}
-            }, 10000);
-        }
+function startReviewCheck() {
+    if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+    reviewCheckInterval = setInterval(async () => {
+        const phone = document.getElementById('customerPhone').value.trim();
+        if (!phone) return;
+        try {
+            const res = await fetch('/api/my-orders', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({phone}) });
+            const data = await res.json();
+            if (data.success && data.orders) {
+                const latestOrder = data.orders[0];
+                if (latestOrder && latestOrder.status === 'выполнен' && !latestOrder.reviewed && new Date(latestOrder.createdAt).getTime() > lastOrderCheckTime) {
+                    showNotification('🎉 Ваш заказ доставлен! Наслаждайтесь 🍓', 'success');
+                    setTimeout(() => { openReviewModal(latestOrder.id); }, 1500);
+                    clearInterval(reviewCheckInterval); reviewCheckInterval = null;
+                }
+            }
+        } catch (e) {}
+    }, 5000);
+}
 
         function openReviewModal(orderId) {
             state.reviewOrderId = orderId;
