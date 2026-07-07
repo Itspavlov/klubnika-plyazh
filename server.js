@@ -291,7 +291,9 @@ app.get('/api/reviews', async (req, res) => {
 
 app.post('/api/review', async (req, res) => {
     const { orderId, name, phone, rating, text } = req.body;
-    if (!orderId || !rating || !text) return res.json({ success: false, error: 'Нет данных' });
+    if (!orderId || !rating) {
+    return res.json({ success: false, error: 'Поставьте оценку' });
+}
     const review = { id: Date.now(), orderId, name, phone, rating: Math.min(5, Math.max(1, rating)), text: text.trim(), createdAt: new Date().toISOString() };
     await pool.query('INSERT INTO reviews (data) VALUES ($1)', [JSON.stringify(review)]);
     await pool.query("UPDATE orders SET data = jsonb_set(data, '{reviewed}', 'true') WHERE id = $1", [orderId]);
