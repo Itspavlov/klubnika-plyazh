@@ -335,5 +335,8 @@ setInterval(async () => {
     await initDB();
     await loadSettings();
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, '0.0.0.0', () => console.log(`🍓 Сервер на порту ${PORT} | База подключена`));
+  app.listen(PORT, '0.0.0.0', () => {
+    const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
+    console.log(`🍓 Сервер на порту ${PORT} | БД подключена | ${WORK_HOURS.start}:00-${endHour}:00`);
+});
 })();
