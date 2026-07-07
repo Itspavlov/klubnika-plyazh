@@ -69,6 +69,13 @@
         }
         .tabs button i { font-size: 14px; }
         .tabs button.active { background: #fff; color: var(--primary); font-weight: 600; box-shadow: var(--shadow); }
+        .tabs button .tab-badge {
+            position: absolute; top: 2px; right: 4px;
+            background: var(--primary); color: #fff; font-size: 10px; font-weight: 700;
+            min-width: 18px; height: 18px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+        }
+        .tabs button .tab-badge.show { display: flex; }
         .panel { display: none; animation: fadeIn 0.3s ease; }
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
@@ -97,20 +104,17 @@
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
             border: 1px solid #F1F5F9; transition: var(--transition);
         }
-        .menu-item:hover { box-shadow: var(--shadow); }
         .menu-item img { width: 56px; height: 56px; border-radius: var(--radius-md); object-fit: cover; background: #FCE4EC; flex-shrink: 0; }
         .menu-item .info { flex: 1; min-width: 0; }
         .menu-item .info .name { font-weight: 600; font-size: 14px; color: var(--text-dark); }
         .menu-item .info .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         .menu-item .info .price { font-weight: 700; color: var(--primary); font-size: 15px; margin-top: 4px; }
-        .menu-item .info .price .old-price { text-decoration: line-through; color: var(--text-muted); font-weight: 500; font-size: 13px; margin-left: 6px; }
         .menu-item .actions { display: flex; gap: 4px; flex-shrink: 0; }
         .menu-item .actions button {
             width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
             font-size: 12px; display: flex; align-items: center; justify-content: center;
             transition: var(--transition);
         }
-        .menu-item .actions button:active { transform: scale(0.9); }
         .btn-edit { background: #F1F5F9; color: #6B7280; }
         .btn-on { background: #E8F5E9; color: #2E7D32; }
         .btn-off { background: #FFEBEE; color: #D32F2F; }
@@ -127,6 +131,23 @@
         .order-card .items { font-size: 12px; color: var(--text-secondary); background: #F8FAFC; padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 6px; }
         .order-card .bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .order-card .total { font-weight: 700; color: var(--primary); font-size: 16px; }
+        .order-card .chat-plate {
+            display: flex; align-items: center; gap: 8px;
+            background: #FFF8E1; border: 1px solid #FFE0B2;
+            border-radius: var(--radius-md); padding: 10px 14px;
+            margin-top: 8px; cursor: pointer; transition: var(--transition);
+            width: 100%;
+        }
+        .order-card .chat-plate:active { transform: scale(0.98); }
+        .order-card .chat-plate .msg-preview {
+            flex: 1; font-size: 12px; color: var(--text-secondary);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .order-card .chat-plate .msg-badge {
+            background: var(--primary); color: #fff; font-size: 11px; font-weight: 700;
+            min-width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
         .chat-item {
             background: #fff; border-radius: var(--radius-lg); padding: 14px;
             margin-bottom: 8px; border: 1px solid #F1F5F9; cursor: pointer; transition: var(--transition);
@@ -220,7 +241,7 @@
         <div class="tabs">
             <button class="active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
             <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
-            <button data-tab="chats"><i class="fas fa-comments"></i> Чаты</button>
+            <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
             <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
         </div>
 
@@ -267,7 +288,6 @@
             <div class="form-group"><label>Название</label><input type="text" id="fName" placeholder="Например: Клубника в шоколаде"></div>
             <div class="form-group"><label>Описание</label><textarea id="fDesc" rows="2" placeholder="Краткое описание"></textarea></div>
             <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice" placeholder="350"></div>
-            <div class="form-group"><label>Старая цена (₽) — перечёркнутая</label><input type="number" id="fOldPrice" placeholder="770 (оставьте пустым если не нужна)"></div>
             <div class="form-group"><label>Объём/Вес</label><input type="text" id="fVolume" placeholder="300 мл"></div>
             <div class="form-group"><label>Категория</label>
                 <select id="fCategory">
@@ -310,13 +330,14 @@
     </div>
 
     <script>
-        // ===== STATE =====
         const S = {
             settings: {},
             menu: [],
             tab: 'orders',
             chatPhone: null,
-            orders: []
+            orders: [],
+            chats: [],
+            totalUnread: 0
         };
 
         const $ = id => document.getElementById(id);
@@ -383,6 +404,12 @@
             $('statRevenue').textContent = revenue + ' ₽';
         }
 
+        function getChatInfo(phone) {
+            const chat = S.chats.find(c => c.phone === phone);
+            if (!chat || !chat.lastMessage || chat.lastMessage.from !== 'client') return null;
+            return { text: chat.lastMessage.text, unread: chat.unread || 0 };
+        }
+
         function renderOrders() {
             const orders = S.orders;
             const list = $('ordersList');
@@ -393,7 +420,31 @@
                 if (order.status === 'выполнен') sc = 'status-done';
                 if (order.status?.includes('отменен')) sc = 'status-cancelled';
                 const acts = order.status === 'ожидает' ? `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅</button><button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌</button>` : '';
-                return `<div class="order-card"><div class="top"><span class="oid">🏠 #${order.bungalow||'?'} — #${order.id}</span><span class="status ${sc}">${order.status||'ожидает'}</span></div><div style="font-size:12px;color:var(--text-secondary);">👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} ${order.confirmCode?'🔑 <b>'+order.confirmCode+'</b>':''}</div><div class="items">${itemsHtml}</div><div class="bottom"><span class="total">💰 ${order.total||0} ₽</span><span style="font-size:10px;color:var(--text-muted);">${new Date(order.createdAt).toLocaleString()}</span><div style="display:flex;gap:4px;">${acts}</div></div></div>`;
+                
+                const chatInfo = getChatInfo(order.customerPhone);
+                let chatPlate = '';
+                if (chatInfo && order.status === 'ожидает') {
+                    chatPlate = `
+                        <div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')">
+                            <span class="msg-preview">💬 ${chatInfo.text}</span>
+                            ${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}
+                        </div>`;
+                }
+                
+                return `<div class="order-card">
+                    <div class="top">
+                        <span class="oid">🏠 #${order.bungalow||'?'} — #${order.id}</span>
+                        <span class="status ${sc}">${order.status||'ожидает'}</span>
+                    </div>
+                    <div style="font-size:12px;color:var(--text-secondary);">👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} ${order.confirmCode?'🔑 <b>'+order.confirmCode+'</b>':''}</div>
+                    <div class="items">${itemsHtml}</div>
+                    <div class="bottom">
+                        <span class="total">💰 ${order.total||0} ₽</span>
+                        <span style="font-size:10px;color:var(--text-muted);">${new Date(order.createdAt).toLocaleString()}</span>
+                        <div style="display:flex;gap:4px;">${acts}</div>
+                    </div>
+                    ${chatPlate}
+                </div>`;
             }).join('');
         }
 
@@ -402,80 +453,60 @@
         async function clearOrders() { if(!confirm('Удалить все?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
 
         // ===== MENU =====
-     const CATALOG = [
-    { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, oldPrice:770, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
-    { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
-    { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
-    { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
-    { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-    { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-    { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
-    { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-    { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-    { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-    { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-    { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-    { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-    { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-    { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
-    { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
-];
+        const CATALOG = [
+            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
+            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
+            { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
+            { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
+            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
+            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
+            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
+            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
+            { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
+            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
+            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
+            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
+            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
+            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
+            { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
+        ];
 
         async function loadMenu() {
             try {
                 const d = await api('/settings');
                 S.settings = d;
                 updateTechUI();
-                
                 S.menu = CATALOG.map(item => ({ ...item, available: d.menuItems?.[item.id] !== false }));
-                
                 if (d.customItems && Array.isArray(d.customItems)) {
                     d.customItems.forEach(ci => {
                         const idx = S.menu.findIndex(x => x.id === ci.id);
-                        if (idx >= 0) {
-                            S.menu[idx] = { ...S.menu[idx], ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true };
-                        } else {
-                            S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
-                        }
+                        if (idx >= 0) S.menu[idx] = { ...S.menu[idx], ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true };
+                        else S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
                     });
                 }
-                
                 renderMenu();
-            } catch(e) {
-                console.error(e);
-                $('menuList').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle" style="color:#D32F2F;"></i>Ошибка загрузки<br><button class="btn btn-primary btn-sm" onclick="loadMenu()">Повторить</button></div>';
-            }
+            } catch(e) { $('menuList').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i>Ошибка</div>'; }
         }
 
         function renderMenu() {
             const filter = $('menuFilter').value;
             let items = S.menu;
             if (filter !== 'all') items = items.filter(x => x.category === filter);
-            
             const list = $('menuList');
             if (!items.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-utensils"></i>Нет позиций</div>'; return; }
-            
             list.innerHTML = items.map(x => `
                 <div class="menu-item">
                     <img src="${x.image}" onerror="this.style.display='none'" loading="lazy" alt="${x.name}">
                     <div class="info">
-                        <div class="name">
-                            ${x.emoji||''} ${x.name}
-                            ${x.badge ? `<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;margin-left:4px;">${x.badge}</span>` : ''}
-                            ${x.isCustom ? `<span style="font-size:10px;background:#E3F2FD;color:#1565C0;padding:2px 8px;border-radius:10px;margin-left:4px;">изменено</span>` : ''}
-                        </div>
-                        <div class="desc">${x.desc} ${x.volume ? '• ' + x.volume : ''}</div>
-                        <div class="price">
-                            ${x.price} ₽
-                            ${x.oldPrice ? `<span class="old-price">${x.oldPrice} ₽</span>` : ''}
-                        </div>
+                        <div class="name">${x.emoji||''} ${x.name} ${x.badge?`<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;">${x.badge}</span>`:''}</div>
+                        <div class="desc">${x.desc} ${x.volume?'• '+x.volume:''}</div>
+                        <div class="price">${x.price} ₽</div>
                     </div>
                     <div class="actions">
-                        <button class="btn-edit" onclick="editItem('${x.id}')" title="Редактировать"><i class="fas fa-pen"></i></button>
-                        <button class="${x.available ? 'btn-on' : 'btn-off'}" onclick="toggleItem('${x.id}')" title="${x.available ? 'Скрыть' : 'Показать'}"><i class="fas ${x.available ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
+                        <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
+                        <button class="${x.available?'btn-on':'btn-off'}" onclick="toggleItem('${x.id}')"><i class="fas ${x.available?'fa-eye':'fa-eye-slash'}"></i></button>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         function openItemModal(item = null) {
@@ -483,27 +514,20 @@
             $('fName').value = item ? item.name : '';
             $('fDesc').value = item ? item.desc : '';
             $('fPrice').value = item ? item.price : '';
-            $('fOldPrice').value = item ? (item.oldPrice || '') : '';
             $('fVolume').value = item ? (item.volume || '') : '';
             $('fCategory').value = item ? (item.category || 'strawberry') : 'strawberry';
             $('fEmoji').value = item ? (item.emoji || '') : '';
             $('fBadge').value = item ? (item.badge || '') : '';
             $('fImageData').value = item ? (item.image || '') : '';
             $('fDeleteBtn').style.display = item ? 'block' : 'none';
-            $('modalTitle').innerHTML = item ? '<i class="fas fa-pen" style="color:var(--primary);"></i> Редактирование' : '<i class="fas fa-plus-circle" style="color:var(--primary);"></i> Новая позиция';
-            
+            $('modalTitle').innerHTML = item ? '<i class="fas fa-pen"></i> Редактирование' : '<i class="fas fa-plus-circle"></i> Новая позиция';
             const prev = $('fImagePreview');
             if (item && item.image) { prev.src = item.image; prev.style.display = 'block'; }
             else { prev.style.display = 'none'; }
-            
             $('itemModal').classList.add('open');
         }
 
-        function editItem(id) {
-            const item = S.menu.find(x => x.id === id);
-            if (item) openItemModal(item);
-        }
-
+        function editItem(id) { const item = S.menu.find(x => x.id === id); if (item) openItemModal(item); }
         function closeItemModal() { $('itemModal').classList.remove('open'); }
 
         function previewImage(e) {
@@ -517,96 +541,53 @@
         async function toggleItem(id) {
             const cur = S.settings.menuItems?.[id] !== false;
             const d = await api('/settings', 'POST', { menuItems: { [id]: !cur } });
-            if (d.success) {
-                S.settings = d.settings;
-                const mi = S.menu.find(x => x.id === id);
-                if (mi) mi.available = !cur;
-                renderMenu();
-                toast(cur ? '❌ Скрыто' : '✅ Показано');
-            }
+            if (d.success) { S.settings = d.settings; const mi = S.menu.find(x => x.id === id); if (mi) mi.available = !cur; renderMenu(); toast(cur ? '❌ Скрыто' : '✅ Показано'); }
         }
 
         async function saveItem() {
-            const id = $('fId').value;
-            const name = $('fName').value.trim();
-            const price = parseInt($('fPrice').value);
-            const oldPrice = parseInt($('fOldPrice').value) || null;
-            
-            if (!name || !price || isNaN(price)) {
-                toast('❌ Заполните название и цену');
-                return;
-            }
-
-            const item = {
-                id: id || String(Date.now()),
-                name: name,
-                desc: $('fDesc').value.trim(),
-                price: price,
-                oldPrice: oldPrice,
-                volume: $('fVolume').value.trim(),
-                category: $('fCategory').value,
-                emoji: $('fEmoji').value.trim(),
-                badge: $('fBadge').value.trim(),
-                image: $('fImageData').value || 'images/placeholder.jpg',
-                isCustom: true
-            };
-
+            const id = $('fId').value, name = $('fName').value.trim(), price = parseInt($('fPrice').value);
+            if (!name || !price || isNaN(price)) { toast('❌ Заполните название и цену'); return; }
+            const item = { id: id || String(Date.now()), name, desc: $('fDesc').value.trim(), price, volume: $('fVolume').value.trim(), category: $('fCategory').value, emoji: $('fEmoji').value.trim(), badge: $('fBadge').value.trim(), image: $('fImageData').value || 'images/placeholder.jpg', isCustom: true };
             if (!S.settings.customItems) S.settings.customItems = [];
-            
             const idx = S.settings.customItems.findIndex(x => x.id === item.id);
-            if (idx >= 0) S.settings.customItems[idx] = item;
-            else S.settings.customItems.push(item);
-
+            if (idx >= 0) S.settings.customItems[idx] = item; else S.settings.customItems.push(item);
             S.settings.menuItems = S.settings.menuItems || {};
             S.settings.menuItems[item.id] = true;
-
-            try {
-                const d = await api('/settings', 'POST', {
-                    customItems: S.settings.customItems,
-                    menuItems: S.settings.menuItems
-                });
-                
-                if (d.success) {
-                    S.settings = d.settings;
-                    closeItemModal();
-                    await loadMenu();
-                    toast('✅ Сохранено');
-                } else {
-                    toast('❌ Ошибка сервера');
-                }
-            } catch(e) {
-                console.error(e);
-                toast('❌ Ошибка соединения');
-            }
+            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
+            if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('✅ Сохранено'); }
+            else toast('❌ Ошибка');
         }
 
         async function deleteItem() {
             const id = $('fId').value;
-            if (!id || !confirm('Удалить позицию?')) return;
-            
+            if (!id || !confirm('Удалить?')) return;
             if (S.settings.customItems) S.settings.customItems = S.settings.customItems.filter(x => x.id !== id);
             S.settings.menuItems = S.settings.menuItems || {};
             S.settings.menuItems[id] = false;
-            
-            const d = await api('/settings', 'POST', {
-                customItems: S.settings.customItems,
-                menuItems: S.settings.menuItems
-            });
-            
+            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
             if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('🗑️ Удалено'); }
         }
 
         // ===== CHATS =====
         async function loadChats() {
             const d = await api('/chats');
-            const chats = d.chats || [];
+            S.chats = d.chats || [];
+            S.totalUnread = S.chats.reduce((sum, c) => sum + (c.unread || 0), 0);
+            updateChatsBadge();
+            
             const list = $('chatsList');
-            if (!chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
-            list.innerHTML = chats.map(c => `
+            if (!S.chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
+            list.innerHTML = S.chats.map(c => `
                 <div class="chat-item" onclick="openChat('${c.phone}','${c.name||'Клиент'}')">
-                    <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone}</div>
-                    <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:1px 6px;border-radius:8px;font-size:10px;">${c.unread}</span>`:''}</div>
+                    <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div>
+                    <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'}</div>
                 </div>`).join('');
+        }
+
+        function updateChatsBadge() {
+            const badge = $('chatsBadge');
+            if (S.totalUnread > 0) { badge.textContent = S.totalUnread; badge.classList.add('show'); }
+            else badge.classList.remove('show');
         }
 
         async function openChat(phone, name) {
@@ -615,6 +596,7 @@
             $('chatModal').classList.add('open');
             await api('/chat-read', 'POST', { phone });
             loadMessages();
+            loadChats();
         }
 
         async function loadMessages() {
@@ -664,7 +646,7 @@
 
         async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
 
-        // ===== MODAL CLOSE =====
+        // ===== MODALS =====
         $('itemModal').addEventListener('click', function(e) { if(e.target===this) closeItemModal(); });
         $('chatModal').addEventListener('click', function(e) { if(e.target===this) closeChatModal(); });
 
@@ -676,7 +658,7 @@
                 if (o.length > lastCount && lastCount > 0) toast('📦 Новый заказ!');
                 lastCount = o.length;
                 if (S.tab === 'orders') { S.orders = o; updateStats(o); renderOrders(); }
-                if (S.tab === 'chats') loadChats();
+                loadChats();
             } catch(e) {}
         }, 10000);
 
@@ -684,8 +666,9 @@
         async function init() {
             await loadMenu();
             await loadOrders();
+            await loadChats();
             lastCount = S.orders.length;
-            console.log('🍓 Админка v7 — с поддержкой старой цены');
+            console.log('🍓 Админка готова');
         }
         init();
     </script>
