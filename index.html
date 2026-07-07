@@ -1650,10 +1650,7 @@
                 <span class="delivery-time">⏱️ за 15 минут!</span>
             </p>
         </header>
-                <button class="map-btn-top" onclick="openMap()">
-            <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Мы на карте
-            <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
-        </button>
+             
         <div id="noAccessMode" style="display:none;">
             <div class="no-access-message">
                 <span class="no-access-icon">🔒</span>
@@ -2061,8 +2058,8 @@
             }
         }
 
-        window.addEventListener('online', () => { updateOnlineStatus(); showNotification('🌐 Интернет появился!'); });
-        window.addEventListener('offline', () => { updateOnlineStatus(); showNotification('📴 Нет интернета!', 'error'); });
+      window.addEventListener('online', () => { updateOnlineStatus(); });
+window.addEventListener('offline', () => { updateOnlineStatus(); });
 
         // ================================================================
         // ===== WORKING TIME =====
