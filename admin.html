@@ -8,296 +8,107 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FF4757;
-            --primary-dark: #E63946;
-            --bg: #FFF5F5;
-            --card-bg: #FFFFFF;
-            --text-dark: #1A1A2E;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow: 0 4px 6px rgba(0,0,0,0.07);
-            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
-            --radius-2xl: 24px;
-            --radius-xl: 20px;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
+            --primary: #FF4757; --primary-dark: #E63946; --bg: #FFF5F5; --card-bg: #FFFFFF;
+            --text-dark: #1A1A2E; --text-secondary: #6B7280; --text-muted: #9CA3AF;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05); --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1); --radius-2xl: 24px; --radius-xl: 20px;
+            --radius-lg: 16px; --radius-md: 12px; --radius-sm: 8px;
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-        body {
-            font-family: var(--font);
-            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
-            min-height: 100vh; padding: 16px; padding-bottom: 100px;
-            background-attachment: fixed; -webkit-font-smoothing: antialiased;
-        }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { text-align: center; padding: 20px 0; }
-        .header-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
-            color: var(--primary); font-size: 11px; font-weight: 600;
-            padding: 6px 16px; border-radius: 100px; margin-bottom: 12px;
-            border: 1px solid rgba(255,71,87,0.2); box-shadow: var(--shadow-sm);
-        }
-        .header h1 { font-size: 28px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
-        .header h1 span { background: linear-gradient(135deg, var(--primary), #FF8A80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
-        .stat-card {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
-            padding: 14px 10px; border-radius: var(--radius-lg); text-align: center;
-            border: 1px solid rgba(255,255,255,0.3); box-shadow: var(--shadow-sm);
-        }
-        .stat-card .val { font-size: 22px; font-weight: 800; color: var(--text-dark); }
-        .stat-card .lbl { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-        .tabs {
-            display: flex; gap: 6px; margin-bottom: 16px; padding: 4px;
-            background: rgba(255,255,255,0.6); backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.3);
-        }
-        .tabs button {
-            flex: 1; padding: 10px 8px; border-radius: var(--radius-lg); border: none;
-            background: transparent; font-size: 12px; font-weight: 500;
-            color: var(--text-secondary); cursor: pointer; transition: var(--transition);
-            font-family: var(--font); display: flex; align-items: center;
-            justify-content: center; gap: 5px; position: relative;
-        }
-        .tabs button i { font-size: 14px; }
-        .tabs button.active { background: #fff; color: var(--primary); font-weight: 600; box-shadow: var(--shadow); }
-        .tabs button .tab-badge {
-            position: absolute; top: 2px; right: 4px;
-            background: var(--primary); color: #fff; font-size: 10px; font-weight: 700;
-            min-width: 18px; height: 18px; border-radius: 50%;
-            display: none; align-items: center; justify-content: center;
-        }
-        .tabs button .tab-badge.show { display: flex; }
-        .panel { display: none; animation: fadeIn 0.3s ease; }
-        .panel.active { display: block; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-        .card {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl); padding: 18px; margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.3); box-shadow: var(--shadow-sm);
-        }
-        .btn {
-            padding: 10px 18px; border-radius: var(--radius-md); border: none;
-            font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition);
-            font-family: var(--font); display: inline-flex; align-items: center; gap: 6px;
-        }
-        .btn:active { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; box-shadow: 0 4px 12px rgba(255,71,87,0.3); }
-        .btn-outline { background: #fff; border: 2px solid #F1F5F9; color: var(--text-dark); }
-        .btn-danger { background: #EF4444; color: #fff; }
-        .btn-sm { padding: 6px 14px; font-size: 11px; }
-        .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
-        .tech-card { background: linear-gradient(135deg, #4ADE80, #22C55E); color: #fff; cursor: pointer; transition: var(--transition); }
-        .tech-card.off { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
-        .row-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
-        .row-btns select { padding: 8px 14px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); font-size: 13px; font-family: var(--font); background: #fff; }
-        .menu-item {
-            background: #fff; border-radius: var(--radius-lg); padding: 14px;
-            display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
-            border: 1px solid #F1F5F9; transition: var(--transition);
-        }
-        .menu-item img { width: 56px; height: 56px; border-radius: var(--radius-md); object-fit: cover; background: #FCE4EC; flex-shrink: 0; }
-        .menu-item .info { flex: 1; min-width: 0; }
-        .menu-item .info .name { font-weight: 600; font-size: 14px; color: var(--text-dark); }
-        .menu-item .info .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-        .menu-item .info .price { font-weight: 700; color: var(--primary); font-size: 15px; margin-top: 4px; }
-        .menu-item .actions { display: flex; gap: 4px; flex-shrink: 0; }
-        .menu-item .actions button { width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-        .btn-edit { background: #F1F5F9; color: #6B7280; }
-        .btn-on { background: #E8F5E9; color: #2E7D32; }
-        .btn-off { background: #FFEBEE; color: #D32F2F; }
-        .order-card { background: #fff; border-radius: var(--radius-lg); padding: 14px; margin-bottom: 10px; border: 1px solid #F1F5F9; }
-        .order-card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .order-card .oid { font-weight: 700; color: var(--primary); font-size: 15px; }
-        .order-card .status { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
-        .status-waiting { background: #FFF3E0; color: #E65100; }
-        .status-done { background: #E8F5E9; color: #2E7D32; }
-        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
-        .order-card .items { font-size: 12px; color: var(--text-secondary); background: #F8FAFC; padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 6px; }
-        .order-card .bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .order-card .total { font-weight: 700; color: var(--primary); font-size: 16px; }
-        .order-card .chat-plate {
-            display: flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, #FF4757, #FF6B81); color: #fff;
-            border-radius: 14px; padding: 10px 14px;
-            margin-top: 8px; cursor: pointer; transition: var(--transition);
-            width: 100%; border: none;
-        }
-        .order-card .chat-plate:active { transform: scale(0.98); opacity: 0.9; }
-        .order-card .chat-plate .msg-preview {
-            flex: 1; font-size: 12px; color: #fff;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .order-card .chat-plate .msg-badge {
-            background: #fff; color: var(--primary); font-size: 11px; font-weight: 700;
-            min-width: 22px; height: 22px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .chat-item {
-            background: #fff; border-radius: var(--radius-lg); padding: 14px;
-            margin-bottom: 8px; border: 1px solid #F1F5F9; cursor: pointer; transition: var(--transition);
-        }
-        .chat-item:active { transform: scale(0.98); }
-        .chat-item .cname { font-weight: 600; font-size: 14px; color: var(--text-dark); }
-        .chat-item .cpreview { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-        .review-card { background: #fff; border-radius: var(--radius-lg); padding: 14px; margin-bottom: 8px; border: 1px solid #F1F5F9; }
-        .review-card .stars { color: #FFB300; font-size: 16px; }
-        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
-        .empty-state i { font-size: 48px; display: block; margin-bottom: 12px; }
-        .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #1A1A2E; color: #fff; padding: 12px 24px; border-radius: 100px;
-            font-size: 13px; font-weight: 500; z-index: 9999; display: none;
-        }
-        .toast.show { display: block; }
-        .modal-overlay {
-            display: none; position: fixed; top:0; left:0; right:0; bottom:0;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); z-index: 1000;
-            justify-content: center; align-items: center; padding: 20px;
-        }
-        .modal-overlay.open { display: flex; }
-        .modal {
-            background: #fff; border-radius: var(--radius-2xl); max-width: 460px; width: 100%;
-            max-height: 85vh; overflow-y: auto; padding: 24px; position: relative;
-            box-shadow: var(--shadow-lg); animation: pop 0.3s ease;
-        }
-        @keyframes pop { from { transform: scale(0.9); opacity:0; } to { transform: scale(1); opacity:1; } }
-        .modal-close {
-            position: absolute; top: 14px; right: 14px; background: #F8FAFC;
-            border: none; width: 32px; height: 32px; border-radius: 50%;
-            font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 10px 14px; border: 2px solid #F1F5F9; border-radius: var(--radius-md);
-            font-size: 14px; background: #F8FAFC; outline: none; font-family: var(--font);
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); }
-        .img-upload {
-            border: 2px dashed #F1F5F9; border-radius: var(--radius-lg); padding: 20px;
-            text-align: center; cursor: pointer; background: #F8FAFC;
-        }
-        .img-upload img { max-width: 100%; max-height: 150px; border-radius: var(--radius-md); margin-top: 8px; }
-        @media (max-width: 500px) {
-            .stats { grid-template-columns: 1fr 1fr; }
-            .tabs button { font-size: 10px; padding: 8px 4px; }
-            .menu-item { flex-direction: column; align-items: flex-start; }
-            .menu-item .actions { align-self: flex-end; }
-        }
+        body { font-family:var(--font); background:linear-gradient(135deg,#FFF5F5,#FFE8EC,#FFF0F0); min-height:100vh; padding:16px 16px 100px; }
+        .container { max-width:800px; margin:0 auto; }
+        .header { text-align:center; padding:20px 0; }
+        .header-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.9); backdrop-filter:blur(20px); color:var(--primary); font-size:11px; font-weight:600; padding:6px 16px; border-radius:100px; margin-bottom:12px; border:1px solid rgba(255,71,87,.2); }
+        .header h1 { font-size:28px; font-weight:800; }
+        .header h1 span { background:linear-gradient(135deg,var(--primary),#FF8A80); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+        .stat-card { background:rgba(255,255,255,.8); backdrop-filter:blur(20px); padding:14px 10px; border-radius:var(--radius-lg); text-align:center; border:1px solid rgba(255,255,255,.3); }
+        .stat-card .val { font-size:22px; font-weight:800; }
+        .stat-card .lbl { font-size:10px; color:var(--text-muted); margin-top:2px; }
+        .tabs { display:flex; gap:6px; margin-bottom:16px; padding:4px; background:rgba(255,255,255,.6); backdrop-filter:blur(20px); border-radius:var(--radius-xl); }
+        .tabs button { flex:1; padding:10px 8px; border-radius:var(--radius-lg); border:none; background:transparent; font-size:12px; font-weight:500; color:var(--text-secondary); cursor:pointer; font-family:var(--font); display:flex; align-items:center; justify-content:center; gap:5px; position:relative; }
+        .tabs button.active { background:#fff; color:var(--primary); font-weight:600; box-shadow:var(--shadow); }
+        .tabs button .tab-badge { position:absolute; top:2px; right:4px; background:var(--primary); color:#fff; font-size:10px; font-weight:700; min-width:18px; height:18px; border-radius:50%; display:none; align-items:center; justify-content:center; }
+        .tabs button .tab-badge.show { display:flex; }
+        .panel { display:none; animation:fadeIn .3s; }
+        .panel.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .btn { padding:10px 18px; border-radius:var(--radius-md); border:none; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font); display:inline-flex; align-items:center; gap:6px; }
+        .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; box-shadow:0 4px 12px rgba(255,71,87,.3); }
+        .btn-outline { background:#fff; border:2px solid #F1F5F9; }
+        .btn-danger { background:#EF4444; color:#fff; }
+        .btn-sm { padding:6px 14px; font-size:11px; }
+        .btn-xs { padding:4px 10px; font-size:10px; border-radius:20px; }
+        .tech-card { background:linear-gradient(135deg,#4ADE80,#22C55E); color:#fff; cursor:pointer; }
+        .tech-card.off { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); }
+        .row-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center; }
+        .row-btns select { padding:8px 14px; border:2px solid #F1F5F9; border-radius:var(--radius-md); font-size:13px; font-family:var(--font); background:#fff; }
+        .order-card { background:#fff; border-radius:var(--radius-lg); padding:14px; margin-bottom:10px; border:1px solid #F1F5F9; }
+        .order-card .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+        .order-card .oid { font-weight:700; color:var(--primary); font-size:15px; }
+        .order-card .status { font-size:10px; font-weight:600; padding:3px 10px; border-radius:100px; }
+        .status-waiting { background:#FFF3E0; color:#E65100; } .status-done { background:#E8F5E9; color:#2E7D32; } .status-cancelled { background:#FFEBEE; color:#D32F2F; }
+        .order-card .items { font-size:12px; color:var(--text-secondary); background:#F8FAFC; padding:8px 12px; border-radius:var(--radius-sm); margin-bottom:6px; }
+        .order-card .bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+        .order-card .total { font-weight:700; color:var(--primary); font-size:16px; }
+        .order-card .chat-plate { display:flex; align-items:center; gap:8px; background:linear-gradient(135deg,#FF4757,#FF6B81); color:#fff; border-radius:14px; padding:10px 14px; margin-top:8px; cursor:pointer; width:100%; border:none; }
+        .order-card .chat-plate .msg-preview { flex:1; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .order-card .chat-plate .msg-badge { background:#fff; color:var(--primary); font-size:11px; font-weight:700; min-width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+        .chat-item { background:#fff; border-radius:var(--radius-lg); padding:14px; margin-bottom:8px; border:1px solid #F1F5F9; cursor:pointer; }
+        .review-card { background:#fff; border-radius:var(--radius-lg); padding:14px; margin-bottom:8px; border:1px solid #F1F5F9; }
+        .review-card .stars { color:#FFB300; font-size:16px; }
+        .empty-state { text-align:center; padding:40px; color:var(--text-muted); }
+        .empty-state i { font-size:48px; display:block; margin-bottom:12px; }
+        .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#1A1A2E; color:#fff; padding:12px 24px; border-radius:100px; font-size:13px; z-index:9999; display:none; }
+        .toast.show { display:block; }
+        .modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.4); backdrop-filter:blur(12px); z-index:1000; justify-content:center; align-items:center; padding:20px; }
+        .modal-overlay.open { display:flex; }
+        .modal { background:#fff; border-radius:var(--radius-2xl); max-width:460px; width:100%; max-height:85vh; overflow-y:auto; padding:24px; position:relative; }
+        .modal-close { position:absolute; top:14px; right:14px; background:#F8FAFC; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .form-group { margin-bottom:12px; }
+        .form-group label { display:block; font-size:12px; font-weight:600; margin-bottom:4px; }
+        .form-group input, .form-group textarea, .form-group select { width:100%; padding:10px 14px; border:2px solid #F1F5F9; border-radius:var(--radius-md); font-size:14px; background:#F8FAFC; outline:none; font-family:var(--font); }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--primary); }
+        @media (max-width:500px) { .stats { grid-template-columns:1fr 1fr; } }
     </style>
 </head>
 <body>
-
     <div class="toast" id="toast"></div>
-
     <div class="container">
-        <div class="header">
-            <div class="header-badge"><i class="fas fa-lock"></i> Панель управления</div>
-            <h1><span>Strawberry</span> Админка</h1>
-        </div>
-
+        <div class="header"><div class="header-badge"><i class="fas fa-lock"></i> Панель управления</div><h1><span>Strawberry</span> Админка</h1></div>
         <div class="stats">
-            <div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl">Всего заказов</div></div>
+            <div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl">Всего</div></div>
             <div class="stat-card"><div class="val" id="statActive">0</div><div class="lbl">Активных</div></div>
-            <div class="stat-card"><div class="val" id="statToday">0</div><div class="lbl">За сегодня</div></div>
+            <div class="stat-card"><div class="val" id="statToday">0</div><div class="lbl">Сегодня</div></div>
             <div class="stat-card"><div class="val" id="statRevenue">0 ₽</div><div class="lbl">Выручка</div></div>
         </div>
-
-        <div class="card tech-card" id="techCard" onclick="toggleTechBreak()">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <div><div style="font-weight:700;font-size:18px;" id="techLabel">✅ Всё работает</div><div style="font-size:12px;opacity:0.8;">Нажмите для переключения</div></div>
-                <div style="font-size:28px;opacity:0.6;"><i class="fas fa-power-off"></i></div>
-            </div>
-        </div>
-
+        <div class="card tech-card" id="techCard" onclick="toggleTechBreak()"><div style="display:flex;justify-content:space-between;"><div><div style="font-weight:700;font-size:18px;" id="techLabel">✅ Работаем</div></div><div style="font-size:28px;opacity:.6;"><i class="fas fa-power-off"></i></div></div></div>
         <div class="tabs">
             <button class="active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
             <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
             <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
             <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
         </div>
-
-        <div class="panel active" id="panel-orders">
-            <div class="row-btns">
-                <button class="btn btn-primary btn-sm" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Обновить</button>
-                <button class="btn btn-outline btn-sm" onclick="clearOrders()"><i class="fas fa-trash"></i> Очистить историю</button>
-            </div>
-            <div id="ordersList"><div class="empty-state"><i class="fas fa-inbox"></i>Заказов пока нет</div></div>
-        </div>
-
-        <div class="panel" id="panel-menu">
-            <div class="row-btns">
-                <button class="btn btn-primary btn-sm" onclick="openItemModal()"><i class="fas fa-plus"></i> Добавить</button>
-                <button class="btn btn-outline btn-sm" onclick="loadMenu()"><i class="fas fa-sync-alt"></i> Обновить</button>
-                <select id="menuFilter" onchange="renderMenu()">
-                    <option value="all">Все</option>
-                    <option value="strawberry">🍓 Клубника</option>
-                    <option value="fruits">🍉 Фрукты</option>
-                    <option value="drinks">🥤 Напитки</option>
-                </select>
-            </div>
-            <div id="menuList"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Загрузка...</div></div>
-        </div>
-
-        <div class="panel" id="panel-chats">
-            <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadChats()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
-            <div id="chatsList"><div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов пока нет</div></div>
-        </div>
-
-        <div class="panel" id="panel-reviews">
-            <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
-            <div id="reviewsList"><div class="empty-state"><i class="fas fa-star"></i>Отзывов пока нет</div></div>
-        </div>
+        <div class="panel active" id="panel-orders"><div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadOrders()"><i class="fas fa-sync-alt"></i></button><button class="btn btn-outline btn-sm" onclick="clearOrders()"><i class="fas fa-trash"></i></button></div><div id="ordersList"><div class="empty-state"><i class="fas fa-inbox"></i>Нет заказов</div></div></div>
+        <div class="panel" id="panel-menu"><div class="row-btns"><button class="btn btn-primary btn-sm" onclick="openItemModal()"><i class="fas fa-plus"></i></button><button class="btn btn-outline btn-sm" onclick="loadMenu()"><i class="fas fa-sync-alt"></i></button><select id="menuFilter" onchange="renderMenu()"><option value="all">Все</option><option value="strawberry">🍓 Клубника</option><option value="fruits">🍉 Фрукты</option><option value="drinks">🥤 Напитки</option></select></div><div id="menuList"><div class="empty-state">Загрузка...</div></div></div>
+        <div class="panel" id="panel-chats"><div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadChats()"><i class="fas fa-sync-alt"></i></button></div><div id="chatsList"><div class="empty-state"><i class="fas fa-comment-dots"></i>Нет чатов</div></div></div>
+        <div class="panel" id="panel-reviews"><div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i></button></div><div id="reviewsList"><div class="empty-state"><i class="fas fa-star"></i>Нет отзывов</div></div></div>
     </div>
-
-    <!-- Модалка товара -->
-    <div class="modal-overlay" id="itemModal">
-        <div class="modal">
-            <button class="modal-close" onclick="closeItemModal()"><i class="fas fa-times"></i></button>
-            <div style="font-weight:700;font-size:18px;margin-bottom:14px;" id="modalTitle"><i class="fas fa-plus-circle" style="color:var(--primary);"></i> Новая позиция</div>
-            <div class="form-group"><label>Название</label><input type="text" id="fName"></div>
-            <div class="form-group"><label>Описание</label><textarea id="fDesc" rows="2"></textarea></div>
-            <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice"></div>
-            <div class="form-group"><label>Объём</label><input type="text" id="fVolume"></div>
-            <div class="form-group"><label>Категория</label><select id="fCategory"><option value="strawberry">🍓 Клубника</option><option value="fruits">🍉 Фрукты</option><option value="drinks">🥤 Напитки</option></select></div>
-            <div class="form-group"><label>Эмодзи</label><input type="text" id="fEmoji"></div>
-            <div class="form-group"><label>Бейдж</label><input type="text" id="fBadge"></div>
-            <div class="form-group"><label>Изображение</label><div class="img-upload" onclick="document.getElementById('fImageInput').click()"><i class="fas fa-cloud-upload-alt" style="font-size:32px;color:var(--text-muted);display:block;margin-bottom:8px;"></i><span style="font-size:13px;">Нажмите для загрузки</span><img id="fImagePreview" style="display:none;"></div><input type="file" id="fImageInput" accept="image/*" style="display:none;" onchange="previewImage(event)"></div>
-            <input type="hidden" id="fId"><input type="hidden" id="fImageData">
-            <button class="btn btn-primary" style="width:100%;" onclick="saveItem()"><i class="fas fa-save"></i> Сохранить</button>
-            <button class="btn btn-danger btn-sm" id="fDeleteBtn" style="width:100%;margin-top:8px;display:none;" onclick="deleteItem()"><i class="fas fa-trash"></i> Удалить</button>
-        </div>
-    </div>
-
-    <!-- Модалка чата -->
-    <div class="modal-overlay" id="chatModal">
-        <div class="modal" style="display:flex;flex-direction:column;max-height:75vh;padding:0;">
-            <div style="padding:14px 20px;border-bottom:1px solid #F1F5F9;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
-                <div style="font-weight:700;font-size:16px;" id="chatTitle">💬 Чат</div>
-                <button class="modal-close" style="position:static;" onclick="closeChatModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="chatMessages" style="flex:1;padding:16px 20px;overflow-y:auto;max-height:45vh;"></div>
-            <div style="padding:12px 20px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;">
-                <input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;font-family:var(--font);" onkeydown="if(event.key==='Enter')sendChat()">
-                <button class="btn btn-primary btn-sm" onclick="sendChat()">📤</button>
-            </div>
-        </div>
-    </div>
+    <div class="modal-overlay" id="chatModal"><div class="modal" style="display:flex;flex-direction:column;max-height:75vh;padding:0;"><div style="padding:14px 20px;border-bottom:1px solid #F1F5F9;display:flex;justify-content:space-between;flex-shrink:0;"><div style="font-weight:700;" id="chatTitle">💬 Чат</div><button class="modal-close" style="position:static;" onclick="closeChatModal()"><i class="fas fa-times"></i></button></div><div id="chatMessages" style="flex:1;padding:16px 20px;overflow-y:auto;"></div><div style="padding:12px 20px;border-top:1px solid #F1F5F9;display:flex;gap:8px;flex-shrink:0;"><input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:14px;outline:none;font-family:var(--font);" onkeydown="if(event.key==='Enter')sendChat()"><button class="btn btn-primary btn-sm" onclick="sendChat()">📤</button></div></div></div>
 
     <script>
+        if (localStorage.getItem('admin_auth') !== 'ok') {
+            const pass = prompt('🔐 Пароль:');
+            if (pass !== 'klubnika270192') { document.body.innerHTML = '<div style="text-align:center;padding:100px;font-family:var(--font);"><h1 style="color:#EF4444;">❌ Доступ запрещён</h1></div>'; throw new Error(); }
+            localStorage.setItem('admin_auth', 'ok');
+        }
+
         const S = { settings:{}, menu:[], tab:'orders', chatPhone:null, orders:[], chats:[], totalUnread:0 };
         const $ = id => document.getElementById(id);
 
-        function toast(msg) {
-            const t = $('toast'); t.textContent = msg; t.classList.add('show');
-            clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2500);
-        }
+        function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2500); }
 
         async function api(url, method = 'GET', body = null) {
             const opts = { method, headers: { 'Content-Type': 'application/json' } };
@@ -306,7 +117,6 @@
             return res.json();
         }
 
-        // ===== TABS =====
         document.querySelectorAll('.tabs button').forEach(b => {
             b.addEventListener('click', function() {
                 S.tab = this.dataset.tab;
@@ -321,194 +131,63 @@
             });
         });
 
-        // ===== TECH BREAK =====
         async function toggleTechBreak() {
             const v = !S.settings.technicalBreak;
             const d = await api('/settings', 'POST', { technicalBreak: v });
-            if (d.success) { S.settings = d.settings; updateTechUI(); toast(v ? '🔧 Перерыв' : '✅ Работаем'); }
+            if (d.success) { S.settings = d.settings; $('techLabel').textContent = v ? '🔧 Перерыв' : '✅ Работаем'; $('techCard').classList.toggle('off', v); }
         }
 
-        function updateTechUI() {
-            const card = $('techCard'), label = $('techLabel');
-            if (S.settings.technicalBreak) { card.classList.add('off'); label.textContent = '🔧 Технический перерыв'; }
-            else { card.classList.remove('off'); label.textContent = '✅ Всё работает'; }
-        }
-
-        // ===== ORDERS =====
         async function loadOrders() {
-            const orders = await api('/orders');
-            S.orders = orders;
-            updateStats(orders);
+            S.orders = await api('/orders');
+            updateStats();
             renderOrders();
         }
 
-        function updateStats(orders) {
+        function updateStats() {
             const today = new Date().toDateString();
-            const active = orders.filter(o => o.status === 'ожидает');
-            let revenue = 0;
-            orders.forEach(o => { if (o.items) o.items.forEach(i => revenue += (i.price || 0) * (i.quantity || 1)); });
-            $('statTotal').textContent = orders.length;
+            const active = S.orders.filter(o => o.status === 'ожидает');
+            let rev = 0;
+            S.orders.forEach(o => { if (o.items) o.items.forEach(i => rev += (i.price||0)*(i.quantity||1)); });
+            $('statTotal').textContent = S.orders.length;
             $('statActive').textContent = active.length;
-            $('statToday').textContent = orders.filter(o => new Date(o.createdAt).toDateString() === today).length;
-            $('statRevenue').textContent = revenue + ' ₽';
+            $('statToday').textContent = S.orders.filter(o => new Date(o.createdAt).toDateString() === today).length;
+            $('statRevenue').textContent = rev + ' ₽';
         }
 
         function getChatInfo(phone) {
-            const chat = S.chats.find(c => c.phone === phone);
-            if (!chat || !chat.lastMessage || chat.lastMessage.from !== 'client') return null;
-            return { text: chat.lastMessage.text, unread: chat.unread || 0 };
+            const c = S.chats.find(x => x.phone === phone);
+            if (!c || !c.lastMessage || c.lastMessage.from !== 'client') return null;
+            return { text: c.lastMessage.text, unread: c.unread || 0 };
         }
 
         function renderOrders() {
             const list = $('ordersList');
-            if (!S.orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
+            if (!S.orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Нет заказов</div>'; return; }
             list.innerHTML = [...S.orders].reverse().map(order => {
                 const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
                 let sc = order.status === 'выполнен' ? 'status-done' : order.status?.includes('отменен') ? 'status-cancelled' : 'status-waiting';
                 const acts = order.status === 'ожидает' ? `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅</button><button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌</button>` : '';
-                
-                const chatInfo = getChatInfo(order.customerPhone);
-                let chatPlate = '';
-                if (chatInfo && order.status === 'ожидает') {
-                    chatPlate = `<div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')"><span class="msg-preview">💬 ${chatInfo.text}</span>${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}</div>`;
-                }
-                
-                return `<div class="order-card">
-                    <div class="top"><span class="oid">🏠 #${order.bungalow||'?'} — #${order.id}</span><span class="status ${sc}">${order.status||'ожидает'}</span></div>
-                    <div style="font-size:12px;color:var(--text-secondary);">👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} ${order.confirmCode?'🔑 <b>'+order.confirmCode+'</b>':''}</div>
-                    <div class="items">${itemsHtml}</div>
-                    <div class="bottom"><span class="total">💰 ${order.total||0} ₽</span><span style="font-size:10px;color:var(--text-muted);">${new Date(order.createdAt).toLocaleString()}</span><div style="display:flex;gap:4px;">${acts}</div></div>
-                    ${chatPlate}
-                </div>`;
+                const ci = getChatInfo(order.customerPhone);
+                let plate = '';
+                if (ci && order.status === 'ожидает') plate = `<div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')"><span class="msg-preview">💬 ${ci.text}</span>${ci.unread>0?`<span class="msg-badge">${ci.unread}</span>`:''}</div>`;
+                return `<div class="order-card"><div class="top"><span class="oid">🏠 #${order.bungalow||'?'} — #${order.id}</span><span class="status ${sc}">${order.status}</span></div><div style="font-size:12px;color:var(--text-secondary);">👤 ${order.customerName} 📞 ${order.customerPhone} ${order.confirmCode?'🔑 <b>'+order.confirmCode+'</b>':''}</div><div class="items">${itemsHtml}</div><div class="bottom"><span class="total">💰 ${order.total||0} ₽</span><span style="font-size:10px;color:var(--text-muted);">${new Date(order.createdAt).toLocaleString()}</span><div>${acts}</div></div>${plate}</div>`;
             }).join('');
         }
 
-        async function confirmOrder(id, code) { if(!confirm('Подтвердить?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Доставлено'); loadOrders(); }
-        async function cancelOrder(id) { if(!confirm('Отменить?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Отменён'); loadOrders(); }
-        async function clearOrders() { if(!confirm('Удалить все?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
+        async function confirmOrder(id, code) { if(!confirm('Подтвердить?'))return; await api('/confirm','POST',{orderId:id,code}); loadOrders(); }
+        async function cancelOrder(id) { if(!confirm('Отменить?'))return; await api('/cancel','POST',{orderId:id}); loadOrders(); }
+        async function clearOrders() { if(!confirm('Удалить все?'))return; await api('/clear-orders','POST'); loadOrders(); }
 
-        // ===== MENU =====
-        const CATALOG = [
-            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
-            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥' },
-            { id:'2', name:'Белый шоколад', desc:'Нежная ягода', price:380, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg' },
-            { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg' },
-            { id:'4', name:'Микс', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-            { id:'11', name:'Арбуз', desc:'Сочный', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-            { id:'12', name:'Дыня', desc:'Нежная', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-            { id:'13', name:'Малина', desc:'Свежая', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-            { id:'14', name:'Ежевика', desc:'Сочная', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-            { id:'15', name:'Голубика', desc:'Полезная', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-            { id:'6', name:'Лимонад', desc:'Домашний', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-            { id:'7', name:'Кока-Кола', desc:'0.33 л', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-            { id:'8', name:'Пиво', desc:'0.5 л', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
-            { id:'10', name:'Шаурма', desc:'С курицей', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
-        ];
-
-        async function loadMenu() {
-            try {
-                const d = await api('/settings');
-                S.settings = d;
-                updateTechUI();
-                S.menu = CATALOG.map(item => ({ ...item, available: d.menuItems?.[item.id] !== false }));
-                if (d.customItems) {
-                    d.customItems.forEach(ci => {
-                        const idx = S.menu.findIndex(x => x.id === ci.id);
-                        if (idx >= 0) S.menu[idx] = { ...S.menu[idx], ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true };
-                        else S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
-                    });
-                }
-                renderMenu();
-            } catch(e) { $('menuList').innerHTML = '<div class="empty-state">Ошибка</div>'; }
-        }
-
-        function renderMenu() {
-            const filter = $('menuFilter').value;
-            let items = filter === 'all' ? S.menu : S.menu.filter(x => x.category === filter);
-            if (!items.length) { $('menuList').innerHTML = '<div class="empty-state">Нет позиций</div>'; return; }
-            $('menuList').innerHTML = items.map(x => `
-                <div class="menu-item">
-                    <img src="${x.image}" onerror="this.style.display='none'" loading="lazy">
-                    <div class="info"><div class="name">${x.emoji||''} ${x.name}</div><div class="desc">${x.desc}</div><div class="price">${x.price} ₽</div></div>
-                    <div class="actions">
-                        <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
-                        <button class="${x.available?'btn-on':'btn-off'}" onclick="toggleItem('${x.id}')"><i class="fas ${x.available?'fa-eye':'fa-eye-slash'}"></i></button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function openItemModal(item = null) {
-            $('fId').value = item?.id || '';
-            $('fName').value = item?.name || '';
-            $('fDesc').value = item?.desc || '';
-            $('fPrice').value = item?.price || '';
-            $('fVolume').value = item?.volume || '';
-            $('fCategory').value = item?.category || 'strawberry';
-            $('fEmoji').value = item?.emoji || '';
-            $('fBadge').value = item?.badge || '';
-            $('fImageData').value = item?.image || '';
-            $('fDeleteBtn').style.display = item ? 'block' : 'none';
-            $('modalTitle').innerHTML = item ? '<i class="fas fa-pen"></i> Редактирование' : '<i class="fas fa-plus-circle"></i> Новая позиция';
-            $('fImagePreview').style.display = item?.image ? 'block' : 'none';
-            if (item?.image) $('fImagePreview').src = item.image;
-            $('itemModal').classList.add('open');
-        }
-
-        function editItem(id) { const item = S.menu.find(x => x.id === id); if (item) openItemModal(item); }
-        function closeItemModal() { $('itemModal').classList.remove('open'); }
-
-        function previewImage(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => { $('fImagePreview').src = ev.target.result; $('fImagePreview').style.display = 'block'; $('fImageData').value = ev.target.result; };
-            reader.readAsDataURL(file);
-        }
-
-        async function toggleItem(id) {
-            const cur = S.settings.menuItems?.[id] !== false;
-            const d = await api('/settings', 'POST', { menuItems: { [id]: !cur } });
-            if (d.success) { S.settings = d.settings; const mi = S.menu.find(x => x.id === id); if (mi) mi.available = !cur; renderMenu(); }
-        }
-
-        async function saveItem() {
-            const id = $('fId').value, name = $('fName').value.trim(), price = parseInt($('fPrice').value);
-            if (!name || !price) { toast('❌ Заполните название и цену'); return; }
-            const item = { id: id || String(Date.now()), name, desc: $('fDesc').value.trim(), price, volume: $('fVolume').value.trim(), category: $('fCategory').value, emoji: $('fEmoji').value.trim(), badge: $('fBadge').value.trim(), image: $('fImageData').value || 'images/placeholder.jpg', isCustom: true };
-            if (!S.settings.customItems) S.settings.customItems = [];
-            const idx = S.settings.customItems.findIndex(x => x.id === item.id);
-            if (idx >= 0) S.settings.customItems[idx] = item; else S.settings.customItems.push(item);
-            S.settings.menuItems = S.settings.menuItems || {};
-            S.settings.menuItems[item.id] = true;
-            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
-            if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('✅ Сохранено'); }
-        }
-
-        async function deleteItem() {
-            const id = $('fId').value;
-            if (!id || !confirm('Удалить?')) return;
-            if (S.settings.customItems) S.settings.customItems = S.settings.customItems.filter(x => x.id !== id);
-            S.settings.menuItems[id] = false;
-            await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
-            closeItemModal(); await loadMenu(); toast('🗑️ Удалено');
-        }
-
-        // ===== CHATS =====
         async function loadChats() {
             const d = await api('/chats');
             S.chats = d.chats || [];
-            S.totalUnread = S.chats.reduce((sum, c) => sum + (c.unread || 0), 0);
-            updateChatsBadge();
-            const list = $('chatsList');
-            if (!S.chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
-            list.innerHTML = S.chats.map(c => `<div class="chat-item" onclick="openChat('${c.phone}','${c.name||'Клиент'}')"><div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div><div class="cpreview">${c.lastMessage?.text||'Нет сообщений'}</div></div>`).join('');
-        }
-
-        function updateChatsBadge() {
+            S.totalUnread = S.chats.reduce((s,c) => s + (c.unread||0), 0);
             const badge = $('chatsBadge');
             if (S.totalUnread > 0) { badge.textContent = S.totalUnread; badge.classList.add('show'); }
             else badge.classList.remove('show');
+            const list = $('chatsList');
+            if (!S.chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Нет чатов</div>'; return; }
+            list.innerHTML = S.chats.map(c => `<div class="chat-item" onclick="openChat('${c.phone}','${c.name||'Клиент'}')"><div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div><div class="cpreview">${c.lastMessage?.text||''}</div></div>`).join('');
         }
 
         function openChat(phone, name) {
@@ -524,7 +203,7 @@
             const msgs = d.messages || [];
             const c = $('chatMessages');
             if (!msgs.length) { c.innerHTML = '<div class="empty-state">Начните диалог</div>'; return; }
-            c.innerHTML = msgs.map(m => `<div style="margin-bottom:6px;display:flex;justify-content:${m.from==='client'?'flex-start':'flex-end'};"><div style="max-width:80%;padding:8px 12px;border-radius:${m.from==='client'?'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px':'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from==='client'?'#F8FAFC':'linear-gradient(135deg,var(--primary),var(--primary-dark))'};color:${m.from==='client'?'var(--text-dark)':'#fff'};font-size:13px;">${m.text}<span style="font-size:9px;display:block;margin-top:3px;opacity:0.6;">${new Date(m.time).toLocaleTimeString()}</span></div></div>`).join('');
+            c.innerHTML = msgs.map(m => `<div style="margin-bottom:6px;display:flex;justify-content:${m.from==='client'?'flex-start':'flex-end'};"><div style="max-width:80%;padding:8px 12px;border-radius:${m.from==='client'?'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px':'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from==='client'?'#F8FAFC':'linear-gradient(135deg,var(--primary),var(--primary-dark))'};color:${m.from==='client'?'var(--text-dark)':'#fff'};font-size:13px;">${m.text}<span style="font-size:9px;display:block;margin-top:3px;opacity:.6;">${new Date(m.time).toLocaleTimeString()}</span></div></div>`).join('');
             c.scrollTop = c.scrollHeight;
         }
 
@@ -539,41 +218,30 @@
 
         function closeChatModal() { $('chatModal').classList.remove('open'); S.chatPhone = null; }
 
-        // ===== REVIEWS =====
         async function loadReviews() {
             const d = await api('/reviews');
             const revs = d.reviews || [];
             const list = $('reviewsList');
-            if (!revs.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Отзывов нет</div>'; return; }
+            if (!revs.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Нет отзывов</div>'; return; }
             list.innerHTML = revs.map(r => `<div class="review-card"><div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">${r.name||'Клиент'}</span><span class="stars">${'⭐'.repeat(r.rating||5)}</span></div><div style="font-size:13px;color:var(--text-secondary);margin:4px 0;">${r.text||''}</div><div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--text-muted);">#${r.orderId}</span><button class="btn btn-danger btn-xs" onclick="deleteReview(${r.id})">🗑️</button></div></div>`).join('');
         }
 
-        async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
+        async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); loadReviews(); }
 
-        // ===== MODALS =====
-        $('itemModal').addEventListener('click', function(e) { if(e.target===this) closeItemModal(); });
         $('chatModal').addEventListener('click', function(e) { if(e.target===this) closeChatModal(); });
 
-        // ===== AUTO REFRESH =====
         let lastCount = 0;
         setInterval(async () => {
             try {
                 const o = await api('/orders');
                 if (o.length > lastCount && lastCount > 0) toast('📦 Новый заказ!');
                 lastCount = o.length;
-                if (S.tab === 'orders') { S.orders = o; updateStats(o); renderOrders(); }
+                if (S.tab === 'orders') { S.orders = o; updateStats(); renderOrders(); }
                 loadChats();
             } catch(e) {}
         }, 10000);
 
-        // ===== INIT =====
-        async function init() {
-            await loadMenu();
-            await loadOrders();
-            await loadChats();
-            lastCount = S.orders.length;
-        }
-        init();
+        (async () => { await loadOrders(); await loadChats(); lastCount = S.orders.length; })();
     </script>
 </body>
 </html>
