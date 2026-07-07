@@ -282,7 +282,22 @@ app.post('/api/chat-send', async (req, res) => {
     await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
     res.json({ success: true });
 });
-
+// ===== API: ЧАТЫ (дополнить) =====
+app.post('/api/chat-read', async (req, res) => {
+    const { phone } = req.body;
+    if (!phone) return res.json({ success: false });
+    try {
+        const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
+        if (exist.rows.length > 0) {
+            let data = exist.rows[0].data;
+            data.unread = 0;
+            await pool.query('UPDATE chats SET data = $1 WHERE phone = $2', [JSON.stringify(data), phone]);
+        }
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false });
+    }
+});
 // ===== API: ОТЗЫВЫ =====
 app.get('/api/reviews', async (req, res) => {
     const r = await pool.query('SELECT data FROM reviews ORDER BY created_at DESC');
