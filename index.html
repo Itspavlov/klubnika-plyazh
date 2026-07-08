@@ -138,58 +138,106 @@
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-8px); }
 }
+/* ===== BUNGALO CARD WITH BACKGROUND ===== */
+.bungalo-display {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    padding: 20px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: #FFFFFF;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.7), rgba(230, 57, 70, 0.8));
+}
 
-        /* ===== BUNGALO CARD ===== */
-        .bungalo-display {
-            position: relative;
-            border-radius: var(--radius-2xl);
-            padding: 20px 20px;
-            margin-bottom: 16px;
-            text-align: center;
-            color: #FFFFFF;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, #FF4757, #E63946);
-        }
+/* ФОНОВОЕ ИЗОБРАЖЕНИЕ (WEBP) */
+.bungalo-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('images/bungalo-bg.webp') center/cover no-repeat;
+    opacity: 0.6;
+    z-index: 0;
+}
 
-        .bungalo-display::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
+/* ТЕМНЫЙ ОВЕРЛЕЙ ДЛЯ ЧИТАЕМОСТИ ТЕКСТА */
+.bungalo-display::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+    z-index: 1;
+}
 
-        .bungalo-display .label {
-            position: relative;
-            z-index: 2;
-            font-size: 11px;
-            font-weight: 500;
-            opacity: 0.9;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+.bungalo-display .label {
+    position: relative;
+    z-index: 2;
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.95;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
 
-        .bungalo-display .number {
-            position: relative;
-            z-index: 2;
-            font-size: 40px;
-            font-weight: 800;
-            margin: 4px 0;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+.bungalo-display .number {
+    position: relative;
+    z-index: 2;
+    font-size: 40px;
+    font-weight: 800;
+    margin: 4px 0;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
 
-        .bungalo-display .hint {
-            position: relative;
-            z-index: 2;
-            font-size: 12px;
-            opacity: 0.8;
-            font-weight: 400;
-        }
+.bungalo-display .hint {
+    position: relative;
+    z-index: 2;
+    font-size: 12px;
+    opacity: 0.9;
+    font-weight: 400;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ДЕКОРАТИВНЫЕ КЛУБНИЧКИ НА ФОНЕ */
+.bungalo-display .bg-strawberry {
+    position: absolute;
+    z-index: 1;
+    font-size: 60px;
+    opacity: 0.15;
+    animation: floatBg 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.bungalo-display .bg-strawberry:nth-child(1) {
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.bungalo-display .bg-strawberry:nth-child(2) {
+    bottom: 10%;
+    right: 5%;
+    animation-delay: 3s;
+    font-size: 40px;
+}
+
+@keyframes floatBg {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(10deg); }
+}
 
         /* ===== NAVIGATION CHIPS ===== */
         .chips-nav {
@@ -1881,11 +1929,10 @@
             phone: '+7 962 855-72-63',
             phoneRaw: '79628557263'
         };
-
-        const WORK_HOURS = { 
-            start: 9,  
-            end: 28    // 28 = 4:00 утра
-        };
+const WORK_HOURS = { 
+    start: 9,    // 9:00 утра
+    end: 30      // 30 = 6:00 утра
+};
 
         const FORCE_WORKING_TIME = false;
         let manualTime = null;
