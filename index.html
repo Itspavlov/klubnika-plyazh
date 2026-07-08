@@ -1795,39 +1795,70 @@
             <div style="height: 16px;"></div>
         </div>
     </div>
-<!-- ===== BOTTOM TAB BAR WITH WAVE ===== -->
-<div class="bottom-tab-bar" id="bottomTabBar">
-    <!-- WAVE -->
-    <div class="tab-wave">
-        <svg viewBox="0 0 480 20" preserveAspectRatio="none">
-            <path d="M0,10 C120,0 160,20 240,10 C320,0 360,20 480,10 L480,20 L0,20 Z"/>
-        </svg>
+
+    <!-- ===== BOTTOM TAB BAR ===== -->
+    <div class="bottom-tab-bar" id="bottomTabBar">
+        <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
+            <span class="tab-icon"><i class="fas fa-home"></i></span>
+            <span class="tab-label">Меню</span>
+        </button>
+        <button class="tab-item" id="tabOrders" onclick="openOrdersModal()">
+            <span class="tab-icon"><i class="fas fa-list-alt"></i></span>
+            <span class="tab-label">Заказы</span>
+            <span class="tab-badge hidden" id="tabOrdersBadge">0</span>
+        </button>
+        <button class="tab-item" id="tabCart" onclick="openCart()">
+            <span class="tab-icon"><i class="fas fa-shopping-cart"></i></span>
+            <span class="tab-label">Корзина</span>
+            <span class="tab-badge hidden" id="tabCartBadge">0</span>
+            <span class="tab-total" id="tabCartTotal">0 ₽</span>
+        </button>
     </div>
-    
-    <!-- STRAWBERRY DECORATION -->
-    <div class="tab-strawberry-decoration">🍓</div>
-    
-    <!-- MENU TAB -->
-    <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
-        <span class="tab-icon"><i class="fas fa-home"></i></span>
-        <span class="tab-label">Меню</span>
-    </button>
-    
-    <!-- ORDERS TAB -->
-    <button class="tab-item" id="tabOrders" onclick="openOrdersModal()">
-        <span class="tab-icon"><i class="fas fa-list-alt"></i></span>
-        <span class="tab-label">Заказы</span>
-        <span class="tab-badge hidden" id="tabOrdersBadge">0</span>
-    </button>
-    
-    <!-- CART TAB -->
-    <button class="tab-item" id="tabCart" onclick="openCart()">
-        <span class="tab-icon"><i class="fas fa-shopping-cart"></i></span>
-        <span class="tab-label">Корзина</span>
-        <span class="tab-badge hidden" id="tabCartBadge">0</span>
-        <span class="tab-total" id="tabCartTotal">0 ₽</span>
-    </button>
-</div>
+
+    <!-- ===== CART MODAL ===== -->
+    <div class="cart-modal" id="cartModal">
+        <div class="modal-header">
+            <h2><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> Корзина</h2>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button id="clearCart" style="background: none; border: none; color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: var(--font-family);">
+                    <i class="fas fa-trash-can"></i> Очистить
+                </button>
+                <button onclick="closeCart()" style="background: #F1F5F9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; color: var(--text-secondary); cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="cart-content">
+            <div id="cartItems">
+                <div class="cart-empty">
+                    <i class="fas fa-cart-plus" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
+                    Добавьте что-нибудь вкусное 😋
+                </div>
+            </div>
+            <div class="payment-section" id="paymentSection">
+                <div class="payment-title"><i class="fas fa-credit-card" style="color: var(--primary);"></i> Способ оплаты</div>
+                <div class="payment-options">
+                    <button class="payment-btn active" data-method="cash" onclick="selectPayment('cash')">
+                        <span class="payment-icon">💵</span>
+                        <span class="payment-name">Наличными</span>
+                    </button>
+                    <button class="payment-btn" data-method="transfer" onclick="selectPayment('transfer')">
+                        <span class="payment-icon">📱</span>
+                        <span class="payment-name">Переводом</span>
+                    </button>
+                </div>
+                <div class="payment-info" id="paymentInfo">💡 Оплата наличными при получении</div>
+            </div>
+            <div class="cart-total">
+                <span>Итого:</span>
+                <span class="total-price" id="cartTotal">0 ₽</span>
+            </div>
+            <button id="orderButton" class="confirm-btn" style="margin-top: 8px;" disabled>
+                <i class="fas fa-check-circle"></i> Заказать
+            </button>
+        </div>
+    </div>
+
     <script>
         // ================================================================
         // ===== CONFIGURATION =====
