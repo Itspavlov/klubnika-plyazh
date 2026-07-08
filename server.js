@@ -298,6 +298,18 @@ app.post('/api/chat-read', async (req, res) => {
         res.json({ success: false });
     }
 });
+// ===== УДАЛЕНИЕ ЧАТА =====
+app.post('/api/delete-chat', async (req, res) => {
+    const { phone } = req.body;
+    if (!phone) return res.json({ success: false });
+    try {
+        await pool.query('DELETE FROM chats WHERE phone = $1', [phone]);
+        res.json({ success: true });
+    } catch(e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
 // ===== API: ОТЗЫВЫ =====
 app.get('/api/reviews', async (req, res) => {
     const r = await pool.query('SELECT data FROM reviews ORDER BY created_at DESC');
