@@ -109,6 +109,7 @@
         .menu-item .info .name { font-weight: 600; font-size: 14px; color: var(--text-dark); }
         .menu-item .info .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         .menu-item .info .price { font-weight: 700; color: var(--primary); font-size: 15px; margin-top: 4px; }
+        .menu-item .info .old-price { font-size: 13px; color: var(--text-muted); text-decoration: line-through; margin-left: 8px; font-weight: 400; }
         .menu-item .actions { display: flex; gap: 4px; flex-shrink: 0; }
         .menu-item .actions button {
             width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
@@ -148,13 +149,62 @@
             min-width: 22px; height: 22px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
         }
-        .chat-item {
-            background: #fff; border-radius: var(--radius-lg); padding: 14px;
-            margin-bottom: 8px; border: 1px solid #F1F5F9; cursor: pointer; transition: var(--transition);
+
+        /* ===== CHAT ITEM WITH SWIPE ===== */
+        .chat-item-wrapper {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 8px;
+            border-radius: var(--radius-lg);
+            background: #fff;
+            border: 1px solid #F1F5F9;
+            touch-action: pan-y;
         }
-        .chat-item:active { transform: scale(0.98); }
+
+        .chat-item {
+            background: #fff;
+            padding: 14px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            touch-action: pan-y;
+        }
+
+        .chat-item.swiped {
+            transform: translateX(-80px);
+        }
+
         .chat-item .cname { font-weight: 600; font-size: 14px; color: var(--text-dark); }
         .chat-item .cpreview { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .chat-delete-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 80px;
+            background: #EF4444;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            transition: var(--transition);
+            z-index: 1;
+            font-family: var(--font);
+        }
+
+        .chat-delete-btn:active {
+            background: #DC2626;
+        }
+
         .review-card {
             background: #fff; border-radius: var(--radius-lg); padding: 14px;
             margin-bottom: 8px; border: 1px solid #F1F5F9;
@@ -197,17 +247,89 @@
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,71,87,0.1);
         }
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
         .img-upload {
             border: 2px dashed #F1F5F9; border-radius: var(--radius-lg); padding: 20px;
             text-align: center; cursor: pointer; background: #F8FAFC; transition: var(--transition);
         }
         .img-upload:hover { border-color: var(--primary); background: #FFF5F5; }
         .img-upload img { max-width: 100%; max-height: 150px; border-radius: var(--radius-md); margin-top: 8px; }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .login-box {
+            background: #fff;
+            border-radius: var(--radius-2xl);
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        .login-box .login-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+        }
+        .login-box h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .login-box p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #F1F5F9;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            margin-bottom: 16px;
+            outline: none;
+            font-family: var(--font);
+            transition: var(--transition);
+        }
+        .login-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255,71,87,0.1);
+        }
+        .login-box .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
+            font-size: 16px;
+        }
+        .login-box .error-msg {
+            color: #EF4444;
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
         @media (max-width: 500px) {
             .stats { grid-template-columns: 1fr 1fr; }
             .tabs button { font-size: 10px; padding: 8px 4px; }
             .menu-item { flex-direction: column; align-items: flex-start; }
             .menu-item .actions { align-self: flex-end; }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
         }
     </style>
 </head>
@@ -215,66 +337,86 @@
 
     <div class="toast" id="toast"></div>
 
-    <div class="container">
-        <div class="header">
-            <div class="header-badge"><i class="fas fa-lock"></i> Панель управления</div>
-            <h1><span>Strawberry</span> Админка</h1>
+    <!-- ===== LOGIN SCREEN ===== -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <span class="login-icon">🍓</span>
+            <h2>Вход в админку</h2>
+            <p>Введите пароль для доступа к панели управления</p>
+            <input type="password" id="loginPassword" placeholder="Введите пароль..." onkeydown="if(event.key==='Enter') login()">
+            <button class="btn btn-primary" onclick="login()">🔓 Войти</button>
+            <div class="error-msg" id="loginError">❌ Неверный пароль!</div>
         </div>
+    </div>
 
-        <div class="stats">
-            <div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl">Всего заказов</div></div>
-            <div class="stat-card"><div class="val" id="statActive">0</div><div class="lbl">Активных</div></div>
-            <div class="stat-card"><div class="val" id="statToday">0</div><div class="lbl">За сегодня</div></div>
-            <div class="stat-card"><div class="val" id="statRevenue">0 ₽</div><div class="lbl">Выручка</div></div>
-        </div>
+    <!-- ===== ADMIN PANEL ===== -->
+    <div id="adminPanel" style="display:none;">
+        <div class="container">
+            <div class="header">
+                <div class="header-badge"><i class="fas fa-lock"></i> Панель управления</div>
+                <h1><span>Strawberry</span> Админка</h1>
+                <button onclick="logout()" style="background:rgba(255,255,255,0.8);border:1px solid #F1F5F9;border-radius:100px;padding:6px 16px;font-size:12px;cursor:pointer;font-family:var(--font);margin-top:8px;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            </div>
 
-        <div class="card tech-card" id="techCard" onclick="toggleTechBreak()">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                    <div style="font-weight:700;font-size:18px;" id="techLabel">✅ Всё работает</div>
-                    <div style="font-size:12px;opacity:0.8;">Нажмите для переключения</div>
+            <div class="stats">
+                <div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl">Всего заказов</div></div>
+                <div class="stat-card"><div class="val" id="statActive">0</div><div class="lbl">Активных</div></div>
+                <div class="stat-card"><div class="val" id="statToday">0</div><div class="lbl">За сегодня</div></div>
+                <div class="stat-card"><div class="val" id="statRevenue">0 ₽</div><div class="lbl">Выручка</div></div>
+            </div>
+
+            <div class="card tech-card" id="techCard" onclick="toggleTechBreak()">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <div style="font-weight:700;font-size:18px;" id="techLabel">✅ Всё работает</div>
+                        <div style="font-size:12px;opacity:0.8;">Нажмите для переключения</div>
+                    </div>
+                    <div style="font-size:28px;opacity:0.6;"><i class="fas fa-power-off"></i></div>
                 </div>
-                <div style="font-size:28px;opacity:0.6;"><i class="fas fa-power-off"></i></div>
             </div>
-        </div>
 
-        <div class="tabs">
-            <button class="active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
-            <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
-            <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
-            <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
-        </div>
-
-        <div class="panel active" id="panel-orders">
-            <div class="row-btns">
-                <button class="btn btn-primary btn-sm" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Обновить</button>
-                <button class="btn btn-outline btn-sm" onclick="clearOrders()"><i class="fas fa-trash"></i> Очистить историю</button>
+            <div class="tabs">
+                <button class="active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
+                <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
+                <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
+                <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
             </div>
-            <div id="ordersList"><div class="empty-state"><i class="fas fa-inbox"></i>Заказов пока нет</div></div>
-        </div>
 
-        <div class="panel" id="panel-menu">
-            <div class="row-btns">
-                <button class="btn btn-primary btn-sm" onclick="openItemModal()"><i class="fas fa-plus"></i> Добавить позицию</button>
-                <button class="btn btn-outline btn-sm" onclick="loadMenu()"><i class="fas fa-sync-alt"></i> Обновить</button>
-                <select id="menuFilter" onchange="renderMenu()">
-                    <option value="all">Все категории</option>
-                    <option value="strawberry">🍓 Клубника</option>
-                    <option value="fruits">🍉 Фрукты</option>
-                    <option value="drinks">🥤 Напитки</option>
-                </select>
+            <div class="panel active" id="panel-orders">
+                <div class="row-btns">
+                    <button class="btn btn-primary btn-sm" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                    <button class="btn btn-outline btn-sm" onclick="clearOrders()"><i class="fas fa-trash"></i> Очистить историю</button>
+                </div>
+                <div id="ordersList"><div class="empty-state"><i class="fas fa-inbox"></i>Заказов пока нет</div></div>
             </div>
-            <div id="menuList"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Загрузка меню...</div></div>
-        </div>
 
-        <div class="panel" id="panel-chats">
-            <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadChats()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
-            <div id="chatsList"><div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов пока нет</div></div>
-        </div>
+            <div class="panel" id="panel-menu">
+                <div class="row-btns">
+                    <button class="btn btn-primary btn-sm" onclick="openItemModal()"><i class="fas fa-plus"></i> Добавить позицию</button>
+                    <button class="btn btn-outline btn-sm" onclick="loadMenu()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                    <select id="menuFilter" onchange="renderMenu()">
+                        <option value="all">Все категории</option>
+                        <option value="strawberry">🍓 Клубника</option>
+                        <option value="fruits">🍉 Фрукты</option>
+                        <option value="drinks">🥤 Напитки</option>
+                    </select>
+                </div>
+                <div id="menuList"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Загрузка меню...</div></div>
+            </div>
 
-        <div class="panel" id="panel-reviews">
-            <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
-            <div id="reviewsList"><div class="empty-state"><i class="fas fa-star"></i>Отзывов пока нет</div></div>
+            <div class="panel" id="panel-chats">
+                <div class="row-btns">
+                    <button class="btn btn-primary btn-sm" onclick="loadChats()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                </div>
+                <div id="chatsList"><div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов пока нет</div></div>
+            </div>
+
+            <div class="panel" id="panel-reviews">
+                <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
+                <div id="reviewsList"><div class="empty-state"><i class="fas fa-star"></i>Отзывов пока нет</div></div>
+            </div>
         </div>
     </div>
 
@@ -287,7 +429,10 @@
             </div>
             <div class="form-group"><label>Название</label><input type="text" id="fName" placeholder="Например: Клубника в шоколаде"></div>
             <div class="form-group"><label>Описание</label><textarea id="fDesc" rows="2" placeholder="Краткое описание"></textarea></div>
-            <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice" placeholder="350"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice" placeholder="350"></div>
+                <div class="form-group"><label>Старая цена (₽) <small style="color:var(--text-muted);">(перечеркнутая)</small></label><input type="number" id="fOldPrice" placeholder="400" style="border-color: #FEE2E2;"></div>
+            </div>
             <div class="form-group"><label>Объём/Вес</label><input type="text" id="fVolume" placeholder="300 мл"></div>
             <div class="form-group"><label>Категория</label>
                 <select id="fCategory">
@@ -330,6 +475,33 @@
     </div>
 
     <script>
+        // ===== LOGIN =====
+        const ADMIN_PASSWORD = 'klubnika270192';
+
+        function login() {
+            const input = document.getElementById('loginPassword');
+            const error = document.getElementById('loginError');
+            
+            if (input.value === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                error.style.display = 'none';
+                initAdmin();
+            } else {
+                error.style.display = 'block';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        // ===== ADMIN LOGIC =====
         const S = {
             settings: {},
             menu: [],
@@ -450,25 +622,25 @@
 
         async function confirmOrder(id, code) { if(!confirm('Подтвердить?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Доставлено'); loadOrders(); }
         async function cancelOrder(id) { if(!confirm('Отменить?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Отменён'); loadOrders(); }
-        async function clearOrders() { if(!confirm('Удалить все?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
+        async function clearOrders() { if(!confirm('Удалить все заказы?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
 
         // ===== MENU =====
         const CATALOG = [
-            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
-            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
-            { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
-            { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
-            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-            { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
-            { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
+            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, oldPrice:770, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
+            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, oldPrice:null, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
+            { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, oldPrice:null, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
+            { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, oldPrice:null, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
+            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, oldPrice:null, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
+            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, oldPrice:null, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
+            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, oldPrice:null, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
+            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, oldPrice:null, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
+            { id:'13', name:'Малина', desc:'Свежая малина', price:250, oldPrice:null, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
+            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, oldPrice:null, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
+            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, oldPrice:null, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
+            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, oldPrice:null, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
+            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, oldPrice:null, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
+            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, oldPrice:null, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
+            { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, oldPrice:null, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
         ];
 
         async function loadMenu() {
@@ -500,7 +672,10 @@
                     <div class="info">
                         <div class="name">${x.emoji||''} ${x.name} ${x.badge?`<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;">${x.badge}</span>`:''}</div>
                         <div class="desc">${x.desc} ${x.volume?'• '+x.volume:''}</div>
-                        <div class="price">${x.price} ₽</div>
+                        <div class="price">
+                            ${x.price} ₽
+                            ${x.oldPrice ? `<span class="old-price">${x.oldPrice} ₽</span>` : ''}
+                        </div>
                     </div>
                     <div class="actions">
                         <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
@@ -514,6 +689,7 @@
             $('fName').value = item ? item.name : '';
             $('fDesc').value = item ? item.desc : '';
             $('fPrice').value = item ? item.price : '';
+            $('fOldPrice').value = item && item.oldPrice ? item.oldPrice : '';
             $('fVolume').value = item ? (item.volume || '') : '';
             $('fCategory').value = item ? (item.category || 'strawberry') : 'strawberry';
             $('fEmoji').value = item ? (item.emoji || '') : '';
@@ -547,7 +723,20 @@
         async function saveItem() {
             const id = $('fId').value, name = $('fName').value.trim(), price = parseInt($('fPrice').value);
             if (!name || !price || isNaN(price)) { toast('❌ Заполните название и цену'); return; }
-            const item = { id: id || String(Date.now()), name, desc: $('fDesc').value.trim(), price, volume: $('fVolume').value.trim(), category: $('fCategory').value, emoji: $('fEmoji').value.trim(), badge: $('fBadge').value.trim(), image: $('fImageData').value || 'images/placeholder.jpg', isCustom: true };
+            const oldPrice = $('fOldPrice').value.trim() ? parseInt($('fOldPrice').value.trim()) : null;
+            const item = { 
+                id: id || String(Date.now()), 
+                name, 
+                desc: $('fDesc').value.trim(), 
+                price, 
+                oldPrice: oldPrice,
+                volume: $('fVolume').value.trim(), 
+                category: $('fCategory').value, 
+                emoji: $('fEmoji').value.trim(), 
+                badge: $('fBadge').value.trim(), 
+                image: $('fImageData').value || 'images/placeholder.jpg', 
+                isCustom: true 
+            };
             if (!S.settings.customItems) S.settings.customItems = [];
             const idx = S.settings.customItems.findIndex(x => x.id === item.id);
             if (idx >= 0) S.settings.customItems[idx] = item; else S.settings.customItems.push(item);
@@ -560,7 +749,7 @@
 
         async function deleteItem() {
             const id = $('fId').value;
-            if (!id || !confirm('Удалить?')) return;
+            if (!id || !confirm('Удалить позицию?')) return;
             if (S.settings.customItems) S.settings.customItems = S.settings.customItems.filter(x => x.id !== id);
             S.settings.menuItems = S.settings.menuItems || {};
             S.settings.menuItems[id] = false;
@@ -568,7 +757,7 @@
             if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('🗑️ Удалено'); }
         }
 
-        // ===== CHATS =====
+        // ===== CHATS WITH SWIPE =====
         async function loadChats() {
             const d = await api('/chats');
             S.chats = d.chats || [];
@@ -577,11 +766,106 @@
             
             const list = $('chatsList');
             if (!S.chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
+            
             list.innerHTML = S.chats.map(c => `
-                <div class="chat-item" onclick="openChat('${c.phone}','${c.name||'Клиент'}')">
-                    <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div>
-                    <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'}</div>
-                </div>`).join('');
+                <div class="chat-item-wrapper">
+                    <button class="chat-delete-btn" onclick="deleteChat('${c.phone}')">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                    <div class="chat-item" data-phone="${c.phone}" onclick="openChat('${c.phone}','${c.name||'Клиент'}')">
+                        <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div>
+                        <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Добавляем обработчики свайпа
+            document.querySelectorAll('.chat-item-wrapper').forEach(wrapper => {
+                let startX = 0;
+                let currentX = 0;
+                let isDragging = false;
+                const item = wrapper.querySelector('.chat-item');
+
+                wrapper.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                }, { passive: true });
+
+                wrapper.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    currentX = e.touches[0].clientX;
+                    const diff = startX - currentX;
+                    if (diff > 0 && diff < 100) {
+                        item.style.transform = `translateX(-${diff}px)`;
+                    } else if (diff >= 100) {
+                        item.style.transform = 'translateX(-80px)';
+                        item.classList.add('swiped');
+                    } else {
+                        item.style.transform = 'translateX(0)';
+                        item.classList.remove('swiped');
+                    }
+                }, { passive: true });
+
+                wrapper.addEventListener('touchend', () => {
+                    isDragging = false;
+                    if (!item.classList.contains('swiped')) {
+                        item.style.transform = 'translateX(0)';
+                    } else {
+                        item.style.transform = 'translateX(-80px)';
+                    }
+                }, { passive: true });
+
+                // Для мыши (десктоп)
+                let mouseStartX = 0;
+                let isMouseDown = false;
+
+                wrapper.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.chat-delete-btn')) return;
+                    mouseStartX = e.clientX;
+                    isMouseDown = true;
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isMouseDown) return;
+                    const diff = mouseStartX - e.clientX;
+                    if (diff > 0 && diff < 100) {
+                        item.style.transform = `translateX(-${diff}px)`;
+                    } else if (diff >= 100) {
+                        item.style.transform = 'translateX(-80px)';
+                        item.classList.add('swiped');
+                    } else {
+                        item.style.transform = 'translateX(0)';
+                        item.classList.remove('swiped');
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isMouseDown = false;
+                    if (!item.classList.contains('swiped')) {
+                        item.style.transform = 'translateX(0)';
+                    }
+                });
+            });
+        }
+
+        async function deleteChat(phone) {
+            if (!confirm(`🗑️ Удалить чат с ${phone}?`)) return;
+            try {
+                const res = await fetch('/api/delete-chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast('🗑️ Чат удален');
+                    loadChats();
+                } else {
+                    toast('❌ Ошибка удаления');
+                }
+            } catch(e) {
+                toast('❌ Ошибка соединения');
+            }
         }
 
         function updateChatsBadge() {
@@ -591,12 +875,12 @@
         }
 
         async function openChat(phone, name) {
-    S.chatPhone = phone;
-    $('chatTitle').textContent = `💬 ${name} (${phone})`;
-    $('chatModal').classList.add('open'); // сначала открываем
-    loadMessages(); // сразу грузим сообщения
-    api('/chat-read', 'POST', { phone }).then(() => loadChats()); // фоном сбрасываем unread
-}
+            S.chatPhone = phone;
+            $('chatTitle').textContent = `💬 ${name} (${phone})`;
+            $('chatModal').classList.add('open');
+            loadMessages();
+            api('/chat-read', 'POST', { phone }).then(() => loadChats());
+        }
 
         async function loadMessages() {
             const d = await api('/chat-messages?phone=' + S.chatPhone);
@@ -651,25 +935,38 @@
 
         // ===== AUTO REFRESH =====
         let lastCount = 0;
-        setInterval(async () => {
-            try {
-                const o = await api('/orders');
-                if (o.length > lastCount && lastCount > 0) toast('📦 Новый заказ!');
-                lastCount = o.length;
-                if (S.tab === 'orders') { S.orders = o; updateStats(o); renderOrders(); }
-                loadChats();
-            } catch(e) {}
-        }, 10000);
+        let autoRefreshInterval;
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(async () => {
+                try {
+                    const o = await api('/orders');
+                    if (o.length > lastCount && lastCount > 0) toast('📦 Новый заказ!');
+                    lastCount = o.length;
+                    if (S.tab === 'orders') { S.orders = o; updateStats(o); renderOrders(); }
+                    if (S.tab === 'chats') loadChats();
+                } catch(e) {}
+            }, 10000);
+        }
 
         // ===== INIT =====
-        async function init() {
+        async function initAdmin() {
             await loadMenu();
             await loadOrders();
             await loadChats();
             lastCount = S.orders.length;
+            startAutoRefresh();
             console.log('🍓 Админка готова');
         }
-        init();
+
+        // Проверка авторизации при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Показываем экран входа по умолчанию
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+        });
     </script>
+
 </body>
 </html>
