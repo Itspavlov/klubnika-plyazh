@@ -66,77 +66,78 @@
         }
 
         /* ===== HEADER ===== */
-        .header {
-            text-align: center;
-            padding: 8px 0 16px;
-            position: relative;
-        }
+        /* ===== HEADER ===== */
+.header {
+    text-align: center;
+    padding: 8px 0 16px;
+    position: relative;
+}
 
-        .header-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 6px 16px;
-            border-radius: 100px;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
-            box-shadow: var(--shadow-sm);
-        }
+.header .logo-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 4px;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
+}
 
-        .header .logo-icon {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 8px;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
-        }
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 71, 87, 0.2);
+    box-shadow: var(--shadow-sm);
+}
 
-        .header h1 {
-            font-size: 28px;
-            color: var(--text-dark);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            margin-bottom: 4px;
-        }
+.header h1 {
+    font-size: 28px;
+    color: var(--text-dark);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
 
-        .header h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+.header h1 .highlight {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
-        .header .subtitle {
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 400;
-            line-height: 1.5;
-            max-width: 320px;
-            margin: 0 auto;
-        }
+.header .subtitle {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 320px;
+    margin: 0 auto;
+}
 
-        .header .subtitle .delivery-time {
-            background: linear-gradient(135deg, #FFE8EC, #FFF0F0);
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 12px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
-        }
+.header .subtitle .delivery-time {
+    background: linear-gradient(135deg, #FFE8EC, #FFF0F0);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 12px;
+    border: 1px solid rgba(255, 71, 87, 0.2);
+}
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
 
         /* ===== BUNGALO CARD ===== */
         .bungalo-display {
@@ -1657,20 +1658,27 @@
         </div>
 
         <header class="header">
-            <div class="header-badge">
-                <i class="fas fa-water"></i> Доставка на пляж
-            </div>
-            <span class="logo-icon">🍓</span>
-            <h1>
-                <span class="highlight">Strawberry</span>
-                <span style="color: var(--text-dark);"> in </span>
-                <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
-            </h1>
-            <p class="subtitle">
-                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
-                <span class="delivery-time">⏱️ за 15 минут!</span>
-            </p>
-        </header>
+    <!-- КЛУБНИЧКА НАД ПЛАШКОЙ -->
+    <span class="logo-icon">🍓</span>
+    
+    <!-- ПЛАШКА ДОСТАВКА -->
+    <div class="header-badge">
+        <i class="fas fa-water"></i> Доставка на пляж
+    </div>
+    
+    <!-- ЗАГОЛОВОК -->
+    <h1>
+        <span class="highlight">Strawberry</span>
+        <span style="color: var(--text-dark);"> in </span>
+        <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
+    </h1>
+    
+    <!-- ПОДЗАГОЛОВОК -->
+    <p class="subtitle">
+        <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
+        <span class="delivery-time">⏱️ за 15 минут!</span>
+    </p>
+</header>
 
         <div id="noAccessMode" style="display:none;">
             <div class="no-access-message">
