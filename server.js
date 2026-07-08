@@ -16,8 +16,8 @@ const pool = new Pool({
 
 // ===== НАСТРОЙКИ =====
 const WORK_HOURS = { 
-    start: 9,
-    end: 28
+    start: 9,    // 9:00 утра
+    end: 30      // 30 = 6:00 утра следующего дня (24 + 6 = 30)
 };
 
 let settings = {
