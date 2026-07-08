@@ -133,42 +133,6 @@
             border: 1px solid rgba(255, 71, 87, 0.2);
         }
 
-        /* ===== ONLINE INDICATOR ===== */
-        .online-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 100px;
-            margin: 8px 0;
-            font-size: 12px;
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .online-indicator .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4ADE80;
-            box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
-        }
-
-        .online-indicator.offline .dot {
-            background: #EF4444;
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
@@ -550,27 +514,6 @@
         .section-title i {
             font-size: 20px;
             color: var(--primary);
-        }
-
-        /* ===== WORK HOURS ===== */
-        .work-hours-banner {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 10px 16px;
-            border-radius: var(--radius-xl);
-            margin: 8px 0;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-dark);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            box-shadow: var(--shadow-sm);
         }
 
         /* ===== MAP BUTTON ===== */
@@ -1483,7 +1426,7 @@
     </style>
 </head>
 <body>
-        <!-- ===== TOAST / CART OVERLAY ===== -->
+    <!-- ===== TOAST / CART OVERLAY ===== -->
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
@@ -1728,16 +1671,6 @@
                 <span class="delivery-time">⏱️ за 15 минут!</span>
             </p>
         </header>
-
-        <div class="work-hours-banner">
-            <span><i class="fas fa-truck" style="color: var(--primary);"></i> Доставка: <strong>9:00 — 20:00</strong></span>
-            <span><i class="fas fa-store" style="color: var(--primary);"></i> Киоск: <strong>9:00 — 1:00</strong></span>
-        </div>
-
-        <div class="online-indicator" id="onlineIndicator">
-            <span class="dot"></span>
-            <span id="onlineStatus"><i class="fas fa-wifi"></i> Интернет есть</span>
-        </div>
 
         <div id="noAccessMode" style="display:none;">
             <div class="no-access-message">
@@ -2135,19 +2068,11 @@
         function isOnline() { return navigator.onLine; }
 
         function updateOnlineStatus() {
-            const indicator = document.getElementById('onlineIndicator');
-            const statusText = document.getElementById('onlineStatus');
-            if (isOnline()) {
-                indicator.className = 'online-indicator';
-                statusText.innerHTML = '<i class="fas fa-wifi"></i> Интернет есть';
-            } else {
-                indicator.className = 'online-indicator offline';
-                statusText.innerHTML = '<i class="fas fa-wifi-slash"></i> Нет интернета!';
-            }
+            // Функция оставлена для совместимости, но индикатор скрыт
         }
 
-        window.addEventListener('online', () => { updateOnlineStatus(); showNotification('🌐 Интернет появился!'); });
-        window.addEventListener('offline', () => { updateOnlineStatus(); showNotification('📴 Нет интернета!', 'error'); });
+        window.addEventListener('online', () => { updateOnlineStatus(); });
+        window.addEventListener('offline', () => { updateOnlineStatus(); });
 
         // ================================================================
         // ===== WORKING TIME =====
