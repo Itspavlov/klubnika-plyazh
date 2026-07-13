@@ -66,178 +66,178 @@
         }
 
         /* ===== HEADER ===== */
-        /* ===== HEADER ===== */
-.header {
-    text-align: center;
-    padding: 8px 0 16px;
-    position: relative;
-}
+        .header {
+            text-align: center;
+            padding: 8px 0 16px;
+            position: relative;
+        }
 
-.header .logo-icon {
-    font-size: 48px;
-    display: block;
-    margin-bottom: 4px;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
-}
+        .header .logo-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 4px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
+        }
 
-.header-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    color: var(--primary);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 6px 16px;
-    border-radius: 100px;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    border: 1px solid rgba(255, 71, 87, 0.2);
-    box-shadow: var(--shadow-sm);
-}
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            box-shadow: var(--shadow-sm);
+        }
 
-.header h1 {
-    font-size: 28px;
-    color: var(--text-dark);
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-    margin-bottom: 4px;
-}
+        .header h1 {
+            font-size: 28px;
+            color: var(--text-dark);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
 
-.header h1 .highlight {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+        .header h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-.header .subtitle {
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.5;
-    max-width: 320px;
-    margin: 0 auto;
-}
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
 
-.header .subtitle .delivery-time {
-    background: linear-gradient(135deg, #FFE8EC, #FFF0F0);
-    padding: 4px 12px;
-    border-radius: 100px;
-    font-weight: 600;
-    color: var(--primary);
-    font-size: 12px;
-    border: 1px solid rgba(255, 71, 87, 0.2);
-}
+        .header .subtitle .delivery-time {
+            background: linear-gradient(135deg, #FFE8EC, #FFF0F0);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 12px;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+        }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-}
-/* ===== BUNGALO CARD WITH BACKGROUND ===== */
-.bungalo-display {
-    position: relative;
-    border-radius: var(--radius-2xl);
-    padding: 20px 20px;
-    margin-bottom: 16px;
-    text-align: center;
-    color: #FFFFFF;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, rgba(255, 71, 87, 0.7), rgba(230, 57, 70, 0.8));
-}
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
 
-/* ФОНОВОЕ ИЗОБРАЖЕНИЕ (WEBP) */
-.bungalo-display::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('images/bungalo-bg.jpg') center/cover no-repeat;
-    opacity: 0.6;
-    z-index: 0;
-}
+        /* ===== BUNGALO CARD WITH BACKGROUND ===== */
+        .bungalo-display {
+            position: relative;
+            border-radius: var(--radius-2xl);
+            padding: 20px 20px;
+            margin-bottom: 16px;
+            text-align: center;
+            color: #FFFFFF;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.7), rgba(230, 57, 70, 0.8));
+        }
 
-/* ТЕМНЫЙ ОВЕРЛЕЙ ДЛЯ ЧИТАЕМОСТИ ТЕКСТА */
-.bungalo-display::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
-    z-index: 1;
-}
+        /* ФОНОВОЕ ИЗОБРАЖЕНИЕ (WEBP) */
+        .bungalo-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('images/bungalo-bg.jpg') center/cover no-repeat;
+            opacity: 0.6;
+            z-index: 0;
+        }
 
-.bungalo-display .label {
-    position: relative;
-    z-index: 2;
-    font-size: 11px;
-    font-weight: 500;
-    opacity: 0.95;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
+        /* ТЕМНЫЙ ОВЕРЛЕЙ ДЛЯ ЧИТАЕМОСТИ ТЕКСТА */
+        .bungalo-display::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+            z-index: 1;
+        }
 
-.bungalo-display .number {
-    position: relative;
-    z-index: 2;
-    font-size: 40px;
-    font-weight: 800;
-    margin: 4px 0;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-}
+        .bungalo-display .label {
+            position: relative;
+            z-index: 2;
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.95;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
 
-.bungalo-display .hint {
-    position: relative;
-    z-index: 2;
-    font-size: 12px;
-    opacity: 0.9;
-    font-weight: 400;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
-}
+        .bungalo-display .number {
+            position: relative;
+            z-index: 2;
+            font-size: 40px;
+            font-weight: 800;
+            margin: 4px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+        }
 
-/* ДЕКОРАТИВНЫЕ КЛУБНИЧКИ НА ФОНЕ */
-.bungalo-display .bg-strawberry {
-    position: absolute;
-    z-index: 1;
-    font-size: 60px;
-    opacity: 0.15;
-    animation: floatBg 8s ease-in-out infinite;
-    pointer-events: none;
-}
+        .bungalo-display .hint {
+            position: relative;
+            z-index: 2;
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 400;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+        }
 
-.bungalo-display .bg-strawberry:nth-child(1) {
-    top: 10%;
-    left: 5%;
-    animation-delay: 0s;
-}
+        /* ДЕКОРАТИВНЫЕ КЛУБНИЧКИ НА ФОНЕ */
+        .bungalo-display .bg-strawberry {
+            position: absolute;
+            z-index: 1;
+            font-size: 60px;
+            opacity: 0.15;
+            animation: floatBg 8s ease-in-out infinite;
+            pointer-events: none;
+        }
 
-.bungalo-display .bg-strawberry:nth-child(2) {
-    bottom: 10%;
-    right: 5%;
-    animation-delay: 3s;
-    font-size: 40px;
-}
+        .bungalo-display .bg-strawberry:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
 
-@keyframes floatBg {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(10deg); }
-}
+        .bungalo-display .bg-strawberry:nth-child(2) {
+            bottom: 10%;
+            right: 5%;
+            animation-delay: 3s;
+            font-size: 40px;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
 
         /* ===== NAVIGATION CHIPS ===== */
         .chips-nav {
@@ -1706,27 +1706,27 @@
         </div>
 
         <header class="header">
-    <!-- КЛУБНИЧКА НАД ПЛАШКОЙ -->
-    <span class="logo-icon">🍓</span>
-    
-    <!-- ПЛАШКА ДОСТАВКА -->
-    <div class="header-badge">
-        <i class="fas fa-water"></i> Доставка на пляж
-    </div>
-    
-    <!-- ЗАГОЛОВОК -->
-    <h1>
-        <span class="highlight">Strawberry</span>
-        <span style="color: var(--text-dark);"> in </span>
-        <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
-    </h1>
-    
-    <!-- ПОДЗАГОЛОВОК -->
-    <p class="subtitle">
-        <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
-        <span class="delivery-time">⏱️ за 15 минут!</span>
-    </p>
-</header>
+            <!-- КЛУБНИЧКА НАД ПЛАШКОЙ -->
+            <span class="logo-icon">🍓</span>
+            
+            <!-- ПЛАШКА ДОСТАВКА -->
+            <div class="header-badge">
+                <i class="fas fa-water"></i> Доставка на пляж
+            </div>
+            
+            <!-- ЗАГОЛОВОК -->
+            <h1>
+                <span class="highlight">Strawberry</span>
+                <span style="color: var(--text-dark);"> in </span>
+                <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
+            </h1>
+            
+            <!-- ПОДЗАГОЛОВОК -->
+            <p class="subtitle">
+                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
+                <span class="delivery-time">⏱️ за 15 минут!</span>
+            </p>
+        </header>
 
         <div id="noAccessMode" style="display:none;">
             <div class="no-access-message">
@@ -1799,6 +1799,8 @@
             <div id="pickupBannerContainer"></div>
 
             <div class="bungalo-display">
+                <span class="bg-strawberry">🍓</span>
+                <span class="bg-strawberry">🍓</span>
                 <div class="label"><i class="fas fa-location-dot"></i> <span id="bungaloLabel">Ваше бунгало</span></div>
                 <div class="number" id="bungaloNumberDisplay">#7</div>
                 <div class="hint"><i class="fas fa-qrcode"></i> <span id="bungaloHint">Сканируйте QR-код в вашем бунгало</span></div>
@@ -1929,10 +1931,11 @@
             phone: '+7 962 855-72-63',
             phoneRaw: '79628557263'
         };
-const WORK_HOURS = { 
-    start: 9,    // 9:00 утра
-    end: 30      // 30 = 6:00 утра
-};
+
+        const WORK_HOURS = { 
+            start: 9,
+            end: 30
+        };
 
         const FORCE_WORKING_TIME = false;
         let manualTime = null;
@@ -2799,9 +2802,38 @@ const WORK_HOURS = {
         // ================================================================
         // ===== CART =====
         // ================================================================
+
+        // ===== СОХРАНЕНИЕ КОРЗИНЫ В LOCALSTORAGE =====
+        function saveCart() {
+            try {
+                localStorage.setItem('strawberry_cart', JSON.stringify(state.cart));
+            } catch (e) {}
+        }
+
+        function loadCart() {
+            try {
+                const saved = localStorage.getItem('strawberry_cart');
+                if (saved) {
+                    state.cart = JSON.parse(saved);
+                    updateCart();
+                    return true;
+                }
+            } catch (e) {}
+            return false;
+        }
+
+        function clearSavedCart() {
+            localStorage.removeItem('strawberry_cart');
+        }
+
         function addToCart(item) {
             const existing = state.cart.find(c => c.id === item.id && c.topping === item.topping);
-            if (existing) { existing.quantity += item.quantity || 1; } else { state.cart.push({ ...item, quantity: item.quantity || 1 }); }
+            if (existing) { 
+                existing.quantity += item.quantity || 1; 
+            } else { 
+                state.cart.push({ ...item, quantity: item.quantity || 1 }); 
+            }
+            saveCart();
             updateCart();
         }
 
@@ -2842,13 +2874,19 @@ const WORK_HOURS = {
             const newQuantity = item.quantity + delta;
             if (newQuantity <= 0) state.cart.splice(index, 1);
             else item.quantity = newQuantity;
+            saveCart();
             updateCart();
         }
 
         function removeItem(index) {
             const item = state.cart[index];
             if (!item) return;
-            if (confirm(`Удалить "${item.name}" из корзины?`)) { state.cart.splice(index, 1); updateCart(); showNotification(`🗑️ "${item.name}" удален`); }
+            if (confirm(`Удалить "${item.name}" из корзины?`)) { 
+                state.cart.splice(index, 1); 
+                saveCart();
+                updateCart(); 
+                showNotification(`🗑️ "${item.name}" удален`); 
+            }
         }
 
         function openCart() {
@@ -2955,6 +2993,7 @@ const WORK_HOURS = {
                             showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
                         }
                         state.cart = [];
+                        clearSavedCart();
                         updateCart();
                         selectPayment('cash');
                         closeCart();
@@ -3420,6 +3459,7 @@ const WORK_HOURS = {
                 if (state.cart.length === 0) return;
                 if (!confirm('🗑️ Очистить всю корзину?')) return;
                 state.cart = [];
+                clearSavedCart();
                 updateCart();
                 showNotification('🗑️ Корзина очищена');
             });
@@ -3432,6 +3472,7 @@ const WORK_HOURS = {
         // ================================================================
         async function init() {
             updateOnlineStatus();
+            loadCart();
             const existingSession = getSession();
             const urlBungalo = getBungaloFromURL();
 
@@ -3534,6 +3575,7 @@ const WORK_HOURS = {
         console.log('✅ oldPrice из админки');
         console.log('✅ Анимация клубнички в корзину');
         console.log('✅ Кастомные позиции из админки');
+        console.log('✅ Сохранение корзины в localStorage');
     </script>
 
 </body>
