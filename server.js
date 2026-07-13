@@ -16,8 +16,8 @@ const pool = new Pool({
 
 // ===== НАСТРОЙКИ =====
 const WORK_HOURS = { 
-    start: 9,    // 9:00 утра
-    end: 30      // 30 = 6:00 утра следующего дня (24 + 6 = 30)
+    start: 9,
+    end: 30
 };
 
 let settings = {
@@ -282,7 +282,7 @@ app.post('/api/chat-send', async (req, res) => {
     await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
     res.json({ success: true });
 });
-// ===== API: ЧАТЫ (дополнить) =====
+
 app.post('/api/chat-read', async (req, res) => {
     const { phone } = req.body;
     if (!phone) return res.json({ success: false });
@@ -298,6 +298,7 @@ app.post('/api/chat-read', async (req, res) => {
         res.json({ success: false });
     }
 });
+
 // ===== УДАЛЕНИЕ ЧАТА =====
 app.post('/api/delete-chat', async (req, res) => {
     const { phone } = req.body;
@@ -309,6 +310,63 @@ app.post('/api/delete-chat', async (req, res) => {
         res.json({ success: false, error: e.message });
     }
 });
+
+// ================================================================
+// ===== АВТОМАТИЧЕСКОЕ УВЕДОМЛЕНИЕ О ЗАДЕРЖКЕ =====
+// ================================================================
+
+// Проверка заказов каждые 30 секунд
+setInterval(async () => {
+    try {
+        // Находим заказы со статусом "ожидает", которым больше 15 минут
+        const result = await pool.query(
+            `SELECT id, data FROM orders 
+             WHERE status = 'ожидает' 
+             AND created_at < NOW() - INTERVAL '15 minutes'
+             AND data->>'delay_notified' IS NULL`
+        );
+
+        for (const row of result.rows) {
+            const order = row.data;
+            const orderId = row.id;
+            const phone = order.customerPhone;
+            const name = order.customerName || 'Клиент';
+
+            if (!phone) continue;
+
+            // Проверяем, есть ли уже чат с этим клиентом
+            const chatExist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
+            let chatData = chatExist.rows[0]?.data || { name: name, messages: [], unread: 0 };
+
+            // Добавляем сообщение от администратора
+            const message = {
+                text: `🍓 Уважаемый(ая) ${name}! Приносим свои извинения за задержку заказа #${orderId} 🙏\nЗаказов очень много, но наш курьер уже спешит к вам! 🏃‍♂️\nМы работаем над тем, чтобы стать быстрее. Спасибо за ваше терпение! ❤️`,
+                from: 'admin',
+                time: new Date().toISOString()
+            };
+
+            chatData.messages.push(message);
+            chatData.unread = (chatData.unread || 0) + 1;
+
+            // Сохраняем чат
+            await pool.query(
+                `INSERT INTO chats (phone, data) VALUES ($1, $2) 
+                 ON CONFLICT (phone) DO UPDATE SET data = $2`,
+                [phone, JSON.stringify(chatData)]
+            );
+
+            // Отмечаем заказ, что уведомление отправлено
+            await pool.query(
+                `UPDATE orders SET data = jsonb_set(data, '{delay_notified}', 'true') WHERE id = $1`,
+                [orderId]
+            );
+
+            console.log(`📨 Авто-уведомление о задержке отправлено для заказа #${orderId} (${phone})`);
+        }
+    } catch (e) {
+        console.error('❌ Ошибка авто-уведомления:', e.message);
+    }
+}, 30000); // Проверяем каждые 30 секунд
 
 // ===== API: ОТЗЫВЫ =====
 app.get('/api/reviews', async (req, res) => {
@@ -339,7 +397,7 @@ app.get('/generate-qr', (req, res) => {
     const durH = Math.floor(duration / 60), durM = duration % 60;
     const durText = durH > 0 ? `${durH}ч ${durM}мин` : `${durM}мин`;
     
-    res.send(`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>QR #${bungalow}</title><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#FFF5F5,#FFE8EC);padding:20px}.qr-card{background:#fff;padding:30px;border-radius:24px;box-shadow:0 20px 60px rgba(255,71,87,0.15);text-align:center;max-width:400px;width:100%}.qr-card h2{color:#FF4757;font-size:28px;margin-bottom:8px;font-weight:800}.subtitle{color:#6B7280;margin-bottom:20px;font-size:14px}#qrcode{display:flex;justify-content:center;margin:20px 0;padding:20px;background:#fff;border-radius:16px;border:2px dashed #FFE0B2}.info-box{background:#FFF8E1;padding:16px;border-radius:16px;margin:15px 0;border:1px solid #FFE0B2}.duration{font-size:32px;font-weight:800;color:#FF4757}.label{font-size:13px;color:#6B7280;margin-top:4px}.activate-btn{display:inline-block;background:linear-gradient(135deg,#FF4757,#E63946);color:#fff;padding:16px 32px;border-radius:100px;text-decoration:none;font-weight:700;font-size:16px;margin-top:15px;box-shadow:0 6px 20px rgba(255,71,87,0.3)}.url-display{background:#F8FAFC;padding:12px;border-radius:12px;margin-top:15px;font-size:11px;word-break:break-all;color:#9CA3AF;font-family:monospace}.warning{color:#EF4444;font-size:13px;margin-top:15px;padding:10px;background:#FEF2F2;border-radius:12px}.schedule{font-size:13px;color:#6B7280;margin-top:12px}</style></head><body><div class="qr-card"><h2>🏖️ Бунгало #${bungalow}</h2><p class="subtitle">Отсканируйте для заказа 🍓</p><div id="qrcode"></div><div class="info-box"><div class="duration">⏱️ ${durText}</div><div class="label">Сессия после сканирования</div></div><a href="${activateUrl}" class="activate-btn">🍓 Открыть меню</a><p class="schedule">🕐 Доставка: 9:00-20:00<br>🏪 Киоск: 9:00-1:00</p><div class="warning">⚠️ После истечения — повторное сканирование</div><div class="url-display">${activateUrl}</div></div><script>new QRCode(document.getElementById("qrcode"),{text:"${activateUrl}",width:250,height:250,colorDark:"#FF4757",colorLight:"#FFFFFF",correctLevel:QRCode.CorrectLevel.H})</script></body></html>`);
+    res.send(`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>QR #${bungalow}</title><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#FFF5F5,#FFE8EC);padding:20px}.qr-card{background:#fff;padding:30px;border-radius:24px;box-shadow:0 20px 60px rgba(255,71,87,0.15);text-align:center;max-width:400px;width:100%}.qr-card h2{color:#FF4757;font-size:28px;margin-bottom:8px;font-weight:800}.subtitle{color:#6B7280;margin-bottom:20px;font-size:14px}#qrcode{display:flex;justify-content:center;margin:20px 0;padding:20px;background:#fff;border-radius:16px;border:2px dashed #FFE0B2}.info-box{background:#FFF8E1;padding:16px;border-radius:16px;margin:15px 0;border:1px solid #FFE0B2}.duration{font-size:32px;font-weight:800;color:#FF4757}.label{font-size:13px;color:#6B7280;margin-top:4px}.activate-btn{display:inline-block;background:linear-gradient(135deg,#FF4757,#E63946);color:#fff;padding:16px 32px;border-radius:100px;text-decoration:none;font-weight:700;font-size:16px;margin-top:15px;box-shadow:0 6px 20px rgba(255,71,87,0.3)}.url-display{background:#F8FAFC;padding:12px;border-radius:12px;margin-top:15px;font-size:11px;word-break:break-all;color:#9CA3AF;font-family:monospace}.warning{color:#EF4444;font-size:13px;margin-top:15px;padding:10px;background:#FEF2F2;border-radius:12px}.schedule{font-size:13px;color:#6B7280;margin-top:12px}</style></head><body><div class="qr-card"><h2>🏖️ Бунгало #${bungalow}</h2><p class="subtitle">Отсканируйте для заказа 🍓</p><div id="qrcode"></div><div class="info-box"><div class="duration">⏱️ ${durText}</div><div class="label">Сессия после сканирования</div></div><a href="${activateUrl}" class="activate-btn">🍓 Открыть меню</a><p class="schedule">🕐 Доставка: 9:00-20:00<br>🏪 Киоск: 9:00-6:00</p><div class="warning">⚠️ После истечения — повторное сканирование</div><div class="url-display">${activateUrl}</div></div><script>new QRCode(document.getElementById("qrcode"),{text:"${activateUrl}",width:250,height:250,colorDark:"#FF4757",colorLight:"#FFFFFF",correctLevel:QRCode.CorrectLevel.H})</script></body></html>`);
 });
 
 // ===== АКТИВАЦИЯ =====
@@ -362,8 +420,9 @@ setInterval(async () => {
     await initDB();
     await loadSettings();
     const PORT = process.env.PORT || 3000;
-  app.listen(PORT, '0.0.0.0', () => {
-    const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
-    console.log(`🍓 Сервер на порту ${PORT} | БД подключена | ${WORK_HOURS.start}:00-${endHour}:00`);
-});
+    app.listen(PORT, '0.0.0.0', () => {
+        const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
+        console.log(`🍓 Сервер на порту ${PORT} | БД подключена | ${WORK_HOURS.start}:00-${endHour}:00`);
+        console.log('📨 Авто-уведомления о задержке включены (15 минут)');
+    });
 })();
