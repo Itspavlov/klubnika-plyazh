@@ -382,6 +382,126 @@
             font-size: 16px;
         }
 
+        /* ===== TRUST MODAL ===== */
+        .trust-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 700;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeInOverlay 0.4s ease;
+        }
+
+        .trust-modal-overlay.open {
+            display: flex;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .trust-modal-content {
+            background: #FFFFFF;
+            border-radius: var(--radius-2xl);
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 24px 28px;
+            position: relative;
+            animation: trustPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        @keyframes trustPop {
+            from {
+                transform: scale(0.8) translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .trust-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 12px;
+            animation: trustFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes trustFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
+        }
+
+        .trust-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .trust-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .trust-text p {
+            margin-bottom: 10px;
+        }
+
+        .trust-text p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .trust-text strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .trust-note {
+            font-size: 12px !important;
+            color: var(--text-muted) !important;
+            font-style: italic;
+            margin-top: 8px !important;
+            padding-top: 8px;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .trust-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+            font-family: var(--font-family);
+            letter-spacing: -0.2px;
+        }
+
+        .trust-btn:active {
+            transform: scale(0.97);
+        }
+
         /* ===== NAVIGATION CHIPS ===== */
         .chips-nav {
             display: flex;
@@ -1852,6 +1972,26 @@
         </div>
     </div>
 
+    <!-- ===== TRUST MODAL ===== -->
+    <div class="trust-modal-overlay" id="trustModal">
+        <div class="trust-modal-content">
+            <button class="modal-close" onclick="closeTrustModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="trust-icon">🍓</div>
+            <div class="trust-title">Мы заботимся о качестве!</div>
+            <div class="trust-text">
+                <p>Уважаемый покупатель! Наша команда следит за качеством продукта и заботится о вашем здоровье.</p>
+                <p>Мы доставляем исключительно <strong>свежую отборную</strong> продукцию.</p>
+                <p>Если вы обнаружили <strong>не свежую клубнику</strong> — сообщите нам, и мы <strong>обменяем</strong> её на другую <strong>абсолютно бесплатно</strong>!</p>
+                <p class="trust-note">* В случае не предоставления брака обмен не производится</p>
+            </div>
+            <button class="trust-btn" onclick="closeTrustModal()">
+                <i class="fas fa-check-circle"></i> Я понимаю, спасибо!
+            </button>
+        </div>
+    </div>
+
     <!-- ===== MAIN CONTAINER ===== -->
     <div class="app-container">
 
@@ -2086,6 +2226,7 @@
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
         const SUPPORT_PHONE = '+7 962 855-72-63';
+        const TRUST_KEY = 'strawberry_trust_shown';
 
         const MY_LOCATION = {
             lat: 44.358193,
@@ -2171,6 +2312,58 @@
         let reviewCheckInterval = null;
         let lastOrderCheckTime = Date.now();
         let chatTimerInterval = null;
+
+        // ================================================================
+        // ===== TRUST MODAL =====
+        // ================================================================
+
+        function hasTrustShown(phone) {
+            try {
+                const data = localStorage.getItem(TRUST_KEY);
+                if (!data) return false;
+                const saved = JSON.parse(data);
+                return saved === phone;
+            } catch { return false; }
+        }
+
+        function setTrustShown(phone) {
+            try {
+                localStorage.setItem(TRUST_KEY, JSON.stringify(phone));
+            } catch (e) {}
+        }
+
+        function showTrustModal() {
+            const overlay = document.getElementById('trustModal');
+            if (overlay) {
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeTrustModal() {
+            const overlay = document.getElementById('trustModal');
+            if (overlay) {
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+            // Если есть отложенное добавление товара - выполняем его
+            if (window._pendingAddToCart) {
+                const item = window._pendingAddToCart;
+                window._pendingAddToCart = null;
+                // Проверяем, есть ли такой товар уже в корзине
+                const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
+                if (existing) {
+                    existing.quantity += item.quantity || 1;
+                } else {
+                    state.cart.push({ ...item, quantity: item.quantity || 1 });
+                }
+                saveCart();
+                updateCart();
+                showNotification(`✅ ${item.name} добавлен!`);
+                const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+                animateStrawberryToCart(fakeEvent);
+            }
+        }
 
         // ================================================================
         // ===== PHONE VALIDATION =====
@@ -2537,6 +2730,24 @@
                 return;
             }
             
+            // Проверяем, показывали ли уже доверительное окно
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category || 'напиток',
+                    topping: '',
+                    toppingName: '',
+                    isAlcohol: true
+                };
+                showTrustModal();
+                return;
+            }
+            
             addToCart({
                 id: product.id,
                 name: product.name,
@@ -2793,6 +3004,27 @@
                 openAuthModal(product); 
                 return; 
             }
+
+            // Проверяем, показывали ли уже доверительное окно для этого телефона
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                // Сохраняем товар для добавления после закрытия модалки
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category,
+                    topping: '',
+                    toppingName: '',
+                    isRomantic: product.isRomantic || false,
+                    hasToppings: hasToppings
+                };
+                showTrustModal();
+                return;
+            }
+
             if (!hasToppings) {
                 addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '', isRomantic: product.isRomantic || false });
                 showNotification(`✅ ${product.name} добавлен!`);
@@ -2828,6 +3060,23 @@
                 }
                 openAuthModal(null); 
                 return; 
+            }
+
+            // Проверяем, показывали ли уже доверительное окно для этого телефона
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category,
+                    topping: '',
+                    toppingName: ''
+                };
+                showTrustModal();
+                return;
             }
             
             addToCart({
@@ -2879,6 +3128,23 @@
             
             if (pendingProduct) {
                 if (pendingProduct.isAlcohol) {
+                    // Проверяем доверительное окно для алкоголя
+                    if (!hasTrustShown(phoneClean)) {
+                        setTrustShown(phoneClean);
+                        window._pendingAddToCart = {
+                            id: pendingProduct.id,
+                            name: pendingProduct.name,
+                            price: pendingProduct.price,
+                            quantity: 1,
+                            category: pendingProduct.category || 'напиток',
+                            topping: '',
+                            toppingName: '',
+                            isAlcohol: true
+                        };
+                        showTrustModal();
+                        pendingProduct = null;
+                        return;
+                    }
                     addToCart({
                         id: pendingProduct.id,
                         name: pendingProduct.name,
@@ -2893,6 +3159,23 @@
                     const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
                     animateStrawberryToCart(fakeEvent);
                 } else if (!pendingProduct.hasToppings) {
+                    // Проверяем доверительное окно
+                    if (!hasTrustShown(phoneClean)) {
+                        setTrustShown(phoneClean);
+                        window._pendingAddToCart = {
+                            id: pendingProduct.id,
+                            name: pendingProduct.name,
+                            price: pendingProduct.price,
+                            quantity: 1,
+                            category: pendingProduct.category,
+                            topping: '',
+                            toppingName: '',
+                            isRomantic: pendingProduct.isRomantic || false
+                        };
+                        showTrustModal();
+                        pendingProduct = null;
+                        return;
+                    }
                     addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '', isRomantic: pendingProduct.isRomantic || false });
                     showNotification(`✅ ${pendingProduct.name} добавлен!`);
                     const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
@@ -2958,6 +3241,28 @@
             let finalPrice = product.price + (product.isRomantic ? 0 : topping.price);
             let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
             const itemName = product.isRomantic ? `${product.name} (2 стаканчика)` : `${product.name}${toppingText}`;
+            
+            const phone = document.getElementById('customerPhone').value.trim();
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            
+            // Проверяем доверительное окно
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: itemName,
+                    price: finalPrice,
+                    quantity: 1,
+                    category: product.category,
+                    topping: topping.id,
+                    toppingName: topping.name,
+                    isRomantic: product.isRomantic || false
+                };
+                closeToppingModal();
+                showTrustModal();
+                return;
+            }
+            
             addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category, topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
             closeToppingModal();
             showNotification(`✅ ${itemName} добавлен!`);
@@ -2993,7 +3298,7 @@
         }
 
         function addToCart(item) {
-            const existing = state.cart.find(c => c.id === item.id && c.topping === item.topping);
+            const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
             if (existing) { 
                 existing.quantity += item.quantity || 1; 
             } else { 
@@ -3821,6 +4126,16 @@
             }, 5000);
         }
 
+        // Закрытие доверительного модала по клику вне
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('trustModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) closeTrustModal();
+                });
+            }
+        });
+
         window.addEventListener('beforeunload', function() {
             if (notificationCheckInterval) clearInterval(notificationCheckInterval);
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
@@ -3843,6 +4158,7 @@
         console.log('✅ Кастомные позиции из админки');
         console.log('✅ Сохранение корзины в localStorage');
         console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
+        console.log('✅ Доверительное окно при первом добавлении в корзину');
     </script>
 
 </body>
