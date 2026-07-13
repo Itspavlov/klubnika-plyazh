@@ -181,6 +181,30 @@
             transition: width 0.3s ease;
         }
 
+        /* ===== SCROLL HINT ===== */
+        .scroll-hint {
+            display: none;
+            text-align: center;
+            padding: 8px 0 4px;
+            color: var(--text-muted);
+            font-size: 12px;
+            animation: bounceHint 2s ease-in-out infinite;
+        }
+
+        .scroll-hint.show {
+            display: block;
+        }
+
+        @keyframes bounceHint {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(4px); opacity: 1; }
+        }
+
+        .scroll-hint i {
+            font-size: 16px;
+            color: var(--primary);
+        }
+
         /* ===== LOCATION CARD ===== */
         .location-card {
             background: linear-gradient(135deg, #FF4757, #E63946);
@@ -704,6 +728,22 @@
                 padding: 8px 6px;
             }
         }
+
+        /* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ МЕНЮ ===== */
+        .menu-section {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -735,6 +775,11 @@
                 <span class="delivery-time">⏱️ за 15 минут!</span>
             </p>
         </header>
+
+        <!-- ===== SCROLL HINT ===== -->
+        <div class="scroll-hint show" id="scrollHint">
+            <i class="fas fa-chevron-down"></i> Листайте вниз, чтобы увидеть меню
+        </div>
 
         <!-- ===== LOCATION CARD ===== -->
         <div class="location-card" onclick="buildWalkRoute()">
@@ -779,7 +824,7 @@
         </div>
 
         <!-- ===== CHIPS NAV ===== -->
-        <div class="chips-nav">
+        <div class="chips-nav" id="menuAnchor">
             <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
                 <i class="fas fa-apple-alt"></i>Фрукты
             </button>
@@ -841,6 +886,7 @@
 
         let userLocation = null;
         let mapLoaded = false;
+        let autoScrollDone = false;
 
         // ================================================================
         // ===== LOADING SCREEN =====
@@ -858,10 +904,38 @@
         }
 
         // ================================================================
+        // ===== АВТОМАТИЧЕСКАЯ ПРОКРУТКА К МЕНЮ =====
+        // ================================================================
+
+        function autoScrollToMenu() {
+            if (autoScrollDone) return;
+            autoScrollDone = true;
+
+            const menuAnchor = document.getElementById('menuAnchor');
+            if (!menuAnchor) return;
+
+            // Скрываем подсказку о прокрутке
+            const hint = document.getElementById('scrollHint');
+            if (hint) {
+                hint.classList.remove('show');
+                setTimeout(() => { hint.style.display = 'none'; }, 500);
+            }
+
+            const menuPosition = menuAnchor.getBoundingClientRect().top + window.pageYOffset;
+
+            setTimeout(() => {
+                window.scrollTo({
+                    top: menuPosition - 30,
+                    behavior: 'smooth'
+                });
+            }, 400);
+        }
+
+        // ================================================================
         // ===== MAP FUNCTIONS =====
         // ================================================================
 
-        // Загрузка карты с задержкой
+        // Загрузка карты
         function loadMap() {
             showLoading(20);
 
@@ -870,7 +944,6 @@
                 const iframe = document.getElementById('mapIframe');
                 const placeholder = document.getElementById('mapPlaceholder');
 
-                // Показываем базовую карту с меткой
                 iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
 
                 iframe.onload = function() {
@@ -879,9 +952,10 @@
                     placeholder.style.display = 'none';
                     mapLoaded = true;
                     setTimeout(hideLoading, 500);
+                    // После загрузки карты - прокрутка к меню
+                    setTimeout(autoScrollToMenu, 800);
                 };
 
-                // Если iframe не загружается 5 секунд — все равно показываем
                 setTimeout(() => {
                     if (!mapLoaded) {
                         iframe.style.display = 'block';
@@ -889,6 +963,7 @@
                         mapLoaded = true;
                         showLoading(100);
                         setTimeout(hideLoading, 500);
+                        setTimeout(autoScrollToMenu, 800);
                     }
                 }, 5000);
 
@@ -1123,13 +1198,32 @@
         document.addEventListener('DOMContentLoaded', function() {
             showLoading(10);
             renderMenu();
+
+            // Показываем подсказку о прокрутке через 2 секунды
+            setTimeout(() => {
+                const hint = document.getElementById('scrollHint');
+                if (hint && !autoScrollDone) {
+                    hint.classList.add('show');
+                }
+            }, 2000);
+
             setTimeout(() => {
                 loadMap();
-            }, 300);
+            }, 400);
+        });
+
+        // Если пользователь начал скроллить сам — убираем подсказку
+        document.addEventListener('scroll', function() {
+            const hint = document.getElementById('scrollHint');
+            if (hint && window.scrollY > 50) {
+                hint.classList.remove('show');
+                setTimeout(() => { hint.style.display = 'none'; }, 500);
+            }
         });
 
         console.log('🍓 Меню-страница загружена');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
+        console.log('🔄 Автоматическая прокрутка к меню включена');
         console.log('📱 Нажмите "Где я?" для определения местоположения');
         console.log('🚶 Доступны маршруты: пешком и на авто');
     </script>
