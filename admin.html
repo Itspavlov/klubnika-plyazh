@@ -606,44 +606,94 @@
             if (!chat || !chat.lastMessage || chat.lastMessage.from !== 'client') return null;
             return { text: chat.lastMessage.text, unread: chat.unread || 0 };
         }
+function renderOrders() {
+    const orders = S.orders;
+    const list = $('ordersList');
+    if (!orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
+    
+    // Сортируем: сначала новые (ожидает), потом выполненные, потом отмененные
+    const sortedOrders = [...orders].sort((a, b) => {
+        // Сначала по статусу: ожидает > выполнены > отменены
+        const statusOrder = { 'ожидает': 0, 'выполнен': 1, 'отменен': 2, 'отменен (таймаут)': 2 };
+        const aOrder = statusOrder[a.status] ?? 1;
+        const bOrder = statusOrder[b.status] ?? 1;
+        if (aOrder !== bOrder) return aOrder - bOrder;
+        // Затем по времени (новые сверху)
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    });
 
-        function renderOrders() {
-            const orders = S.orders;
-            const list = $('ordersList');
-            if (!orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
-            list.innerHTML = [...orders].reverse().map(order => {
-                const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
-                let sc = 'status-waiting';
-                if (order.status === 'выполнен') sc = 'status-done';
-                if (order.status?.includes('отменен')) sc = 'status-cancelled';
-                const acts = order.status === 'ожидает' ? `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅</button><button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌</button>` : '';
-                
-                const chatInfo = getChatInfo(order.customerPhone);
-                let chatPlate = '';
-                if (chatInfo && order.status === 'ожидает') {
-                    chatPlate = `
-                        <div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')">
-                            <span class="msg-preview">💬 ${chatInfo.text}</span>
-                            ${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}
-                        </div>`;
-                }
-                
-                return `<div class="order-card">
-                    <div class="top">
-                        <span class="oid">🏠 #${order.bungalow||'?'} — #${order.id}</span>
-                        <span class="status ${sc}">${order.status||'ожидает'}</span>
-                    </div>
-                    <div style="font-size:12px;color:var(--text-secondary);">👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} ${order.confirmCode?'🔑 <b>'+order.confirmCode+'</b>':''}</div>
-                    <div class="items">${itemsHtml}</div>
-                    <div class="bottom">
-                        <span class="total">💰 ${order.total||0} ₽</span>
-                        <span style="font-size:10px;color:var(--text-muted);">${new Date(order.createdAt).toLocaleString()}</span>
-                        <div style="display:flex;gap:4px;">${acts}</div>
-                    </div>
-                    ${chatPlate}
-                </div>`;
-            }).join('');
+    list.innerHTML = sortedOrders.map(order => {
+        const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
+        
+        // Определяем класс для рамки
+        let borderClass = '';
+        let statusLabel = order.status || 'ожидает';
+        let dotColor = 'gray';
+        let isNew = false;
+        
+        if (order.status === 'ожидает') {
+            borderClass = 'status-waiting';
+            dotColor = 'red';
+            // Проверяем, не старше ли 15 минут (новый заказ)
+            const orderAge = (Date.now() - new Date(order.createdAt)) / 1000 / 60;
+            if (orderAge < 15) {
+                isNew = true;
+            }
+        } else if (order.status === 'выполнен') {
+            borderClass = 'status-done';
+            dotColor = 'green';
+        } else if (order.status?.includes('отменен')) {
+            borderClass = 'status-cancelled';
+            dotColor = 'gray';
         }
+        
+        const acts = order.status === 'ожидает' ? 
+            `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅ Подтвердить</button>
+             <button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌ Отменить</button>` : '';
+        
+        const chatInfo = getChatInfo(order.customerPhone);
+        let chatPlate = '';
+        if (chatInfo && order.status === 'ожидает') {
+            chatPlate = `
+                <div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')">
+                    <span class="msg-preview">💬 ${chatInfo.text}</span>
+                    ${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}
+                </div>`;
+        }
+        
+        // Время заказа
+        const orderDate = new Date(order.createdAt);
+        const timeStr = orderDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        const dateStr = orderDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+        
+        return `<div class="order-card ${borderClass}">
+            <div class="top">
+                <span class="oid">
+                    🏠 #${order.bungalow||'?'} — #${order.id}
+                    ${isNew ? `<span class="new-badge">🆕 Новый</span>` : ''}
+                </span>
+                <span class="status ${borderClass}">${statusLabel}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">
+                <div style="font-size:12px;color:var(--text-secondary);">
+                    👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} 
+                    ${order.confirmCode ? '🔑 <b>'+order.confirmCode+'</b>' : ''}
+                </div>
+                <div class="order-time">
+                    <span class="time-dot ${dotColor}"></span>
+                    ${dateStr} в ${timeStr}
+                    ${isNew ? ` <span style="color:#EF4444;font-weight:600;">⚡</span>` : ''}
+                </div>
+            </div>
+            <div class="items">${itemsHtml}</div>
+            <div class="bottom">
+                <span class="total">💰 ${order.total||0} ₽</span>
+                <div style="display:flex;gap:4px;">${acts}</div>
+            </div>
+            ${chatPlate}
+        </div>`;
+    }).join('');
+}
 
         async function confirmOrder(id, code) { if(!confirm('Подтвердить?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Доставлено'); loadOrders(); }
         async function cancelOrder(id) { if(!confirm('Отменить?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Отменён'); loadOrders(); }
