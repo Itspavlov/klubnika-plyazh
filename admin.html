@@ -477,12 +477,32 @@
     <script>
         // ===== LOGIN =====
         const ADMIN_PASSWORD = 'klubnika270192';
+        const AUTH_STORAGE_KEY = 'strawberry_admin_auth';
+
+        // Проверка авторизации при загрузке
+        function checkAuth() {
+            try {
+                const auth = localStorage.getItem(AUTH_STORAGE_KEY);
+                if (auth === 'true') {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    initAdmin();
+                    return true;
+                }
+            } catch (e) {}
+            return false;
+        }
 
         function login() {
             const input = document.getElementById('loginPassword');
             const error = document.getElementById('loginError');
             
             if (input.value === ADMIN_PASSWORD) {
+                // Сохраняем авторизацию
+                try {
+                    localStorage.setItem(AUTH_STORAGE_KEY, 'true');
+                } catch (e) {}
+                
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 error.style.display = 'none';
@@ -495,6 +515,11 @@
         }
 
         function logout() {
+            // Удаляем сохраненную авторизацию
+            try {
+                localStorage.removeItem(AUTH_STORAGE_KEY);
+            } catch (e) {}
+            
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('loginPassword').value = '';
@@ -623,26 +648,27 @@
         async function confirmOrder(id, code) { if(!confirm('Подтвердить?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Доставлено'); loadOrders(); }
         async function cancelOrder(id) { if(!confirm('Отменить?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Отменён'); loadOrders(); }
         async function clearOrders() { if(!confirm('Удалить все заказы?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
-const CATALOG = [
-    { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, oldPrice:770, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
-    { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, oldPrice:null, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
-    { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, oldPrice:null, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
-    { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, oldPrice:null, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
-    { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, oldPrice:null, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-    { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, oldPrice:null, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-    // 👇 ДОБАВЛЯЕМ ЭТУ ПОЗИЦИЮ
-    { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, oldPrice:null, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
-    // 👆
-    { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, oldPrice:null, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-    { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, oldPrice:null, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-    { id:'13', name:'Малина', desc:'Свежая малина', price:250, oldPrice:null, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-    { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, oldPrice:null, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-    { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, oldPrice:null, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-    { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, oldPrice:null, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-    { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, oldPrice:null, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-    { id:'8', name:'Пиво', desc:'Охлажденное', price:200, oldPrice:null, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
-    { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, oldPrice:null, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
-];
+
+        // ===== MENU =====
+        const CATALOG = [
+            { id:'9', name:'Для влюбленных', desc:'Тиффани + Классика', price:699, oldPrice:770, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/romantic.jpg', badge:'❤️' },
+            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, oldPrice:null, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
+            { id:'2', name:'Белый шоколад', desc:'Нежная ягода в сливочном', price:380, oldPrice:null, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/belyy-shokolad.jpg', badge:'⭐' },
+            { id:'3', name:'Тиффани', desc:'Бирюзовый шоколад', price:420, oldPrice:null, volume:'300 мл', emoji:'💎', category:'strawberry', image:'images/tiffani.jpg', badge:'✨' },
+            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, oldPrice:null, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
+            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, oldPrice:null, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
+            { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, oldPrice:null, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
+            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, oldPrice:null, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
+            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, oldPrice:null, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
+            { id:'13', name:'Малина', desc:'Свежая малина', price:250, oldPrice:null, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
+            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, oldPrice:null, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
+            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, oldPrice:null, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
+            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, oldPrice:null, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
+            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, oldPrice:null, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
+            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, oldPrice:null, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
+            { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, oldPrice:null, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
+        ];
+
         async function loadMenu() {
             try {
                 const d = await api('/settings');
@@ -962,9 +988,12 @@ const CATALOG = [
 
         // Проверка авторизации при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            // Показываем экран входа по умолчанию
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('adminPanel').style.display = 'none';
+            // Проверяем сохраненную авторизацию
+            const isAuth = checkAuth();
+            if (!isAuth) {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('adminPanel').style.display = 'none';
+            }
         });
     </script>
 
