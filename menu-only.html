@@ -196,19 +196,21 @@
             padding: 12px 16px;
             background: #F8FAFC;
             border-top: 1px solid #F1F5F9;
+            flex-wrap: wrap;
         }
 
         .map-btn {
             flex: 1;
+            min-width: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 10px 16px;
+            gap: 6px;
+            padding: 10px 12px;
             border-radius: var(--radius-lg);
             border: none;
             font-family: var(--font-family);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -226,7 +228,7 @@
         }
 
         .map-btn.route-btn i {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .map-btn.navigate-btn {
@@ -236,13 +238,70 @@
         }
 
         .map-btn.navigate-btn i {
-            font-size: 16px;
+            font-size: 14px;
+        }
+
+        .map-btn.location-btn {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .map-btn.location-btn i {
+            font-size: 14px;
+        }
+
+        .map-btn.location-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
         }
 
         .map-btn.yandex-btn {
             background: #F8FAFC;
             color: var(--text-dark);
             border: 2px solid #F1F5F9;
+        }
+
+        /* ===== LOCATION STATUS ===== */
+        .location-status {
+            display: none;
+            padding: 10px 16px;
+            background: #F8FAFC;
+            border-radius: var(--radius-md);
+            margin: 8px 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-status.show {
+            display: flex;
+        }
+
+        .location-status .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .location-status .status-dot.success {
+            background: #22C55E;
+        }
+
+        .location-status .status-dot.error {
+            background: #EF4444;
+        }
+
+        .location-status .status-dot.loading {
+            background: #F59E0B;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
 
         /* ===== CHIPS NAV ===== */
@@ -513,6 +572,7 @@
             }
             .map-btn {
                 flex: 1 1 100%;
+                padding: 12px;
             }
         }
 
@@ -548,7 +608,7 @@
         </header>
 
         <!-- ===== LOCATION CARD ===== -->
-        <div class="location-card" onclick="openRoute()">
+        <div class="location-card" onclick="buildRoute()">
             <span class="loc-icon">📍</span>
             <div class="loc-text">
                 <strong>Наш киоск на пляже</strong><br>
@@ -562,12 +622,20 @@
             <div class="map-container">
                 <iframe id="mapIframe" src=""></iframe>
             </div>
+            <!-- ===== СТАТУС МЕСТОПОЛОЖЕНИЯ ===== -->
+            <div class="location-status" id="locationStatus">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Определение местоположения...</span>
+            </div>
             <div class="map-actions">
-                <button class="map-btn route-btn" onclick="openRoute()">
-                    <i class="fas fa-route"></i> Построить маршрут
+                <button class="map-btn location-btn" id="locationBtn" onclick="getMyLocation()">
+                    <i class="fas fa-location-dot"></i> Где я?
+                </button>
+                <button class="map-btn route-btn" onclick="buildRoute()">
+                    <i class="fas fa-route"></i> Маршрут
                 </button>
                 <button class="map-btn navigate-btn" onclick="openNavigator()">
-                    <i class="fas fa-location-arrow"></i> Открыть в навигаторе
+                    <i class="fas fa-location-arrow"></i> Навигатор
                 </button>
             </div>
         </div>
@@ -634,6 +702,8 @@
             yandexUrl: 'https://yandex.ru/maps/?pt=38.528773,44.358193&z=18&whatshere%5Bpoint%5D=38.528773,44.358193&whatshere%5Bzoom%5D=18&l=map'
         };
 
+        let userLocation = null;
+
         // ================================================================
         // ===== MAP FUNCTIONS =====
         // ================================================================
@@ -644,25 +714,126 @@
             iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=18&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
         }
 
-        // Построить маршрут (Яндекс Карты)
-        function openRoute() {
-            const url = `https://yandex.ru/maps/?rtext=~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=auto&z=18`;
-            window.open(url, '_blank');
+        // ===== ОПРЕДЕЛЕНИЕ МЕСТОПОЛОЖЕНИЯ =====
+        function getMyLocation() {
+            const btn = document.getElementById('locationBtn');
+            const status = document.getElementById('locationStatus');
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+
+            // Проверяем поддержку геолокации
+            if (!navigator.geolocation) {
+                dot.className = 'status-dot error';
+                text.textContent = '❌ Ваш браузер не поддерживает геолокацию';
+                status.classList.add('show');
+                return;
+            }
+
+            // Показываем статус загрузки
+            btn.classList.add('loading');
+            dot.className = 'status-dot loading';
+            text.textContent = '⏳ Определение вашего местоположения...';
+            status.classList.add('show');
+
+            // Запрашиваем местоположение
+            navigator.geolocation.getCurrentPosition(
+                // Успех
+                function(position) {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    dot.className = 'status-dot success';
+                    text.innerHTML = `✅ Ваше местоположение определено: <strong>${userLocation.lat.toFixed(5)}, ${userLocation.lng.toFixed(5)}</strong>`;
+                    btn.classList.remove('loading');
+
+                    // Показываем на карте
+                    showLocationOnMap(userLocation.lat, userLocation.lng);
+
+                    // Автоматически строим маршрут
+                    setTimeout(() => {
+                        buildRoute();
+                    }, 500);
+                },
+                // Ошибка
+                function(error) {
+                    let errorMessage = '❌ Не удалось определить местоположение';
+                    if (error.code === 1) {
+                        errorMessage = '❌ Доступ к геолокации запрещен. Разрешите доступ в настройках браузера';
+                    } else if (error.code === 2) {
+                        errorMessage = '❌ Сигнал GPS слабый. Попробуйте выйти на открытое место';
+                    } else if (error.code === 3) {
+                        errorMessage = '⏳ Превышено время ожидания. Попробуйте еще раз';
+                    }
+
+                    dot.className = 'status-dot error';
+                    text.textContent = errorMessage;
+                    btn.classList.remove('loading');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
         }
 
-        // Открыть в навигаторе (универсальная ссылка)
+        // ===== ПОКАЗАТЬ МЕСТОПОЛОЖЕНИЕ НА КАРТЕ =====
+        function showLocationOnMap(lat, lng) {
+            const iframe = document.getElementById('mapIframe');
+            // Показываем карту с двумя метками: пользователь и киоск
+            const userPin = `${lng},${lat},user`;
+            const targetPin = `${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
+            iframe.src = `https://yandex.ru/map-widget/v1/?ll=${(lng + MY_LOCATION.lng)/2},${(lat + MY_LOCATION.lat)/2}&z=16&pt=${userPin}&pt=${targetPin}`;
+        }
+
+        // ===== ПОСТРОИТЬ МАРШРУТ =====
+        function buildRoute() {
+            let url;
+
+            if (userLocation) {
+                // Маршрут от пользователя до киоска
+                url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=auto&z=16`;
+            } else {
+                // Просто показываем киоск на карте
+                url = `https://yandex.ru/maps/?pt=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=18`;
+            }
+
+            window.open(url, '_blank');
+
+            // Если местоположение не определено, предлагаем определить
+            if (!userLocation) {
+                const status = document.getElementById('locationStatus');
+                const dot = document.getElementById('statusDot');
+                const text = document.getElementById('statusText');
+                dot.className = 'status-dot error';
+                text.textContent = '📍 Сначала нажмите "Где я?" для определения вашего местоположения';
+                status.classList.add('show');
+                setTimeout(() => {
+                    status.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // ===== ОТКРЫТЬ В НАВИГАТОРЕ =====
         function openNavigator() {
             const lat = MY_LOCATION.lat;
             const lng = MY_LOCATION.lng;
             const name = encodeURIComponent('Strawberry in Chocolate');
 
-            // Пробуем открыть в приложениях
+            // Если есть координаты пользователя — передаем их для маршрута
+            let fromParam = '';
+            if (userLocation) {
+                fromParam = `&from=${userLocation.lat},${userLocation.lng}`;
+            }
+
             const schemes = [
-                `yandexmaps://maps.yandex.ru/?pt=${lng},${lat}&z=18`,  // Яндекс Навигатор
-                `yandexnavi://build_route_on_map?lat_to=${lat}&lon_to=${lng}`, // Яндекс Навигатор
-                `google.navigation:q=${lat},${lng}`, // Google Maps
-                `waze://?ll=${lat},${lng}&navigate=yes`, // Waze
-                `https://yandex.ru/maps/?pt=${lng},${lat}&z=18` // Fallback
+                `yandexmaps://maps.yandex.ru/?pt=${lng},${lat}&z=18${fromParam}`,
+                `yandexnavi://build_route_on_map?lat_to=${lat}&lon_to=${lng}${fromParam ? `&lat_from=${userLocation.lat}&lon_from=${userLocation.lng}` : ''}`,
+                `google.navigation:q=${lat},${lng}`,
+                `waze://?ll=${lat},${lng}&navigate=yes`,
+                `https://yandex.ru/maps/?pt=${lng},${lat}&z=18${fromParam ? `&rtext=${userLocation.lat},${userLocation.lng}~${lat},${lng}` : ''}`
             ];
 
             // Пробуем открыть
@@ -810,6 +981,7 @@
 
         console.log('🍓 Меню-страница загружена');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
+        console.log('📱 Нажмите "Где я?" для определения вашего местоположения');
     </script>
 
 </body>
