@@ -10,11 +10,17 @@
         :root {
             --primary: #FF4757;
             --primary-dark: #E63946;
-            --bg: #FFF5F5;
+            --green: #2D8A4E;
+            --green-light: #3DAF6A;
+            --green-dark: #1E6B3A;
+            --beige: #F5E6D3;
+            --beige-dark: #E8D5C0;
+            --beige-light: #FAF0E8;
+            --bg: #F5E6D3;
             --card-bg: #FFFFFF;
             --text-dark: #1A1A2E;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
+            --text-secondary: #4A4A5A;
+            --text-muted: #8A8A9A;
             --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
             --shadow: 0 4px 6px rgba(0,0,0,0.07);
             --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
@@ -29,7 +35,7 @@
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body {
             font-family: var(--font);
-            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
+            background: linear-gradient(135deg, #2D8A4E 0%, #1E6B3A 30%, #F5E6D3 60%, #E8D5C0 100%);
             min-height: 100vh;
             padding: 16px;
             padding-bottom: 100px;
@@ -40,25 +46,31 @@
         .header { text-align: center; padding: 20px 0; }
         .header-badge {
             display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
-            color: var(--primary); font-size: 11px; font-weight: 600;
+            background: rgba(255,255,255,0.95); 
+            color: var(--green-dark);
+            font-size: 11px; font-weight: 600;
             padding: 6px 16px; border-radius: 100px; margin-bottom: 12px;
-            border: 1px solid rgba(255,71,87,0.2); box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(45, 138, 78, 0.2); 
+            box-shadow: var(--shadow-sm);
         }
-        .header h1 { font-size: 28px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
-        .header h1 span { background: linear-gradient(135deg, var(--primary), #FF8A80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header h1 { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .header h1 span { background: linear-gradient(135deg, #FF4757, #FF8A80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
         .stat-card {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
             padding: 14px 10px; border-radius: var(--radius-lg); text-align: center;
-            border: 1px solid rgba(255,255,255,0.3); box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255,255,255,0.3); 
+            box-shadow: var(--shadow-sm);
         }
-        .stat-card .val { font-size: 22px; font-weight: 800; color: var(--text-dark); }
+        .stat-card .val { font-size: 22px; font-weight: 800; color: var(--green-dark); }
         .stat-card .lbl { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
         .tabs {
             display: flex; gap: 6px; margin-bottom: 16px; padding: 4px;
-            background: rgba(255,255,255,0.6); backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl); 
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .tabs button {
             flex: 1; padding: 10px 8px; border-radius: var(--radius-lg); border: none;
@@ -68,7 +80,7 @@
             justify-content: center; gap: 5px; position: relative;
         }
         .tabs button i { font-size: 14px; }
-        .tabs button.active { background: #fff; color: var(--primary); font-weight: 600; box-shadow: var(--shadow); }
+        .tabs button.active { background: var(--green); color: #fff; font-weight: 600; box-shadow: var(--shadow); }
         .tabs button .tab-badge {
             position: absolute; top: 2px; right: 4px;
             background: var(--primary); color: #fff; font-size: 10px; font-weight: 700;
@@ -80,9 +92,11 @@
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .card {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
             border-radius: var(--radius-xl); padding: 18px; margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.3); box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255,255,255,0.3); 
+            box-shadow: var(--shadow-sm);
         }
         .btn {
             padding: 10px 18px; border-radius: var(--radius-md); border: none;
@@ -90,9 +104,10 @@
             font-family: var(--font); display: inline-flex; align-items: center; gap: 6px;
         }
         .btn:active { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; box-shadow: 0 4px 12px rgba(255,71,87,0.3); }
+        .btn-primary { background: linear-gradient(135deg, var(--green), var(--green-dark)); color: #fff; box-shadow: 0 4px 12px rgba(45,138,78,0.3); }
         .btn-outline { background: #fff; border: 2px solid #F1F5F9; color: var(--text-dark); }
         .btn-danger { background: #EF4444; color: #fff; }
+        .btn-success { background: #22C55E; color: #fff; }
         .btn-sm { padding: 6px 14px; font-size: 11px; }
         .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
         .tech-card { background: linear-gradient(135deg, #4ADE80, #22C55E); color: #fff; cursor: pointer; transition: var(--transition); }
@@ -119,35 +134,114 @@
         .btn-edit { background: #F1F5F9; color: #6B7280; }
         .btn-on { background: #E8F5E9; color: #2E7D32; }
         .btn-off { background: #FFEBEE; color: #D32F2F; }
+
+        /* ===== ORDER CARDS ===== */
         .order-card {
-            background: #fff; border-radius: var(--radius-lg); padding: 14px;
-            margin-bottom: 10px; border: 1px solid #F1F5F9;
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 3px solid #F1F5F9;
+            transition: all 0.3s ease;
         }
-        .order-card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .order-card .oid { font-weight: 700; color: var(--primary); font-size: 15px; }
-        .order-card .status { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
-        .status-waiting { background: #FFF3E0; color: #E65100; }
-        .status-done { background: #E8F5E9; color: #2E7D32; }
-        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
-        .order-card .items { font-size: 12px; color: var(--text-secondary); background: #F8FAFC; padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 6px; }
-        .order-card .bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .order-card .total { font-weight: 700; color: var(--primary); font-size: 16px; }
-        .order-card .chat-plate {
-            display: flex; align-items: center; gap: 8px;
-            background: #FFF8E1; border: 1px solid #FFE0B2;
-            border-radius: var(--radius-md); padding: 10px 14px;
-            margin-top: 8px; cursor: pointer; transition: var(--transition);
-            width: 100%;
+
+        .order-card.status-waiting {
+            border-color: #EF4444;
+            border-style: solid;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+            animation: pulseRed 2s ease-in-out infinite;
         }
-        .order-card .chat-plate:active { transform: scale(0.98); }
-        .order-card .chat-plate .msg-preview {
-            flex: 1; font-size: 12px; color: var(--text-secondary);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+
+        @keyframes pulseRed {
+            0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); }
+            50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); }
         }
-        .order-card .chat-plate .msg-badge {
-            background: var(--primary); color: #fff; font-size: 11px; font-weight: 700;
-            min-width: 22px; height: 22px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+
+        .order-card.status-done {
+            border-color: #22C55E;
+            border-style: solid;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.12);
+        }
+
+        .order-card.status-cancelled {
+            border-color: #9CA3AF;
+            border-style: dashed;
+            opacity: 0.7;
+        }
+
+        .order-card .new-badge {
+            display: inline-block;
+            background: #EF4444;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: blinkBadge 1.5s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes blinkBadge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .order-card .order-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .order-card .order-time .time-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .order-card .order-time .time-dot.red {
+            background: #EF4444;
+            animation: pulseDot 1.5s ease-in-out infinite;
+        }
+
+        .order-card .order-time .time-dot.green {
+            background: #22C55E;
+        }
+
+        .order-card .order-time .time-dot.gray {
+            background: #9CA3AF;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        /* ===== PAYMENT BADGE ===== */
+        .payment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 100px;
+            background: #F8FAFC;
+            color: var(--text-secondary);
+        }
+
+        .payment-badge.cash {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .payment-badge.transfer {
+            background: #E3F2FD;
+            color: #1565C0;
         }
 
         /* ===== CHAT ITEM WITH SWIPE ===== */
@@ -269,13 +363,15 @@
             min-height: 80vh;
         }
         .login-box {
-            background: #fff;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
             border-radius: var(--radius-2xl);
             padding: 40px 30px;
             max-width: 400px;
             width: 100%;
             box-shadow: var(--shadow-lg);
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .login-box .login-icon {
             font-size: 64px;
@@ -285,7 +381,7 @@
         .login-box h2 {
             font-size: 24px;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var(--green-dark);
             margin-bottom: 8px;
         }
         .login-box p {
@@ -305,8 +401,8 @@
             transition: var(--transition);
         }
         .login-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255,71,87,0.1);
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(45,138,78,0.1);
         }
         .login-box .btn {
             width: 100%;
@@ -319,6 +415,31 @@
             font-size: 13px;
             margin-top: 12px;
             display: none;
+        }
+
+        .order-card .payment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 100px;
+            background: #F8FAFC;
+            color: var(--text-secondary);
+            border: 1px solid #E5E7EB;
+        }
+
+        .order-card .payment-badge.cash {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-color: #A5D6A7;
+        }
+
+        .order-card .payment-badge.transfer {
+            background: #E3F2FD;
+            color: #1565C0;
+            border-color: #90CAF9;
         }
 
         @media (max-width: 500px) {
@@ -355,7 +476,7 @@
             <div class="header">
                 <div class="header-badge"><i class="fas fa-lock"></i> Панель управления</div>
                 <h1><span>Strawberry</span> Админка</h1>
-                <button onclick="logout()" style="background:rgba(255,255,255,0.8);border:1px solid #F1F5F9;border-radius:100px;padding:6px 16px;font-size:12px;cursor:pointer;font-family:var(--font);margin-top:8px;">
+                <button onclick="logout()" style="background:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.3);border-radius:100px;padding:6px 16px;font-size:12px;cursor:pointer;font-family:var(--font);margin-top:8px;color:var(--text-dark);">
                     <i class="fas fa-sign-out-alt"></i> Выйти
                 </button>
             </div>
@@ -479,7 +600,6 @@
         const ADMIN_PASSWORD = 'klubnika270192';
         const AUTH_STORAGE_KEY = 'strawberry_admin_auth';
 
-        // Проверка авторизации при загрузке
         function checkAuth() {
             try {
                 const auth = localStorage.getItem(AUTH_STORAGE_KEY);
@@ -498,7 +618,6 @@
             const error = document.getElementById('loginError');
             
             if (input.value === ADMIN_PASSWORD) {
-                // Сохраняем авторизацию
                 try {
                     localStorage.setItem(AUTH_STORAGE_KEY, 'true');
                 } catch (e) {}
@@ -515,7 +634,6 @@
         }
 
         function logout() {
-            // Удаляем сохраненную авторизацию
             try {
                 localStorage.removeItem(AUTH_STORAGE_KEY);
             } catch (e) {}
@@ -606,97 +724,102 @@
             if (!chat || !chat.lastMessage || chat.lastMessage.from !== 'client') return null;
             return { text: chat.lastMessage.text, unread: chat.unread || 0 };
         }
-function renderOrders() {
-    const orders = S.orders;
-    const list = $('ordersList');
-    if (!orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
-    
-    // Сортируем: сначала новые (ожидает), потом выполненные, потом отмененные
-    const sortedOrders = [...orders].sort((a, b) => {
-        // Сначала по статусу: ожидает > выполнены > отменены
-        const statusOrder = { 'ожидает': 0, 'выполнен': 1, 'отменен': 2, 'отменен (таймаут)': 2 };
-        const aOrder = statusOrder[a.status] ?? 1;
-        const bOrder = statusOrder[b.status] ?? 1;
-        if (aOrder !== bOrder) return aOrder - bOrder;
-        // Затем по времени (новые сверху)
-        return new Date(b.createdAt) - new Date(a.createdAt);
-    });
 
-    list.innerHTML = sortedOrders.map(order => {
-        const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
-        
-        // Определяем класс для рамки
-        let borderClass = '';
-        let statusLabel = order.status || 'ожидает';
-        let dotColor = 'gray';
-        let isNew = false;
-        
-        if (order.status === 'ожидает') {
-            borderClass = 'status-waiting';
-            dotColor = 'red';
-            // Проверяем, не старше ли 15 минут (новый заказ)
-            const orderAge = (Date.now() - new Date(order.createdAt)) / 1000 / 60;
-            if (orderAge < 15) {
-                isNew = true;
-            }
-        } else if (order.status === 'выполнен') {
-            borderClass = 'status-done';
-            dotColor = 'green';
-        } else if (order.status?.includes('отменен')) {
-            borderClass = 'status-cancelled';
-            dotColor = 'gray';
-        }
-        
-        const acts = order.status === 'ожидает' ? 
-            `<button class="btn btn-primary btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅ Подтвердить</button>
-             <button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌ Отменить</button>` : '';
-        
-        const chatInfo = getChatInfo(order.customerPhone);
-        let chatPlate = '';
-        if (chatInfo && order.status === 'ожидает') {
-            chatPlate = `
-                <div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')">
-                    <span class="msg-preview">💬 ${chatInfo.text}</span>
-                    ${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}
+        function renderOrders() {
+            const orders = S.orders;
+            const list = $('ordersList');
+            if (!orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
+            
+            const sortedOrders = [...orders].sort((a, b) => {
+                const statusOrder = { 'ожидает': 0, 'выполнен': 1, 'отменен': 2, 'отменен (таймаут)': 2 };
+                const aOrder = statusOrder[a.status] ?? 1;
+                const bOrder = statusOrder[b.status] ?? 1;
+                if (aOrder !== bOrder) return aOrder - bOrder;
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+
+            list.innerHTML = sortedOrders.map(order => {
+                const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
+                
+                let borderClass = '';
+                let statusLabel = order.status || 'ожидает';
+                let dotColor = 'gray';
+                let isNew = false;
+                
+                if (order.status === 'ожидает') {
+                    borderClass = 'status-waiting';
+                    dotColor = 'red';
+                    const orderAge = (Date.now() - new Date(order.createdAt)) / 1000 / 60;
+                    if (orderAge < 15) {
+                        isNew = true;
+                    }
+                } else if (order.status === 'выполнен') {
+                    borderClass = 'status-done';
+                    dotColor = 'green';
+                } else if (order.status?.includes('отменен')) {
+                    borderClass = 'status-cancelled';
+                    dotColor = 'gray';
+                }
+                
+                const acts = order.status === 'ожидает' ? 
+                    `<button class="btn btn-success btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅ Подтвердить</button>
+                     <button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌ Отменить</button>` : '';
+                
+                const chatInfo = getChatInfo(order.customerPhone);
+                let chatPlate = '';
+                if (chatInfo && order.status === 'ожидает') {
+                    chatPlate = `
+                        <div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')">
+                            <span class="msg-preview">💬 ${chatInfo.text}</span>
+                            ${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}
+                        </div>`;
+                }
+                
+                const orderDate = new Date(order.createdAt);
+                const timeStr = orderDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const dateStr = orderDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+                
+                // Определяем способ оплаты
+                let paymentLabel = order.paymentLabel || 'Наличными';
+                let paymentIcon = '💵';
+                let paymentClass = 'cash';
+                if (order.paymentMethod === 'transfer' || order.paymentLabel?.includes('Перевод')) {
+                    paymentIcon = '📱';
+                    paymentClass = 'transfer';
+                }
+                
+                return `<div class="order-card ${borderClass}">
+                    <div class="top">
+                        <span class="oid">
+                            🏠 #${order.bungalow||'?'} — #${order.id}
+                            ${isNew ? `<span class="new-badge">🆕 Новый</span>` : ''}
+                            <span class="payment-badge ${paymentClass}">${paymentIcon} ${paymentLabel}</span>
+                        </span>
+                        <span class="status ${borderClass}">${statusLabel}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">
+                        <div style="font-size:12px;color:var(--text-secondary);">
+                            👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} 
+                            ${order.confirmCode ? '🔑 <b>'+order.confirmCode+'</b>' : ''}
+                        </div>
+                        <div class="order-time">
+                            <span class="time-dot ${dotColor}"></span>
+                            ${dateStr} в ${timeStr}
+                            ${isNew ? ` <span style="color:#EF4444;font-weight:600;">⚡</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="items">${itemsHtml}</div>
+                    <div class="bottom">
+                        <span class="total">💰 ${order.total||0} ₽</span>
+                        <div style="display:flex;gap:4px;flex-wrap:wrap;">${acts}</div>
+                    </div>
+                    ${chatPlate}
                 </div>`;
+            }).join('');
         }
-        
-        // Время заказа
-        const orderDate = new Date(order.createdAt);
-        const timeStr = orderDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-        const dateStr = orderDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-        
-        return `<div class="order-card ${borderClass}">
-            <div class="top">
-                <span class="oid">
-                    🏠 #${order.bungalow||'?'} — #${order.id}
-                    ${isNew ? `<span class="new-badge">🆕 Новый</span>` : ''}
-                </span>
-                <span class="status ${borderClass}">${statusLabel}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">
-                <div style="font-size:12px;color:var(--text-secondary);">
-                    👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} 
-                    ${order.confirmCode ? '🔑 <b>'+order.confirmCode+'</b>' : ''}
-                </div>
-                <div class="order-time">
-                    <span class="time-dot ${dotColor}"></span>
-                    ${dateStr} в ${timeStr}
-                    ${isNew ? ` <span style="color:#EF4444;font-weight:600;">⚡</span>` : ''}
-                </div>
-            </div>
-            <div class="items">${itemsHtml}</div>
-            <div class="bottom">
-                <span class="total">💰 ${order.total||0} ₽</span>
-                <div style="display:flex;gap:4px;">${acts}</div>
-            </div>
-            ${chatPlate}
-        </div>`;
-    }).join('');
-}
 
-        async function confirmOrder(id, code) { if(!confirm('Подтвердить?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Доставлено'); loadOrders(); }
-        async function cancelOrder(id) { if(!confirm('Отменить?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Отменён'); loadOrders(); }
+        async function confirmOrder(id, code) { if(!confirm('Подтвердить выполнение заказа?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Заказ выполнен!'); loadOrders(); }
+        async function cancelOrder(id) { if(!confirm('Отменить заказ?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Заказ отменён'); loadOrders(); }
         async function clearOrders() { if(!confirm('Удалить все заказы?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
 
         // ===== MENU =====
@@ -855,7 +978,6 @@ function renderOrders() {
                 </div>
             `).join('');
 
-            // Добавляем обработчики свайпа
             document.querySelectorAll('.chat-item-wrapper').forEach(wrapper => {
                 let startX = 0;
                 let currentX = 0;
@@ -891,7 +1013,6 @@ function renderOrders() {
                     }
                 }, { passive: true });
 
-                // Для мыши (десктоп)
                 let mouseStartX = 0;
                 let isMouseDown = false;
 
@@ -1036,9 +1157,7 @@ function renderOrders() {
             console.log('🍓 Админка готова');
         }
 
-        // Проверка авторизации при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            // Проверяем сохраненную авторизацию
             const isAuth = checkAuth();
             if (!isAuth) {
                 document.getElementById('loginScreen').style.display = 'flex';
