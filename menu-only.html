@@ -719,7 +719,6 @@
             }
         }
 
-        /* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ МЕНЮ ===== */
         .menu-section {
             animation: fadeInUp 0.6s ease forwards;
         }
@@ -738,7 +737,6 @@
 </head>
 <body>
 
-    <!-- ===== LOADING OVERLAY ===== -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner">🍓</div>
         <div class="loading-text">Загрузка меню...</div>
@@ -749,7 +747,6 @@
 
     <div class="menu-container">
 
-        <!-- ===== HEADER ===== -->
         <header class="header">
             <span class="logo-icon">🍓</span>
             <div class="header-badge">
@@ -766,12 +763,10 @@
             </p>
         </header>
 
-        <!-- ===== SCROLL HINT ===== -->
         <div class="scroll-hint show" id="scrollHint">
             <i class="fas fa-chevron-down"></i> Листайте вниз, чтобы увидеть меню
         </div>
 
-        <!-- ===== LOCATION CARD ===== -->
         <div class="location-card" onclick="buildWalkRoute()">
             <span class="loc-icon">📍</span>
             <div class="loc-text">
@@ -781,7 +776,6 @@
             <div class="loc-sub">👆 Нажмите, чтобы проложить пеший маршрут</div>
         </div>
 
-        <!-- ===== MAP CARD ===== -->
         <div class="map-card">
             <div class="map-container" id="mapContainer">
                 <div class="map-placeholder" id="mapPlaceholder">
@@ -790,12 +784,10 @@
                 </div>
                 <iframe id="mapIframe" src="" style="display:none;"></iframe>
             </div>
-            <!-- ===== СТАТУС МЕСТОПОЛОЖЕНИЯ ===== -->
             <div class="location-status" id="locationStatus">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="statusText">Определение местоположения...</span>
             </div>
-            <!-- ===== ИНФОРМАЦИЯ О МАРШРУТЕ ===== -->
             <div class="route-info" id="routeInfo">
                 <span class="route-icon">🚶</span>
                 <span class="route-text" id="routeText">Маршрут построен</span>
@@ -813,7 +805,6 @@
             </div>
         </div>
 
-        <!-- ===== CHIPS NAV ===== -->
         <div class="chips-nav" id="menuAnchor">
             <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
                 <i class="fas fa-apple-alt"></i>Фрукты
@@ -826,7 +817,6 @@
             </button>
         </div>
 
-        <!-- ===== SECTION: STRAWBERRY ===== -->
         <div class="menu-section active" id="section-strawberry">
             <div class="section-title">
                 <i class="fas fa-strawberry"></i> Клубника в шоколаде
@@ -834,7 +824,6 @@
             <div class="menu-grid" id="strawberryGrid"></div>
         </div>
 
-        <!-- ===== SECTION: FRUITS ===== -->
         <div class="menu-section" id="section-fruits" style="display: none;">
             <div class="section-title">
                 <i class="fas fa-apple-alt"></i> Свежие фрукты
@@ -842,7 +831,6 @@
             <div class="menu-grid" id="fruitsGrid"></div>
         </div>
 
-        <!-- ===== SECTION: DRINKS ===== -->
         <div class="menu-section" id="section-drinks" style="display: none;">
             <div class="section-title">
                 <i class="fas fa-mug-saucer"></i> Напитки и перекус
@@ -850,7 +838,6 @@
             <div class="drinks-grid" id="drinksGrid"></div>
         </div>
 
-        <!-- ===== FOOTER ===== -->
         <div class="footer">
             <i class="fas fa-heart" style="color: var(--primary);"></i>
             С любовью, Strawberry in Chocolate
@@ -877,7 +864,6 @@
         let userLocation = null;
         let mapLoaded = false;
         let autoScrollDone = false;
-        let routeMode = 'pedestrian'; // 'pedestrian' или 'auto'
 
         // ================================================================
         // ===== LOADING SCREEN =====
@@ -925,7 +911,6 @@
         // ===== MAP FUNCTIONS =====
         // ================================================================
 
-        // Загрузка карты
         function loadMap() {
             showLoading(20);
 
@@ -989,7 +974,6 @@
                     text.innerHTML = `✅ Ваше местоположение определено`;
                     btn.classList.remove('loading');
 
-                    // Сразу строим маршрут (пешком по умолчанию)
                     setTimeout(() => {
                         buildWalkRoute();
                     }, 500);
@@ -1018,7 +1002,6 @@
 
         // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
         function buildWalkRoute() {
-            routeMode = 'pedestrian';
             document.getElementById('walkBtn').classList.add('active');
             document.getElementById('autoBtn').classList.remove('active');
             showRoute('pedestrian', '🚶 Пешком');
@@ -1026,13 +1009,12 @@
 
         // ===== ПОСТРОИТЬ АВТО МАРШРУТ =====
         function buildRoute() {
-            routeMode = 'auto';
             document.getElementById('autoBtn').classList.add('active');
             document.getElementById('walkBtn').classList.remove('active');
             showRoute('auto', '🚗 На авто');
         }
 
-        // ===== ПОКАЗАТЬ МАРШРУТ НА КАРТЕ =====
+        // ===== ПОКАЗАТЬ МАРШРУТ НА КАРТЕ (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
         function showRoute(mode, modeLabel) {
             const iframe = document.getElementById('mapIframe');
             const routeInfo = document.getElementById('routeInfo');
@@ -1043,34 +1025,34 @@
 
             // Проверяем, есть ли местоположение пользователя
             if (!userLocation) {
-                // Если нет — показываем статус и предлагаем определить
                 dot.className = 'status-dot error';
                 statusText.textContent = '📍 Сначала нажмите "Где я?" для определения местоположения';
                 status.classList.add('show');
                 routeInfo.classList.remove('show');
-
-                // Показываем просто метку киоска
                 iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
-
-                // Скрываем статус через 4 секунды
-                setTimeout(() => {
-                    status.classList.remove('show');
-                }, 4000);
+                setTimeout(() => { status.classList.remove('show'); }, 4000);
                 return;
             }
 
-            // Строим маршрут
-            const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=${mode}&z=16`;
-            iframe.src = url;
+            // Очищаем iframe перед загрузкой нового маршрута
+            iframe.src = 'about:blank';
+
+            // Формируем URL для маршрута
+            // pedestrian — пешком, auto — на авто
+            const routeType = mode === 'pedestrian' ? 'pedestrian' : 'auto';
+            const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=${routeType}&z=16`;
+
+            // Загружаем карту с задержкой
+            setTimeout(() => {
+                iframe.src = url;
+            }, 100);
 
             // Показываем информацию о маршруте
             routeInfo.classList.add('show');
             routeText.innerHTML = `<strong>${modeLabel}</strong> от вас до киоска`;
-
-            // Скрываем статус, если он был показан
             status.classList.remove('show');
 
-            // Прокручиваем к карте, чтобы пользователь увидел маршрут
+            // Прокручиваем к карте
             const mapCard = document.querySelector('.map-card');
             if (mapCard) {
                 const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
@@ -1235,7 +1217,6 @@
             }, 400);
         });
 
-        // Если пользователь начал скроллить сам — убираем подсказку
         document.addEventListener('scroll', function() {
             const hint = document.getElementById('scrollHint');
             if (hint && window.scrollY > 50) {
