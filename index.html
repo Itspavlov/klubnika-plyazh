@@ -156,7 +156,6 @@
             background: linear-gradient(135deg, rgba(255, 71, 87, 0.7), rgba(230, 57, 70, 0.8));
         }
 
-        /* ФОНОВОЕ ИЗОБРАЖЕНИЕ (WEBP) */
         .bungalo-display::before {
             content: '';
             position: absolute;
@@ -169,7 +168,6 @@
             z-index: 0;
         }
 
-        /* ТЕМНЫЙ ОВЕРЛЕЙ ДЛЯ ЧИТАЕМОСТИ ТЕКСТА */
         .bungalo-display::after {
             content: '';
             position: absolute;
@@ -211,7 +209,6 @@
             text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* ДЕКОРАТИВНЫЕ КЛУБНИЧКИ НА ФОНЕ */
         .bungalo-display .bg-strawberry {
             position: absolute;
             z-index: 1;
@@ -237,6 +234,152 @@
         @keyframes floatBg {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        /* ===== SUPPORT HEADER ===== */
+        .support-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .support-header .support-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .support-btn {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 100px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .support-btn:active {
+            transform: scale(0.95);
+        }
+
+        .support-btn i {
+            font-size: 14px;
+        }
+
+        .support-btn .badge {
+            background: #EF4444;
+            color: #FFFFFF;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .support-btn .badge.show {
+            display: flex;
+        }
+
+        .support-call-btn {
+            background: linear-gradient(135deg, #4ADE80, #22C55E);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 100px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(74, 222, 128, 0.3);
+            text-decoration: none;
+        }
+
+        .support-call-btn:active {
+            transform: scale(0.95);
+        }
+
+        .support-call-btn i {
+            font-size: 14px;
+        }
+
+        /* ===== CHAT TIMER BANNER ===== */
+        .chat-timer-banner {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border: 1px solid #FFE0B2;
+            border-radius: var(--radius-lg);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chat-timer-banner.show {
+            display: flex;
+        }
+
+        .chat-timer-banner .timer-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .chat-timer-banner .timer-text {
+            flex: 1;
+            font-size: 13px;
+            color: #E65100;
+            line-height: 1.4;
+        }
+
+        .chat-timer-banner .timer-text strong {
+            font-weight: 700;
+        }
+
+        .chat-timer-banner .timer-call-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: 100px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+            text-decoration: none;
+        }
+
+        .chat-timer-banner .timer-call-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-timer-banner .timer-call-btn i {
+            font-size: 16px;
         }
 
         /* ===== NAVIGATION CHIPS ===== */
@@ -1461,6 +1604,26 @@
                 height: 36px;
                 font-size: 18px;
             }
+            .support-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .support-header .support-buttons {
+                justify-content: center;
+            }
+            .support-call-btn {
+                justify-content: center;
+            }
+            .chat-timer-banner {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+            .chat-timer-banner .timer-call-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         @media (max-width: 340px) {
@@ -1692,36 +1855,35 @@
     <!-- ===== MAIN CONTAINER ===== -->
     <div class="app-container">
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <button onclick="openSupportChat()" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text-dark); cursor: pointer; font-family: var(--font-family); display: flex; align-items: center; gap: 6px;">
-                <i class="fas fa-headset" style="color: var(--primary);"></i> Поддержка
-                <span id="supportBadge" style="background: #EF4444; color: #FFFFFF; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 700;">!</span>
-            </button>
-            <button onclick="openReviewsModal()" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text-dark); cursor: pointer; font-family: var(--font-family); display: flex; align-items: center; gap: 6px;">
-                <i class="fas fa-star" style="color: #FFB300;"></i> Отзывы
-                <span id="reviewsBadge" style="background: var(--primary); color: #FFFFFF; font-size: 10px; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 700; padding: 0 4px;">
-                    <span id="reviewsCount">0</span>
-                </span>
-            </button>
+        <!-- ===== SUPPORT HEADER ===== -->
+        <div class="support-header">
+            <div class="support-buttons">
+                <button onclick="openSupportChat()" class="support-btn">
+                    <i class="fas fa-headset" style="color: var(--primary);"></i> Поддержка
+                    <span class="badge" id="supportBadge">!</span>
+                </button>
+                <button onclick="openReviewsModal()" class="support-btn">
+                    <i class="fas fa-star" style="color: #FFB300;"></i> Отзывы
+                    <span id="reviewsBadge" style="background: var(--primary); color: #FFFFFF; font-size: 10px; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 700; padding: 0 4px;">
+                        <span id="reviewsCount">0</span>
+                    </span>
+                </button>
+            </div>
+            <a href="tel:+79628557263" class="support-call-btn">
+                <i class="fas fa-phone"></i> Позвонить
+            </a>
         </div>
 
         <header class="header">
-            <!-- КЛУБНИЧКА НАД ПЛАШКОЙ -->
             <span class="logo-icon">🍓</span>
-            
-            <!-- ПЛАШКА ДОСТАВКА -->
             <div class="header-badge">
                 <i class="fas fa-water"></i> Доставка на пляж
             </div>
-            
-            <!-- ЗАГОЛОВОК -->
             <h1>
                 <span class="highlight">Strawberry</span>
                 <span style="color: var(--text-dark);"> in </span>
                 <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
             </h1>
-            
-            <!-- ПОДЗАГОЛОВОК -->
             <p class="subtitle">
                 <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
                 <span class="delivery-time">⏱️ за 15 минут!</span>
@@ -1923,6 +2085,7 @@
         // ================================================================
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
+        const SUPPORT_PHONE = '+7 962 855-72-63';
 
         const MY_LOCATION = {
             lat: 44.358193,
@@ -1991,7 +2154,9 @@
             reviewRating: 0,
             reviewOrderId: null,
             bungalowNumber: null,
-            sessionExpiresAt: null
+            sessionExpiresAt: null,
+            chatStartTime: null,
+            chatTimerShown: false
         };
 
         let selectedPayment = 'cash';
@@ -2005,6 +2170,7 @@
         let sessionTimerInterval = null;
         let reviewCheckInterval = null;
         let lastOrderCheckTime = Date.now();
+        let chatTimerInterval = null;
 
         // ================================================================
         // ===== PHONE VALIDATION =====
@@ -3308,6 +3474,70 @@
         // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
+
+        // Показать баннер с таймером
+        function showChatTimerBanner() {
+            const banner = document.getElementById('chatTimerBanner');
+            if (!banner) return;
+            
+            if (!state.chatTimerShown) {
+                state.chatTimerShown = true;
+                banner.classList.add('show');
+                
+                // Автоматически скрываем через 30 секунд, чтобы не мешал
+                setTimeout(() => {
+                    banner.classList.remove('show');
+                }, 30000);
+            }
+        }
+
+        // Запустить таймер чата
+        function startChatTimer() {
+            if (chatTimerInterval) clearInterval(chatTimerInterval);
+            
+            state.chatStartTime = Date.now();
+            state.chatTimerShown = false;
+            
+            chatTimerInterval = setInterval(() => {
+                const elapsed = (Date.now() - state.chatStartTime) / 1000 / 60; // минуты
+                
+                // Если прошло 10 минут и баннер еще не показан
+                if (elapsed >= 10 && !state.chatTimerShown) {
+                    showChatTimerBanner();
+                }
+            }, 10000); // Проверяем каждые 10 секунд
+        }
+
+        // Остановить таймер чата
+        function stopChatTimer() {
+            if (chatTimerInterval) {
+                clearInterval(chatTimerInterval);
+                chatTimerInterval = null;
+            }
+            state.chatStartTime = null;
+            state.chatTimerShown = false;
+            
+            const banner = document.getElementById('chatTimerBanner');
+            if (banner) {
+                banner.classList.remove('show');
+            }
+        }
+
+        // Обновить функцию открытия чата
+        const originalOpenSupportChat = openSupportChat;
+        openSupportChat = function() {
+            originalOpenSupportChat();
+            startChatTimer();
+        };
+
+        // Обновить функцию закрытия чата
+        const originalCloseSupportChat = closeSupportChat;
+        closeSupportChat = function() {
+            originalCloseSupportChat();
+            stopChatTimer();
+        };
+
+        // Остальные функции чата
         async function sendSupportMessage() {
             const input = document.getElementById('supportInput');
             const text = input.value.trim();
@@ -3323,6 +3553,9 @@
                     body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) 
                 });
                 loadSupportMessages(phone);
+                // Сбрасываем таймер при отправке сообщения
+                stopChatTimer();
+                startChatTimer();
             } catch (e) {}
         }
 
@@ -3330,7 +3563,21 @@
             try {
                 const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
                 const data = await res.json();
-                if (data.success) { renderSupportMessages(data.messages || []); }
+                if (data.success) { 
+                    renderSupportMessages(data.messages || []);
+                    // Проверяем, есть ли ответ от администратора
+                    const adminMessages = (data.messages || []).filter(msg => msg.from === 'admin');
+                    if (adminMessages.length > 0 && state.chatStartTime) {
+                        // Если администратор ответил - сбрасываем таймер
+                        stopChatTimer();
+                        // Но не показываем баннер заново
+                        const banner = document.getElementById('chatTimerBanner');
+                        if (banner) {
+                            banner.classList.remove('show');
+                        }
+                        state.chatTimerShown = false;
+                    }
+                }
             } catch (e) {}
         }
 
@@ -3355,8 +3602,13 @@
         function startChatAutoUpdate(phone) {
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             chatUpdateInterval = setInterval(() => {
-                if (document.getElementById('supportChatModal')) { loadSupportMessages(phone); } 
-                else { clearInterval(chatUpdateInterval); chatUpdateInterval = null; }
+                if (document.getElementById('supportChatModal')) { 
+                    loadSupportMessages(phone); 
+                } else { 
+                    clearInterval(chatUpdateInterval); 
+                    chatUpdateInterval = null; 
+                    stopChatTimer();
+                }
             }, 3000);
         }
 
@@ -3368,6 +3620,7 @@
                 clearInterval(chatUpdateInterval); 
                 chatUpdateInterval = null; 
             }
+            stopChatTimer();
         }
 
         function openSupportChatWithOrder(orderId) {
@@ -3412,6 +3665,17 @@
                         </div>
                         <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
                     </div>
+                    <!-- ===== ТАЙМЕР БАННЕР ===== -->
+                    <div id="chatTimerBanner" class="chat-timer-banner">
+                        <span class="timer-icon">⏰</span>
+                        <span class="timer-text">
+                            <strong>Нет ответа больше 10 минут?</strong><br>
+                            Позвоните нам по номеру <strong>${SUPPORT_PHONE}</strong>
+                        </span>
+                        <a href="tel:+79628557263" class="timer-call-btn">
+                            <i class="fas fa-phone"></i> Позвонить
+                        </a>
+                    </div>
                     <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;background:#F8FAFC;">
                         <div style="text-align:center;color:var(--text-muted);padding:40px 0;">
                             <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
@@ -3430,6 +3694,7 @@
             
             loadSupportMessages(phone);
             startChatAutoUpdate(phone);
+            startChatTimer();
         }
 
         // ================================================================
@@ -3562,6 +3827,7 @@
             if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
             if (sessionTimerInterval) clearInterval(sessionTimerInterval);
             if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+            if (chatTimerInterval) clearInterval(chatTimerInterval);
         });
 
         init();
@@ -3576,6 +3842,7 @@
         console.log('✅ Анимация клубнички в корзину');
         console.log('✅ Кастомные позиции из админки');
         console.log('✅ Сохранение корзины в localStorage');
+        console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
     </script>
 
 </body>
