@@ -330,16 +330,6 @@
             font-size: 14px;
         }
 
-        .map-btn.navigate-btn {
-            background: linear-gradient(135deg, #3B82F6, #2563EB);
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .map-btn.navigate-btn i {
-            font-size: 14px;
-        }
-
         .map-btn.location-btn {
             background: linear-gradient(135deg, #8B5CF6, #7C3AED);
             color: #FFFFFF;
@@ -887,6 +877,7 @@
         let userLocation = null;
         let mapLoaded = false;
         let autoScrollDone = false;
+        let routeMode = 'pedestrian'; // 'pedestrian' или 'auto'
 
         // ================================================================
         // ===== LOADING SCREEN =====
@@ -914,7 +905,6 @@
             const menuAnchor = document.getElementById('menuAnchor');
             if (!menuAnchor) return;
 
-            // Скрываем подсказку о прокрутке
             const hint = document.getElementById('scrollHint');
             if (hint) {
                 hint.classList.remove('show');
@@ -952,7 +942,6 @@
                     placeholder.style.display = 'none';
                     mapLoaded = true;
                     setTimeout(hideLoading, 500);
-                    // После загрузки карты - прокрутка к меню
                     setTimeout(autoScrollToMenu, 800);
                 };
 
@@ -1000,6 +989,7 @@
                     text.innerHTML = `✅ Ваше местоположение определено`;
                     btn.classList.remove('loading');
 
+                    // Сразу строим маршрут (пешком по умолчанию)
                     setTimeout(() => {
                         buildWalkRoute();
                     }, 500);
@@ -1028,6 +1018,7 @@
 
         // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
         function buildWalkRoute() {
+            routeMode = 'pedestrian';
             document.getElementById('walkBtn').classList.add('active');
             document.getElementById('autoBtn').classList.remove('active');
             showRoute('pedestrian', '🚶 Пешком');
@@ -1035,6 +1026,7 @@
 
         // ===== ПОСТРОИТЬ АВТО МАРШРУТ =====
         function buildRoute() {
+            routeMode = 'auto';
             document.getElementById('autoBtn').classList.add('active');
             document.getElementById('walkBtn').classList.remove('active');
             showRoute('auto', '🚗 На авто');
@@ -1045,18 +1037,50 @@
             const iframe = document.getElementById('mapIframe');
             const routeInfo = document.getElementById('routeInfo');
             const routeText = document.getElementById('routeText');
+            const status = document.getElementById('locationStatus');
+            const dot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
 
+            // Проверяем, есть ли местоположение пользователя
             if (!userLocation) {
+                // Если нет — показываем статус и предлагаем определить
+                dot.className = 'status-dot error';
+                statusText.textContent = '📍 Сначала нажмите "Где я?" для определения местоположения';
+                status.classList.add('show');
                 routeInfo.classList.remove('show');
+
+                // Показываем просто метку киоска
                 iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
+
+                // Скрываем статус через 4 секунды
+                setTimeout(() => {
+                    status.classList.remove('show');
+                }, 4000);
                 return;
             }
 
+            // Строим маршрут
             const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=${mode}&z=16`;
             iframe.src = url;
 
+            // Показываем информацию о маршруте
             routeInfo.classList.add('show');
             routeText.innerHTML = `<strong>${modeLabel}</strong> от вас до киоска`;
+
+            // Скрываем статус, если он был показан
+            status.classList.remove('show');
+
+            // Прокручиваем к карте, чтобы пользователь увидел маршрут
+            const mapCard = document.querySelector('.map-card');
+            if (mapCard) {
+                const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: mapPosition - 20,
+                        behavior: 'smooth'
+                    });
+                }, 300);
+            }
         }
 
         // ================================================================
@@ -1199,7 +1223,6 @@
             showLoading(10);
             renderMenu();
 
-            // Показываем подсказку о прокрутке через 2 секунды
             setTimeout(() => {
                 const hint = document.getElementById('scrollHint');
                 if (hint && !autoScrollDone) {
@@ -1226,6 +1249,7 @@
         console.log('🔄 Автоматическая прокрутка к меню включена');
         console.log('📱 Нажмите "Где я?" для определения местоположения');
         console.log('🚶 Доступны маршруты: пешком и на авто');
+        console.log('📍 При нажатии на маршрут карта сразу показывает путь');
     </script>
 
 </body>
