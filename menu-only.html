@@ -320,16 +320,6 @@
             pointer-events: none;
         }
 
-        .map-btn.route-btn {
-            background: linear-gradient(135deg, #4ADE80, #22C55E);
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
-        }
-
-        .map-btn.route-btn i {
-            font-size: 14px;
-        }
-
         .map-btn.location-btn {
             background: linear-gradient(135deg, #8B5CF6, #7C3AED);
             color: #FFFFFF;
@@ -346,9 +336,9 @@
         }
 
         .map-btn.walk-btn {
-            background: linear-gradient(135deg, #F59E0B, #D97706);
+            background: linear-gradient(135deg, #22C55E, #16A34A);
             color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
         }
 
         .map-btn.walk-btn i {
@@ -356,13 +346,8 @@
         }
 
         .map-btn.walk-btn.active {
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-        }
-
-        .map-btn.route-btn.active {
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, #16A34A, #15803D);
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
         }
 
         /* ===== LOCATION STATUS ===== */
@@ -916,7 +901,6 @@
                 const iframe = document.getElementById('mapIframe');
                 const placeholder = document.getElementById('mapPlaceholder');
 
-                // Ваша метка киоска с координатами
                 iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
 
                 iframe.onload = function() {
@@ -972,7 +956,6 @@
                     text.innerHTML = `✅ Ваше местоположение определено`;
                     btn.classList.remove('loading');
 
-                    // Сразу строим пеший маршрут
                     setTimeout(() => {
                         buildWalkRoute();
                     }, 500);
@@ -999,7 +982,7 @@
             );
         }
 
-        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
+        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
         function buildWalkRoute() {
             const iframe = document.getElementById('mapIframe');
             const routeInfo = document.getElementById('routeInfo');
@@ -1015,14 +998,12 @@
                 status.classList.add('show');
                 routeInfo.classList.remove('show');
                 
-                // Показываем метку киоска
                 iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
 
                 setTimeout(() => {
                     status.classList.remove('show');
                 }, 4000);
 
-                // Прокрутка к карте
                 const mapCard = document.querySelector('.map-card');
                 if (mapCard) {
                     const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
@@ -1036,15 +1017,11 @@
                 return;
             }
 
-            // Очищаем iframe перед загрузкой маршрута
-            iframe.src = 'about:blank';
-
-            // Пеший маршрут от пользователя до киоска
+            // Строим пеший маршрут — просто обновляем src без about:blank
             const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pedestrian&z=16`;
-
-            setTimeout(() => {
-                iframe.src = url;
-            }, 100);
+            
+            // Обновляем src
+            iframe.src = url;
 
             // Показываем информацию о маршруте
             routeInfo.classList.add('show');
@@ -1226,9 +1203,8 @@
 
         console.log('🍓 Меню-страница загружена');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
-        console.log('🔄 Автоматическая прокрутка к меню включена');
         console.log('📱 Нажмите "Где я?" для определения местоположения');
-        console.log('🚶 Только пеший маршрут до киоска на набережной');
+        console.log('🚶 Только пеший маршрут до киоска');
     </script>
 
 </body>
