@@ -205,45 +205,44 @@
             color: var(--primary);
         }
 
-        /* ===== LOCATION CARD ===== */
-        .location-card {
-            background: linear-gradient(135deg, #FF4757, #E63946);
+        /* ===== ROUTE BUTTON ===== */
+        .route-big-btn {
+            width: 100%;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, #22C55E, #16A34A);
+            border: none;
             border-radius: var(--radius-xl);
-            padding: 16px 20px;
-            margin-bottom: 16px;
-            text-align: center;
             color: #FFFFFF;
-            box-shadow: var(--shadow-lg);
+            font-family: var(--font-family);
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .location-card:active {
-            transform: scale(0.98);
+        .route-big-btn:active {
+            transform: scale(0.97);
         }
 
-        .location-card .loc-icon {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 6px;
+        .route-big-btn i {
+            font-size: 24px;
         }
 
-        .location-card .loc-text {
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.5;
-            opacity: 0.95;
-        }
-
-        .location-card .loc-text strong {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .location-card .loc-sub {
+        .route-big-btn .btn-sub {
             font-size: 12px;
+            font-weight: 400;
             opacity: 0.8;
-            margin-top: 4px;
+        }
+
+        .route-big-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
         }
 
         /* ===== MAP CARD ===== */
@@ -282,72 +281,6 @@
         .map-card .map-container .map-placeholder i {
             font-size: 48px;
             color: var(--primary);
-        }
-
-        .map-card .map-actions {
-            display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            background: #F8FAFC;
-            border-top: 1px solid #F1F5F9;
-            flex-wrap: wrap;
-        }
-
-        .map-btn {
-            flex: 1;
-            min-width: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 10px 12px;
-            border-radius: var(--radius-lg);
-            border: none;
-            font-family: var(--font-family);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .map-btn:active {
-            transform: scale(0.97);
-        }
-
-        .map-btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .map-btn.location-btn {
-            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
-        .map-btn.location-btn i {
-            font-size: 14px;
-        }
-
-        .map-btn.location-btn.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .map-btn.walk-btn {
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-        }
-
-        .map-btn.walk-btn i {
-            font-size: 14px;
-        }
-
-        .map-btn.walk-btn.active {
-            background: linear-gradient(135deg, #16A34A, #15803D);
-            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
         }
 
         /* ===== LOCATION STATUS ===== */
@@ -420,6 +353,62 @@
 
         .route-info .route-text strong {
             font-weight: 700;
+        }
+
+        /* ===== CHIPS NAV ===== */
+        .chips-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chips-nav .chip {
+            flex: 1;
+            padding: 10px 8px;
+            border-radius: var(--radius-lg);
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            letter-spacing: -0.2px;
+        }
+
+        .chips-nav .chip i {
+            font-size: 16px;
+        }
+
+        .chips-nav .chip.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .chips-nav .chip.main-chip {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+        }
+
+        .chips-nav .chip.main-chip.active {
+            box-shadow: 0 6px 16px rgba(255, 71, 87, 0.4);
+            transform: scale(1.02);
         }
 
         /* ===== MENU GRID ===== */
@@ -504,6 +493,74 @@
             box-shadow: var(--shadow-sm);
         }
 
+        /* ===== DRINKS ===== */
+        .drinks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drink-item {
+            display: flex;
+            align-items: center;
+            background: #FFFFFF;
+            padding: 14px 16px;
+            border-radius: var(--radius-lg);
+            border: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            gap: 12px;
+        }
+
+        .drink-item .drink-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drink-item .drink-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .drink-item .drink-info {
+            flex: 1;
+        }
+
+        .drink-item .drink-info h4 {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .drink-item .drink-info .drink-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .drink-item .drink-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .drink-item .drink-old-price {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-decoration: line-through;
+            margin-right: 6px;
+        }
+
         /* ===== SECTION TITLE ===== */
         .section-title {
             font-size: 18px;
@@ -561,18 +618,22 @@
             .map-card .map-container {
                 height: 300px;
             }
-            .map-card .map-actions {
-                flex-wrap: wrap;
+            .route-big-btn {
+                font-size: 15px;
+                padding: 14px 16px;
             }
-            .map-btn {
-                flex: 1 1 100%;
-                padding: 12px;
+            .route-big-btn i {
+                font-size: 20px;
             }
         }
 
         @media (max-width: 340px) {
             .menu-grid {
                 grid-template-columns: 1fr;
+            }
+            .chips-nav .chip {
+                font-size: 11px;
+                padding: 8px 6px;
             }
         }
 
@@ -615,7 +676,7 @@
                 <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
             </h1>
             <p class="subtitle">
-                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде
+                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
                 <span class="delivery-time">⏱️ за 15 минут!</span>
             </p>
         </header>
@@ -624,15 +685,17 @@
             <i class="fas fa-chevron-down"></i> Листайте вниз, чтобы увидеть меню
         </div>
 
-        <div class="location-card" onclick="buildWalkRoute(event)">
-            <span class="loc-icon">📍</span>
-            <div class="loc-text">
-                <strong>Наш киоск на пляже</strong><br>
-                Напротив бетонного пирса, белый киоск
-            </div>
-            <div class="loc-sub">👆 Нажмите, чтобы проложить пеший маршрут</div>
-        </div>
+        <!-- ===== БОЛЬШАЯ ПЛАШКА МАРШРУТ ===== -->
+        <button class="route-big-btn" id="routeBtn" onclick="buildWalkRoute()">
+            <i class="fas fa-walking"></i>
+            <span>
+                🚶 Маршрут до киоска
+                <br>
+                <span class="btn-sub">Нажмите, чтобы проложить пеший маршрут</span>
+            </span>
+        </button>
 
+        <!-- ===== MAP CARD ===== -->
         <div class="map-card">
             <div class="map-container" id="mapContainer">
                 <div class="map-placeholder" id="mapPlaceholder">
@@ -649,14 +712,18 @@
                 <span class="route-icon">🚶</span>
                 <span class="route-text" id="routeText">Маршрут построен</span>
             </div>
-            <div class="map-actions">
-                <button class="map-btn location-btn" id="locationBtn" onclick="getMyLocation(event)">
-                    <i class="fas fa-location-dot"></i> Где я?
-                </button>
-                <button class="map-btn walk-btn active" id="walkBtn" onclick="buildWalkRoute(event)">
-                    <i class="fas fa-walking"></i> Пешком
-                </button>
-            </div>
+        </div>
+
+        <div class="chips-nav" id="menuAnchor">
+            <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
+                <i class="fas fa-apple-alt"></i>Фрукты
+            </button>
+            <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')">
+                <i class="fas fa-strawberry"></i> Клубника
+            </button>
+            <button class="chip" data-section="drinks" onclick="switchSection('drinks')">
+                <i class="fas fa-mug-saucer"></i> Напитки
+            </button>
         </div>
 
         <div class="menu-section active" id="section-strawberry">
@@ -664,6 +731,20 @@
                 <i class="fas fa-strawberry"></i> Клубника в шоколаде
             </div>
             <div class="menu-grid" id="strawberryGrid"></div>
+        </div>
+
+        <div class="menu-section" id="section-fruits" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-apple-alt"></i> Свежие фрукты
+            </div>
+            <div class="menu-grid" id="fruitsGrid"></div>
+        </div>
+
+        <div class="menu-section" id="section-drinks" style="display: none;">
+            <div class="section-title">
+                <i class="fas fa-mug-saucer"></i> Напитки и перекус
+            </div>
+            <div class="drinks-grid" id="drinksGrid"></div>
         </div>
 
         <div class="footer">
@@ -692,7 +773,7 @@
         let userLocation = null;
         let mapLoaded = false;
         let autoScrollDone = false;
-        let isBuildingRoute = false;
+        let isRouteBuilding = false;
 
         // ================================================================
         // ===== LOADING SCREEN =====
@@ -700,28 +781,25 @@
         function showLoading(progress) {
             const overlay = document.getElementById('loadingOverlay');
             const bar = document.getElementById('loadingBar');
-            if (overlay && bar) {
-                overlay.classList.add('show');
-                bar.style.width = progress + '%';
-            }
+            overlay.classList.add('show');
+            bar.style.width = progress + '%';
         }
 
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.classList.remove('show');
-            }
+            overlay.classList.remove('show');
         }
 
         // ================================================================
         // ===== АВТОМАТИЧЕСКАЯ ПРОКРУТКА К МЕНЮ =====
         // ================================================================
+
         function autoScrollToMenu() {
             if (autoScrollDone) return;
             autoScrollDone = true;
 
-            const menuSection = document.getElementById('section-strawberry');
-            if (!menuSection) return;
+            const menuAnchor = document.getElementById('menuAnchor');
+            if (!menuAnchor) return;
 
             const hint = document.getElementById('scrollHint');
             if (hint) {
@@ -729,7 +807,7 @@
                 setTimeout(() => { hint.style.display = 'none'; }, 500);
             }
 
-            const menuPosition = menuSection.getBoundingClientRect().top + window.pageYOffset;
+            const menuPosition = menuAnchor.getBoundingClientRect().top + window.pageYOffset;
 
             setTimeout(() => {
                 window.scrollTo({
@@ -742,6 +820,7 @@
         // ================================================================
         // ===== MAP FUNCTIONS =====
         // ================================================================
+
         function loadMap() {
             showLoading(20);
 
@@ -750,11 +829,7 @@
                 const iframe = document.getElementById('mapIframe');
                 const placeholder = document.getElementById('mapPlaceholder');
 
-                if (!iframe || !placeholder) return;
-
-                const staticMapUrl = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
-                
-                iframe.src = staticMapUrl;
+                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
 
                 iframe.onload = function() {
                     showLoading(100);
@@ -779,30 +854,47 @@
             }, 500);
         }
 
-        // ===== ОПРЕДЕЛЕНИЕ МЕСТОПОЛОЖЕНИЯ =====
-        function getMyLocation(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            
-            const btn = document.getElementById('locationBtn');
+        // ================================================================
+        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
+        // ================================================================
+
+        function buildWalkRoute() {
+            const btn = document.getElementById('routeBtn');
+            const iframe = document.getElementById('mapIframe');
+            const routeInfo = document.getElementById('routeInfo');
+            const routeText = document.getElementById('routeText');
             const status = document.getElementById('locationStatus');
             const dot = document.getElementById('statusDot');
-            const text = document.getElementById('statusText');
+            const statusText = document.getElementById('statusText');
 
-            if (!navigator.geolocation) {
-                if (dot) dot.className = 'status-dot error';
-                if (text) text.textContent = '❌ Ваш браузер не поддерживает геолокацию';
-                if (status) status.classList.add('show');
-                return false;
+            // Если уже строится маршрут — выходим
+            if (isRouteBuilding) return;
+            isRouteBuilding = true;
+
+            // Если местоположение уже определено — сразу строим маршрут
+            if (userLocation) {
+                buildRouteOnMap();
+                isRouteBuilding = false;
+                return;
             }
 
-            if (btn) btn.classList.add('loading');
-            if (dot) dot.className = 'status-dot loading';
-            if (text) text.textContent = '⏳ Определение вашего местоположения...';
-            if (status) status.classList.add('show');
+            // Показываем статус загрузки
+            btn.classList.add('loading');
+            dot.className = 'status-dot loading';
+            statusText.textContent = '⏳ Определение вашего местоположения...';
+            status.classList.add('show');
+            routeInfo.classList.remove('show');
 
+            // Проверяем поддержку геолокации
+            if (!navigator.geolocation) {
+                dot.className = 'status-dot error';
+                statusText.textContent = '❌ Ваш браузер не поддерживает геолокацию';
+                btn.classList.remove('loading');
+                isRouteBuilding = false;
+                return;
+            }
+
+            // Запрашиваем местоположение
             navigator.geolocation.getCurrentPosition(
                 function(position) {
                     userLocation = {
@@ -810,13 +902,13 @@
                         lng: position.coords.longitude
                     };
 
-                    if (dot) dot.className = 'status-dot success';
-                    if (text) text.innerHTML = '✅ Ваше местоположение определено';
-                    if (btn) btn.classList.remove('loading');
+                    dot.className = 'status-dot success';
+                    statusText.innerHTML = `✅ Ваше местоположение определено`;
+                    btn.classList.remove('loading');
 
-                    setTimeout(() => {
-                        buildWalkRoute();
-                    }, 500);
+                    // Строим маршрут
+                    buildRouteOnMap();
+                    isRouteBuilding = false;
                 },
                 function(error) {
                     let errorMessage = '❌ Не удалось определить местоположение';
@@ -828,9 +920,15 @@
                         errorMessage = '⏳ Превышено время ожидания. Попробуйте еще раз';
                     }
 
-                    if (dot) dot.className = 'status-dot error';
-                    if (text) text.textContent = errorMessage;
-                    if (btn) btn.classList.remove('loading');
+                    dot.className = 'status-dot error';
+                    statusText.textContent = errorMessage;
+                    btn.classList.remove('loading');
+                    isRouteBuilding = false;
+
+                    // Через 4 секунды скрываем статус
+                    setTimeout(() => {
+                        status.classList.remove('show');
+                    }, 4000);
                 },
                 {
                     enableHighAccuracy: true,
@@ -838,86 +936,35 @@
                     maximumAge: 0
                 }
             );
-            
-            return false;
         }
 
-        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
-        function buildWalkRoute(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            
-            if (isBuildingRoute) return false;
-            isBuildingRoute = true;
-            
+        // ===== ПОСТРОИТЬ МАРШРУТ НА КАРТЕ =====
+        function buildRouteOnMap() {
             const iframe = document.getElementById('mapIframe');
             const routeInfo = document.getElementById('routeInfo');
             const routeText = document.getElementById('routeText');
             const status = document.getElementById('locationStatus');
-            const dot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-            const walkBtn = document.getElementById('walkBtn');
+            const btn = document.getElementById('routeBtn');
 
-            if (!iframe) {
-                isBuildingRoute = false;
-                return false;
-            }
-
+            // Если нет местоположения — показываем метку киоска
             if (!userLocation) {
-                if (dot) dot.className = 'status-dot error';
-                if (statusText) statusText.textContent = '📍 Сначала нажмите "Где я?" для определения местоположения';
-                if (status) status.classList.add('show');
-                if (routeInfo) routeInfo.classList.remove('show');
-                
-                const staticMapUrl = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
-                iframe.src = staticMapUrl;
-
-                setTimeout(() => {
-                    if (status) status.classList.remove('show');
-                }, 4000);
-
-                scrollToMap();
-                
-                isBuildingRoute = false;
-                return false;
+                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
+                routeInfo.classList.remove('show');
+                btn.classList.remove('loading');
+                return;
             }
 
-            const routeUrl = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=15`;
-            const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=15`;
-            
-            iframe.src = routeUrl;
+            // Строим пеший маршрут
+            const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pedestrian&z=16`;
+            iframe.src = url;
 
-            if (routeInfo) {
-                routeInfo.classList.add('show');
-                routeInfo.style.cursor = 'pointer';
-                routeInfo.onclick = function() {
-                    window.open(yandexMapsUrl, '_blank');
-                };
-            }
-            
-            if (routeText) {
-                routeText.innerHTML = '<strong>🚶 Пеший маршрут</strong> от вас до киоска <strong>🍓 Strawberry in Chocolate</strong><br><small style="color: #16A34A;">👆 Нажмите здесь, чтобы открыть в Яндекс.Картах</small>';
-            }
-            
-            if (status) status.classList.remove('show');
-            if (walkBtn) walkBtn.classList.add('active');
+            // Показываем информацию о маршруте
+            routeInfo.classList.add('show');
+            routeText.innerHTML = `<strong>🚶 Пешком</strong> от вас до киоска <strong>🍓 Strawberry in Chocolate</strong>`;
+            status.classList.remove('show');
+            btn.classList.remove('loading');
 
-            scrollToMap();
-            
-            setTimeout(() => {
-                window.open(yandexMapsUrl, '_blank');
-            }, 1500);
-            
-            setTimeout(() => {
-                isBuildingRoute = false;
-            }, 2000);
-            
-            return false;
-        }
-
-        function scrollToMap() {
+            // Прокручиваем к карте
             const mapCard = document.querySelector('.map-card');
             if (mapCard) {
                 const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
@@ -933,19 +980,34 @@
         // ================================================================
         // ===== MENU DATA =====
         // ================================================================
-        const ROMANTIC_ITEM = {
-            id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
-            price: 699, oldPrice: 770, volume: '300 мл',
-            image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
-        };
-
         const STRAWBERRY_ITEMS = [
             { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
             { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, oldPrice: null, volume: '300 мл', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
             { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, oldPrice: null, volume: '300 мл', image: 'images/tiffani.jpg', badge: '✨ Новинка', badgeColor: '#4ADE80' },
             { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/miks.jpg' },
             { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, oldPrice: null, volume: '300 мл', image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
+        ];
+
+        const ROMANTIC_ITEM = {
+            id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
+            price: 699, oldPrice: 770, volume: '300 мл',
+            image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
+        };
+
+        const FRUITS_ITEMS = [
+            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, oldPrice: null, volume: '300 мл', image: 'images/watermelon.jpg', emoji: '🍉' },
+            { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, oldPrice: null, volume: '300 мл', image: 'images/melon.jpg', emoji: '🍈' },
+            { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, oldPrice: null, volume: '200 мл', image: 'images/raspberry.jpg', emoji: '🍓' },
+            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, oldPrice: null, volume: '200 мл', image: 'images/blackberry.jpg', emoji: '🫐' },
+            { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, oldPrice: null, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
+        ];
+
+        const DRINK_ITEMS = [
+            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, oldPrice: null, image: 'images/limonad.webp', emoji: '🍋' },
+            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, oldPrice: null, image: 'images/kola.jpg', emoji: '🥤' },
+            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, oldPrice: null, image: 'images/pivo.webp', emoji: '🍺' },
+            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, oldPrice: null, image: 'images/shaurma.webp', emoji: '🌯' }
         ];
 
         // ================================================================
@@ -955,15 +1017,11 @@
             showLoading(60);
 
             const strawberryGrid = document.getElementById('strawberryGrid');
-            if (!strawberryGrid) return;
-            
             let html = '';
 
-            // Романтический набор
             html += `
                 <div class="menu-item">
-                    ${ROMANTIC_ITEM.badge ? `<span class="badge" style="color: ${ROMANTIC_ITEM.badgeColor || 'var(--primary)'};">${ROMANTIC_ITEM.badge}</span>` : ''}
-                    <img src="${ROMANTIC_ITEM.image}" alt="${ROMANTIC_ITEM.name}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23fce4ec%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                    <img src="${ROMANTIC_ITEM.image}" alt="${ROMANTIC_ITEM.name}" class="item-image" loading="lazy">
                     <div class="item-content">
                         <div class="item-name">${ROMANTIC_ITEM.name}</div>
                         <div class="item-desc">${ROMANTIC_ITEM.desc} 💕</div>
@@ -975,12 +1033,11 @@
                 </div>
             `;
 
-            // Остальные товары
             STRAWBERRY_ITEMS.forEach(item => {
                 html += `
                     <div class="menu-item">
                         ${item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${item.badge}</span>` : ''}
-                        <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23fce4ec%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                        <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy">
                         <div class="item-content">
                             <div class="item-name">${item.name}</div>
                             <div class="item-desc">${item.desc}</div>
@@ -994,7 +1051,63 @@
             });
 
             strawberryGrid.innerHTML = html;
-            showLoading(100);
+            showLoading(75);
+
+            const fruitsGrid = document.getElementById('fruitsGrid');
+            let fruitsHtml = '';
+
+            FRUITS_ITEMS.forEach(item => {
+                fruitsHtml += `
+                    <div class="menu-item">
+                        <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy">
+                        <div class="item-content">
+                            <div class="item-name">${item.emoji} ${item.name}</div>
+                            <div class="item-desc">${item.desc}</div>
+                            <div class="item-price">
+                                ${item.price} ₽
+                                ${item.oldPrice ? `<span class="item-old-price">${item.oldPrice} ₽</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            fruitsGrid.innerHTML = fruitsHtml;
+            showLoading(85);
+
+            const drinksGrid = document.getElementById('drinksGrid');
+            let drinksHtml = '';
+
+            DRINK_ITEMS.forEach(item => {
+                drinksHtml += `
+                    <div class="drink-item">
+                        <div class="drink-icon">
+                            <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" loading="lazy">
+                        </div>
+                        <div class="drink-info">
+                            <h4>${item.name}</h4>
+                            <div class="drink-desc">${item.desc}</div>
+                        </div>
+                        <div>
+                            ${item.oldPrice ? `<span class="drink-old-price">${item.oldPrice} ₽</span>` : ''}
+                            <span class="drink-price">${item.price} ₽</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            drinksGrid.innerHTML = drinksHtml;
+            showLoading(95);
+        }
+
+        // ================================================================
+        // ===== NAVIGATION =====
+        // ================================================================
+        function switchSection(section) {
+            document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
+            document.getElementById('section-' + section).style.display = 'block';
+            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.chip[data-section="${section}"]`).classList.add('active');
         }
 
         // ================================================================
@@ -1014,13 +1127,6 @@
             setTimeout(() => {
                 loadMap();
             }, 400);
-            
-            document.querySelectorAll('.map-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    return false;
-                });
-            });
         });
 
         document.addEventListener('scroll', function() {
@@ -1033,8 +1139,7 @@
 
         console.log('🍓 Меню-страница загружена');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
-        console.log('📱 Нажмите "Где я?" для определения местоположения');
-        console.log('🚶 Пеший маршрут до киоска');
+        console.log('🚶 Нажмите "Маршрут до киоска" для построения пешего маршрута');
     </script>
 
 </body>
