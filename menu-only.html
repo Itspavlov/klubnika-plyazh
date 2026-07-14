@@ -422,62 +422,6 @@
             font-weight: 700;
         }
 
-        /* ===== CHIPS NAV ===== */
-        .chips-nav {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            padding: 4px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .chips-nav .chip {
-            flex: 1;
-            padding: 10px 8px;
-            border-radius: var(--radius-lg);
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            letter-spacing: -0.2px;
-        }
-
-        .chips-nav .chip i {
-            font-size: 16px;
-        }
-
-        .chips-nav .chip.active {
-            background: #FFFFFF;
-            color: var(--primary);
-            font-weight: 600;
-            box-shadow: var(--shadow);
-        }
-
-        .chips-nav .chip.main-chip {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-        }
-
-        .chips-nav .chip.main-chip.active {
-            box-shadow: 0 6px 16px rgba(255, 71, 87, 0.4);
-            transform: scale(1.02);
-        }
-
         /* ===== MENU GRID ===== */
         .menu-grid {
             display: grid;
@@ -560,74 +504,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        /* ===== DRINKS ===== */
-        .drinks-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .drink-item {
-            display: flex;
-            align-items: center;
-            background: #FFFFFF;
-            padding: 14px 16px;
-            border-radius: var(--radius-lg);
-            border: none;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-            gap: 12px;
-        }
-
-        .drink-item .drink-icon {
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .drink-item .drink-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .drink-item .drink-info {
-            flex: 1;
-        }
-
-        .drink-item .drink-info h4 {
-            font-size: 15px;
-            color: var(--text-dark);
-            font-weight: 600;
-            letter-spacing: -0.2px;
-        }
-
-        .drink-item .drink-info .drink-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .drink-item .drink-price {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .drink-item .drink-old-price {
-            color: var(--text-muted);
-            font-size: 13px;
-            text-decoration: line-through;
-            margin-right: 6px;
-        }
-
         /* ===== SECTION TITLE ===== */
         .section-title {
             font-size: 18px;
@@ -698,10 +574,6 @@
             .menu-grid {
                 grid-template-columns: 1fr;
             }
-            .chips-nav .chip {
-                font-size: 11px;
-                padding: 8px 6px;
-            }
         }
 
         .menu-section {
@@ -743,7 +615,7 @@
                 <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
             </h1>
             <p class="subtitle">
-                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
+                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде
                 <span class="delivery-time">⏱️ за 15 минут!</span>
             </p>
         </header>
@@ -787,37 +659,11 @@
             </div>
         </div>
 
-        <div class="chips-nav" id="menuAnchor">
-            <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
-                <i class="fas fa-apple-alt"></i>Фрукты
-            </button>
-            <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')">
-                <i class="fas fa-strawberry"></i> Клубника
-            </button>
-            <button class="chip" data-section="drinks" onclick="switchSection('drinks')">
-                <i class="fas fa-mug-saucer"></i> Напитки
-            </button>
-        </div>
-
         <div class="menu-section active" id="section-strawberry">
             <div class="section-title">
                 <i class="fas fa-strawberry"></i> Клубника в шоколаде
             </div>
             <div class="menu-grid" id="strawberryGrid"></div>
-        </div>
-
-        <div class="menu-section" id="section-fruits" style="display: none;">
-            <div class="section-title">
-                <i class="fas fa-apple-alt"></i> Свежие фрукты
-            </div>
-            <div class="menu-grid" id="fruitsGrid"></div>
-        </div>
-
-        <div class="menu-section" id="section-drinks" style="display: none;">
-            <div class="section-title">
-                <i class="fas fa-mug-saucer"></i> Напитки и перекус
-            </div>
-            <div class="drinks-grid" id="drinksGrid"></div>
         </div>
 
         <div class="footer">
@@ -874,8 +720,8 @@
             if (autoScrollDone) return;
             autoScrollDone = true;
 
-            const menuAnchor = document.getElementById('menuAnchor');
-            if (!menuAnchor) return;
+            const menuSection = document.getElementById('section-strawberry');
+            if (!menuSection) return;
 
             const hint = document.getElementById('scrollHint');
             if (hint) {
@@ -883,7 +729,7 @@
                 setTimeout(() => { hint.style.display = 'none'; }, 500);
             }
 
-            const menuPosition = menuAnchor.getBoundingClientRect().top + window.pageYOffset;
+            const menuPosition = menuSection.getBoundingClientRect().top + window.pageYOffset;
 
             setTimeout(() => {
                 window.scrollTo({
@@ -906,7 +752,6 @@
 
                 if (!iframe || !placeholder) return;
 
-                // Используем статическую карту с маркером киоска
                 const staticMapUrl = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
                 
                 iframe.src = staticMapUrl;
@@ -920,7 +765,6 @@
                     setTimeout(autoScrollToMenu, 800);
                 };
 
-                // Fallback если карта не загрузилась
                 setTimeout(() => {
                     if (!mapLoaded) {
                         iframe.style.display = 'block';
@@ -937,7 +781,6 @@
 
         // ===== ОПРЕДЕЛЕНИЕ МЕСТОПОЛОЖЕНИЯ =====
         function getMyLocation(event) {
-            // Предотвращаем перезагрузку страницы
             if (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -971,7 +814,6 @@
                     if (text) text.innerHTML = '✅ Ваше местоположение определено';
                     if (btn) btn.classList.remove('loading');
 
-                    // Автоматически строим маршрут после определения местоположения
                     setTimeout(() => {
                         buildWalkRoute();
                     }, 500);
@@ -1000,15 +842,13 @@
             return false;
         }
 
-        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
+        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
         function buildWalkRoute(event) {
-            // Предотвращаем перезагрузку страницы
             if (event) {
                 event.preventDefault();
                 event.stopPropagation();
             }
             
-            // Предотвращаем множественные вызовы
             if (isBuildingRoute) return false;
             isBuildingRoute = true;
             
@@ -1025,62 +865,59 @@
                 return false;
             }
 
-            // Если местоположение не определено — показываем метку киоска
             if (!userLocation) {
                 if (dot) dot.className = 'status-dot error';
                 if (statusText) statusText.textContent = '📍 Сначала нажмите "Где я?" для определения местоположения';
                 if (status) status.classList.add('show');
                 if (routeInfo) routeInfo.classList.remove('show');
                 
-                // Показываем статическую карту с киоском
                 const staticMapUrl = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
-                
-                // Безопасное обновление iframe
-                if (iframe.src !== staticMapUrl) {
-                    iframe.src = 'about:blank';
-                    setTimeout(() => {
-                        iframe.src = staticMapUrl;
-                    }, 100);
-                }
+                iframe.src = staticMapUrl;
 
                 setTimeout(() => {
                     if (status) status.classList.remove('show');
                 }, 4000);
 
-                // Прокручиваем к карте
-                const mapCard = document.querySelector('.map-card');
-                if (mapCard) {
-                    const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
-                    setTimeout(() => {
-                        window.scrollTo({
-                            top: mapPosition - 20,
-                            behavior: 'smooth'
-                        });
-                    }, 300);
-                }
+                scrollToMap();
                 
                 isBuildingRoute = false;
                 return false;
             }
 
-            // Строим пеший маршрут
-            const routeUrl = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pedestrian&z=16`;
+            const routeUrl = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=15`;
+            const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=15`;
             
-            // Безопасное обновление iframe
-            if (iframe.src !== routeUrl) {
-                iframe.src = 'about:blank';
-                setTimeout(() => {
-                    iframe.src = routeUrl;
-                }, 100);
-            }
+            iframe.src = routeUrl;
 
-            // Обновляем UI
-            if (routeInfo) routeInfo.classList.add('show');
-            if (routeText) routeText.innerHTML = '<strong>🚶 Пешком</strong> от вас до киоска <strong>🍓 Strawberry in Chocolate</strong>';
+            if (routeInfo) {
+                routeInfo.classList.add('show');
+                routeInfo.style.cursor = 'pointer';
+                routeInfo.onclick = function() {
+                    window.open(yandexMapsUrl, '_blank');
+                };
+            }
+            
+            if (routeText) {
+                routeText.innerHTML = '<strong>🚶 Пеший маршрут</strong> от вас до киоска <strong>🍓 Strawberry in Chocolate</strong><br><small style="color: #16A34A;">👆 Нажмите здесь, чтобы открыть в Яндекс.Картах</small>';
+            }
+            
             if (status) status.classList.remove('show');
             if (walkBtn) walkBtn.classList.add('active');
 
-            // Прокручиваем к карте
+            scrollToMap();
+            
+            setTimeout(() => {
+                window.open(yandexMapsUrl, '_blank');
+            }, 1500);
+            
+            setTimeout(() => {
+                isBuildingRoute = false;
+            }, 2000);
+            
+            return false;
+        }
+
+        function scrollToMap() {
             const mapCard = document.querySelector('.map-card');
             if (mapCard) {
                 const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
@@ -1091,46 +928,24 @@
                     });
                 }, 300);
             }
-            
-            // Сбрасываем флаг через небольшую задержку
-            setTimeout(() => {
-                isBuildingRoute = false;
-            }, 1000);
-            
-            return false;
         }
 
         // ================================================================
         // ===== MENU DATA =====
         // ================================================================
-        const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, oldPrice: null, volume: '300 мл', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
-            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, oldPrice: null, volume: '300 мл', image: 'images/tiffani.jpg', badge: '✨ Новинка', badgeColor: '#4ADE80' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, oldPrice: null, volume: '300 мл', image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
-        ];
-
         const ROMANTIC_ITEM = {
             id: '9', name: 'Для влюбленных', desc: '2 стаканчика: Тиффани + Классика',
             price: 699, oldPrice: 770, volume: '300 мл',
             image: 'images/romantic.jpg', badge: '❤️ Романтика', badgeColor: '#E91E63'
         };
 
-        const FRUITS_ITEMS = [
-            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, oldPrice: null, volume: '300 мл', image: 'images/watermelon.jpg', emoji: '🍉' },
-            { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, oldPrice: null, volume: '300 мл', image: 'images/melon.jpg', emoji: '🍈' },
-            { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, oldPrice: null, volume: '200 мл', image: 'images/raspberry.jpg', emoji: '🍓' },
-            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, oldPrice: null, volume: '200 мл', image: 'images/blackberry.jpg', emoji: '🫐' },
-            { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, oldPrice: null, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
-        ];
-
-        const DRINK_ITEMS = [
-            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, oldPrice: null, image: 'images/limonad.webp', emoji: '🍋' },
-            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, oldPrice: null, image: 'images/kola.jpg', emoji: '🥤' },
-            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, oldPrice: null, image: 'images/pivo.webp', emoji: '🍺' },
-            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, oldPrice: null, image: 'images/shaurma.webp', emoji: '🌯' }
+        const STRAWBERRY_ITEMS = [
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
+            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 380, oldPrice: null, volume: '300 мл', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
+            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 420, oldPrice: null, volume: '300 мл', image: 'images/tiffani.jpg', badge: '✨ Новинка', badgeColor: '#4ADE80' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, oldPrice: null, volume: '300 мл', image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         // ================================================================
@@ -1144,7 +959,7 @@
             
             let html = '';
 
-            // Добавляем романтический набор первым
+            // Романтический набор
             html += `
                 <div class="menu-item">
                     ${ROMANTIC_ITEM.badge ? `<span class="badge" style="color: ${ROMANTIC_ITEM.badgeColor || 'var(--primary)'};">${ROMANTIC_ITEM.badge}</span>` : ''}
@@ -1160,7 +975,7 @@
                 </div>
             `;
 
-            // Добавляем остальные товары с клубникой
+            // Остальные товары
             STRAWBERRY_ITEMS.forEach(item => {
                 html += `
                     <div class="menu-item">
@@ -1179,73 +994,7 @@
             });
 
             strawberryGrid.innerHTML = html;
-            showLoading(75);
-
-            // Рендерим фрукты
-            const fruitsGrid = document.getElementById('fruitsGrid');
-            if (fruitsGrid) {
-                let fruitsHtml = '';
-                FRUITS_ITEMS.forEach(item => {
-                    fruitsHtml += `
-                        <div class="menu-item">
-                            <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23fce4ec%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E${item.emoji}%3C/text%3E%3C/svg%3E'">
-                            <div class="item-content">
-                                <div class="item-name">${item.emoji} ${item.name}</div>
-                                <div class="item-desc">${item.desc}</div>
-                                <div class="item-price">
-                                    ${item.price} ₽
-                                    ${item.oldPrice ? `<span class="item-old-price">${item.oldPrice} ₽</span>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                fruitsGrid.innerHTML = fruitsHtml;
-            }
-            
-            showLoading(85);
-
-            // Рендерим напитки
-            const drinksGrid = document.getElementById('drinksGrid');
-            if (drinksGrid) {
-                let drinksHtml = '';
-                DRINK_ITEMS.forEach(item => {
-                    drinksHtml += `
-                        <div class="drink-item">
-                            <div class="drink-icon">
-                                <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'" loading="lazy">
-                            </div>
-                            <div class="drink-info">
-                                <h4>${item.name}</h4>
-                                <div class="drink-desc">${item.desc}</div>
-                            </div>
-                            <div>
-                                ${item.oldPrice ? `<span class="drink-old-price">${item.oldPrice} ₽</span>` : ''}
-                                <span class="drink-price">${item.price} ₽</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                drinksGrid.innerHTML = drinksHtml;
-            }
-            
-            showLoading(95);
-        }
-
-        // ================================================================
-        // ===== NAVIGATION =====
-        // ================================================================
-        function switchSection(section) {
-            document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
-            const targetSection = document.getElementById('section-' + section);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-            }
-            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
-            const targetChip = document.querySelector(`.chip[data-section="${section}"]`);
-            if (targetChip) {
-                targetChip.classList.add('active');
-            }
+            showLoading(100);
         }
 
         // ================================================================
@@ -1266,7 +1015,6 @@
                 loadMap();
             }, 400);
             
-            // Добавляем обработчики для предотвращения перезагрузки
             document.querySelectorAll('.map-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1286,7 +1034,7 @@
         console.log('🍓 Меню-страница загружена');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
         console.log('📱 Нажмите "Где я?" для определения местоположения');
-        console.log('🚶 Только пеший маршрут до киоска');
+        console.log('🚶 Пеший маршрут до киоска');
     </script>
 
 </body>
