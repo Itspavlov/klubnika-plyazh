@@ -919,7 +919,8 @@
                 const iframe = document.getElementById('mapIframe');
                 const placeholder = document.getElementById('mapPlaceholder');
 
-                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
+                const name = encodeURIComponent('🍓 Strawberry in Chocolate');
+                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag&text=${name}`;
 
                 iframe.onload = function() {
                     showLoading(100);
@@ -1025,12 +1026,32 @@
 
             // Проверяем, есть ли местоположение пользователя
             if (!userLocation) {
+                // Показываем сообщение
                 dot.className = 'status-dot error';
                 statusText.textContent = '📍 Сначала нажмите "Где я?" для определения местоположения';
                 status.classList.add('show');
                 routeInfo.classList.remove('show');
-                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
-                setTimeout(() => { status.classList.remove('show'); }, 4000);
+
+                // Показываем карту с меткой киоска
+                const name = encodeURIComponent('🍓 Strawberry in Chocolate');
+                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag&text=${name}`;
+
+                // Скрываем сообщение через 4 секунды
+                setTimeout(() => {
+                    status.classList.remove('show');
+                }, 4000);
+
+                // Прокручиваем к карте, чтобы пользователь увидел метку
+                const mapCard = document.querySelector('.map-card');
+                if (mapCard) {
+                    const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: mapPosition - 20,
+                            behavior: 'smooth'
+                        });
+                    }, 300);
+                }
                 return;
             }
 
@@ -1038,9 +1059,9 @@
             iframe.src = 'about:blank';
 
             // Формируем URL для маршрута
-            // pedestrian — пешком, auto — на авто
             const routeType = mode === 'pedestrian' ? 'pedestrian' : 'auto';
-            const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=${routeType}&z=16`;
+            const name = encodeURIComponent('🍓 Strawberry in Chocolate');
+            const url = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=${routeType}&z=16&text=${name}`;
 
             // Загружаем карту с задержкой
             setTimeout(() => {
@@ -1049,7 +1070,7 @@
 
             // Показываем информацию о маршруте
             routeInfo.classList.add('show');
-            routeText.innerHTML = `<strong>${modeLabel}</strong> от вас до киоска`;
+            routeText.innerHTML = `<strong>${modeLabel}</strong> от вас до киоска <strong>🍓 Strawberry in Chocolate</strong>`;
             status.classList.remove('show');
 
             // Прокручиваем к карте
@@ -1230,7 +1251,7 @@
         console.log('🔄 Автоматическая прокрутка к меню включена');
         console.log('📱 Нажмите "Где я?" для определения местоположения');
         console.log('🚶 Доступны маршруты: пешком и на авто');
-        console.log('📍 При нажатии на маршрут карта сразу показывает путь');
+        console.log('📍 При нажатии на маршрут без геолокации — показывает метку киоска');
     </script>
 
 </body>
