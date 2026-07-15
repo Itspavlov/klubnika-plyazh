@@ -2298,7 +2298,7 @@
             sessionExpiresAt: null,
             chatStartTime: null,
             chatTimerShown: false,
-            userLocation: null // Добавляем геолокацию в состояние
+            userLocation: null
         };
 
         let selectedPayment = 'cash';
@@ -2347,11 +2347,9 @@
                 overlay.classList.remove('open');
                 document.body.style.overflow = '';
             }
-            // Если есть отложенное добавление товара - выполняем его
             if (window._pendingAddToCart) {
                 const item = window._pendingAddToCart;
                 window._pendingAddToCart = null;
-                // Проверяем, есть ли такой товар уже в корзине
                 const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
                 if (existing) {
                     existing.quantity += item.quantity || 1;
@@ -2371,62 +2369,59 @@
         // ================================================================
 
         function getUserLocation() {
-    return new Promise((resolve) => {
-        // Если геолокация уже есть — возвращаем сразу
-        if (state.userLocation) {
-            resolve(state.userLocation);
-            return;
-        }
-
-        if (!navigator.geolocation) {
-            console.warn('Геолокация не поддерживается браузером');
-            showNotification('⚠️ Ваш браузер не поддерживает геолокацию');
-            resolve(null);
-            return;
-        }
-
-        // Показываем уведомление, что запрашиваем геолокацию
-        showNotification('📍 Запрашиваем ваше местоположение...');
-
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                const location = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                state.userLocation = location;
-                console.log('📍 Геолокация получена:', location.lat, location.lng);
-                showNotification('✅ Местоположение определено!');
-                resolve(location);
-            },
-            function(error) {
-                let errorMessage = '❌ Не удалось определить местоположение';
-                if (error.code === 1) {
-                    errorMessage = '❌ Разрешите доступ к геолокации в настройках браузера';
-                } else if (error.code === 2) {
-                    errorMessage = '❌ Сигнал GPS слабый';
-                } else if (error.code === 3) {
-                    errorMessage = '⏳ Превышено время ожидания';
+            return new Promise((resolve) => {
+                if (state.userLocation) {
+                    resolve(state.userLocation);
+                    return;
                 }
-                console.warn('⚠️ Ошибка геолокации:', errorMessage);
-                showNotification(errorMessage);
-                resolve(null);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            }
-        );
-    });
 
+                if (!navigator.geolocation) {
+                    console.warn('Геолокация не поддерживается браузером');
+                    showNotification('⚠️ Ваш браузер не поддерживает геолокацию');
+                    resolve(null);
+                    return;
+                }
+
+                showNotification('📍 Запрашиваем ваше местоположение...');
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const location = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        state.userLocation = location;
+                        console.log('📍 Геолокация получена:', location.lat, location.lng);
+                        showNotification('✅ Местоположение определено!');
+                        resolve(location);
+                    },
+                    function(error) {
+                        let errorMessage = '❌ Не удалось определить местоположение';
+                        if (error.code === 1) {
+                            errorMessage = '❌ Разрешите доступ к геолокации в настройках браузера';
+                        } else if (error.code === 2) {
+                            errorMessage = '❌ Сигнал GPS слабый';
+                        } else if (error.code === 3) {
+                            errorMessage = '⏳ Превышено время ожидания';
+                        }
+                        console.warn('⚠️ Ошибка геолокации:', errorMessage);
+                        showNotification(errorMessage);
+                        resolve(null);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
 
         // ================================================================
         // ===== PHONE VALIDATION =====
         // ================================================================
         function validatePhoneInput(input) {
             let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
-            
             if (value.match(/^[7-8]\d{0,10}$/)) {
                 if (value.length === 11 && (value.startsWith('7') || value.startsWith('8'))) {
                     input.classList.remove('invalid');
@@ -2438,7 +2433,6 @@
             } else {
                 input.classList.remove('invalid');
             }
-            
             input.value = value;
         }
 
@@ -2540,9 +2534,7 @@
         // ================================================================
         function isOnline() { return navigator.onLine; }
 
-        function updateOnlineStatus() {
-            // Функция оставлена для совместимости, но индикатор скрыт
-        }
+        function updateOnlineStatus() {}
 
         window.addEventListener('online', () => { updateOnlineStatus(); });
         window.addEventListener('offline', () => { updateOnlineStatus(); });
@@ -2552,7 +2544,6 @@
         // ================================================================
         function isWorkingTime() {
             if (FORCE_WORKING_TIME) return true;
-            
             let now;
             if (manualTime) {
                 now = new Date();
@@ -2565,18 +2556,15 @@
                     now = new Date();
                 }
             }
-            
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const currentMinutes = hours * 60 + minutes;
             const startMinutes = WORK_HOURS.start * 60;
             const endMinutes = WORK_HOURS.end * 60;
-            
             let normalizedCurrent = currentMinutes;
             if (currentMinutes < startMinutes) {
                 normalizedCurrent = currentMinutes + 24 * 60;
             }
-            
             return normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
         }
 
@@ -2620,96 +2608,91 @@
             strawberry.className = 'flying-strawberry';
             strawberry.innerHTML = '🍓';
             document.body.appendChild(strawberry);
-            
             const startX = clickEvent.clientX;
             const startY = clickEvent.clientY;
-            
             strawberry.style.left = startX + 'px';
             strawberry.style.top = startY + 'px';
             strawberry.style.transform = 'translate(-50%, -50%) scale(1)';
-            
             const cartIcon = document.getElementById('tabCart');
             const cartRect = cartIcon.getBoundingClientRect();
             const endX = cartRect.left + cartRect.width / 2;
             const endY = cartRect.top + cartRect.height / 2;
-            
             requestAnimationFrame(() => {
                 strawberry.style.left = endX + 'px';
                 strawberry.style.top = endY + 'px';
                 strawberry.style.transform = 'translate(-50%, -50%) scale(0.3)';
                 strawberry.style.opacity = '0.6';
             });
-            
             setTimeout(() => {
                 strawberry.remove();
             }, 800);
         }
-// ================================================================
-// ===== MODES =====
-// ================================================================
-function showNoAccess() {
-    document.getElementById('noAccessMode').style.display = 'block';
-    document.getElementById('bungaloMode').style.display = 'none';
-    document.getElementById('closedMode').style.display = 'none';
-    document.getElementById('techBreakMode').style.display = 'none';
-    document.getElementById('bottomTabBar').style.display = 'none';
-}
 
-function showBungaloMode(bungalowNumber, expiresAt) {
-    document.getElementById('noAccessMode').style.display = 'none';
-    document.getElementById('bungaloMode').style.display = 'block';
-    document.getElementById('closedMode').style.display = 'none';
-    document.getElementById('techBreakMode').style.display = 'none';
-    document.getElementById('bottomTabBar').style.display = 'flex';
+        // ================================================================
+        // ===== MODES =====
+        // ================================================================
+        function showNoAccess() {
+            document.getElementById('noAccessMode').style.display = 'block';
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'none';
+        }
 
-    state.bungalowNumber = bungalowNumber;
-    isPickupMode = false;
+        function showBungaloMode(bungalowNumber, expiresAt) {
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'block';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'flex';
 
-    const savedAuth = getUserAuth();
-    if (savedAuth) {
-        document.getElementById('customerName').value = savedAuth.name || '';
-        document.getElementById('customerPhone').value = savedAuth.phone || '';
-    }
+            state.bungalowNumber = bungalowNumber;
+            isPickupMode = false;
 
-    if (bungalowNumber > 0) {
-        document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
-        document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
-        document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
-        document.getElementById('pickupBannerContainer').innerHTML = '';
-    }
+            const savedAuth = getUserAuth();
+            if (savedAuth) {
+                document.getElementById('customerName').value = savedAuth.name || '';
+                document.getElementById('customerPhone').value = savedAuth.phone || '';
+            }
 
-    // ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ ПРИ ЗАХОДЕ
-    setTimeout(() => {
-        getUserLocation();
-    }, 1500);
+            if (bungalowNumber > 0) {
+                document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
+                document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
+                document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
+                document.getElementById('pickupBannerContainer').innerHTML = '';
+            }
 
-    loadSettings().then(settings => {
-        if (settings?.technicalBreak) { showTechBreak(); return; }
-        if (!isWorkingTime()) { showClosedMode(); return; }
-        renderMenu(settings || state.settings);
-        initCart();
-        loadReviews();
-        startReviewCheck();
-    });
-    setTimeout(updateOrdersBadge, 1000);
-}
+            setTimeout(() => {
+                getUserLocation();
+            }, 1500);
 
-function showTechBreak() {
-    document.getElementById('noAccessMode').style.display = 'none';
-    document.getElementById('bungaloMode').style.display = 'none';
-    document.getElementById('closedMode').style.display = 'none';
-    document.getElementById('techBreakMode').style.display = 'block';
-    document.getElementById('bottomTabBar').style.display = 'none';
-}
+            loadSettings().then(settings => {
+                if (settings?.technicalBreak) { showTechBreak(); return; }
+                if (!isWorkingTime()) { showClosedMode(); return; }
+                renderMenu(settings || state.settings);
+                initCart();
+                loadReviews();
+                startReviewCheck();
+            });
+            setTimeout(updateOrdersBadge, 1000);
+        }
 
-function showClosedMode() {
-    document.getElementById('noAccessMode').style.display = 'none';
-    document.getElementById('bungaloMode').style.display = 'none';
-    document.getElementById('closedMode').style.display = 'block';
-    document.getElementById('techBreakMode').style.display = 'none';
-    document.getElementById('bottomTabBar').style.display = 'none';
-    document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-}
+        function showTechBreak() {
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'block';
+            document.getElementById('bottomTabBar').style.display = 'none';
+        }
+
+        function showClosedMode() {
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('closedMode').style.display = 'block';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'none';
+            document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+        }
 
         // ================================================================
         // ===== MAP =====
@@ -2768,20 +2751,15 @@ function showClosedMode() {
 
         function confirmAge() {
             if (!document.getElementById('ageCheckbox').checked) return;
-            
             const product = pendingAlcoholProduct;
-            
             if (!product) {
                 closeAgeVerify();
                 return;
             }
-            
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            
             closeAgeVerify();
             pendingAlcoholProduct = null;
-            
             if (!name || !phone || !isValidPhone(phone)) {
                 if (phone && !isValidPhone(phone)) {
                     showNotification('⚠️ Введите корректный номер телефона!', 'error');
@@ -2789,8 +2767,6 @@ function showClosedMode() {
                 openAuthModal({ ...product, isAlcohol: true });
                 return;
             }
-            
-            // Проверяем, показывали ли уже доверительное окно
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
             if (!hasTrustShown(phoneClean)) {
                 setTrustShown(phoneClean);
@@ -2807,7 +2783,6 @@ function showClosedMode() {
                 showTrustModal();
                 return;
             }
-            
             addToCart({
                 id: product.id,
                 name: product.name,
@@ -2819,7 +2794,6 @@ function showClosedMode() {
                 isAlcohol: true
             });
             showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
-            
             const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
             animateStrawberryToCart(fakeEvent);
         }
@@ -2892,7 +2866,6 @@ function showClosedMode() {
                 }
                 const displayItem = customItem || item;
                 const available = settings.menuItems[item.id] !== false;
-                
                 html += `
                     <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
                         ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
@@ -2907,7 +2880,6 @@ function showClosedMode() {
                 `;
             });
 
-            // Кастомные позиции клубники из админки
             if (settings.customItems) {
                 settings.customItems.forEach(ci => {
                     if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id) && ci.id !== ROMANTIC_ITEM.id) {
@@ -2940,7 +2912,6 @@ function showClosedMode() {
                 }
                 const displayItem = customItem || item;
                 const available = settings.menuItems[item.id] !== false;
-                
                 fruitsHtml += `
                     <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="фрукты" data-has-toppings="false" data-volume="${displayItem.volume || item.volume}">
                         <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
@@ -2954,7 +2925,6 @@ function showClosedMode() {
                 `;
             });
 
-            // Кастомные фрукты из админки
             if (settings.customItems) {
                 settings.customItems.forEach(ci => {
                     if (ci.category === 'fruits' && !FRUITS_ITEMS.find(f => f.id === ci.id)) {
@@ -2984,7 +2954,6 @@ function showClosedMode() {
                 }
                 const displayItem = customItem || item;
                 const available = settings.menuItems[item.id] !== false;
-                
                 drinksHtml += `
                     <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток" data-alcohol="${item.alcohol ? 'true' : 'false'}">
                         <div class="drink-icon" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')">
@@ -3000,7 +2969,6 @@ function showClosedMode() {
                 `;
             });
 
-            // Кастомные напитки из админки
             if (settings.customItems) {
                 settings.customItems.forEach(ci => {
                     if (ci.category === 'drinks' && !DRINK_ITEMS.find(d => d.id === ci.id)) {
@@ -3057,19 +3025,17 @@ function showClosedMode() {
 
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone || !isValidPhone(phone)) { 
+            if (!name || !phone || !isValidPhone(phone)) {
                 if (phone && !isValidPhone(phone)) {
                     showNotification('⚠️ Введите корректный номер телефона!', 'error');
                 }
-                openAuthModal(product); 
-                return; 
+                openAuthModal(product);
+                return;
             }
 
-            // Проверяем, показывали ли уже доверительное окно для этого телефона
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
             if (!hasTrustShown(phoneClean)) {
                 setTrustShown(phoneClean);
-                // Сохраняем товар для добавления после закрытия модалки
                 window._pendingAddToCart = {
                     id: product.id,
                     name: product.name,
@@ -3098,31 +3064,26 @@ function showClosedMode() {
             e.stopPropagation();
             const item = this.closest('.drink-item');
             if (!item) return;
-            
             const product = {
                 id: parseInt(item.dataset.id),
                 name: item.dataset.name,
                 price: parseInt(item.dataset.price),
                 category: item.dataset.category || 'напиток'
             };
-            
             const isAlcohol = item.dataset.alcohol === 'true';
             if (isAlcohol) {
                 openAgeVerify(product);
                 return;
             }
-            
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone || !isValidPhone(phone)) { 
+            if (!name || !phone || !isValidPhone(phone)) {
                 if (phone && !isValidPhone(phone)) {
                     showNotification('⚠️ Введите корректный номер телефона!', 'error');
                 }
-                openAuthModal(null); 
-                return; 
+                openAuthModal(null);
+                return;
             }
-
-            // Проверяем, показывали ли уже доверительное окно для этого телефона
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
             if (!hasTrustShown(phoneClean)) {
                 setTrustShown(phoneClean);
@@ -3138,7 +3099,6 @@ function showClosedMode() {
                 showTrustModal();
                 return;
             }
-            
             addToCart({
                 id: product.id,
                 name: product.name,
@@ -3171,24 +3131,19 @@ function showClosedMode() {
         function confirmAuth() {
             const name = document.getElementById('authName').value.trim();
             const phone = document.getElementById('authPhone').value.trim();
-            
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
             if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
-            if (!isValidPhone(phone)) { 
-                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error'); 
-                return; 
+            if (!isValidPhone(phone)) {
+                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error');
+                return;
             }
-            
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            
             document.getElementById('customerName').value = name;
             document.getElementById('customerPhone').value = phoneClean;
             saveUserAuth(name, phoneClean);
             closeAuthModal();
-            
             if (pendingProduct) {
                 if (pendingProduct.isAlcohol) {
-                    // Проверяем доверительное окно для алкоголя
                     if (!hasTrustShown(phoneClean)) {
                         setTrustShown(phoneClean);
                         window._pendingAddToCart = {
@@ -3219,7 +3174,6 @@ function showClosedMode() {
                     const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
                     animateStrawberryToCart(fakeEvent);
                 } else if (!pendingProduct.hasToppings) {
-                    // Проверяем доверительное окно
                     if (!hasTrustShown(phoneClean)) {
                         setTrustShown(phoneClean);
                         window._pendingAddToCart = {
@@ -3301,11 +3255,8 @@ function showClosedMode() {
             let finalPrice = product.price + (product.isRomantic ? 0 : topping.price);
             let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
             const itemName = product.isRomantic ? `${product.name} (2 стаканчика)` : `${product.name}${toppingText}`;
-            
             const phone = document.getElementById('customerPhone').value.trim();
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            
-            // Проверяем доверительное окно
             if (!hasTrustShown(phoneClean)) {
                 setTrustShown(phoneClean);
                 window._pendingAddToCart = {
@@ -3322,7 +3273,6 @@ function showClosedMode() {
                 showTrustModal();
                 return;
             }
-            
             addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category, topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
             closeToppingModal();
             showNotification(`✅ ${itemName} добавлен!`);
@@ -3334,7 +3284,6 @@ function showClosedMode() {
         // ===== CART =====
         // ================================================================
 
-        // ===== СОХРАНЕНИЕ КОРЗИНЫ В LOCALSTORAGE =====
         function saveCart() {
             try {
                 localStorage.setItem('strawberry_cart', JSON.stringify(state.cart));
@@ -3359,10 +3308,10 @@ function showClosedMode() {
 
         function addToCart(item) {
             const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
-            if (existing) { 
-                existing.quantity += item.quantity || 1; 
-            } else { 
-                state.cart.push({ ...item, quantity: item.quantity || 1 }); 
+            if (existing) {
+                existing.quantity += item.quantity || 1;
+            } else {
+                state.cart.push({ ...item, quantity: item.quantity || 1 });
             }
             saveCart();
             updateCart();
@@ -3412,11 +3361,11 @@ function showClosedMode() {
         function removeItem(index) {
             const item = state.cart[index];
             if (!item) return;
-            if (confirm(`Удалить "${item.name}" из корзины?`)) { 
-                state.cart.splice(index, 1); 
+            if (confirm(`Удалить "${item.name}" из корзины?`)) {
+                state.cart.splice(index, 1);
                 saveCart();
-                updateCart(); 
-                showNotification(`🗑️ "${item.name}" удален`); 
+                updateCart();
+                showNotification(`🗑️ "${item.name}" удален`);
             }
         }
 
@@ -3452,11 +3401,10 @@ function showClosedMode() {
         }
 
         // ================================================================
-        // ===== ORDER SUBMIT (С ГЕОЛОКАЦИЕЙ) =====
+        // ===== ORDER SUBMIT =====
         // ================================================================
         async function submitOrder() {
             const bungaloNumber = state.bungalowNumber;
-            
             if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
             if (state.settings.technicalBreak) { showNotification('🔧 Технический перерыв!', 'error'); return; }
             if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00', 'error'); return; }
@@ -3464,7 +3412,6 @@ function showClosedMode() {
 
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            
             if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!', 'error'); return; }
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
             if (!phone || !isValidPhone(phone)) { showNotification('⚠️ Введите корректный номер телефона!', 'error'); return; }
@@ -3473,7 +3420,6 @@ function showClosedMode() {
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
             saveUserAuth(name, phoneClean);
 
-            // ===== ПОЛУЧАЕМ ГЕОЛОКАЦИЮ =====
             showNotification('📍 Определяем ваше местоположение...');
             const location = await getUserLocation();
             if (location) {
@@ -3506,18 +3452,18 @@ function showClosedMode() {
                 paymentMethod: selectedPayment,
                 paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
                 isPickup: isPickupMode || false,
-                items: state.cart.map(item => ({ 
-                    id: item.id, 
-                    name: item.name + (item.isRomantic ? ' ❤️' : '') + (item.isAlcohol ? ' 🍺 18+' : ''), 
-                    price: item.price, 
-                    quantity: item.quantity, 
-                    category: item.category || 'другое', 
-                    topping: item.toppingName || '' 
+                items: state.cart.map(item => ({
+                    id: item.id,
+                    name: item.name + (item.isRomantic ? ' ❤️' : '') + (item.isAlcohol ? ' 🍺 18+' : ''),
+                    price: item.price,
+                    quantity: item.quantity,
+                    category: item.category || 'другое',
+                    topping: item.toppingName || ''
                 })),
                 total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 timestamp: new Date().toISOString(),
                 hasAlcohol: state.cart.some(item => item.isAlcohol),
-                location: location // 👈 Добавляем координаты в заказ
+                location: location
             };
 
             const orderButton = document.getElementById('orderButton');
@@ -3554,20 +3500,17 @@ function showClosedMode() {
         }
 
         // ================================================================
-        // ===== ORDERS MODAL (FULLSCREEN) =====
+        // ===== ORDERS MODAL =====
         // ================================================================
         function openOrdersModal() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            
             document.getElementById('ordersModal').classList.add('open');
             document.getElementById('ordersPhoneInput').value = phoneClean;
             document.body.style.overflow = 'hidden';
             loadMyOrders();
-            
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabOrders').classList.add('active');
         }
@@ -3581,13 +3524,11 @@ function showClosedMode() {
 
         function loadMyOrders() {
             const phone = document.getElementById('ordersPhoneInput').value.trim();
-            if (!phone) { 
-                document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите номер телефона</div>'; 
-                return; 
+            if (!phone) {
+                document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите номер телефона</div>';
+                return;
             }
-            
             document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-spinner fa-spin" style="font-size:48px;display:block;margin-bottom:12px;"></i>Загрузка...</div>';
-
             fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
@@ -3595,7 +3536,6 @@ function showClosedMode() {
                         document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-receipt" style="font-size:48px;display:block;margin-bottom:12px;"></i>У вас пока нет заказов<br><small style="color:var(--text-muted);">Закажите что-нибудь вкусное! 🍓</small></div>';
                         return;
                     }
-                    
                     document.getElementById('ordersContent').innerHTML = data.orders.map(order => {
                         const statusMap = {
                             'ожидает': { bg: '#FFF8E1', color: '#F59E0B', icon: '🕒', text: 'Ожидает' },
@@ -3604,7 +3544,6 @@ function showClosedMode() {
                             'отменен (таймаут)': { bg: '#FFEBEE', color: '#D32F2F', icon: '⏰', text: 'Отменён (таймаут)' }
                         };
                         const st = statusMap[order.status] || statusMap['ожидает'];
-                        
                         const itemsList = order.items ? order.items.map(item => `
                             <div class="order-item-row">
                                 <div class="item-left">
@@ -3617,14 +3556,11 @@ function showClosedMode() {
                                 <div class="item-total">${item.price * item.quantity} ₽</div>
                             </div>
                         `).join('') : '';
-                        
                         const date = new Date(order.createdAt);
                         const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
                         const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                        
                         const canCancel = order.status === 'ожидает' && (new Date() - date) / 1000 / 60 <= 5;
                         const canReview = order.status === 'выполнен' && !order.reviewed;
-                        
                         let actionButtons = '';
                         if (canCancel) {
                             actionButtons += `<button class="btn-cancel-order" onclick="cancelMyOrder(${order.id}, '${phone}')">Отменить заказ</button>`;
@@ -3632,7 +3568,6 @@ function showClosedMode() {
                         if (canReview) {
                             actionButtons += `<button class="btn-review-order" onclick="openReviewModal(${order.id})">⭐ Оставить отзыв</button>`;
                         }
-                        
                         return `
                             <div class="order-card-full">
                                 <div class="order-card-header">
@@ -3644,9 +3579,7 @@ function showClosedMode() {
                                         ${st.icon} ${st.text}
                                     </span>
                                 </div>
-                                
                                 <div class="order-items-list">${itemsList}</div>
-                                
                                 <div class="order-card-footer">
                                     <div class="footer-info">
                                         ${order.paymentLabel ? '💳 ' + order.paymentLabel : ''}
@@ -3662,8 +3595,8 @@ function showClosedMode() {
                         `;
                     }).join('');
                 })
-                .catch(() => { 
-                    document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-circle" style="font-size:48px;display:block;margin-bottom:12px;"></i>Ошибка загрузки</div>'; 
+                .catch(() => {
+                    document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-circle" style="font-size:48px;display:block;margin-bottom:12px;"></i>Ошибка загрузки</div>';
                 });
         }
 
@@ -3672,8 +3605,7 @@ function showClosedMode() {
             fetch('/api/cancel-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId, phone }) })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); } 
-                    else { showNotification('❌ ' + (data.error || 'Ошибка'), 'error'); }
+                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); } else { showNotification('❌ ' + (data.error || 'Ошибка'), 'error'); }
                 })
                 .catch(() => { showNotification('❌ Ошибка соединения', 'error'); });
         }
@@ -3687,8 +3619,7 @@ function showClosedMode() {
                 .then(data => {
                     if (data.success) {
                         const activeOrders = data.orders.filter(o => o.status === 'ожидает').length;
-                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); } 
-                        else badge.classList.add('hidden');
+                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
                     }
                 })
                 .catch(() => {});
@@ -3762,7 +3693,7 @@ function showClosedMode() {
                     const res = await fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
                     const data = await res.json();
                     if (data.success && data.orders) {
-                        const completedOrders = data.orders.filter(order => 
+                        const completedOrders = data.orders.filter(order =>
                             order.status === 'выполнен' && !order.reviewed && new Date(order.createdAt).getTime() > lastOrderCheckTime
                         );
                         if (completedOrders.length > 0) {
@@ -3802,14 +3733,11 @@ function showClosedMode() {
         async function submitReview() {
             const text = document.getElementById('reviewText').value.trim();
             if (state.reviewRating === 0) { showNotification('⚠️ Поставьте оценку!', 'error'); return; }
-           if (!text) { /* комментарий не обязателен */ }
-
             const name = document.getElementById('customerName').value.trim() || 'Клиент';
             const phone = document.getElementById('customerPhone').value.trim();
             const btn = document.getElementById('submitReviewBtn');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
             btn.disabled = true;
-
             try {
                 const res = await fetch('/api/review', {
                     method: 'POST',
@@ -3853,40 +3781,30 @@ function showClosedMode() {
         // ===== SUPPORT CHAT =====
         // ================================================================
 
-        // Показать баннер с таймером
         function showChatTimerBanner() {
             const banner = document.getElementById('chatTimerBanner');
             if (!banner) return;
-            
             if (!state.chatTimerShown) {
                 state.chatTimerShown = true;
                 banner.classList.add('show');
-                
-                // Автоматически скрываем через 30 секунд, чтобы не мешал
                 setTimeout(() => {
                     banner.classList.remove('show');
                 }, 30000);
             }
         }
 
-        // Запустить таймер чата
         function startChatTimer() {
             if (chatTimerInterval) clearInterval(chatTimerInterval);
-            
             state.chatStartTime = Date.now();
             state.chatTimerShown = false;
-            
             chatTimerInterval = setInterval(() => {
-                const elapsed = (Date.now() - state.chatStartTime) / 1000 / 60; // минуты
-                
-                // Если прошло 10 минут и баннер еще не показан
+                const elapsed = (Date.now() - state.chatStartTime) / 1000 / 60;
                 if (elapsed >= 10 && !state.chatTimerShown) {
                     showChatTimerBanner();
                 }
-            }, 10000); // Проверяем каждые 10 секунд
+            }, 10000);
         }
 
-        // Остановить таймер чата
         function stopChatTimer() {
             if (chatTimerInterval) {
                 clearInterval(chatTimerInterval);
@@ -3894,44 +3812,38 @@ function showClosedMode() {
             }
             state.chatStartTime = null;
             state.chatTimerShown = false;
-            
             const banner = document.getElementById('chatTimerBanner');
             if (banner) {
                 banner.classList.remove('show');
             }
         }
 
-        // Обновить функцию открытия чата
         const originalOpenSupportChat = openSupportChat;
         openSupportChat = function() {
             originalOpenSupportChat();
             startChatTimer();
         };
 
-        // Обновить функцию закрытия чата
         const originalCloseSupportChat = closeSupportChat;
         closeSupportChat = function() {
             originalCloseSupportChat();
             stopChatTimer();
         };
 
-        // Остальные функции чата
         async function sendSupportMessage() {
             const input = document.getElementById('supportInput');
             const text = input.value.trim();
             if (!text) return;
             const phone = document.getElementById('customerPhone').value.trim();
             if (!phone) { showNotification('⚠️ Введите телефон!', 'error'); return; }
-            
             input.value = '';
             try {
-                await fetch('/api/chat-send', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) 
+                await fetch('/api/chat-send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() })
                 });
                 loadSupportMessages(phone);
-                // Сбрасываем таймер при отправке сообщения
                 stopChatTimer();
                 startChatTimer();
             } catch (e) {}
@@ -3941,14 +3853,11 @@ function showClosedMode() {
             try {
                 const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
                 const data = await res.json();
-                if (data.success) { 
+                if (data.success) {
                     renderSupportMessages(data.messages || []);
-                    // Проверяем, есть ли ответ от администратора
                     const adminMessages = (data.messages || []).filter(msg => msg.from === 'admin');
                     if (adminMessages.length > 0 && state.chatStartTime) {
-                        // Если администратор ответил - сбрасываем таймер
                         stopChatTimer();
-                        // Но не показываем баннер заново
                         const banner = document.getElementById('chatTimerBanner');
                         if (banner) {
                             banner.classList.remove('show');
@@ -3980,11 +3889,11 @@ function showClosedMode() {
         function startChatAutoUpdate(phone) {
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             chatUpdateInterval = setInterval(() => {
-                if (document.getElementById('supportChatModal')) { 
-                    loadSupportMessages(phone); 
-                } else { 
-                    clearInterval(chatUpdateInterval); 
-                    chatUpdateInterval = null; 
+                if (document.getElementById('supportChatModal')) {
+                    loadSupportMessages(phone);
+                } else {
+                    clearInterval(chatUpdateInterval);
+                    chatUpdateInterval = null;
                     stopChatTimer();
                 }
             }, 3000);
@@ -3994,9 +3903,9 @@ function showClosedMode() {
             const modal = document.getElementById('supportChatModal');
             if (modal) modal.remove();
             document.body.style.overflow = '';
-            if (chatUpdateInterval) { 
-                clearInterval(chatUpdateInterval); 
-                chatUpdateInterval = null; 
+            if (chatUpdateInterval) {
+                clearInterval(chatUpdateInterval);
+                chatUpdateInterval = null;
             }
             stopChatTimer();
         }
@@ -4005,9 +3914,7 @@ function showClosedMode() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); return; }
-            
             openSupportChat();
-            
             setTimeout(() => {
                 const input = document.getElementById('supportInput');
                 if (input) {
@@ -4021,10 +3928,8 @@ function showClosedMode() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            
             closeSupportChat();
             lastMessageTime = Date.now();
-
             const overlay = document.createElement('div');
             overlay.className = 'auth-modal-overlay open';
             overlay.id = 'supportChatModal';
@@ -4043,7 +3948,6 @@ function showClosedMode() {
                         </div>
                         <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
                     </div>
-                    <!-- ===== ТАЙМЕР БАННЕР ===== -->
                     <div id="chatTimerBanner" class="chat-timer-banner">
                         <span class="timer-icon">⏰</span>
                         <span class="timer-text">
@@ -4069,7 +3973,6 @@ function showClosedMode() {
             document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
             overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
-            
             loadSupportMessages(phone);
             startChatAutoUpdate(phone);
             startChatTimer();
@@ -4087,7 +3990,7 @@ function showClosedMode() {
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if (tab === 'menu') { 
+            if (tab === 'menu') {
                 document.getElementById('tabMenu').classList.add('active');
                 closeCart();
                 closeOrdersModal();
@@ -4199,7 +4102,6 @@ function showClosedMode() {
             }, 5000);
         }
 
-        // Закрытие доверительного модала по клику вне
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('trustModal');
             if (modal) {
@@ -4233,6 +4135,7 @@ function showClosedMode() {
         console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
         console.log('✅ Доверительное окно при первом добавлении в корзину');
         console.log('📍 Отправка геолокации при заказе');
+        console.log('📍 Автоматический запрос геолокации при заходе в бунгало');
     </script>
 
 </body>
