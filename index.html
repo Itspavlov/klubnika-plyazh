@@ -2297,7 +2297,8 @@
             bungalowNumber: null,
             sessionExpiresAt: null,
             chatStartTime: null,
-            chatTimerShown: false
+            chatTimerShown: false,
+            userLocation: null // Добавляем геолокацию в состояние
         };
 
         let selectedPayment = 'cash';
@@ -2364,6 +2365,61 @@
                 animateStrawberryToCart(fakeEvent);
             }
         }
+
+        // ================================================================
+        // ===== ГЕОЛОКАЦИЯ =====
+        // ================================================================
+
+        function getUserLocation() {
+    return new Promise((resolve) => {
+        // Если геолокация уже есть — возвращаем сразу
+        if (state.userLocation) {
+            resolve(state.userLocation);
+            return;
+        }
+
+        if (!navigator.geolocation) {
+            console.warn('Геолокация не поддерживается браузером');
+            showNotification('⚠️ Ваш браузер не поддерживает геолокацию');
+            resolve(null);
+            return;
+        }
+
+        // Показываем уведомление, что запрашиваем геолокацию
+        showNotification('📍 Запрашиваем ваше местоположение...');
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const location = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                state.userLocation = location;
+                console.log('📍 Геолокация получена:', location.lat, location.lng);
+                showNotification('✅ Местоположение определено!');
+                resolve(location);
+            },
+            function(error) {
+                let errorMessage = '❌ Не удалось определить местоположение';
+                if (error.code === 1) {
+                    errorMessage = '❌ Разрешите доступ к геолокации в настройках браузера';
+                } else if (error.code === 2) {
+                    errorMessage = '❌ Сигнал GPS слабый';
+                } else if (error.code === 3) {
+                    errorMessage = '⏳ Превышено время ожидания';
+                }
+                console.warn('⚠️ Ошибка геолокации:', errorMessage);
+                showNotification(errorMessage);
+                resolve(null);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
+}
 
         // ================================================================
         // ===== PHONE VALIDATION =====
@@ -2601,27 +2657,43 @@
         }
 
         function showBungaloMode(bungalowNumber, expiresAt) {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'flex';
+    document.getElementById('noAccessMode').style.display = 'none';
+    document.getElementById('bungaloMode').style.display = 'block';
+    document.getElementById('closedMode').style.display = 'none';
+    document.getElementById('techBreakMode').style.display = 'none';
+    document.getElementById('bottomTabBar').style.display = 'flex';
 
-            state.bungalowNumber = bungalowNumber;
-            isPickupMode = false;
+    state.bungalowNumber = bungalowNumber;
+    isPickupMode = false;
 
-            const savedAuth = getUserAuth();
-            if (savedAuth) {
-                document.getElementById('customerName').value = savedAuth.name || '';
-                document.getElementById('customerPhone').value = savedAuth.phone || '';
-            }
+    const savedAuth = getUserAuth();
+    if (savedAuth) {
+        document.getElementById('customerName').value = savedAuth.name || '';
+        document.getElementById('customerPhone').value = savedAuth.phone || '';
+    }
 
-            if (bungalowNumber > 0) {
-                document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
-                document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
-                document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
-                document.getElementById('pickupBannerContainer').innerHTML = '';
-            }
+    if (bungalowNumber > 0) {
+        document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
+        document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
+        document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
+        document.getElementById('pickupBannerContainer').innerHTML = '';
+    }
+
+    // 👇 ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ ПРИ ЗАХОДЕ
+    setTimeout(() => {
+        getUserLocation();
+    }, 1500);
+
+    loadSettings().then(settings => {
+        if (settings?.technicalBreak) { showTechBreak(); return; }
+        if (!isWorkingTime()) { showClosedMode(); return; }
+        renderMenu(settings || state.settings);
+        initCart();
+        loadReviews();
+        startReviewCheck();
+    });
+    setTimeout(updateOrdersBadge, 1000);
+}
 
             loadSettings().then(settings => {
                 if (settings?.technicalBreak) { showTechBreak(); return; }
@@ -3392,7 +3464,7 @@
         }
 
         // ================================================================
-        // ===== ORDER SUBMIT =====
+        // ===== ORDER SUBMIT (С ГЕОЛОКАЦИЕЙ) =====
         // ================================================================
         async function submitOrder() {
             const bungaloNumber = state.bungalowNumber;
@@ -3412,6 +3484,15 @@
 
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
             saveUserAuth(name, phoneClean);
+
+            // ===== ПОЛУЧАЕМ ГЕОЛОКАЦИЮ =====
+            showNotification('📍 Определяем ваше местоположение...');
+            const location = await getUserLocation();
+            if (location) {
+                showNotification('✅ Местоположение определено!');
+            } else {
+                showNotification('⚠️ Не удалось определить местоположение, заказ будет принят без геолокации');
+            }
 
             try {
                 const checkRes = await fetch('/api/my-orders', {
@@ -3447,7 +3528,8 @@
                 })),
                 total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 timestamp: new Date().toISOString(),
-                hasAlcohol: state.cart.some(item => item.isAlcohol)
+                hasAlcohol: state.cart.some(item => item.isAlcohol),
+                location: location // 👈 Добавляем координаты в заказ
             };
 
             const orderButton = document.getElementById('orderButton');
@@ -3462,6 +3544,9 @@
                             showNotification('🏖️ Заказ ждет вас в киоске!');
                         } else {
                             showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+                            if (location) {
+                                showNotification('📍 Ваше местоположение передано курьеру');
+                            }
                         }
                         state.cart = [];
                         clearSavedCart();
@@ -4159,6 +4244,7 @@
         console.log('✅ Сохранение корзины в localStorage');
         console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
         console.log('✅ Доверительное окно при первом добавлении в корзину');
+        console.log('📍 Отправка геолокации при заказе');
     </script>
 
 </body>
