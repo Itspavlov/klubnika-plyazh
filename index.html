@@ -2645,18 +2645,18 @@
             }, 800);
         }
 
-        // ================================================================
-        // ===== MODES =====
-        // ================================================================
-        function showNoAccess() {
-            document.getElementById('noAccessMode').style.display = 'block';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'none';
-        }
+      // ================================================================
+// ===== MODES =====
+// ================================================================
+function showNoAccess() {
+    document.getElementById('noAccessMode').style.display = 'block';
+    document.getElementById('bungaloMode').style.display = 'none';
+    document.getElementById('closedMode').style.display = 'none';
+    document.getElementById('techBreakMode').style.display = 'none';
+    document.getElementById('bottomTabBar').style.display = 'none';
+}
 
-        function showBungaloMode(bungalowNumber, expiresAt) {
+function showBungaloMode(bungalowNumber, expiresAt) {
     document.getElementById('noAccessMode').style.display = 'none';
     document.getElementById('bungaloMode').style.display = 'block';
     document.getElementById('closedMode').style.display = 'none';
@@ -2679,11 +2679,21 @@
         document.getElementById('pickupBannerContainer').innerHTML = '';
     }
 
-    // 👇 ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ ПРИ ЗАХОДЕ
+    // ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ ПРИ ЗАХОДЕ
     setTimeout(() => {
         getUserLocation();
     }, 1500);
 
+    loadSettings().then(settings => {
+        if (settings?.technicalBreak) { showTechBreak(); return; }
+        if (!isWorkingTime()) { showClosedMode(); return; }
+        renderMenu(settings || state.settings);
+        initCart();
+        loadReviews();
+        startReviewCheck();
+    });
+    setTimeout(updateOrdersBadge, 1000);
+}
     loadSettings().then(settings => {
         if (settings?.technicalBreak) { showTechBreak(); return; }
         if (!isWorkingTime()) { showClosedMode(); return; }

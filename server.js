@@ -174,12 +174,21 @@ app.get('/api/activate-session', async (req, res) => {
     res.json({ success: true, bungalow: b, expiresAt: exp });
 });
 
-// ===== API: ЗАКАЗЫ =====
+// ===== API: ЗАКАЗЫ (С ГЕОЛОКАЦИЕЙ) =====
 app.post('/api/order', async (req, res) => {
     if (settings.technicalBreak) return res.json({ success: false, error: '🔧 Технический перерыв!' });
     if (!isWorkingTime()) return res.json({ success: false, error: '🔒 Не принимаем заказы' });
     
     const order = req.body;
+    
+    // Сохраняем координаты из location
+    if (order.location) {
+        order.lat = order.location.lat;
+        order.lng = order.location.lng;
+        console.log(`📍 Геолокация заказа #: ${order.lat}, ${order.lng}`);
+    } else {
+        console.log('⚠️ Заказ без геолокации');
+    }
     
     if (order.bungalow) {
         const s = await pool.query('SELECT * FROM sessions WHERE bungalow = $1', [order.bungalow]);
@@ -201,6 +210,9 @@ app.post('/api/order', async (req, res) => {
             [JSON.stringify({ ...order, confirmCode: code })]
         );
         console.log(`🍓 Новый заказ #${r.rows[0].id} | ${order.customerName} | ${order.total} ₽`);
+        if (order.location) {
+            console.log(`📍 Координаты: ${order.location.lat}, ${order.location.lng}`);
+        }
         res.json({ success: true, orderId: r.rows[0].id, confirmCode: code });
     } catch (e) {
         res.json({ success: false, error: 'Ошибка сервера' });
@@ -256,63 +268,8 @@ app.post('/api/clear-orders', async (req, res) => {
     res.json({ success: true });
 });
 
-setInterval(async () => {
-    await pool.query("UPDATE orders SET status = 'отменен (таймаут)' WHERE status = 'ожидает' AND created_at < NOW() - INTERVAL '15 minutes'").catch(() => {});
-}, 60000);
-
-// ===== API: ЧАТЫ =====
-app.get('/api/chats', async (req, res) => {
-    const r = await pool.query('SELECT phone, data FROM chats');
-    res.json({ chats: r.rows.map(row => ({ phone: row.phone, name: row.data?.name, lastMessage: row.data?.messages?.slice(-1)[0], unread: row.data?.unread || 0 })) });
-});
-
-app.get('/api/chat-messages', async (req, res) => {
-    const r = await pool.query('SELECT data FROM chats WHERE phone = $1', [req.query.phone]);
-    res.json({ success: true, messages: r.rows[0]?.data?.messages || [] });
-});
-
-app.post('/api/chat-send', async (req, res) => {
-    const { phone, text, from, name } = req.body;
-    if (!phone || !text) return res.json({ success: false });
-    const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
-    let data = exist.rows[0]?.data || { name: name || 'Клиент', messages: [], unread: 0 };
-    data.messages.push({ text, from: from || 'client', time: new Date().toISOString() });
-    data.unread = from === 'client' ? (data.unread || 0) + 1 : 0;
-    if (name) data.name = name;
-    await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
-    res.json({ success: true });
-});
-
-app.post('/api/chat-read', async (req, res) => {
-    const { phone } = req.body;
-    if (!phone) return res.json({ success: false });
-    try {
-        const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
-        if (exist.rows.length > 0) {
-            let data = exist.rows[0].data;
-            data.unread = 0;
-            await pool.query('UPDATE chats SET data = $1 WHERE phone = $2', [JSON.stringify(data), phone]);
-        }
-        res.json({ success: true });
-    } catch (e) {
-        res.json({ success: false });
-    }
-});
-
-// ===== УДАЛЕНИЕ ЧАТА =====
-app.post('/api/delete-chat', async (req, res) => {
-    const { phone } = req.body;
-    if (!phone) return res.json({ success: false });
-    try {
-        await pool.query('DELETE FROM chats WHERE phone = $1', [phone]);
-        res.json({ success: true });
-    } catch(e) {
-        res.json({ success: false, error: e.message });
-    }
-});
-
 // ================================================================
-// ===== АВТОМАТИЧЕСКОЕ УВЕДОМЛЕНИЕ О ЗАДЕРЖКЕ =====
+// ===== АВТОМАТИЧЕСКОЕ УВЕДОМЛЕНИЕ О ЗАДЕРЖКЕ (БЕЗ АВТО-ОТМЕНЫ) =====
 // ================================================================
 
 // Проверка заказов каждые 30 секунд
@@ -366,7 +323,58 @@ setInterval(async () => {
     } catch (e) {
         console.error('❌ Ошибка авто-уведомления:', e.message);
     }
-}, 30000); // Проверяем каждые 30 секунд
+}, 30000);
+
+// ===== API: ЧАТЫ =====
+app.get('/api/chats', async (req, res) => {
+    const r = await pool.query('SELECT phone, data FROM chats');
+    res.json({ chats: r.rows.map(row => ({ phone: row.phone, name: row.data?.name, lastMessage: row.data?.messages?.slice(-1)[0], unread: row.data?.unread || 0 })) });
+});
+
+app.get('/api/chat-messages', async (req, res) => {
+    const r = await pool.query('SELECT data FROM chats WHERE phone = $1', [req.query.phone]);
+    res.json({ success: true, messages: r.rows[0]?.data?.messages || [] });
+});
+
+app.post('/api/chat-send', async (req, res) => {
+    const { phone, text, from, name } = req.body;
+    if (!phone || !text) return res.json({ success: false });
+    const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
+    let data = exist.rows[0]?.data || { name: name || 'Клиент', messages: [], unread: 0 };
+    data.messages.push({ text, from: from || 'client', time: new Date().toISOString() });
+    data.unread = from === 'client' ? (data.unread || 0) + 1 : 0;
+    if (name) data.name = name;
+    await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
+    res.json({ success: true });
+});
+
+app.post('/api/chat-read', async (req, res) => {
+    const { phone } = req.body;
+    if (!phone) return res.json({ success: false });
+    try {
+        const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
+        if (exist.rows.length > 0) {
+            let data = exist.rows[0].data;
+            data.unread = 0;
+            await pool.query('UPDATE chats SET data = $1 WHERE phone = $2', [JSON.stringify(data), phone]);
+        }
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false });
+    }
+});
+
+// ===== УДАЛЕНИЕ ЧАТА =====
+app.post('/api/delete-chat', async (req, res) => {
+    const { phone } = req.body;
+    if (!phone) return res.json({ success: false });
+    try {
+        await pool.query('DELETE FROM chats WHERE phone = $1', [phone]);
+        res.json({ success: true });
+    } catch(e) {
+        res.json({ success: false, error: e.message });
+    }
+});
 
 // ===== API: ОТЗЫВЫ =====
 app.get('/api/reviews', async (req, res) => {
@@ -424,5 +432,7 @@ setInterval(async () => {
         const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
         console.log(`🍓 Сервер на порту ${PORT} | БД подключена | ${WORK_HOURS.start}:00-${endHour}:00`);
         console.log('📨 Авто-уведомления о задержке включены (15 минут)');
+        console.log('❌ Авто-отмена заказов ОТКЛЮЧЕНА — заказы остаются активными до ручного управления');
+        console.log('📍 Геолокация клиентов сохраняется в заказах');
     });
 })();
