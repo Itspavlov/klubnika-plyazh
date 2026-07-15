@@ -2644,8 +2644,7 @@
                 strawberry.remove();
             }, 800);
         }
-
-      // ================================================================
+// ================================================================
 // ===== MODES =====
 // ================================================================
 function showNoAccess() {
@@ -2694,44 +2693,23 @@ function showBungaloMode(bungalowNumber, expiresAt) {
     });
     setTimeout(updateOrdersBadge, 1000);
 }
-    loadSettings().then(settings => {
-        if (settings?.technicalBreak) { showTechBreak(); return; }
-        if (!isWorkingTime()) { showClosedMode(); return; }
-        renderMenu(settings || state.settings);
-        initCart();
-        loadReviews();
-        startReviewCheck();
-    });
-    setTimeout(updateOrdersBadge, 1000);
+
+function showTechBreak() {
+    document.getElementById('noAccessMode').style.display = 'none';
+    document.getElementById('bungaloMode').style.display = 'none';
+    document.getElementById('closedMode').style.display = 'none';
+    document.getElementById('techBreakMode').style.display = 'block';
+    document.getElementById('bottomTabBar').style.display = 'none';
 }
 
-            loadSettings().then(settings => {
-                if (settings?.technicalBreak) { showTechBreak(); return; }
-                if (!isWorkingTime()) { showClosedMode(); return; }
-                renderMenu(settings || state.settings);
-                initCart();
-                loadReviews();
-                startReviewCheck();
-            });
-            setTimeout(updateOrdersBadge, 1000);
-        }
-
-        function showTechBreak() {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'block';
-            document.getElementById('bottomTabBar').style.display = 'none';
-        }
-
-        function showClosedMode() {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'block';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'none';
-            document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-        }
+function showClosedMode() {
+    document.getElementById('noAccessMode').style.display = 'none';
+    document.getElementById('bungaloMode').style.display = 'none';
+    document.getElementById('closedMode').style.display = 'block';
+    document.getElementById('techBreakMode').style.display = 'none';
+    document.getElementById('bottomTabBar').style.display = 'none';
+    document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+}
 
         // ================================================================
         // ===== MAP =====
