@@ -143,6 +143,11 @@
             margin-bottom: 10px;
             border: 3px solid #F1F5F9;
             transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .order-card:active {
+            transform: scale(0.99);
         }
 
         .order-card.status-waiting {
@@ -242,6 +247,169 @@
         .payment-badge.transfer {
             background: #E3F2FD;
             color: #1565C0;
+        }
+
+        /* ===== LOCATION BADGE ===== */
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 100px;
+            background: #E3F2FD;
+            color: #1565C0;
+            border: 1px solid #90CAF9;
+        }
+
+        .location-badge.no-location {
+            background: #FFF3E0;
+            color: #E65100;
+            border-color: #FFE0B2;
+        }
+
+        .location-badge i {
+            font-size: 12px;
+        }
+
+        /* ===== MAP MODAL ===== */
+        .map-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .map-modal-overlay.open {
+            display: flex;
+        }
+
+        .map-modal-content {
+            background: #FFFFFF;
+            border-radius: var(--radius-2xl);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        @keyframes modalPop {
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .map-modal-content .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .map-modal-content .modal-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .map-modal-content .modal-close {
+            background: #F8FAFC;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .map-modal-content .modal-close:active {
+            transform: scale(0.9);
+        }
+
+        .map-modal-content .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: #F1F5F9;
+            border: 1px solid #E5E7EB;
+            position: relative;
+        }
+
+        .map-modal-content .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-modal-content .map-container .map-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 14px;
+            gap: 8px;
+        }
+
+        .map-modal-content .map-container .map-placeholder i {
+            font-size: 48px;
+            color: var(--primary);
+        }
+
+        .map-modal-content .order-info {
+            background: #F8FAFC;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .map-modal-content .order-info strong {
+            color: var(--text-dark);
+        }
+
+        .map-modal-content .order-info .highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .map-modal-content .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .map-modal-content .action-row .btn {
+            flex: 1;
+            justify-content: center;
         }
 
         /* ===== CHAT ITEM WITH SWIPE ===== */
@@ -442,6 +610,7 @@
             border-color: #90CAF9;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 500px) {
             .stats { grid-template-columns: 1fr 1fr; }
             .tabs button { font-size: 10px; padding: 8px 4px; }
@@ -450,6 +619,9 @@
             .form-row {
                 flex-direction: column;
                 gap: 0;
+            }
+            .map-modal-content .map-container {
+                height: 280px;
             }
         }
     </style>
@@ -541,6 +713,38 @@
         </div>
     </div>
 
+    <!-- ===== MAP MODAL ===== -->
+    <div class="map-modal-overlay" id="mapModal" onclick="closeMapModal()">
+        <div class="map-modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 id="mapModalTitle">📍 Местоположение клиента</h2>
+                <button class="modal-close" onclick="closeMapModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="map-container" id="mapContainer">
+                <div class="map-placeholder" id="mapPlaceholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Загрузка карты...</span>
+                </div>
+                <iframe id="mapIframe" src="" style="display:none;"></iframe>
+            </div>
+            <div class="order-info" id="mapOrderInfo">
+                <strong>Информация о заказе</strong>
+                <div id="mapOrderDetails">Загрузка...</div>
+            </div>
+            <div class="action-row">
+                <button class="btn btn-success btn-sm" onclick="openRoute()">
+                    <i class="fas fa-route"></i> Маршрут
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="openNavigator()">
+                    <i class="fas fa-location-arrow"></i> Навигатор
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="closeMapModal()">
+                    <i class="fas fa-times"></i> Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Модалка товара -->
     <div class="modal-overlay" id="itemModal">
         <div class="modal">
@@ -596,10 +800,22 @@
     </div>
 
     <script>
-        // ===== LOGIN =====
+        // ================================================================
+        // ===== КОНСТАНТЫ =====
+        // ================================================================
         const ADMIN_PASSWORD = 'klubnika270192';
         const AUTH_STORAGE_KEY = 'strawberry_admin_auth';
+        const MY_LOCATION = {
+            lat: 44.358193,
+            lng: 38.528773,
+            name: 'Strawberry in Chocolate'
+        };
 
+        let selectedOrder = null;
+
+        // ================================================================
+        // ===== LOGIN =====
+        // ================================================================
         function checkAuth() {
             try {
                 const auth = localStorage.getItem(AUTH_STORAGE_KEY);
@@ -644,7 +860,116 @@
             document.getElementById('loginError').style.display = 'none';
         }
 
+        // ================================================================
+        // ===== MAP MODAL =====
+        // ================================================================
+        function openMapModal(order) {
+            selectedOrder = order;
+            const modal = document.getElementById('mapModal');
+            const iframe = document.getElementById('mapIframe');
+            const placeholder = document.getElementById('mapPlaceholder');
+            const details = document.getElementById('mapOrderDetails');
+
+            // Заполняем информацию о заказе
+            const date = new Date(order.createdAt);
+            const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+            const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            
+            let itemsStr = order.items?.map(i => `${i.name} ×${i.quantity}`).join(', ') || 'нет товаров';
+            let paymentLabel = order.paymentLabel || 'Наличными';
+            if (order.paymentMethod === 'transfer') paymentLabel = '📱 Переводом';
+            else paymentLabel = '💵 ' + paymentLabel;
+
+            let locationText = '📍 Координаты не определены';
+            let hasLocation = false;
+            if (order.lat && order.lng) {
+                hasLocation = true;
+                locationText = `<strong>📍 Координаты:</strong> ${order.lat.toFixed(5)}, ${order.lng.toFixed(5)}`;
+            }
+
+            details.innerHTML = `
+                <div><strong>👤 Клиент:</strong> ${order.customerName || 'не указан'}</div>
+                <div><strong>📞 Телефон:</strong> ${order.customerPhone || 'не указан'}</div>
+                <div><strong>🏠 Бунгало:</strong> #${order.bungalow || '?'}</div>
+                <div><strong>📦 Заказ:</strong> #${order.id}</div>
+                <div><strong>🛒 Товары:</strong> ${itemsStr}</div>
+                <div><strong>💰 Сумма:</strong> <span class="highlight">${order.total || 0} ₽</span></div>
+                <div><strong>💳 Оплата:</strong> ${paymentLabel}</div>
+                <div><strong>📅 Время:</strong> ${dateStr} в ${timeStr}</div>
+                <div>${locationText}</div>
+            `;
+
+            // Загружаем карту
+            if (hasLocation) {
+                const clientPin = `${order.lng},${order.lat},flag`;
+                const shopPin = `${MY_LOCATION.lng},${MY_LOCATION.lat},round`;
+                const centerLat = (order.lat + MY_LOCATION.lat) / 2;
+                const centerLng = (order.lng + MY_LOCATION.lng) / 2;
+                iframe.src = `https://yandex.ru/map-widget/v1/?ll=${centerLng},${centerLat}&z=15&pt=${clientPin}&pt=${shopPin}`;
+                iframe.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                iframe.style.display = 'none';
+                placeholder.style.display = 'flex';
+                placeholder.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="color:#F59E0B;"></i>
+                    <span>📍 Геолокация не определена</span>
+                    <span style="font-size:12px;color:#9CA3AF;">Клиент не передал координаты</span>
+                `;
+            }
+
+            document.getElementById('mapModalTitle').textContent = `📍 Заказ #${order.id} — ${order.customerName || 'Клиент'}`;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMapModal() {
+            document.getElementById('mapModal').classList.remove('open');
+            document.body.style.overflow = '';
+            const iframe = document.getElementById('mapIframe');
+            iframe.src = '';
+            selectedOrder = null;
+        }
+
+        function openRoute() {
+            if (!selectedOrder || !selectedOrder.lat || !selectedOrder.lng) {
+                toast('❌ Нет координат для построения маршрута');
+                return;
+            }
+            const url = `https://yandex.ru/maps/?rtext=${selectedOrder.lat},${selectedOrder.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=auto&z=15`;
+            window.open(url, '_blank');
+        }
+
+        function openNavigator() {
+            if (!selectedOrder || !selectedOrder.lat || !selectedOrder.lng) {
+                toast('❌ Нет координат для навигации');
+                return;
+            }
+            const lat = selectedOrder.lat;
+            const lng = selectedOrder.lng;
+            const schemes = [
+                `yandexnavi://build_route_on_map?lat_to=${lat}&lon_to=${lng}`,
+                `yandexmaps://maps.yandex.ru/?pt=${lng},${lat}&z=18`,
+                `google.navigation:q=${lat},${lng}`,
+                `waze://?ll=${lat},${lng}&navigate=yes`,
+                `https://yandex.ru/maps/?pt=${lng},${lat}&z=18`
+            ];
+            for (const scheme of schemes) {
+                try {
+                    window.open(scheme, '_blank');
+                    break;
+                } catch (e) {}
+            }
+        }
+
+        // Закрытие модалки по клику вне
+        document.getElementById('mapModal').addEventListener('click', function(e) {
+            if (e.target === this) closeMapModal();
+        });
+
+        // ================================================================
         // ===== ADMIN LOGIC =====
+        // ================================================================
         const S = {
             settings: {},
             menu: [],
@@ -779,7 +1104,6 @@
                 const timeStr = orderDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
                 const dateStr = orderDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
                 
-                // Определяем способ оплаты
                 let paymentLabel = order.paymentLabel || 'Наличными';
                 let paymentIcon = '💵';
                 let paymentClass = 'cash';
@@ -787,13 +1111,24 @@
                     paymentIcon = '📱';
                     paymentClass = 'transfer';
                 }
+
+                // Определяем наличие геолокации
+                const hasLocation = order.lat && order.lng;
+                const locationBadge = hasLocation 
+                    ? `<span class="location-badge"><i class="fas fa-location-dot"></i> 📍 На карте</span>`
+                    : `<span class="location-badge no-location"><i class="fas fa-exclamation-triangle"></i> Без гео</span>`;
+
+                // Добавляем обработчик клика для открытия карты
+                const clickHandler = hasLocation ? `onclick="openMapModal(${JSON.stringify(order).replace(/"/g, '&quot;')})"` : '';
                 
-                return `<div class="order-card ${borderClass}">
+                return `<div class="order-card ${borderClass}" ${clickHandler} style="${hasLocation ? '' : 'cursor:default;'}">
                     <div class="top">
                         <span class="oid">
                             🏠 #${order.bungalow||'?'} — #${order.id}
                             ${isNew ? `<span class="new-badge">🆕 Новый</span>` : ''}
                             <span class="payment-badge ${paymentClass}">${paymentIcon} ${paymentLabel}</span>
+                            ${locationBadge}
+                            ${hasLocation ? `<span style="font-size:10px;color:#22C55E;font-weight:600;">👆 Нажмите на карту</span>` : ''}
                         </span>
                         <span class="status ${borderClass}">${statusLabel}</span>
                     </div>
@@ -801,6 +1136,7 @@
                         <div style="font-size:12px;color:var(--text-secondary);">
                             👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} 
                             ${order.confirmCode ? '🔑 <b>'+order.confirmCode+'</b>' : ''}
+                            ${hasLocation ? `📍 <span style="color:#1565C0;">${order.lat.toFixed(5)}, ${order.lng.toFixed(5)}</span>` : ''}
                         </div>
                         <div class="order-time">
                             <span class="time-dot ${dotColor}"></span>
@@ -1155,6 +1491,7 @@
             lastCount = S.orders.length;
             startAutoRefresh();
             console.log('🍓 Админка готова');
+            console.log('📍 Нажмите на заказ с меткой "На карте" для просмотра местоположения');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
