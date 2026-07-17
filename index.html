@@ -65,65 +65,6 @@
             min-height: 100vh;
         }
 
-        /* ===== HEADER ROW (Поддержка | 🍓 | Отзывы) ===== */
-        .header-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
-
-        .header-row .support-btn,
-        .header-row .reviews-btn {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 100px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .header-row .support-btn:active,
-        .header-row .reviews-btn:active {
-            transform: scale(0.95);
-        }
-
-        .header-row .strawberry-anim {
-            font-size: 40px;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(1.2);
-            }
-        }
-
         /* ===== HEADER ===== */
         .header {
             text-align: center;
@@ -134,9 +75,27 @@
         .header .logo-icon {
             font-size: 48px;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             animation: float 3s ease-in-out infinite;
             filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            box-shadow: var(--shadow-sm);
         }
 
         .header h1 {
@@ -174,7 +133,12 @@
             border: 1px solid rgba(255, 71, 87, 0.2);
         }
 
-        /* ===== BUNGALO DISPLAY ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ===== BUNGALO CARD WITH BACKGROUND ===== */
         .bungalo-display {
             position: relative;
             border-radius: var(--radius-2xl);
@@ -184,18 +148,35 @@
             color: #FFFFFF;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, #FF4757, #E63946);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.7), rgba(230, 57, 70, 0.8));
         }
 
         .bungalo-display::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('images/bungalo-bg.jpg') center/cover no-repeat;
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .bungalo-display::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+            z-index: 1;
         }
 
         .bungalo-display .label {
@@ -203,9 +184,10 @@
             z-index: 2;
             font-size: 11px;
             font-weight: 500;
-            opacity: 0.9;
+            opacity: 0.95;
             letter-spacing: 1px;
             text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .bungalo-display .number {
@@ -215,42 +197,365 @@
             font-weight: 800;
             margin: 4px 0;
             letter-spacing: 2px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
         }
 
         .bungalo-display .hint {
             position: relative;
             z-index: 2;
             font-size: 12px;
-            opacity: 0.8;
+            opacity: 0.9;
             font-weight: 400;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* ===== MAP BUTTON ===== */
-        .map-btn-top {
+        .bungalo-display .bg-strawberry {
+            position: absolute;
+            z-index: 1;
+            font-size: 60px;
+            opacity: 0.15;
+            animation: floatBg 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .bungalo-display .bg-strawberry:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .bungalo-display .bg-strawberry:nth-child(2) {
+            bottom: 10%;
+            right: 5%;
+            animation-delay: 3s;
+            font-size: 40px;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        /* ===== SUPPORT HEADER ===== */
+        .support-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .support-header .support-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .support-btn {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius-xl);
-            padding: 14px 18px;
-            margin-bottom: 16px;
+            border-radius: 100px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
             color: var(--text-dark);
-            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .support-btn:active {
+            transform: scale(0.95);
+        }
+
+        .support-btn i {
             font-size: 14px;
+        }
+
+        .support-btn .badge {
+            background: #EF4444;
+            color: #FFFFFF;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .support-btn .badge.show {
+            display: flex;
+        }
+
+        .support-call-btn {
+            background: linear-gradient(135deg, #4ADE80, #22C55E);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 100px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(74, 222, 128, 0.3);
+            text-decoration: none;
+        }
+
+        .support-call-btn:active {
+            transform: scale(0.95);
+        }
+
+        .support-call-btn i {
+            font-size: 14px;
+        }
+
+        /* ===== CHAT TIMER BANNER ===== */
+        .chat-timer-banner {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border: 1px solid #FFE0B2;
+            border-radius: var(--radius-lg);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chat-timer-banner.show {
+            display: flex;
+        }
+
+        .chat-timer-banner .timer-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .chat-timer-banner .timer-text {
+            flex: 1;
+            font-size: 13px;
+            color: #E65100;
+            line-height: 1.4;
+        }
+
+        .chat-timer-banner .timer-text strong {
+            font-weight: 700;
+        }
+
+        .chat-timer-banner .timer-call-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: 100px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+            text-decoration: none;
+        }
+
+        .chat-timer-banner .timer-call-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-timer-banner .timer-call-btn i {
+            font-size: 16px;
+        }
+
+        /* ===== TRUST MODAL ===== */
+        .trust-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 700;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeInOverlay 0.4s ease;
+        }
+
+        .trust-modal-overlay.open {
+            display: flex;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .trust-modal-content {
+            background: #FFFFFF;
+            border-radius: var(--radius-2xl);
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 24px 28px;
+            position: relative;
+            animation: trustPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        @keyframes trustPop {
+            from {
+                transform: scale(0.8) translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .trust-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 12px;
+            animation: trustFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes trustFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
+        }
+
+        .trust-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .trust-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .trust-text p {
+            margin-bottom: 10px;
+        }
+
+        .trust-text p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .trust-text strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .trust-note {
+            font-size: 12px !important;
+            color: var(--text-muted) !important;
+            font-style: italic;
+            margin-top: 8px !important;
+            padding-top: 8px;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .trust-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+            font-family: var(--font-family);
+            letter-spacing: -0.2px;
+        }
+
+        .trust-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== NAVIGATION CHIPS ===== */
+        .chips-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chips-nav .chip {
+            flex: 1;
+            padding: 10px 8px;
+            border-radius: var(--radius-lg);
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: var(--transition);
             font-family: var(--font-family);
-            width: 100%;
-            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            letter-spacing: -0.2px;
         }
 
-        .map-btn-top:active {
-            transform: scale(0.98);
+        .chips-nav .chip i {
+            font-size: 16px;
+        }
+
+        .chips-nav .chip.active {
             background: #FFFFFF;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .chips-nav .chip.main-chip {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+        }
+
+        .chips-nav .chip.main-chip.active {
+            box-shadow: 0 6px 16px rgba(255, 71, 87, 0.4);
+            transform: scale(1.02);
         }
 
         /* ===== CONTACT SECTION ===== */
@@ -523,60 +828,31 @@
             color: var(--primary);
         }
 
-        /* ===== CHIPS NAV ===== */
-        .chips-nav {
+        /* ===== MAP BUTTON ===== */
+        .map-btn-top {
             display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            padding: 4px;
-            background: rgba(255, 255, 255, 0.6);
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
             border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .chips-nav .chip {
-            flex: 1;
-            padding: 10px 8px;
-            border-radius: var(--radius-lg);
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            border-radius: var(--radius-xl);
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             transition: var(--transition);
             font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            letter-spacing: -0.2px;
+            width: 100%;
+            box-shadow: var(--shadow-sm);
         }
 
-        .chips-nav .chip i {
-            font-size: 16px;
-        }
-
-        .chips-nav .chip.active {
+        .map-btn-top:active {
+            transform: scale(0.98);
             background: #FFFFFF;
-            color: var(--primary);
-            font-weight: 600;
-            box-shadow: var(--shadow);
-        }
-
-        .chips-nav .chip.main-chip {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-        }
-
-        .chips-nav .chip.main-chip.active {
-            box-shadow: 0 6px 16px rgba(255, 71, 87, 0.4);
-            transform: scale(1.02);
         }
 
         /* ===== MODALS ===== */
@@ -1313,42 +1589,30 @@
 
         /* ===== NOTIFICATION ===== */
         .notification {
+            display: none;
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(-120px);
+            transform: translateX(-50%);
             background: #1A1A2E;
             color: #FFFFFF;
             padding: 14px 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 100px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             max-width: 90%;
             text-align: center;
             font-weight: 500;
             font-size: 14px;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
+            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .notification.hide {
-            transform: translateX(-50%) translateY(-120px);
-            opacity: 0;
+            display: block;
         }
 
         .notification.error {
             background: #EF4444;
-        }
-
-        .notification.success {
-            background: #10B981;
         }
 
         @keyframes slideDown {
@@ -1459,6 +1723,26 @@
                 width: 36px;
                 height: 36px;
                 font-size: 18px;
+            }
+            .support-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .support-header .support-buttons {
+                justify-content: center;
+            }
+            .support-call-btn {
+                justify-content: center;
+            }
+            .chat-timer-banner {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+            .chat-timer-banner .timer-call-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -1688,23 +1972,53 @@
         </div>
     </div>
 
+    <!-- ===== TRUST MODAL ===== -->
+    <div class="trust-modal-overlay" id="trustModal">
+        <div class="trust-modal-content">
+            <button class="modal-close" onclick="closeTrustModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="trust-icon">🍓</div>
+            <div class="trust-title">Мы заботимся о качестве!</div>
+            <div class="trust-text">
+                <p>Уважаемый покупатель! Наша команда следит за качеством продукта и заботится о вашем здоровье.</p>
+                <p>Мы доставляем исключительно <strong>свежую отборную</strong> продукцию.</p>
+                <p>Если вы обнаружили <strong>не свежую клубнику</strong> — сообщите нам, и мы <strong>обменяем</strong> её на другую <strong>абсолютно бесплатно</strong>!</p>
+                <p class="trust-note">* В случае не предоставления брака обмен не производится</p>
+            </div>
+            <button class="trust-btn" onclick="closeTrustModal()">
+                <i class="fas fa-check-circle"></i> Я понимаю, спасибо!
+            </button>
+        </div>
+    </div>
+
     <!-- ===== MAIN CONTAINER ===== -->
     <div class="app-container">
 
-        <div class="header-row">
-            <button class="support-btn" onclick="openSupportChat()">
-                <i class="fas fa-headset" style="color:var(--primary);"></i> Поддержка
-                <span id="supportBadge" style="background:#EF4444;color:#fff;font-size:10px;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;">!</span>
-            </button>
-            <span class="strawberry-anim">🍓</span>
-            <button class="reviews-btn" onclick="openReviewsModal()">
-                <i class="fas fa-star" style="color:#FFB300;"></i> Отзывы
-                <span id="reviewsBadge" style="background:var(--primary);color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;padding:0 4px;"><span id="reviewsCount">0</span></span>
-            </button>
+        <!-- ===== SUPPORT HEADER ===== -->
+        <div class="support-header">
+            <div class="support-buttons">
+                <button onclick="openSupportChat()" class="support-btn">
+                    <i class="fas fa-headset" style="color: var(--primary);"></i> Поддержка
+                    <span class="badge" id="supportBadge">!</span>
+                </button>
+                <button onclick="openReviewsModal()" class="support-btn">
+                    <i class="fas fa-star" style="color: #FFB300;"></i> Отзывы
+                    <span id="reviewsBadge" style="background: var(--primary); color: #FFFFFF; font-size: 10px; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 700; padding: 0 4px;">
+                        <span id="reviewsCount">0</span>
+                    </span>
+                </button>
+            </div>
+            <a href="tel:+79628557263" class="support-call-btn">
+                <i class="fas fa-phone"></i> Позвонить
+            </a>
         </div>
 
         <header class="header">
             <span class="logo-icon">🍓</span>
+            <div class="header-badge">
+                <i class="fas fa-water"></i> Доставка на пляж
+            </div>
             <h1>
                 <span class="highlight">Strawberry</span>
                 <span style="color: var(--text-dark);"> in </span>
@@ -1779,6 +2093,21 @@
         </div>
 
         <div id="bungaloMode">
+            <button class="map-btn-top" onclick="openMap()">
+                <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
+                <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
+            </button>
+
+            <div id="pickupBannerContainer"></div>
+
+            <div class="bungalo-display">
+                <span class="bg-strawberry">🍓</span>
+                <span class="bg-strawberry">🍓</span>
+                <div class="label"><i class="fas fa-location-dot"></i> <span id="bungaloLabel">Ваше бунгало</span></div>
+                <div class="number" id="bungaloNumberDisplay">#7</div>
+                <div class="hint"><i class="fas fa-qrcode"></i> <span id="bungaloHint">Сканируйте QR-код в вашем бунгало</span></div>
+            </div>
+
             <div class="contact-section">
                 <div class="contact-label">
                     <i class="fas fa-phone"></i> Как с вами связаться?
@@ -1789,17 +2118,6 @@
                     <input type="tel" id="customerPhone" placeholder="+7 999 123-45-67" oninput="validatePhoneInput(this)">
                 </div>
             </div>
-
-            <div class="bungalo-display">
-                <div class="label"><i class="fas fa-location-dot"></i> <span id="bungaloLabel">Ваше бунгало</span></div>
-                <div class="number" id="bungaloNumberDisplay">#7</div>
-                <div class="hint"><i class="fas fa-qrcode"></i> <span id="bungaloHint">Сканируйте QR-код в вашем бунгало</span></div>
-            </div>
-
-            <button class="map-btn-top" onclick="openMap()">
-                <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
-                <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
-            </button>
 
             <div class="chips-nav">
                 <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
@@ -1900,12 +2218,15 @@
             </button>
         </div>
     </div>
-        <script>
+
+    <script>
         // ================================================================
         // ===== CONFIGURATION =====
         // ================================================================
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
+        const SUPPORT_PHONE = '+7 962 855-72-63';
+        const TRUST_KEY = 'strawberry_trust_shown';
 
         const MY_LOCATION = {
             lat: 44.358193,
@@ -1916,8 +2237,8 @@
         };
 
         const WORK_HOURS = { 
-            start: 9,  
-            end: 28    // 28 = 4:00 утра
+            start: 9,
+            end: 30
         };
 
         const FORCE_WORKING_TIME = false;
@@ -1928,8 +2249,10 @@
         // ================================================================
         const STRAWBERRY_ITEMS = [
             { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 420, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '❤️', badgeColor: '#E91E63' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐', badgeColor: '#FFB74D' },
+        { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
+
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
             { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
         ];
 
@@ -1940,6 +2263,12 @@
             { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, volume: '200 мл', image: 'images/blackberry.jpg', emoji: '🫐' },
             { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
         ];
+
+        const ROMANTIC_ITEM = {
+    id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде',
+    price: 420, volume: '300 мл',
+    image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757'
+}; 
 
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.webp', emoji: '🍋' },
@@ -1966,7 +2295,10 @@
             reviewRating: 0,
             reviewOrderId: null,
             bungalowNumber: null,
-            sessionExpiresAt: null
+            sessionExpiresAt: null,
+            chatStartTime: null,
+            chatTimerShown: false,
+            userLocation: null
         };
 
         let selectedPayment = 'cash';
@@ -1980,13 +2312,116 @@
         let sessionTimerInterval = null;
         let reviewCheckInterval = null;
         let lastOrderCheckTime = Date.now();
+        let chatTimerInterval = null;
+
+        // ================================================================
+        // ===== TRUST MODAL =====
+        // ================================================================
+
+        function hasTrustShown(phone) {
+            try {
+                const data = localStorage.getItem(TRUST_KEY);
+                if (!data) return false;
+                const saved = JSON.parse(data);
+                return saved === phone;
+            } catch { return false; }
+        }
+
+        function setTrustShown(phone) {
+            try {
+                localStorage.setItem(TRUST_KEY, JSON.stringify(phone));
+            } catch (e) {}
+        }
+
+        function showTrustModal() {
+            const overlay = document.getElementById('trustModal');
+            if (overlay) {
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeTrustModal() {
+            const overlay = document.getElementById('trustModal');
+            if (overlay) {
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+            if (window._pendingAddToCart) {
+                const item = window._pendingAddToCart;
+                window._pendingAddToCart = null;
+                const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
+                if (existing) {
+                    existing.quantity += item.quantity || 1;
+                } else {
+                    state.cart.push({ ...item, quantity: item.quantity || 1 });
+                }
+                saveCart();
+                updateCart();
+                showNotification(`✅ ${item.name} добавлен!`);
+                const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+                animateStrawberryToCart(fakeEvent);
+            }
+        }
+
+        // ================================================================
+        // ===== ГЕОЛОКАЦИЯ =====
+        // ================================================================
+
+        function getUserLocation() {
+            return new Promise((resolve) => {
+                if (state.userLocation) {
+                    resolve(state.userLocation);
+                    return;
+                }
+
+                if (!navigator.geolocation) {
+                    console.warn('Геолокация не поддерживается браузером');
+                    showNotification('⚠️ Ваш браузер не поддерживает геолокацию');
+                    resolve(null);
+                    return;
+                }
+
+                showNotification('📍 Запрашиваем ваше местоположение...');
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const location = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        state.userLocation = location;
+                        console.log('📍 Геолокация получена:', location.lat, location.lng);
+                        showNotification('✅ Местоположение определено!');
+                        resolve(location);
+                    },
+                    function(error) {
+                        let errorMessage = '❌ Не удалось определить местоположение';
+                        if (error.code === 1) {
+                            errorMessage = '❌ Разрешите доступ к геолокации в настройках браузера';
+                        } else if (error.code === 2) {
+                            errorMessage = '❌ Сигнал GPS слабый';
+                        } else if (error.code === 3) {
+                            errorMessage = '⏳ Превышено время ожидания';
+                        }
+                        console.warn('⚠️ Ошибка геолокации:', errorMessage);
+                        showNotification(errorMessage);
+                        resolve(null);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
 
         // ================================================================
         // ===== PHONE VALIDATION =====
         // ================================================================
         function validatePhoneInput(input) {
             let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
-            
             if (value.match(/^[7-8]\d{0,10}$/)) {
                 if (value.length === 11 && (value.startsWith('7') || value.startsWith('8'))) {
                     input.classList.remove('invalid');
@@ -1998,7 +2433,6 @@
             } else {
                 input.classList.remove('invalid');
             }
-            
             input.value = value;
         }
 
@@ -2100,9 +2534,7 @@
         // ================================================================
         function isOnline() { return navigator.onLine; }
 
-        function updateOnlineStatus() {
-            // Статус теперь в хедере не показываем
-        }
+        function updateOnlineStatus() {}
 
         window.addEventListener('online', () => { updateOnlineStatus(); });
         window.addEventListener('offline', () => { updateOnlineStatus(); });
@@ -2112,7 +2544,6 @@
         // ================================================================
         function isWorkingTime() {
             if (FORCE_WORKING_TIME) return true;
-            
             let now;
             if (manualTime) {
                 now = new Date();
@@ -2125,18 +2556,15 @@
                     now = new Date();
                 }
             }
-            
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const currentMinutes = hours * 60 + minutes;
             const startMinutes = WORK_HOURS.start * 60;
             const endMinutes = WORK_HOURS.end * 60;
-            
             let normalizedCurrent = currentMinutes;
             if (currentMinutes < startMinutes) {
                 normalizedCurrent = currentMinutes + 24 * 60;
             }
-            
             return normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
         }
 
@@ -2161,20 +2589,15 @@
         }
 
         // ================================================================
-        // ===== TELEGRAM-STYLE NOTIFICATION =====
+        // ===== NOTIFICATION =====
         // ================================================================
         function showNotification(message, type = '') {
             const notification = document.getElementById('notification');
-            clearTimeout(notification._timeout);
-            notification.className = 'notification';
             notification.innerHTML = message;
-            if (type === 'error') notification.classList.add('error');
-            else if (type === 'success') notification.classList.add('success');
-            requestAnimationFrame(() => { notification.classList.add('show'); });
-            notification._timeout = setTimeout(() => {
-                notification.classList.add('hide');
-                setTimeout(() => { notification.classList.remove('show', 'hide', 'error', 'success'); }, 400);
-            }, 4000);
+            notification.className = 'notification show';
+            if (type) notification.classList.add(type);
+            clearTimeout(notification._timeout);
+            notification._timeout = setTimeout(() => notification.classList.remove('show'), 3000);
         }
 
         // ================================================================
@@ -2185,26 +2608,21 @@
             strawberry.className = 'flying-strawberry';
             strawberry.innerHTML = '🍓';
             document.body.appendChild(strawberry);
-            
             const startX = clickEvent.clientX;
             const startY = clickEvent.clientY;
-            
             strawberry.style.left = startX + 'px';
             strawberry.style.top = startY + 'px';
             strawberry.style.transform = 'translate(-50%, -50%) scale(1)';
-            
             const cartIcon = document.getElementById('tabCart');
             const cartRect = cartIcon.getBoundingClientRect();
             const endX = cartRect.left + cartRect.width / 2;
             const endY = cartRect.top + cartRect.height / 2;
-            
             requestAnimationFrame(() => {
                 strawberry.style.left = endX + 'px';
                 strawberry.style.top = endY + 'px';
                 strawberry.style.transform = 'translate(-50%, -50%) scale(0.3)';
                 strawberry.style.opacity = '0.6';
             });
-            
             setTimeout(() => {
                 strawberry.remove();
             }, 800);
@@ -2241,8 +2659,12 @@
                 document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
                 document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
                 document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
-                document.getElementById('pickupBannerContainer') && (document.getElementById('pickupBannerContainer').innerHTML = '');
+                document.getElementById('pickupBannerContainer').innerHTML = '';
             }
+
+            setTimeout(() => {
+                getUserLocation();
+            }, 1500);
 
             loadSettings().then(settings => {
                 if (settings?.technicalBreak) { showTechBreak(); return; }
@@ -2329,20 +2751,15 @@
 
         function confirmAge() {
             if (!document.getElementById('ageCheckbox').checked) return;
-            
             const product = pendingAlcoholProduct;
-            
             if (!product) {
                 closeAgeVerify();
                 return;
             }
-            
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            
             closeAgeVerify();
             pendingAlcoholProduct = null;
-            
             if (!name || !phone || !isValidPhone(phone)) {
                 if (phone && !isValidPhone(phone)) {
                     showNotification('⚠️ Введите корректный номер телефона!', 'error');
@@ -2350,7 +2767,22 @@
                 openAuthModal({ ...product, isAlcohol: true });
                 return;
             }
-            
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category || 'напиток',
+                    topping: '',
+                    toppingName: '',
+                    isAlcohol: true
+                };
+                showTrustModal();
+                return;
+            }
             addToCart({
                 id: product.id,
                 name: product.name,
@@ -2362,7 +2794,6 @@
                 isAlcohol: true
             });
             showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
-            
             const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
             animateStrawberryToCart(fakeEvent);
         }
@@ -2406,6 +2837,28 @@
             const strawberryGrid = document.getElementById('strawberryGrid');
             let html = '';
 
+            let romanticCustom = null;
+            if (settings.customItems) {
+                romanticCustom = settings.customItems.find(ci => ci.id === ROMANTIC_ITEM.id);
+            }
+            const displayRomantic = romanticCustom || ROMANTIC_ITEM;
+            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
+
+            html += `
+                <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
+                    <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
+                    <div class="item-content">
+                        <div class="item-name">${displayRomantic.name}</div>
+                        <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
+                        <div class="item-price">
+                            ${displayRomantic.price} ₽
+                            ${displayRomantic.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${displayRomantic.oldPrice} ₽</small>` : ''}
+                        </div>
+                        <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
+                    </div>
+                </div>
+            `;
+
             STRAWBERRY_ITEMS.forEach(item => {
                 let customItem = null;
                 if (settings.customItems) {
@@ -2413,9 +2866,8 @@
                 }
                 const displayItem = customItem || item;
                 const available = settings.menuItems[item.id] !== false;
-                
                 html += `
-                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume || '300 мл'}">
+                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
                         ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
                         <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
                         <div class="item-content">
@@ -2430,7 +2882,7 @@
 
             if (settings.customItems) {
                 settings.customItems.forEach(ci => {
-                    if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id)) {
+                    if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id) && ci.id !== ROMANTIC_ITEM.id) {
                         const available = settings.menuItems[ci.id] !== false;
                         html += `
                             <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="стаканчик" data-has-toppings="true">
@@ -2438,7 +2890,10 @@
                                 <div class="item-content">
                                     <div class="item-name">${ci.emoji || ''} ${ci.name}</div>
                                     <div class="item-desc">${ci.desc || ''}</div>
-                                    <div class="item-price">${ci.price} ₽${ci.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${ci.oldPrice} ₽</small>` : ''}</div>
+                                    <div class="item-price">
+                                        ${ci.price} ₽
+                                        ${ci.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${ci.oldPrice} ₽</small>` : ''}
+                                    </div>
                                     <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
                                 </div>
                             </div>
@@ -2457,7 +2912,6 @@
                 }
                 const displayItem = customItem || item;
                 const available = settings.menuItems[item.id] !== false;
-                
                 fruitsHtml += `
                     <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="фрукты" data-has-toppings="false" data-volume="${displayItem.volume || item.volume}">
                         <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
@@ -2500,7 +2954,6 @@
                 }
                 const displayItem = customItem || item;
                 const available = settings.menuItems[item.id] !== false;
-                
                 drinksHtml += `
                     <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток" data-alcohol="${item.alcohol ? 'true' : 'false'}">
                         <div class="drink-icon" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')">
@@ -2572,13 +3025,32 @@
 
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone || !isValidPhone(phone)) { 
+            if (!name || !phone || !isValidPhone(phone)) {
                 if (phone && !isValidPhone(phone)) {
                     showNotification('⚠️ Введите корректный номер телефона!', 'error');
                 }
-                openAuthModal(product); 
-                return; 
+                openAuthModal(product);
+                return;
             }
+
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category,
+                    topping: '',
+                    toppingName: '',
+                    isRomantic: product.isRomantic || false,
+                    hasToppings: hasToppings
+                };
+                showTrustModal();
+                return;
+            }
+
             if (!hasToppings) {
                 addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '', isRomantic: product.isRomantic || false });
                 showNotification(`✅ ${product.name} добавлен!`);
@@ -2592,30 +3064,41 @@
             e.stopPropagation();
             const item = this.closest('.drink-item');
             if (!item) return;
-            
             const product = {
                 id: parseInt(item.dataset.id),
                 name: item.dataset.name,
                 price: parseInt(item.dataset.price),
                 category: item.dataset.category || 'напиток'
             };
-            
             const isAlcohol = item.dataset.alcohol === 'true';
             if (isAlcohol) {
                 openAgeVerify(product);
                 return;
             }
-            
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone || !isValidPhone(phone)) { 
+            if (!name || !phone || !isValidPhone(phone)) {
                 if (phone && !isValidPhone(phone)) {
                     showNotification('⚠️ Введите корректный номер телефона!', 'error');
                 }
-                openAuthModal(null); 
-                return; 
+                openAuthModal(null);
+                return;
             }
-            
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category,
+                    topping: '',
+                    toppingName: ''
+                };
+                showTrustModal();
+                return;
+            }
             addToCart({
                 id: product.id,
                 name: product.name,
@@ -2648,23 +3131,35 @@
         function confirmAuth() {
             const name = document.getElementById('authName').value.trim();
             const phone = document.getElementById('authPhone').value.trim();
-            
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
             if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
-            if (!isValidPhone(phone)) { 
-                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error'); 
-                return; 
+            if (!isValidPhone(phone)) {
+                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error');
+                return;
             }
-            
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            
             document.getElementById('customerName').value = name;
             document.getElementById('customerPhone').value = phoneClean;
             saveUserAuth(name, phoneClean);
             closeAuthModal();
-            
             if (pendingProduct) {
                 if (pendingProduct.isAlcohol) {
+                    if (!hasTrustShown(phoneClean)) {
+                        setTrustShown(phoneClean);
+                        window._pendingAddToCart = {
+                            id: pendingProduct.id,
+                            name: pendingProduct.name,
+                            price: pendingProduct.price,
+                            quantity: 1,
+                            category: pendingProduct.category || 'напиток',
+                            topping: '',
+                            toppingName: '',
+                            isAlcohol: true
+                        };
+                        showTrustModal();
+                        pendingProduct = null;
+                        return;
+                    }
                     addToCart({
                         id: pendingProduct.id,
                         name: pendingProduct.name,
@@ -2676,15 +3171,32 @@
                         isAlcohol: true
                     });
                     showNotification(`🍺 ${pendingProduct.name} добавлен! Предъявите паспорт курьеру.`);
+                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+                    animateStrawberryToCart(fakeEvent);
                 } else if (!pendingProduct.hasToppings) {
+                    if (!hasTrustShown(phoneClean)) {
+                        setTrustShown(phoneClean);
+                        window._pendingAddToCart = {
+                            id: pendingProduct.id,
+                            name: pendingProduct.name,
+                            price: pendingProduct.price,
+                            quantity: 1,
+                            category: pendingProduct.category,
+                            topping: '',
+                            toppingName: '',
+                            isRomantic: pendingProduct.isRomantic || false
+                        };
+                        showTrustModal();
+                        pendingProduct = null;
+                        return;
+                    }
                     addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '', isRomantic: pendingProduct.isRomantic || false });
                     showNotification(`✅ ${pendingProduct.name} добавлен!`);
+                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+                    animateStrawberryToCart(fakeEvent);
                 } else {
                     openToppingModal(pendingProduct);
-                    return;
                 }
-                const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-                animateStrawberryToCart(fakeEvent);
                 pendingProduct = null;
             }
         }
@@ -2743,6 +3255,24 @@
             let finalPrice = product.price + (product.isRomantic ? 0 : topping.price);
             let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
             const itemName = product.isRomantic ? `${product.name} (2 стаканчика)` : `${product.name}${toppingText}`;
+            const phone = document.getElementById('customerPhone').value.trim();
+            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            if (!hasTrustShown(phoneClean)) {
+                setTrustShown(phoneClean);
+                window._pendingAddToCart = {
+                    id: product.id,
+                    name: itemName,
+                    price: finalPrice,
+                    quantity: 1,
+                    category: product.category,
+                    topping: topping.id,
+                    toppingName: topping.name,
+                    isRomantic: product.isRomantic || false
+                };
+                closeToppingModal();
+                showTrustModal();
+                return;
+            }
             addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category, topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
             closeToppingModal();
             showNotification(`✅ ${itemName} добавлен!`);
@@ -2753,9 +3283,37 @@
         // ================================================================
         // ===== CART =====
         // ================================================================
+
+        function saveCart() {
+            try {
+                localStorage.setItem('strawberry_cart', JSON.stringify(state.cart));
+            } catch (e) {}
+        }
+
+        function loadCart() {
+            try {
+                const saved = localStorage.getItem('strawberry_cart');
+                if (saved) {
+                    state.cart = JSON.parse(saved);
+                    updateCart();
+                    return true;
+                }
+            } catch (e) {}
+            return false;
+        }
+
+        function clearSavedCart() {
+            localStorage.removeItem('strawberry_cart');
+        }
+
         function addToCart(item) {
-            const existing = state.cart.find(c => c.id === item.id && c.topping === item.topping);
-            if (existing) { existing.quantity += item.quantity || 1; } else { state.cart.push({ ...item, quantity: item.quantity || 1 }); }
+            const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
+            if (existing) {
+                existing.quantity += item.quantity || 1;
+            } else {
+                state.cart.push({ ...item, quantity: item.quantity || 1 });
+            }
+            saveCart();
             updateCart();
         }
 
@@ -2796,13 +3354,19 @@
             const newQuantity = item.quantity + delta;
             if (newQuantity <= 0) state.cart.splice(index, 1);
             else item.quantity = newQuantity;
+            saveCart();
             updateCart();
         }
 
         function removeItem(index) {
             const item = state.cart[index];
             if (!item) return;
-            if (confirm(`Удалить "${item.name}" из корзины?`)) { state.cart.splice(index, 1); updateCart(); showNotification(`🗑️ "${item.name}" удален`); }
+            if (confirm(`Удалить "${item.name}" из корзины?`)) {
+                state.cart.splice(index, 1);
+                saveCart();
+                updateCart();
+                showNotification(`🗑️ "${item.name}" удален`);
+            }
         }
 
         function openCart() {
@@ -2841,7 +3405,6 @@
         // ================================================================
         async function submitOrder() {
             const bungaloNumber = state.bungalowNumber;
-            
             if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
             if (state.settings.technicalBreak) { showNotification('🔧 Технический перерыв!', 'error'); return; }
             if (!isWorkingTime()) { showNotification('🔒 Прием заказов с 9:00 до 1:00', 'error'); return; }
@@ -2849,7 +3412,6 @@
 
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            
             if (bungaloNumber === undefined || bungaloNumber === null) { showNotification('⚠️ Номер бунгало не определен!', 'error'); return; }
             if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
             if (!phone || !isValidPhone(phone)) { showNotification('⚠️ Введите корректный номер телефона!', 'error'); return; }
@@ -2857,6 +3419,14 @@
 
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
             saveUserAuth(name, phoneClean);
+
+            showNotification('📍 Определяем ваше местоположение...');
+            const location = await getUserLocation();
+            if (location) {
+                showNotification('✅ Местоположение определено!');
+            } else {
+                showNotification('⚠️ Не удалось определить местоположение, заказ будет принят без геолокации');
+            }
 
             try {
                 const checkRes = await fetch('/api/my-orders', {
@@ -2882,17 +3452,18 @@
                 paymentMethod: selectedPayment,
                 paymentLabel: paymentLabels[selectedPayment] || 'Наличными',
                 isPickup: isPickupMode || false,
-                items: state.cart.map(item => ({ 
-                    id: item.id, 
-                    name: item.name + (item.isRomantic ? ' ❤️' : '') + (item.isAlcohol ? ' 🍺 18+' : ''), 
-                    price: item.price, 
-                    quantity: item.quantity, 
-                    category: item.category || 'другое', 
-                    topping: item.toppingName || '' 
+                items: state.cart.map(item => ({
+                    id: item.id,
+                    name: item.name + (item.isRomantic ? ' ❤️' : '') + (item.isAlcohol ? ' 🍺 18+' : ''),
+                    price: item.price,
+                    quantity: item.quantity,
+                    category: item.category || 'другое',
+                    topping: item.toppingName || ''
                 })),
                 total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 timestamp: new Date().toISOString(),
-                hasAlcohol: state.cart.some(item => item.isAlcohol)
+                hasAlcohol: state.cart.some(item => item.isAlcohol),
+                location: location
             };
 
             const orderButton = document.getElementById('orderButton');
@@ -2907,8 +3478,12 @@
                             showNotification('🏖️ Заказ ждет вас в киоске!');
                         } else {
                             showNotification('🎉 Заказ отправлен! Ждите доставку в бунгало!');
+                            if (location) {
+                                showNotification('📍 Ваше местоположение передано курьеру');
+                            }
                         }
                         state.cart = [];
+                        clearSavedCart();
                         updateCart();
                         selectPayment('cash');
                         closeCart();
@@ -2925,20 +3500,17 @@
         }
 
         // ================================================================
-        // ===== ORDERS MODAL (FULLSCREEN) =====
+        // ===== ORDERS MODAL =====
         // ================================================================
         function openOrdersModal() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            
             document.getElementById('ordersModal').classList.add('open');
             document.getElementById('ordersPhoneInput').value = phoneClean;
             document.body.style.overflow = 'hidden';
             loadMyOrders();
-            
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.getElementById('tabOrders').classList.add('active');
         }
@@ -2952,13 +3524,11 @@
 
         function loadMyOrders() {
             const phone = document.getElementById('ordersPhoneInput').value.trim();
-            if (!phone) { 
-                document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите номер телефона</div>'; 
-                return; 
+            if (!phone) {
+                document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите номер телефона</div>';
+                return;
             }
-            
             document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-spinner fa-spin" style="font-size:48px;display:block;margin-bottom:12px;"></i>Загрузка...</div>';
-
             fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) })
                 .then(res => res.json())
                 .then(data => {
@@ -2966,7 +3536,6 @@
                         document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-receipt" style="font-size:48px;display:block;margin-bottom:12px;"></i>У вас пока нет заказов<br><small style="color:var(--text-muted);">Закажите что-нибудь вкусное! 🍓</small></div>';
                         return;
                     }
-                    
                     document.getElementById('ordersContent').innerHTML = data.orders.map(order => {
                         const statusMap = {
                             'ожидает': { bg: '#FFF8E1', color: '#F59E0B', icon: '🕒', text: 'Ожидает' },
@@ -2975,7 +3544,6 @@
                             'отменен (таймаут)': { bg: '#FFEBEE', color: '#D32F2F', icon: '⏰', text: 'Отменён (таймаут)' }
                         };
                         const st = statusMap[order.status] || statusMap['ожидает'];
-                        
                         const itemsList = order.items ? order.items.map(item => `
                             <div class="order-item-row">
                                 <div class="item-left">
@@ -2988,14 +3556,11 @@
                                 <div class="item-total">${item.price * item.quantity} ₽</div>
                             </div>
                         `).join('') : '';
-                        
                         const date = new Date(order.createdAt);
                         const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
                         const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                        
                         const canCancel = order.status === 'ожидает' && (new Date() - date) / 1000 / 60 <= 5;
                         const canReview = order.status === 'выполнен' && !order.reviewed;
-                        
                         let actionButtons = '';
                         if (canCancel) {
                             actionButtons += `<button class="btn-cancel-order" onclick="cancelMyOrder(${order.id}, '${phone}')">Отменить заказ</button>`;
@@ -3003,7 +3568,6 @@
                         if (canReview) {
                             actionButtons += `<button class="btn-review-order" onclick="openReviewModal(${order.id})">⭐ Оставить отзыв</button>`;
                         }
-                        
                         return `
                             <div class="order-card-full">
                                 <div class="order-card-header">
@@ -3015,9 +3579,7 @@
                                         ${st.icon} ${st.text}
                                     </span>
                                 </div>
-                                
                                 <div class="order-items-list">${itemsList}</div>
-                                
                                 <div class="order-card-footer">
                                     <div class="footer-info">
                                         ${order.paymentLabel ? '💳 ' + order.paymentLabel : ''}
@@ -3033,8 +3595,8 @@
                         `;
                     }).join('');
                 })
-                .catch(() => { 
-                    document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-circle" style="font-size:48px;display:block;margin-bottom:12px;"></i>Ошибка загрузки</div>'; 
+                .catch(() => {
+                    document.getElementById('ordersContent').innerHTML = '<div class="cart-empty"><i class="fas fa-exclamation-circle" style="font-size:48px;display:block;margin-bottom:12px;"></i>Ошибка загрузки</div>';
                 });
         }
 
@@ -3043,8 +3605,7 @@
             fetch('/api/cancel-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId, phone }) })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); } 
-                    else { showNotification('❌ ' + (data.error || 'Ошибка'), 'error'); }
+                    if (data.success) { showNotification('✅ Заказ отменен!'); loadMyOrders(); updateOrdersBadge(); } else { showNotification('❌ ' + (data.error || 'Ошибка'), 'error'); }
                 })
                 .catch(() => { showNotification('❌ Ошибка соединения', 'error'); });
         }
@@ -3058,8 +3619,7 @@
                 .then(data => {
                     if (data.success) {
                         const activeOrders = data.orders.filter(o => o.status === 'ожидает').length;
-                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); } 
-                        else badge.classList.add('hidden');
+                        if (activeOrders > 0) { badge.textContent = activeOrders; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
                     }
                 })
                 .catch(() => {});
@@ -3133,16 +3693,17 @@
                     const res = await fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
                     const data = await res.json();
                     if (data.success && data.orders) {
-                        const latestOrder = data.orders[0];
-                        if (latestOrder && latestOrder.status === 'выполнен' && !latestOrder.reviewed && new Date(latestOrder.createdAt).getTime() > lastOrderCheckTime) {
-                            showNotification('🎉 Ваш заказ доставлен! Наслаждайтесь 🍓', 'success');
-                            setTimeout(() => { openReviewModal(latestOrder.id); }, 1500);
-                            clearInterval(reviewCheckInterval);
-                            reviewCheckInterval = null;
+                        const completedOrders = data.orders.filter(order =>
+                            order.status === 'выполнен' && !order.reviewed && new Date(order.createdAt).getTime() > lastOrderCheckTime
+                        );
+                        if (completedOrders.length > 0) {
+                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
+                            setTimeout(() => { openReviewModal(completedOrders[0].id); }, 2000);
+                            lastOrderCheckTime = Date.now();
                         }
                     }
                 } catch (e) {}
-            }, 5000);
+            }, 10000);
         }
 
         function openReviewModal(orderId) {
@@ -3172,13 +3733,11 @@
         async function submitReview() {
             const text = document.getElementById('reviewText').value.trim();
             if (state.reviewRating === 0) { showNotification('⚠️ Поставьте оценку!', 'error'); return; }
-
             const name = document.getElementById('customerName').value.trim() || 'Клиент';
             const phone = document.getElementById('customerPhone').value.trim();
             const btn = document.getElementById('submitReviewBtn');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
             btn.disabled = true;
-
             try {
                 const res = await fetch('/api/review', {
                     method: 'POST',
@@ -3187,7 +3746,7 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showNotification('⭐ Спасибо за отзыв! ❤️', 'success');
+                    showNotification('⭐ Спасибо за отзыв! ❤️');
                     closeReviewModal();
                     await loadReviews();
                     lastOrderCheckTime = Date.now();
@@ -3221,21 +3780,72 @@
         // ================================================================
         // ===== SUPPORT CHAT =====
         // ================================================================
+
+        function showChatTimerBanner() {
+            const banner = document.getElementById('chatTimerBanner');
+            if (!banner) return;
+            if (!state.chatTimerShown) {
+                state.chatTimerShown = true;
+                banner.classList.add('show');
+                setTimeout(() => {
+                    banner.classList.remove('show');
+                }, 30000);
+            }
+        }
+
+        function startChatTimer() {
+            if (chatTimerInterval) clearInterval(chatTimerInterval);
+            state.chatStartTime = Date.now();
+            state.chatTimerShown = false;
+            chatTimerInterval = setInterval(() => {
+                const elapsed = (Date.now() - state.chatStartTime) / 1000 / 60;
+                if (elapsed >= 10 && !state.chatTimerShown) {
+                    showChatTimerBanner();
+                }
+            }, 10000);
+        }
+
+        function stopChatTimer() {
+            if (chatTimerInterval) {
+                clearInterval(chatTimerInterval);
+                chatTimerInterval = null;
+            }
+            state.chatStartTime = null;
+            state.chatTimerShown = false;
+            const banner = document.getElementById('chatTimerBanner');
+            if (banner) {
+                banner.classList.remove('show');
+            }
+        }
+
+        const originalOpenSupportChat = openSupportChat;
+        openSupportChat = function() {
+            originalOpenSupportChat();
+            startChatTimer();
+        };
+
+        const originalCloseSupportChat = closeSupportChat;
+        closeSupportChat = function() {
+            originalCloseSupportChat();
+            stopChatTimer();
+        };
+
         async function sendSupportMessage() {
             const input = document.getElementById('supportInput');
             const text = input.value.trim();
             if (!text) return;
             const phone = document.getElementById('customerPhone').value.trim();
             if (!phone) { showNotification('⚠️ Введите телефон!', 'error'); return; }
-            
             input.value = '';
             try {
-                await fetch('/api/chat-send', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() }) 
+                await fetch('/api/chat-send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, text, from: 'client', name: document.getElementById('customerName').value.trim() })
                 });
                 loadSupportMessages(phone);
+                stopChatTimer();
+                startChatTimer();
             } catch (e) {}
         }
 
@@ -3243,7 +3853,18 @@
             try {
                 const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
                 const data = await res.json();
-                if (data.success) { renderSupportMessages(data.messages || []); }
+                if (data.success) {
+                    renderSupportMessages(data.messages || []);
+                    const adminMessages = (data.messages || []).filter(msg => msg.from === 'admin');
+                    if (adminMessages.length > 0 && state.chatStartTime) {
+                        stopChatTimer();
+                        const banner = document.getElementById('chatTimerBanner');
+                        if (banner) {
+                            banner.classList.remove('show');
+                        }
+                        state.chatTimerShown = false;
+                    }
+                }
             } catch (e) {}
         }
 
@@ -3268,8 +3889,13 @@
         function startChatAutoUpdate(phone) {
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             chatUpdateInterval = setInterval(() => {
-                if (document.getElementById('supportChatModal')) { loadSupportMessages(phone); } 
-                else { clearInterval(chatUpdateInterval); chatUpdateInterval = null; }
+                if (document.getElementById('supportChatModal')) {
+                    loadSupportMessages(phone);
+                } else {
+                    clearInterval(chatUpdateInterval);
+                    chatUpdateInterval = null;
+                    stopChatTimer();
+                }
             }, 3000);
         }
 
@@ -3277,19 +3903,18 @@
             const modal = document.getElementById('supportChatModal');
             if (modal) modal.remove();
             document.body.style.overflow = '';
-            if (chatUpdateInterval) { 
-                clearInterval(chatUpdateInterval); 
-                chatUpdateInterval = null; 
+            if (chatUpdateInterval) {
+                clearInterval(chatUpdateInterval);
+                chatUpdateInterval = null;
             }
+            stopChatTimer();
         }
 
         function openSupportChatWithOrder(orderId) {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); return; }
-            
             openSupportChat();
-            
             setTimeout(() => {
                 const input = document.getElementById('supportInput');
                 if (input) {
@@ -3303,10 +3928,8 @@
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            
             closeSupportChat();
             lastMessageTime = Date.now();
-
             const overlay = document.createElement('div');
             overlay.className = 'auth-modal-overlay open';
             overlay.id = 'supportChatModal';
@@ -3325,6 +3948,16 @@
                         </div>
                         <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
                     </div>
+                    <div id="chatTimerBanner" class="chat-timer-banner">
+                        <span class="timer-icon">⏰</span>
+                        <span class="timer-text">
+                            <strong>Нет ответа больше 10 минут?</strong><br>
+                            Позвоните нам по номеру <strong>${SUPPORT_PHONE}</strong>
+                        </span>
+                        <a href="tel:+79628557263" class="timer-call-btn">
+                            <i class="fas fa-phone"></i> Позвонить
+                        </a>
+                    </div>
                     <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;background:#F8FAFC;">
                         <div style="text-align:center;color:var(--text-muted);padding:40px 0;">
                             <i class="fas fa-comment-dots" style="font-size:32px;display:block;margin-bottom:8px;"></i>
@@ -3340,9 +3973,9 @@
             document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
             overlay.addEventListener('click', function(e) { if (e.target === this) closeSupportChat(); });
-            
             loadSupportMessages(phone);
             startChatAutoUpdate(phone);
+            startChatTimer();
         }
 
         // ================================================================
@@ -3357,7 +3990,7 @@
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if (tab === 'menu') { 
+            if (tab === 'menu') {
                 document.getElementById('tabMenu').classList.add('active');
                 closeCart();
                 closeOrdersModal();
@@ -3372,6 +4005,7 @@
                 if (state.cart.length === 0) return;
                 if (!confirm('🗑️ Очистить всю корзину?')) return;
                 state.cart = [];
+                clearSavedCart();
                 updateCart();
                 showNotification('🗑️ Корзина очищена');
             });
@@ -3384,6 +4018,7 @@
         // ================================================================
         async function init() {
             updateOnlineStatus();
+            loadCart();
             const existingSession = getSession();
             const urlBungalo = getBungaloFromURL();
 
@@ -3467,20 +4102,40 @@
             }, 5000);
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('trustModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) closeTrustModal();
+                });
+            }
+        });
+
         window.addEventListener('beforeunload', function() {
             if (notificationCheckInterval) clearInterval(notificationCheckInterval);
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
             if (sessionTimerInterval) clearInterval(sessionTimerInterval);
             if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+            if (chatTimerInterval) clearInterval(chatTimerInterval);
         });
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v8');
-        console.log('✅ Новое меню: Классика, Сливки+Шоколад, Сливки, Просто клубника');
-        console.log('✅ Поддержка | 🍓 | Отзывы в строку');
-        console.log('✅ Карта под бунгало');
+        console.log('🍓 Strawberry in Chocolate - v5');
+        console.log('✅ Валидация телефона');
+        console.log('✅ Автосохранение данных');
+        console.log('✅ Полноэкранные заказы и отзывы');
+        console.log('✅ Красивые карточки заказов');
+        console.log('✅ Проверка возраста 18+ для алкоголя');
+        console.log('✅ oldPrice из админки');
+        console.log('✅ Анимация клубнички в корзину');
+        console.log('✅ Кастомные позиции из админки');
+        console.log('✅ Сохранение корзины в localStorage');
+        console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
+        console.log('✅ Доверительное окно при первом добавлении в корзину');
+        console.log('📍 Отправка геолокации при заказе');
+        console.log('📍 Автоматический запрос геолокации при заходе в бунгало');
     </script>
 
 </body>
