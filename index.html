@@ -65,7 +65,6 @@
             min-height: 100vh;
         }
 
-        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 8px 0 16px;
@@ -138,7 +137,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== BUNGALO CARD ===== */
         .bungalo-display {
             position: relative;
             border-radius: var(--radius-2xl);
@@ -236,7 +234,6 @@
             50% { transform: translateY(-15px) rotate(10deg); }
         }
 
-        /* ===== SUPPORT HEADER ===== */
         .support-header {
             display: flex;
             justify-content: space-between;
@@ -321,7 +318,6 @@
             font-size: 14px;
         }
 
-        /* ===== CHAT TIMER BANNER ===== */
         .chat-timer-banner {
             background: linear-gradient(135deg, #FFF8E1, #FFECB3);
             border: 1px solid #FFE0B2;
@@ -382,7 +378,6 @@
             font-size: 16px;
         }
 
-        /* ===== TRUST MODAL ===== */
         .trust-modal-overlay {
             display: none;
             position: fixed;
@@ -502,7 +497,6 @@
             transform: scale(0.97);
         }
 
-        /* ===== NAVIGATION CHIPS ===== */
         .chips-nav {
             display: flex;
             gap: 8px;
@@ -558,7 +552,6 @@
             transform: scale(1.02);
         }
 
-        /* ===== CONTACT SECTION ===== */
         .contact-section {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
@@ -620,7 +613,6 @@
             box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
         }
 
-        /* ===== MENU GRID ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -729,7 +721,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        /* ===== DRINKS ===== */
         .drinks-grid {
             display: flex;
             flex-direction: column;
@@ -811,7 +802,6 @@
             transform: scale(0.9);
         }
 
-        /* ===== SECTION TITLE ===== */
         .section-title {
             font-size: 18px;
             font-weight: 700;
@@ -828,7 +818,6 @@
             color: var(--primary);
         }
 
-        /* ===== MAP BUTTON ===== */
         .map-btn-top {
             display: flex;
             align-items: center;
@@ -855,7 +844,6 @@
             background: #FFFFFF;
         }
 
-        /* ===== MODALS ===== */
         .auth-modal-overlay,
         .topping-modal-overlay,
         .orders-modal-overlay,
@@ -892,7 +880,6 @@
             display: flex;
         }
 
-        /* ===== FULLSCREEN MODALS ===== */
         .orders-modal-overlay.open,
         .reviews-modal-overlay.open {
             display: flex;
@@ -1042,7 +1029,6 @@
             background: #FFF5F5;
         }
 
-        /* ===== AGE VERIFY ===== */
         .age-verify-overlay {
             z-index: 600;
         }
@@ -1094,7 +1080,6 @@
             color: var(--text-dark);
         }
 
-        /* ===== FLYING STRAWBERRY ===== */
         .flying-strawberry {
             position: fixed;
             z-index: 9999;
@@ -1104,7 +1089,6 @@
             filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.4));
         }
 
-        /* ===== CART MODAL ===== */
         .cart-overlay {
             display: none;
             position: fixed;
@@ -1241,7 +1225,6 @@
             padding: 32px 0;
         }
 
-        /* ===== PAYMENT ===== */
         .payment-section {
             background: #F8FAFC;
             border-radius: var(--radius-lg);
@@ -1299,7 +1282,6 @@
             text-align: center;
         }
 
-        /* ===== BOTTOM TAB BAR ===== */
         .bottom-tab-bar {
             position: fixed;
             bottom: 0;
@@ -1385,7 +1367,6 @@
             color: var(--primary);
         }
 
-        /* ===== ORDERS FULLSCREEN ===== */
         .orders-fullscreen-header {
             display: flex;
             justify-content: space-between;
@@ -1590,7 +1571,6 @@
             color: #FFFFFF;
         }
 
-        /* ===== NOTIFICATION ===== */
         .notification {
             display: none;
             position: fixed;
@@ -1629,7 +1609,6 @@
             }
         }
 
-        /* ===== NO ACCESS ===== */
         .no-access-message {
             text-align: center;
             padding: 40px 24px;
@@ -1702,7 +1681,6 @@
             color: var(--text-secondary);
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 400px) {
             .app-container {
                 padding: 12px 12px 16px;
@@ -1767,11 +1745,9 @@
     </style>
 </head>
 <body>
-    <!-- ===== TOAST / CART OVERLAY ===== -->
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-    <!-- ===== AUTH MODAL ===== -->
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">
@@ -1791,7 +1767,6 @@
         </div>
     </div>
 
-    <!-- ===== TOPPING MODAL ===== -->
     <div class="topping-modal-overlay" id="toppingModal">
         <div class="topping-modal-content">
             <button class="modal-close" onclick="closeToppingModal()">
@@ -1818,7 +1793,6 @@
         </div>
     </div>
 
-    <!-- ===== AGE VERIFICATION MODAL ===== -->
     <div class="age-verify-overlay" id="ageVerifyModal">
         <div class="age-verify-content">
             <span style="font-size: 48px; display: block; text-align: center; margin-bottom: 12px;">🍺</span>
@@ -1826,30 +1800,25 @@
             <div class="modal-subtitle" style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
                 Спиртные напитки отпускаются<br><strong>строго совершеннолетним</strong>
             </div>
-            
             <div class="age-warning-box">
                 <span>⚠️</span>
                 <span class="age-warning-text">
                     При получении заказа необходимо <strong>предъявить документ</strong>, удостоверяющий личность и возраст
                 </span>
             </div>
-
             <label class="age-checkbox-label" onclick="toggleAgeCheckbox()">
                 <input type="checkbox" id="ageCheckbox">
                 <span>Мне есть 18 лет</span>
             </label>
-
             <button class="confirm-btn" id="ageConfirmBtn" disabled onclick="confirmAge()">
                 <i class="fas fa-check-circle"></i> Подтверждаю
             </button>
-            
             <button onclick="closeAgeVerify()" style="width: 100%; padding: 12px; background: none; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; margin-top: 8px; font-family: var(--font-family);">
                 Отмена
             </button>
         </div>
     </div>
 
-    <!-- ===== ORDERS MODAL (FULLSCREEN) ===== -->
     <div class="orders-modal-overlay" id="ordersModal">
         <div class="orders-modal-content">
             <div class="orders-fullscreen-header">
@@ -1873,7 +1842,6 @@
         </div>
     </div>
 
-    <!-- ===== REVIEWS MODAL (FULLSCREEN) ===== -->
     <div class="reviews-modal-overlay" id="reviewsModal">
         <div class="reviews-modal-content">
             <div class="orders-fullscreen-header">
@@ -1897,7 +1865,6 @@
         </div>
     </div>
 
-    <!-- ===== REVIEW WRITE MODAL ===== -->
     <div class="review-modal-overlay" id="reviewModal">
         <div class="review-modal-content">
             <button class="modal-close" onclick="closeReviewModal()">
@@ -1921,7 +1888,6 @@
         </div>
     </div>
 
-    <!-- ===== IMAGE MODAL ===== -->
     <div class="image-modal-overlay" id="imageModal" onclick="closeImageModal()" style="cursor: pointer;">
         <div class="image-modal-content" style="max-width: 90vw; max-height: 90vh; border-radius: var(--radius-xl); overflow: hidden; position: relative;">
             <button class="image-close" onclick="closeImageModal()" style="position: absolute; top: 14px; right: 14px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; color: #FFFFFF; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;">
@@ -1932,7 +1898,6 @@
         </div>
     </div>
 
-    <!-- ===== BEACH RESTRICT MODAL ===== -->
     <div class="beach-restrict-modal" id="beachRestrictModal">
         <div class="beach-restrict-content">
             <span class="restrict-icon" style="font-size: 64px; display: block; text-align: center; margin-bottom: 12px;">🏖️</span>
@@ -1965,7 +1930,6 @@
         </div>
     </div>
 
-    <!-- ===== MAP MODAL ===== -->
     <div class="map-modal-overlay" id="mapModal" onclick="closeMap()">
         <div class="map-modal-content" onclick="event.stopPropagation()" style="background: #FFFFFF; border-radius: var(--radius-2xl); padding: 28px 24px 24px;">
             <button class="modal-close" onclick="closeMap()">
@@ -1984,7 +1948,6 @@
         </div>
     </div>
 
-    <!-- ===== TRUST MODAL ===== -->
     <div class="trust-modal-overlay" id="trustModal">
         <div class="trust-modal-content">
             <button class="modal-close" onclick="closeTrustModal()">
@@ -2004,10 +1967,8 @@
         </div>
     </div>
 
-    <!-- ===== MAIN CONTAINER ===== -->
     <div class="app-container">
 
-        <!-- ===== SUPPORT HEADER ===== -->
         <div class="support-header">
             <div class="support-buttons">
                 <button onclick="openSupportChat()" class="support-btn">
@@ -2168,7 +2129,6 @@
         </div>
     </div>
 
-    <!-- ===== BOTTOM TAB BAR ===== -->
     <div class="bottom-tab-bar" id="bottomTabBar">
         <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
             <span class="tab-icon"><i class="fas fa-home"></i></span>
@@ -2187,7 +2147,6 @@
         </button>
     </div>
 
-    <!-- ===== CART MODAL ===== -->
     <div class="cart-modal" id="cartModal">
         <div class="modal-header">
             <h2><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> Корзина</h2>
@@ -2236,9 +2195,6 @@
     </div>
 
     <script>
-        // ================================================================
-        // ===== CONFIGURATION =====
-        // ================================================================
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
         const SUPPORT_PHONE = '+7 962 855-72-63';
@@ -2252,25 +2208,18 @@
             phoneRaw: '79628557263'
         };
 
-        const WORK_HOURS = { 
-            start: 9,
-            end: 30
-        };
-
+        const WORK_HOURS = { start: 9, end: 30 };
         const FORCE_WORKING_TIME = false;
         let manualTime = null;
 
-        // ================================================================
-        // ===== DATA =====
-        // ================================================================
-       const STRAWBERRY_ITEMS = [
-    { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-    { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
-    { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-    { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', image: 'images/miks.jpg' },
-    { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
-    { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
-];
+        const STRAWBERRY_ITEMS = [
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
+        ];
 
         const FRUITS_ITEMS = [
             { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', image: 'images/watermelon.jpg', emoji: '🍉' },
@@ -2280,42 +2229,12 @@
             { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
         ];
 
-     function renderMenu(settings) {
-    const strawberryGrid = document.getElementById('strawberryGrid');
-    let html = '';
-
-    STRAWBERRY_ITEMS.forEach(item => {
-        let customItem = null;
-        if (settings.customItems) {
-            customItem = settings.customItems.find(ci => ci.id === item.id);
-        }
-        const displayItem = customItem || item;
-        const available = settings.menuItems[item.id] !== false;
-        html += `
-            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
-                ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
-                <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
-                <div class="item-content">
-                    <div class="item-name">${displayItem.name}</div>
-                    <div class="item-desc">${displayItem.desc || item.desc}</div>
-                    <div class="item-price">${displayItem.price} ₽</div>
-                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                </div>
-            </div>
-        `;
-    });
-
-    // ... остальной код (фрукты, напитки, кастомные позиции)
-}
-
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.webp', emoji: '🍋' },
             { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'images/kola.jpg', emoji: '🥤' },
-            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.webp', emoji: '🍺', alcohol: true },
-            { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, image: 'images/shaurma.webp', emoji: '🌯', shaurma: true }
+            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.webp', emoji: '🍺', alcohol: true }
         ];
 
-        // ===== ТОППИНГИ (БЕСПЛАТНЫЕ) =====
         const TOPPINGS = [
             { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban' },
             { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling' },
@@ -2324,9 +2243,6 @@
             { id: 'waffle', name: 'Вафельная крошка', icon: 'fas fa-crumb' }
         ];
 
-        // ================================================================
-        // ===== STATE =====
-        // ================================================================
         const state = {
             cart: [],
             selectedProduct: null,
@@ -2353,10 +2269,6 @@
         let reviewCheckInterval = null;
         let lastOrderCheckTime = Date.now();
         let chatTimerInterval = null;
-
-        // ================================================================
-        // ===== TRUST MODAL =====
-        // ================================================================
 
         function hasTrustShown(phone) {
             try {
@@ -2404,26 +2316,19 @@
             }
         }
 
-        // ================================================================
-        // ===== ГЕОЛОКАЦИЯ =====
-        // ================================================================
-
         function getUserLocation() {
             return new Promise((resolve) => {
                 if (state.userLocation) {
                     resolve(state.userLocation);
                     return;
                 }
-
                 if (!navigator.geolocation) {
                     console.warn('Геолокация не поддерживается браузером');
                     showNotification('⚠️ Ваш браузер не поддерживает геолокацию');
                     resolve(null);
                     return;
                 }
-
                 showNotification('📍 Запрашиваем ваше местоположение...');
-
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
                         const location = {
@@ -2457,9 +2362,6 @@
             });
         }
 
-        // ================================================================
-        // ===== PHONE VALIDATION =====
-        // ================================================================
         function validatePhoneInput(input) {
             let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
             if (value.match(/^[7-8]\d{0,10}$/)) {
@@ -2481,17 +2383,6 @@
             return /^[7-8]\d{10}$/.test(clean);
         }
 
-        function formatPhone(phone) {
-            const clean = phone.replace(/[\s\-\+\(\)]/g, '');
-            if (clean.length === 11) {
-                return `+7 ${clean.substring(1,4)} ${clean.substring(4,7)}-${clean.substring(7,9)}-${clean.substring(9,11)}`;
-            }
-            return phone;
-        }
-
-        // ================================================================
-        // ===== SESSION =====
-        // ================================================================
         function getSession() {
             try {
                 const data = localStorage.getItem(SESSION_KEY);
@@ -2538,17 +2429,6 @@
             } catch { return null; }
         }
 
-        function setManualTime(hours, minutes) {
-            manualTime = { hours, minutes };
-        }
-
-        function clearManualTime() {
-            manualTime = null;
-        }
-
-        // ================================================================
-        // ===== SERVER API =====
-        // ================================================================
         async function checkSessionOnServer(bungalow) {
             try {
                 const res = await fetch(`/api/check-session?b=${bungalow}`);
@@ -2569,19 +2449,8 @@
             } catch (e) { return null; }
         }
 
-        // ================================================================
-        // ===== ONLINE STATUS =====
-        // ================================================================
         function isOnline() { return navigator.onLine; }
 
-        function updateOnlineStatus() {}
-
-        window.addEventListener('online', () => { updateOnlineStatus(); });
-        window.addEventListener('offline', () => { updateOnlineStatus(); });
-
-        // ================================================================
-        // ===== WORKING TIME =====
-        // ================================================================
         function isWorkingTime() {
             if (FORCE_WORKING_TIME) return true;
             let now;
@@ -2628,9 +2497,6 @@
             return `${hours}:${String(minutes).padStart(2, '0')}`;
         }
 
-        // ================================================================
-        // ===== NOTIFICATION =====
-        // ================================================================
         function showNotification(message, type = '') {
             const notification = document.getElementById('notification');
             notification.innerHTML = message;
@@ -2640,9 +2506,6 @@
             notification._timeout = setTimeout(() => notification.classList.remove('show'), 3000);
         }
 
-        // ================================================================
-        // ===== ANIMATION =====
-        // ================================================================
         function animateStrawberryToCart(clickEvent) {
             const strawberry = document.createElement('div');
             strawberry.className = 'flying-strawberry';
@@ -2668,9 +2531,6 @@
             }, 800);
         }
 
-        // ================================================================
-        // ===== MODES =====
-        // ================================================================
         function showNoAccess() {
             document.getElementById('noAccessMode').style.display = 'block';
             document.getElementById('bungaloMode').style.display = 'none';
@@ -2734,9 +2594,6 @@
             document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
         }
 
-        // ================================================================
-        // ===== MAP =====
-        // ================================================================
         function openMap() {
             closeBeachRestrict();
             const mapModal = document.getElementById('mapModal');
@@ -2749,9 +2606,6 @@
             document.getElementById('mapModal').classList.remove('open');
         }
 
-        // ================================================================
-        // ===== BEACH RESTRICT =====
-        // ================================================================
         function openBeachRestrict() {
             document.getElementById('beachRestrictModal').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -2766,9 +2620,6 @@
             if (e.target === this) closeBeachRestrict();
         });
 
-        // ================================================================
-        // ===== AGE VERIFICATION =====
-        // ================================================================
         function toggleAgeCheckbox() {
             const checkbox = document.getElementById('ageCheckbox');
             checkbox.checked = !checkbox.checked;
@@ -2842,9 +2693,6 @@
             if (e.target === this) closeAgeVerify();
         });
 
-        // ================================================================
-        // ===== QR PROMPT =====
-        // ================================================================
         function showQRPrompt() {
             const overlay = document.createElement('div');
             overlay.className = 'auth-modal-overlay open';
@@ -2870,34 +2718,9 @@
             if (overlay) overlay.remove();
         }
 
-        // ================================================================
-        // ===== RENDER MENU =====
-        // ================================================================
         function renderMenu(settings) {
             const strawberryGrid = document.getElementById('strawberryGrid');
             let html = '';
-
-            let romanticCustom = null;
-            if (settings.customItems) {
-                romanticCustom = settings.customItems.find(ci => ci.id === ROMANTIC_ITEM.id);
-            }
-            const displayRomantic = romanticCustom || ROMANTIC_ITEM;
-            const romanticAvailable = settings.menuItems[ROMANTIC_ITEM.id] !== false;
-
-            html += `
-                <div class="menu-item ${romanticAvailable ? '' : 'unavailable'}" data-id="${ROMANTIC_ITEM.id}" data-name="${displayRomantic.name}" data-price="${displayRomantic.price}" data-category="стаканчик" data-has-toppings="true" data-is-romantic="true">
-                    <img src="${displayRomantic.image || ROMANTIC_ITEM.image}" alt="${displayRomantic.name}" class="item-image" onclick="openImageModal('${displayRomantic.image || ROMANTIC_ITEM.image}', '${displayRomantic.name}')" loading="lazy">
-                    <div class="item-content">
-                        <div class="item-name">${displayRomantic.name}</div>
-                        <div class="item-desc">${displayRomantic.desc || ROMANTIC_ITEM.desc} 💕</div>
-                        <div class="item-price">
-                            ${displayRomantic.price} ₽
-                            ${displayRomantic.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${displayRomantic.oldPrice} ₽</small>` : ''}
-                        </div>
-                        <button class="add-btn" ${romanticAvailable ? '' : 'disabled'}>${romanticAvailable ? '+' : '✕'}</button>
-                    </div>
-                </div>
-            `;
 
             STRAWBERRY_ITEMS.forEach(item => {
                 let customItem = null;
@@ -2922,7 +2745,7 @@
 
             if (settings.customItems) {
                 settings.customItems.forEach(ci => {
-                    if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id) && ci.id !== ROMANTIC_ITEM.id) {
+                    if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id)) {
                         const available = settings.menuItems[ci.id] !== false;
                         html += `
                             <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="стаканчик" data-has-toppings="true">
@@ -3031,13 +2854,9 @@
             }
 
             document.getElementById('drinksGrid').innerHTML = drinksHtml;
-
             attachEvents();
         }
 
-        // ================================================================
-        // ===== ATTACH EVENTS =====
-        // ================================================================
         function attachEvents() {
             document.querySelectorAll('.add-btn:not([disabled])').forEach(btn => {
                 btn.removeEventListener('click', handleAddClick);
@@ -3059,7 +2878,6 @@
                 name: item.dataset.name,
                 price: parseInt(item.dataset.price),
                 category: item.dataset.category || 'стаканчик',
-                isRomantic: item.dataset.isRomantic === 'true',
                 hasToppings
             };
 
@@ -3084,7 +2902,6 @@
                     category: product.category,
                     topping: '',
                     toppingName: '',
-                    isRomantic: product.isRomantic || false,
                     hasToppings: hasToppings
                 };
                 showTrustModal();
@@ -3092,7 +2909,7 @@
             }
 
             if (!hasToppings) {
-                addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '', isRomantic: product.isRomantic || false });
+                addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '' });
                 showNotification(`✅ ${product.name} добавлен!`);
                 animateStrawberryToCart(e);
                 return;
@@ -3152,9 +2969,6 @@
             animateStrawberryToCart(e);
         }
 
-        // ================================================================
-        // ===== AUTH =====
-        // ================================================================
         function openAuthModal(product) {
             pendingProduct = product;
             const savedAuth = getUserAuth();
@@ -3223,14 +3037,13 @@
                             quantity: 1,
                             category: pendingProduct.category,
                             topping: '',
-                            toppingName: '',
-                            isRomantic: pendingProduct.isRomantic || false
+                            toppingName: ''
                         };
                         showTrustModal();
                         pendingProduct = null;
                         return;
                     }
-                    addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '', isRomantic: pendingProduct.isRomantic || false });
+                    addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '' });
                     showNotification(`✅ ${pendingProduct.name} добавлен!`);
                     const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
                     animateStrawberryToCart(fakeEvent);
@@ -3243,16 +3056,13 @@
 
         document.getElementById('authModal').addEventListener('click', function(e) { if (e.target === this) closeAuthModal(); });
 
-        // ================================================================
-        // ===== TOPPINGS (БЕСПЛАТНЫЕ, ДО 2 ШТУК) =====
-        // ================================================================
         function openToppingModal(product) {
             state.selectedProduct = product;
             state.selectedToppings = [];
             
             document.getElementById('productIcon').innerHTML = '<i class="fas fa-chocolate-bar" style="color: var(--primary);"></i>';
             document.getElementById('productName').textContent = product.name;
-            document.getElementById('productPrice').textContent = product.price + ' ₽' + (product.isRomantic ? ' (за 2 шт)' : '');
+            document.getElementById('productPrice').textContent = product.price + ' ₽';
             
             let html = `
                 <div style="background: #E8F5E9; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; color: #2E7D32; display: flex; align-items: center; gap: 8px;">
@@ -3282,7 +3092,6 @@
         }
 
         function toggleTopping(toppingId) {
-            // Если выбрана "Без присыпки" — очищаем всё
             if (toppingId === 'none') {
                 state.selectedToppings = ['none'];
                 updateToppingUI();
@@ -3290,7 +3099,6 @@
                 return;
             }
             
-            // Если была выбрана "Без присыпки" — убираем её
             if (state.selectedToppings.includes('none')) {
                 state.selectedToppings = [];
             }
@@ -3313,7 +3121,6 @@
         function updateToppingUI() {
             const display = document.getElementById('selectedToppingsDisplay');
             
-            // Обновляем стили выбранных опций
             document.querySelectorAll('.topping-option').forEach(el => {
                 const id = el.dataset.id;
                 const isSelected = state.selectedToppings.includes(id);
@@ -3323,7 +3130,6 @@
                 el.querySelector('.option-check').style.display = isSelected ? 'inline' : 'none';
             });
             
-            // Обновляем отображение выбранных
             if (state.selectedToppings.length === 0 || (state.selectedToppings.length === 1 && state.selectedToppings[0] === 'none')) {
                 display.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>';
                 return;
@@ -3364,7 +3170,7 @@
             });
             
             const toppingText = state.selectedToppings.includes('none') ? '' : ' (' + toppingNames.join(' + ') + ')';
-            const itemName = product.isRomantic ? `${product.name} (2 стаканчика)` : `${product.name}${toppingText}`;
+            const itemName = `${product.name}${toppingText}`;
             
             const phone = document.getElementById('customerPhone').value.trim();
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
@@ -3378,8 +3184,7 @@
                     quantity: 1,
                     category: product.category,
                     topping: state.selectedToppings.join(','),
-                    toppingName: toppingNames.join(' + '),
-                    isRomantic: product.isRomantic || false
+                    toppingName: toppingNames.join(' + ')
                 };
                 closeToppingModal();
                 showTrustModal();
@@ -3393,8 +3198,7 @@
                 quantity: 1,
                 category: product.category,
                 topping: state.selectedToppings.join(','),
-                toppingName: toppingNames.join(' + '),
-                isRomantic: product.isRomantic || false
+                toppingName: toppingNames.join(' + ')
             });
             
             closeToppingModal();
@@ -3402,10 +3206,6 @@
             const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
             animateStrawberryToCart(fakeEvent);
         });
-
-        // ================================================================
-        // ===== CART =====
-        // ================================================================
 
         function saveCart() {
             try {
@@ -3456,7 +3256,7 @@
                 document.getElementById('cartItems').innerHTML = state.cart.map((item, index) => `
                     <div class="cart-item" data-index="${index}">
                         <div class="item-info-cart">
-                            <div class="item-name-cart">${item.name}${item.isRomantic ? ' ❤️' : ''}${item.isAlcohol ? ' 🍺 18+' : ''}</div>
+                            <div class="item-name-cart">${item.name}${item.isAlcohol ? ' 🍺 18+' : ''}</div>
                             <div class="item-price-cart">${item.price} ₽ × ${item.quantity}</div>
                         </div>
                         <div class="item-actions">
@@ -3513,9 +3313,6 @@
             document.body.style.overflow = '';
         }
 
-        // ================================================================
-        // ===== PAYMENT =====
-        // ================================================================
         function selectPayment(method) {
             selectedPayment = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
@@ -3529,9 +3326,6 @@
             document.getElementById('paymentInfo').textContent = messages[method] || messages.cash;
         }
 
-        // ================================================================
-        // ===== ORDER SUBMIT =====
-        // ================================================================
         async function submitOrder() {
             const bungaloNumber = state.bungalowNumber;
             if (!isOnline()) { showNotification('📴 Нет интернета!', 'error'); return; }
@@ -3583,7 +3377,7 @@
                 isPickup: isPickupMode || false,
                 items: state.cart.map(item => ({
                     id: item.id,
-                    name: item.name + (item.isRomantic ? ' ❤️' : '') + (item.isAlcohol ? ' 🍺 18+' : ''),
+                    name: item.name + (item.isAlcohol ? ' 🍺 18+' : ''),
                     price: item.price,
                     quantity: item.quantity,
                     category: item.category || 'другое',
@@ -3628,9 +3422,6 @@
                 .finally(() => { orderButton.innerHTML = '<i class="fas fa-check-circle"></i> Заказать'; orderButton.disabled = false; });
         }
 
-        // ================================================================
-        // ===== ORDERS MODAL =====
-        // ================================================================
         function openOrdersModal() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
@@ -3754,9 +3545,6 @@
                 .catch(() => {});
         }
 
-        // ================================================================
-        // ===== REVIEWS =====
-        // ================================================================
         async function loadReviews() {
             try {
                 const res = await fetch('/api/reviews');
@@ -3891,9 +3679,6 @@
             }
         }
 
-        // ================================================================
-        // ===== IMAGE MODAL =====
-        // ================================================================
         function openImageModal(src, caption) {
             document.getElementById('modalImage').src = src;
             document.getElementById('imageCaption').textContent = caption || 'Клубника';
@@ -3905,10 +3690,6 @@
             document.getElementById('imageModal').classList.remove('open');
             document.body.style.overflow = '';
         }
-
-        // ================================================================
-        // ===== SUPPORT CHAT =====
-        // ================================================================
 
         function showChatTimerBanner() {
             const banner = document.getElementById('chatTimerBanner');
@@ -4107,9 +3888,6 @@
             startChatTimer();
         }
 
-        // ================================================================
-        // ===== NAVIGATION =====
-        // ================================================================
         function switchSection(section) {
             document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
             document.getElementById('section-' + section).style.display = 'block';
@@ -4126,9 +3904,6 @@
             }
         }
 
-        // ================================================================
-        // ===== INIT CART =====
-        // ================================================================
         function initCart() {
             document.getElementById('clearCart').addEventListener('click', function() {
                 if (state.cart.length === 0) return;
@@ -4142,9 +3917,6 @@
             updateCart();
         }
 
-        // ================================================================
-        // ===== INIT =====
-        // ================================================================
         async function init() {
             updateOnlineStatus();
             loadCart();
@@ -4251,20 +4023,12 @@
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v9');
-        console.log('✅ Валидация телефона');
-        console.log('✅ Автосохранение данных');
-        console.log('✅ Полноэкранные заказы и отзывы');
-        console.log('✅ Красивые карточки заказов');
-        console.log('✅ Проверка возраста 18+ для алкоголя');
-        console.log('✅ Бесплатные присыпки (до 2 видов)');
+        console.log('🍓 Strawberry in Chocolate - v12');
+        console.log('✅ Клубника в сливках и шоколаде — 350 ₽ (1 шт)');
+        console.log('✅ Шаурма удалена');
+        console.log('✅ Присыпки бесплатные (до 2 видов)');
         console.log('✅ Оплата: наличные, перевод, карта при получении');
-        console.log('✅ Анимация клубнички в корзину');
-        console.log('✅ Сохранение корзины в localStorage');
-        console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
-        console.log('✅ Доверительное окно при первом добавлении в корзину');
-        console.log('📍 Отправка геолокации при заказе');
-        console.log('📍 Автоматический запрос геолокации при заходе в бунгало');
+        console.log('❌ Убраны все упоминания "2 шт"');
     </script>
 
 </body>
