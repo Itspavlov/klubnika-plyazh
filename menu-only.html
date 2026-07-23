@@ -246,6 +246,58 @@
             margin-top: 4px;
         }
 
+        /* ===== QR CARD ===== */
+        .qr-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-bottom: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 2px dashed #FFE0B2;
+        }
+
+        .qr-card .qr-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .qr-card .qr-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .qr-card .qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            border: 1px solid #F1F5F9;
+            min-height: 200px;
+        }
+
+        .qr-card .qr-code img {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+        }
+
+        .qr-card .qr-code .qr-placeholder {
+            font-size: 80px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+
+        .qr-card .qr-code .qr-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
         /* ===== MAP CARD ===== */
         .map-card {
             background: #FFFFFF;
@@ -624,6 +676,24 @@
             <i class="fas fa-chevron-down"></i> Листайте вниз, чтобы увидеть меню
         </div>
 
+        <!-- ===== QR КАРТОЧКА ===== -->
+        <div class="qr-card">
+            <div class="qr-title">
+                <i class="fas fa-qrcode" style="color: var(--primary);"></i> Отсканируйте QR-код
+            </div>
+            <div class="qr-sub">Для заказа клубники в ваше бунгало</div>
+            <div class="qr-code" id="qrCodeContainer">
+                <div class="qr-placeholder" id="qrPlaceholder">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <img id="qrImage" src="" alt="QR-код" style="display:none;">
+            </div>
+            <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted);">
+                <i class="fas fa-info-circle"></i> QR-код находится в каждом бунгало
+            </div>
+        </div>
+
+        <!-- ===== ЛОКАЦИЯ ===== -->
         <div class="location-card" onclick="buildWalkRoute(event)">
             <span class="loc-icon">📍</span>
             <div class="loc-text">
@@ -633,6 +703,7 @@
             <div class="loc-sub">👆 Нажмите, чтобы проложить пеший маршрут</div>
         </div>
 
+        <!-- ===== КАРТА ===== -->
         <div class="map-card">
             <div class="map-container" id="mapContainer">
                 <div class="map-placeholder" id="mapPlaceholder">
@@ -659,6 +730,7 @@
             </div>
         </div>
 
+        <!-- ===== МЕНЮ ===== -->
         <div class="menu-section active" id="section-strawberry">
             <div class="section-title">
                 <i class="fas fa-strawberry"></i> Клубника в шоколаде
@@ -689,6 +761,8 @@
             phoneRaw: '79628557263'
         };
 
+        const QR_URL = 'https://klubnika-plyazh.onrender.com/?b=1';
+
         let userLocation = null;
         let mapLoaded = false;
         let autoScrollDone = false;
@@ -714,7 +788,33 @@
         }
 
         // ================================================================
-        // ===== АВТОМАТИЧЕСКАЯ ПРОКРУТКА К МЕНЮ =====
+        // ===== QR-КОД =====
+        // ================================================================
+        function loadQR() {
+            const qrPlaceholder = document.getElementById('qrPlaceholder');
+            const qrImage = document.getElementById('qrImage');
+            
+            // Используем API для генерации QR-кода
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(QR_URL)}&color=FF4757&bgcolor=FFFFFF`;
+            
+            qrImage.src = qrApiUrl;
+            qrImage.onload = function() {
+                qrPlaceholder.style.display = 'none';
+                qrImage.style.display = 'block';
+            };
+            
+            qrImage.onerror = function() {
+                qrPlaceholder.innerHTML = `
+                    <i class="fas fa-qrcode" style="font-size:64px;color:var(--primary);"></i>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${QR_URL}</div>
+                `;
+                qrPlaceholder.style.display = 'block';
+                qrImage.style.display = 'none';
+            };
+        }
+
+        // ================================================================
+        // ===== АВТОМАТИЧЕСКАЯ ПРОКРУТКА =====
         // ================================================================
         function autoScrollToMenu() {
             if (autoScrollDone) return;
@@ -934,12 +1034,12 @@
         // ===== MENU DATA =====
         // ================================================================
         const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '2', name: 'Белый шоколад', desc: 'Нежная ягода в сливочном шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/belyy-shokolad.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
-            { id: '3', name: 'Тиффани', desc: 'Бирюзовый шоколад с ягодой', price: 400, oldPrice: null, volume: '300 мл', image: 'images/tiffani.jpg', badge: '✨ Новинка', badgeColor: '#4ADE80' },
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 420, oldPrice: null, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
             { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 400, oldPrice: null, volume: '300 мл', image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, oldPrice: null, volume: '300 мл', image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         // ================================================================
@@ -980,6 +1080,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             showLoading(10);
             renderMenu();
+            loadQR();
 
             setTimeout(() => {
                 const hint = document.getElementById('scrollHint');
@@ -1010,8 +1111,7 @@
 
         console.log('🍓 Меню-страница загружена');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
-        console.log('📱 Нажмите "Где я?" для определения местоположения');
-        console.log('🚶 Пеший маршрут до киоска');
+        console.log(`📱 QR-код ведет на: ${QR_URL}`);
     </script>
 
 </body>
