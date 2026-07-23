@@ -450,6 +450,35 @@ app.post('/api/gift/manual', async (req, res) => {
     }
 });
 
+// ================================================================
+// ===== API: СБРОС ПОДАРКОВ (ДЛЯ ТЕСТИРОВАНИЯ) =====
+// ================================================================
+
+// Сброс всех подарков
+app.post('/api/gift/reset-all', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM gifts');
+        console.log('🗑️ Все подарки сброшены!');
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
+// Сброс подарка по IP
+app.post('/api/gift/reset-ip', async (req, res) => {
+    const { ip } = req.body;
+    if (!ip) return res.json({ success: false, error: 'Нет IP' });
+    
+    try {
+        await pool.query('DELETE FROM gifts WHERE ip = $1', [ip]);
+        console.log(`🗑️ Сброшен подарок для IP: ${ip}`);
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
 // ===== API: ЧАТЫ =====
 app.get('/api/chats', async (req, res) => {
     const r = await pool.query('SELECT phone, data FROM chats');
@@ -560,5 +589,6 @@ setInterval(async () => {
         console.log('❌ Авто-отмена заказов ОТКЛЮЧЕНА — заказы остаются активными до ручного управления');
         console.log('📍 Геолокация клиентов сохраняется в заказах');
         console.log('🎁 Система подарков (gifts) активирована!');
+        console.log('🗑️ Кнопки сброса подарков добавлены для тестирования');
     });
 })();
