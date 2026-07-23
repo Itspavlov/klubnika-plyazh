@@ -112,6 +112,7 @@
         .btn-purple { background: linear-gradient(135deg, #8B5CF6, #7C3AED); color: #fff; box-shadow: 0 4px 12px rgba(139,92,246,0.3); }
         .btn-sm { padding: 6px 14px; font-size: 11px; }
         .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
+        .btn-full { width: 100%; justify-content: center; }
         .tech-card { background: linear-gradient(135deg, #4ADE80, #22C55E); color: #fff; cursor: pointer; transition: var(--transition); }
         .tech-card.off { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
         .row-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
@@ -147,35 +148,27 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-
-        .order-card:active {
-            transform: scale(0.99);
-        }
-
+        .order-card:active { transform: scale(0.99); }
         .order-card.status-waiting {
             border-color: #EF4444;
             border-style: solid;
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
             animation: pulseRed 2s ease-in-out infinite;
         }
-
         @keyframes pulseRed {
             0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); }
             50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); }
         }
-
         .order-card.status-done {
             border-color: #22C55E;
             border-style: solid;
             box-shadow: 0 0 15px rgba(34, 197, 94, 0.12);
         }
-
         .order-card.status-cancelled {
             border-color: #9CA3AF;
             border-style: dashed;
             opacity: 0.7;
         }
-
         .order-card .new-badge {
             display: inline-block;
             background: #EF4444;
@@ -189,12 +182,10 @@
             animation: blinkBadge 1.5s ease-in-out infinite;
             margin-left: 8px;
         }
-
         @keyframes blinkBadge {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
-
         .order-card .order-time {
             font-size: 10px;
             color: var(--text-muted);
@@ -202,33 +193,23 @@
             align-items: center;
             gap: 4px;
         }
-
         .order-card .order-time .time-dot {
             display: inline-block;
             width: 6px;
             height: 6px;
             border-radius: 50%;
         }
-
         .order-card .order-time .time-dot.red {
             background: #EF4444;
             animation: pulseDot 1.5s ease-in-out infinite;
         }
-
-        .order-card .order-time .time-dot.green {
-            background: #22C55E;
-        }
-
-        .order-card .order-time .time-dot.gray {
-            background: #9CA3AF;
-        }
-
+        .order-card .order-time .time-dot.green { background: #22C55E; }
+        .order-card .order-time .time-dot.gray { background: #9CA3AF; }
         @keyframes pulseDot {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.3; transform: scale(0.7); }
         }
 
-        /* ===== PAYMENT BADGE ===== */
         .payment-badge {
             display: inline-flex;
             align-items: center;
@@ -240,18 +221,9 @@
             background: #F8FAFC;
             color: var(--text-secondary);
         }
+        .payment-badge.cash { background: #E8F5E9; color: #2E7D32; }
+        .payment-badge.transfer { background: #E3F2FD; color: #1565C0; }
 
-        .payment-badge.cash {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .payment-badge.transfer {
-            background: #E3F2FD;
-            color: #1565C0;
-        }
-
-        /* ===== LOCATION BADGE ===== */
         .location-badge {
             display: inline-flex;
             align-items: center;
@@ -264,38 +236,26 @@
             color: #1565C0;
             border: 1px solid #90CAF9;
         }
-
         .location-badge.no-location {
             background: #FFF3E0;
             color: #E65100;
             border-color: #FFE0B2;
         }
-
-        .location-badge i {
-            font-size: 12px;
-        }
+        .location-badge i { font-size: 12px; }
 
         /* ===== MAP MODAL ===== */
         .map-modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
             padding: 16px;
         }
-
-        .map-modal-overlay.open {
-            display: flex;
-        }
-
+        .map-modal-overlay.open { display: flex; }
         .map-modal-content {
             background: #FFFFFF;
             border-radius: var(--radius-2xl);
@@ -308,31 +268,17 @@
             animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: var(--shadow-lg);
         }
-
         @keyframes modalPop {
-            from {
-                transform: scale(0.9) translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
         }
-
         .map-modal-content .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
         }
-
-        .map-modal-content .modal-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
+        .map-modal-content .modal-header h2 { font-size: 18px; font-weight: 700; color: var(--text-dark); }
         .map-modal-content .modal-close {
             background: #F8FAFC;
             border: none;
@@ -347,11 +293,7 @@
             justify-content: center;
             transition: var(--transition);
         }
-
-        .map-modal-content .modal-close:active {
-            transform: scale(0.9);
-        }
-
+        .map-modal-content .modal-close:active { transform: scale(0.9); }
         .map-modal-content .map-container {
             width: 100%;
             height: 350px;
@@ -361,13 +303,11 @@
             border: 1px solid #E5E7EB;
             position: relative;
         }
-
         .map-modal-content .map-container iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-
         .map-modal-content .map-container .map-placeholder {
             display: flex;
             flex-direction: column;
@@ -378,12 +318,7 @@
             font-size: 14px;
             gap: 8px;
         }
-
-        .map-modal-content .map-container .map-placeholder i {
-            font-size: 48px;
-            color: var(--primary);
-        }
-
+        .map-modal-content .map-container .map-placeholder i { font-size: 48px; color: var(--primary); }
         .map-modal-content .order-info {
             background: #F8FAFC;
             border-radius: var(--radius-lg);
@@ -393,28 +328,16 @@
             color: var(--text-secondary);
             line-height: 1.6;
         }
-
-        .map-modal-content .order-info strong {
-            color: var(--text-dark);
-        }
-
-        .map-modal-content .order-info .highlight {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
+        .map-modal-content .order-info strong { color: var(--text-dark); }
+        .map-modal-content .order-info .highlight { color: var(--primary); font-weight: 700; }
         .map-modal-content .action-row {
             display: flex;
             gap: 8px;
             margin-top: 12px;
         }
+        .map-modal-content .action-row .btn { flex: 1; justify-content: center; }
 
-        .map-modal-content .action-row .btn {
-            flex: 1;
-            justify-content: center;
-        }
-
-        /* ===== CHAT ITEM WITH SWIPE ===== */
+        /* ===== CHAT ITEM ===== */
         .chat-item-wrapper {
             position: relative;
             overflow: hidden;
@@ -424,7 +347,6 @@
             border: 1px solid #F1F5F9;
             touch-action: pan-y;
         }
-
         .chat-item {
             background: #fff;
             padding: 14px;
@@ -435,19 +357,12 @@
             width: 100%;
             touch-action: pan-y;
         }
-
-        .chat-item.swiped {
-            transform: translateX(-80px);
-        }
-
+        .chat-item.swiped { transform: translateX(-80px); }
         .chat-item .cname { font-weight: 600; font-size: 14px; color: var(--text-dark); }
         .chat-item .cpreview { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
         .chat-delete-btn {
             position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; right: 0; bottom: 0;
             width: 80px;
             background: #EF4444;
             color: #fff;
@@ -464,10 +379,7 @@
             z-index: 1;
             font-family: var(--font);
         }
-
-        .chat-delete-btn:active {
-            background: #DC2626;
-        }
+        .chat-delete-btn:active { background: #DC2626; }
 
         .review-card {
             background: #fff; border-radius: var(--radius-lg); padding: 14px;
@@ -511,13 +423,8 @@
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,71,87,0.1);
         }
-        .form-row {
-            display: flex;
-            gap: 10px;
-        }
-        .form-row .form-group {
-            flex: 1;
-        }
+        .form-row { display: flex; gap: 10px; }
+        .form-row .form-group { flex: 1; }
         .img-upload {
             border: 2px dashed #F1F5F9; border-radius: var(--radius-lg); padding: 20px;
             text-align: center; cursor: pointer; background: #F8FAFC; transition: var(--transition);
@@ -543,49 +450,19 @@
             text-align: center;
             border: 1px solid rgba(255,255,255,0.3);
         }
-        .login-box .login-icon {
-            font-size: 64px;
-            display: block;
-            margin-bottom: 16px;
-        }
-        .login-box h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--green-dark);
-            margin-bottom: 8px;
-        }
-        .login-box p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
+        .login-box .login-icon { font-size: 64px; display: block; margin-bottom: 16px; }
+        .login-box h2 { font-size: 24px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+        .login-box p { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
         .login-box input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #F1F5F9;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            margin-bottom: 16px;
-            outline: none;
-            font-family: var(--font);
-            transition: var(--transition);
+            width: 100%; padding: 14px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md);
+            font-size: 16px; margin-bottom: 16px; outline: none; font-family: var(--font); transition: var(--transition);
         }
         .login-box input:focus {
             border-color: var(--green);
             box-shadow: 0 0 0 4px rgba(45,138,78,0.1);
         }
-        .login-box .btn {
-            width: 100%;
-            justify-content: center;
-            padding: 14px;
-            font-size: 16px;
-        }
-        .login-box .error-msg {
-            color: #EF4444;
-            font-size: 13px;
-            margin-top: 12px;
-            display: none;
-        }
+        .login-box .btn { width: 100%; justify-content: center; padding: 14px; font-size: 16px; }
+        .login-box .error-msg { color: #EF4444; font-size: 13px; margin-top: 12px; display: none; }
 
         .order-card .payment-badge {
             display: inline-flex;
@@ -599,96 +476,136 @@
             color: var(--text-secondary);
             border: 1px solid #E5E7EB;
         }
+        .order-card .payment-badge.cash { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+        .order-card .payment-badge.transfer { background: #E3F2FD; color: #1565C0; border-color: #90CAF9; }
 
-        .order-card .payment-badge.cash {
-            background: #E8F5E9;
-            color: #2E7D32;
-            border-color: #A5D6A7;
-        }
-
-        .order-card .payment-badge.transfer {
-            background: #E3F2FD;
-            color: #1565C0;
-            border-color: #90CAF9;
-        }
-
-        /* ===== QR SCANNER MODAL ===== */
-        .qr-scanner-modal .modal {
-            max-width: 420px;
-        }
-
-        .qr-scanner-modal .qr-reader {
-            width: 100%;
-            height: 300px;
+        /* ===== QR SCANNER FULLSCREEN ===== */
+        .qr-fullscreen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: #000;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            position: relative;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
         }
+        .qr-fullscreen.open { display: flex; }
 
-        .qr-scanner-modal .qr-reader video {
+        .qr-fullscreen .qr-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.8);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .qr-fullscreen .qr-header .qr-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .qr-fullscreen .qr-header .qr-title i { color: var(--primary); }
+        .qr-fullscreen .qr-header .qr-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        .qr-fullscreen .qr-header .qr-close:active { opacity: 0.6; }
+
+        .qr-fullscreen .qr-reader {
+            flex: 1;
+            width: 100%;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .qr-fullscreen .qr-reader video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+        .qr-fullscreen .qr-reader .qr-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: #fff;
+            font-size: 16px;
+            pointer-events: none;
+            z-index: 1;
+            background: rgba(0,0,0,0.3);
+        }
+        .qr-fullscreen .qr-reader .qr-overlay .qr-icon {
+            font-size: 64px;
+            opacity: 0.3;
+        }
+        .qr-fullscreen .qr-reader .qr-overlay .qr-hint {
+            text-align: center;
+            padding: 0 20px;
+            opacity: 0.7;
+        }
+        .qr-fullscreen .qr-reader .qr-overlay .qr-hint small {
+            font-size: 12px;
+            opacity: 0.5;
+            display: block;
+            margin-top: 4px;
+        }
 
-        .qr-scanner-modal .qr-result {
-            margin-top: 12px;
+        .qr-fullscreen .qr-footer {
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.85);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .qr-fullscreen .qr-footer .qr-result {
+            margin: 0;
             padding: 12px;
             border-radius: var(--radius-md);
-            background: #F8FAFC;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
             text-align: center;
             font-size: 14px;
-            color: var(--text-secondary);
-            min-height: 50px;
-        }
-
-        .qr-scanner-modal .qr-result.success {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .qr-scanner-modal .qr-result.error {
-            background: #FFEBEE;
-            color: #D32F2F;
-        }
-
-        .qr-scanner-modal .qr-result .found-gift {
+            min-height: 48px;
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-
-        .qr-scanner-modal .qr-result .found-gift .gift-id {
+        .qr-fullscreen .qr-footer .qr-result.success {
+            background: rgba(34, 197, 94, 0.3);
+            color: #4ADE80;
+        }
+        .qr-fullscreen .qr-footer .qr-result.error {
+            background: rgba(239, 68, 68, 0.3);
+            color: #F87171;
+        }
+        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-id {
             font-weight: 700;
             font-size: 18px;
             color: var(--primary);
         }
-
-        .qr-scanner-modal .qr-result .found-gift .gift-ip {
+        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-ip {
             font-size: 12px;
-            color: var(--text-muted);
+            opacity: 0.7;
         }
-
-        .qr-scanner-modal .qr-result .found-gift .gift-status {
+        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-status {
             font-weight: 600;
         }
+        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-status.claimed { color: #4ADE80; }
+        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-status.pending { color: #FBBF24; }
 
-        .qr-scanner-modal .qr-result .found-gift .gift-status.claimed {
-            color: #2E7D32;
-        }
-
-        .qr-scanner-modal .qr-result .found-gift .gift-status.pending {
-            color: #F59E0B;
-        }
-
-        .qr-scanner-modal .qr-actions {
+        .qr-fullscreen .qr-footer .qr-actions {
             display: flex;
             gap: 8px;
-            margin-top: 12px;
+            margin-top: 8px;
         }
-
-        .qr-scanner-modal .qr-actions .btn {
+        .qr-fullscreen .qr-footer .qr-actions .btn {
             flex: 1;
             justify-content: center;
         }
@@ -702,17 +619,14 @@
             border: 2px solid #F1F5F9;
             transition: var(--transition);
         }
-
         .gift-card.claimed {
             border-color: #22C55E;
             background: #F8FAFC;
         }
-
         .gift-card.pending {
             border-color: #F59E0B;
             background: #FFFBEB;
         }
-
         .gift-card .gift-header {
             display: flex;
             justify-content: space-between;
@@ -720,30 +634,19 @@
             flex-wrap: wrap;
             gap: 6px;
         }
-
         .gift-card .gift-id {
             font-weight: 700;
             font-size: 15px;
             color: var(--text-dark);
         }
-
         .gift-card .gift-status-badge {
             padding: 3px 12px;
             border-radius: 100px;
             font-size: 11px;
             font-weight: 600;
         }
-
-        .gift-card .gift-status-badge.claimed {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .gift-card .gift-status-badge.pending {
-            background: #FFF8E1;
-            color: #F59E0B;
-        }
-
+        .gift-card .gift-status-badge.claimed { background: #E8F5E9; color: #2E7D32; }
+        .gift-card .gift-status-badge.pending { background: #FFF8E1; color: #F59E0B; }
         .gift-card .gift-details {
             font-size: 12px;
             color: var(--text-muted);
@@ -752,14 +655,12 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .gift-card .gift-actions {
             margin-top: 10px;
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
         }
-
         .gift-card .gift-qr-btn {
             background: none;
             border: none;
@@ -769,10 +670,7 @@
             padding: 4px 8px;
             transition: var(--transition);
         }
-
-        .gift-card .gift-qr-btn:active {
-            transform: scale(0.9);
-        }
+        .gift-card .gift-qr-btn:active { transform: scale(0.9); }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 500px) {
@@ -780,16 +678,8 @@
             .tabs button { font-size: 10px; padding: 8px 4px; }
             .menu-item { flex-direction: column; align-items: flex-start; }
             .menu-item .actions { align-self: flex-end; }
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            .map-modal-content .map-container {
-                height: 280px;
-            }
-            .qr-scanner-modal .qr-reader {
-                height: 250px;
-            }
+            .form-row { flex-direction: column; gap: 0; }
+            .map-modal-content .map-container { height: 280px; }
         }
     </style>
 </head>
@@ -925,19 +815,26 @@
         </div>
     </div>
 
-    <!-- ===== QR SCANNER MODAL ===== -->
-    <div class="modal-overlay qr-scanner-modal" id="qrScannerModal">
-        <div class="modal">
-            <button class="modal-close" onclick="stopQRScanner()"><i class="fas fa-times"></i></button>
-            <div style="font-weight:700;font-size:18px;margin-bottom:12px;text-align:center;color:var(--text-dark);">
-                <i class="fas fa-qrcode" style="color:var(--primary);"></i> Сканируйте QR-код
+    <!-- ===== QR SCANNER FULLSCREEN ===== -->
+    <div class="qr-fullscreen" id="qrFullscreen">
+        <div class="qr-header">
+            <div class="qr-title">
+                <i class="fas fa-qrcode"></i> Сканирование QR
             </div>
-            <div class="qr-reader" id="qrReader">
-                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;font-size:14px;flex-direction:column;gap:12px;">
-                    <i class="fas fa-camera" style="font-size:48px;opacity:0.5;"></i>
-                    <span>Наведите камеру на QR-код</span>
+            <button class="qr-close" onclick="stopQRScanner()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="qr-reader" id="qrReader">
+            <div class="qr-overlay" id="qrOverlay">
+                <div class="qr-icon"><i class="fas fa-camera"></i></div>
+                <div class="qr-hint">
+                    📱 Наведите камеру на QR-код
+                    <small>Поверните телефон горизонтально для лучшего сканирования</small>
                 </div>
             </div>
+        </div>
+        <div class="qr-footer">
             <div class="qr-result" id="qrResult">
                 <i class="fas fa-info-circle"></i> Ожидание сканирования...
             </div>
@@ -945,7 +842,9 @@
                 <button class="btn btn-success" onclick="claimScannedGift()">
                     <i class="fas fa-gift"></i> Выдать подарок
                 </button>
-                <button class="btn btn-outline" onclick="stopQRScanner()">Закрыть</button>
+                <button class="btn btn-outline" onclick="stopQRScanner()" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3);">
+                    Закрыть
+                </button>
             </div>
         </div>
     </div>
@@ -1721,11 +1620,11 @@
         async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
 
         // ================================================================
-        // ===== QR СКАНЕР С АВТО-ВЫДАЧЕЙ =====
+        // ===== QR СКАНЕР FULLSCREEN С АВТО-ВЫДАЧЕЙ =====
         // ================================================================
         function startQRScanner() {
-            const modal = document.getElementById('qrScannerModal');
-            modal.classList.add('open');
+            const fullscreen = document.getElementById('qrFullscreen');
+            fullscreen.classList.add('open');
             document.body.style.overflow = 'hidden';
             
             const result = document.getElementById('qrResult');
@@ -1735,11 +1634,15 @@
             document.getElementById('qrActions').style.display = 'none';
             scannedGiftId = null;
 
+            // Показываем оверлей
+            const overlay = document.getElementById('qrOverlay');
+            overlay.style.display = 'flex';
+
             if (typeof Html5Qrcode === 'undefined') {
                 const script = document.createElement('script');
                 script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
                 script.onload = function() {
-                    initScanner();
+                    initScannerFullscreen();
                 };
                 script.onerror = function() {
                     result.className = 'qr-result error';
@@ -1747,11 +1650,13 @@
                 };
                 document.head.appendChild(script);
             } else {
-                initScanner();
+                initScannerFullscreen();
             }
         }
 
-        function initScanner() {
+        function initScannerFullscreen() {
+            const readerElement = document.getElementById('qrReader');
+            
             if (html5QrCode) {
                 html5QrCode.stop().then(() => {
                     html5QrCode.clear();
@@ -1761,8 +1666,8 @@
             html5QrCode = new Html5Qrcode("qrReader");
             
             const config = {
-                fps: 15,
-                qrbox: { width: 250, height: 250 },
+                fps: 20,
+                qrbox: { width: 300, height: 300 },
                 aspectRatio: 1.0
             };
 
@@ -1770,20 +1675,36 @@
             result.className = 'qr-result';
             result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
 
+            // Скрываем оверлей после запуска
+            const overlay = document.getElementById('qrOverlay');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1500);
+
             html5QrCode.start(
-                { facingMode: "environment" },
+                { 
+                    facingMode: "environment",
+                    aspectRatio: { ideal: 0.75 }
+                },
                 config,
-                onScanSuccess,
-                onScanError
+                onScanSuccessFullscreen,
+                onScanErrorFullscreen
             ).catch(function(err) {
                 result.className = 'qr-result error';
                 result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
+                overlay.style.display = 'flex';
+                overlay.querySelector('.qr-hint').innerHTML = `
+                    ❌ Ошибка доступа к камере<br>
+                    <small style="font-size:12px;opacity:0.5;">Разрешите доступ к камере в браузере</small>
+                `;
             });
         }
 
-        function onScanSuccess(decodedText, decodedResult) {
+        function onScanSuccessFullscreen(decodedText, decodedResult) {
             if (isScannerRunning) return;
             isScannerRunning = true;
+            
+            console.log('✅ Распознан QR:', decodedText);
             
             let giftId = decodedText;
             if (giftId.startsWith('gift-')) {
@@ -1807,15 +1728,14 @@
                 }).catch(() => {});
             }
 
-            // АВТОМАТИЧЕСКАЯ ВЫДАЧА ПОДАРКА
-            autoClaimGift(giftId);
+            autoClaimGiftFullscreen(giftId);
         }
 
-        function onScanError(err) {
-            // Игнорируем ошибки сканирования
+        function onScanErrorFullscreen(err) {
+            // Игнорируем
         }
 
-        async function autoClaimGift(giftId) {
+        async function autoClaimGiftFullscreen(giftId) {
             const result = document.getElementById('qrResult');
             result.className = 'qr-result';
             result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Проверка подарка...';
@@ -1839,15 +1759,14 @@
                         <div class="found-gift">
                             <div class="gift-id">🎁 Подарок #${gift.id}</div>
                             <div class="gift-ip">📍 IP: ${gift.ip || 'неизвестен'}</div>
-                            <div style="color:#D32F2F;font-weight:700;font-size:16px;margin-top:4px;">
+                            <div style="color:#F87171;font-weight:700;font-size:16px;margin-top:4px;">
                                 ❌ УЖЕ ВЫДАН
                             </div>
-                            <div style="font-size:12px;color:var(--text-muted);">
+                            <div style="font-size:12px;opacity:0.7;">
                                 Выдан: ${gift.claimed_at ? new Date(gift.claimed_at).toLocaleString('ru-RU') : 'неизвестно'}
                             </div>
                         </div>
                     `;
-                    document.getElementById('qrActions').style.display = 'none';
                     setTimeout(() => stopQRScanner(), 3000);
                     isScannerRunning = false;
                     return;
@@ -1866,21 +1785,19 @@
                     result.className = 'qr-result success';
                     result.innerHTML = `
                         <div class="found-gift">
-                            <div class="gift-id" style="color:#2E7D32;">🎁 Подарок #${gift.id} ВЫДАН! ✅</div>
+                            <div class="gift-id" style="color:#4ADE80;">🎁 Подарок #${gift.id} ВЫДАН! ✅</div>
                             <div class="gift-ip">📍 IP: ${gift.ip || 'неизвестен'}</div>
-                            <div style="font-size:14px;color:#2E7D32;font-weight:600;margin-top:4px;">
+                            <div style="font-size:14px;color:#4ADE80;font-weight:600;margin-top:4px;">
                                 🎉 Поздравляем! Подарок получен!
                             </div>
                         </div>
                     `;
-                    document.getElementById('qrActions').style.display = 'none';
                     toast('✅ Подарок #' + giftId + ' успешно выдан!');
                     setTimeout(() => stopQRScanner(), 2000);
                     loadGifts();
                 } else {
                     result.className = 'qr-result error';
                     result.innerHTML = '❌ Ошибка выдачи: ' + (claimData.error || 'неизвестная');
-                    document.getElementById('qrActions').style.display = 'flex';
                 }
 
                 isScannerRunning = false;
@@ -1902,16 +1819,19 @@
                 html5QrCode = null;
             }
             
-            document.getElementById('qrScannerModal').classList.remove('open');
+            document.getElementById('qrFullscreen').classList.remove('open');
             document.body.style.overflow = '';
-            document.getElementById('qrActions').style.display = 'none';
             scannedGiftId = null;
             isScannerRunning = false;
+            
+            // Восстанавливаем оверлей
+            const overlay = document.getElementById('qrOverlay');
+            overlay.style.display = 'flex';
+            overlay.querySelector('.qr-hint').innerHTML = `
+                📱 Наведите камеру на QR-код
+                <small>Поверните телефон горизонтально для лучшего сканирования</small>
+            `;
         }
-
-        document.getElementById('qrScannerModal').addEventListener('click', function(e) {
-            if (e.target === this) stopQRScanner();
-        });
 
         // ===== РУЧНОЙ ВВОД КОДА =====
         function manualClaimGift() {
@@ -1930,15 +1850,15 @@
             }
             
             // Открываем сканер с результатом
-            const modal = document.getElementById('qrScannerModal');
-            modal.classList.add('open');
+            const fullscreen = document.getElementById('qrFullscreen');
+            fullscreen.classList.add('open');
             document.body.style.overflow = 'hidden';
             
             const result = document.getElementById('qrResult');
             result.className = 'qr-result';
             result.innerHTML = `<i class="fas fa-keyboard"></i> Код: <strong>gift-${giftId}</strong>`;
             
-            autoClaimGift(giftId);
+            autoClaimGiftFullscreen(giftId);
         }
 
         // ================================================================
