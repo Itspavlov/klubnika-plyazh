@@ -54,6 +54,14 @@ async function initDB() {
                 data JSONB,
                 created_at TIMESTAMPTZ DEFAULT NOW()
             );
+            CREATE TABLE IF NOT EXISTS gifts (
+                id SERIAL PRIMARY KEY,
+                ip TEXT NOT NULL,
+                bungalow INTEGER,
+                claimed BOOLEAN DEFAULT false,
+                claimed_at TIMESTAMPTZ,
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            );
         `);
         console.log('📦 Таблицы созданы');
     } catch (e) {
@@ -181,7 +189,6 @@ app.post('/api/order', async (req, res) => {
     
     const order = req.body;
     
-    // Сохраняем координаты из location
     if (order.location) {
         order.lat = order.location.lat;
         order.lng = order.location.lng;
@@ -269,13 +276,11 @@ app.post('/api/clear-orders', async (req, res) => {
 });
 
 // ================================================================
-// ===== АВТОМАТИЧЕСКОЕ УВЕДОМЛЕНИЕ О ЗАДЕРЖКЕ (БЕЗ АВТО-ОТМЕНЫ) =====
+// ===== АВТОМАТИЧЕСКОЕ УВЕДОМЛЕНИЕ О ЗАДЕРЖКЕ =====
 // ================================================================
 
-// Проверка заказов каждые 30 секунд
 setInterval(async () => {
     try {
-        // Находим заказы со статусом "ожидает", которым больше 15 минут
         const result = await pool.query(
             `SELECT id, data FROM orders 
              WHERE status = 'ожидает' 
@@ -291,11 +296,9 @@ setInterval(async () => {
 
             if (!phone) continue;
 
-            // Проверяем, есть ли уже чат с этим клиентом
             const chatExist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
             let chatData = chatExist.rows[0]?.data || { name: name, messages: [], unread: 0 };
 
-            // Добавляем сообщение от администратора
             const message = {
                 text: `🍓 Уважаемый(ая) ${name}! Приносим свои извинения за задержку заказа #${orderId} 🙏\nЗаказов очень много, но наш курьер уже спешит к вам! 🏃‍♂️\nМы работаем над тем, чтобы стать быстрее. Спасибо за ваше терпение! ❤️`,
                 from: 'admin',
@@ -305,14 +308,12 @@ setInterval(async () => {
             chatData.messages.push(message);
             chatData.unread = (chatData.unread || 0) + 1;
 
-            // Сохраняем чат
             await pool.query(
                 `INSERT INTO chats (phone, data) VALUES ($1, $2) 
                  ON CONFLICT (phone) DO UPDATE SET data = $2`,
                 [phone, JSON.stringify(chatData)]
             );
 
-            // Отмечаем заказ, что уведомление отправлено
             await pool.query(
                 `UPDATE orders SET data = jsonb_set(data, '{delay_notified}', 'true') WHERE id = $1`,
                 [orderId]
@@ -324,6 +325,130 @@ setInterval(async () => {
         console.error('❌ Ошибка авто-уведомления:', e.message);
     }
 }, 30000);
+
+// ================================================================
+// ===== API: ПОДАРКИ (GIFTS) =====
+// ================================================================
+
+// Проверка подарка
+app.post('/api/gift/check', async (req, res) => {
+    const { ip } = req.body;
+    if (!ip) return res.json({ hasGift: false, error: 'Нет IP' });
+    
+    try {
+        const claimed = await pool.query(
+            `SELECT * FROM gifts WHERE ip = $1 AND claimed = true`,
+            [ip]
+        );
+        if (claimed.rows.length > 0) {
+            return res.json({ hasGift: false, reason: 'already_claimed' });
+        }
+        
+        const pending = await pool.query(
+            `SELECT * FROM gifts WHERE ip = $1 AND claimed = false`,
+            [ip]
+        );
+        if (pending.rows.length > 0) {
+            return res.json({ hasGift: true, giftId: pending.rows[0].id });
+        }
+        
+        res.json({ hasGift: false, canActivate: true });
+    } catch (e) {
+        res.json({ hasGift: false, error: e.message });
+    }
+});
+
+// Активация подарка
+app.post('/api/gift/activate', async (req, res) => {
+    const { ip, bungalow } = req.body;
+    if (!ip) return res.json({ success: false, error: 'Нет IP' });
+    
+    try {
+        const existing = await pool.query(
+            `SELECT * FROM gifts WHERE ip = $1 AND claimed = true`,
+            [ip]
+        );
+        if (existing.rows.length > 0) {
+            return res.json({ success: false, message: 'Подарок уже получен' });
+        }
+        
+        const pending = await pool.query(
+            `SELECT * FROM gifts WHERE ip = $1 AND claimed = false`,
+            [ip]
+        );
+        if (pending.rows.length > 0) {
+            return res.json({ success: true, giftId: pending.rows[0].id });
+        }
+        
+        const result = await pool.query(
+            `INSERT INTO gifts (ip, bungalow) VALUES ($1, $2) RETURNING id`,
+            [ip, bungalow || null]
+        );
+        res.json({ success: true, giftId: result.rows[0].id });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
+// Выдача подарка (админка)
+app.post('/api/gift/claim', async (req, res) => {
+    const { giftId } = req.body;
+    if (!giftId) return res.json({ success: false, error: 'Нет ID' });
+    
+    try {
+        await pool.query(
+            `UPDATE gifts SET claimed = true, claimed_at = NOW() WHERE id = $1`,
+            [giftId]
+        );
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
+// Список подарков (админка)
+app.get('/api/gifts', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT * FROM gifts ORDER BY created_at DESC`
+        );
+        res.json({ gifts: result.rows });
+    } catch (e) {
+        res.json({ gifts: [], error: e.message });
+    }
+});
+
+// Статистика подарков
+app.get('/api/gifts/stats', async (req, res) => {
+    try {
+        const total = await pool.query(`SELECT COUNT(*) FROM gifts`);
+        const claimed = await pool.query(`SELECT COUNT(*) FROM gifts WHERE claimed = true`);
+        const pending = await pool.query(`SELECT COUNT(*) FROM gifts WHERE claimed = false`);
+        res.json({
+            total: parseInt(total.rows[0].count),
+            claimed: parseInt(claimed.rows[0].count),
+            pending: parseInt(pending.rows[0].count)
+        });
+    } catch (e) {
+        res.json({ total: 0, claimed: 0, pending: 0 });
+    }
+});
+
+// Ручное добавление подарка (админка)
+app.post('/api/gift/manual', async (req, res) => {
+    const { ip, bungalow } = req.body;
+    if (!ip) return res.json({ success: false, error: 'Нет IP' });
+    
+    try {
+        const result = await pool.query(
+            `INSERT INTO gifts (ip, bungalow) VALUES ($1, $2) RETURNING id`,
+            [ip, bungalow || null]
+        );
+        res.json({ success: true, giftId: result.rows[0].id });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
 
 // ===== API: ЧАТЫ =====
 app.get('/api/chats', async (req, res) => {
@@ -434,5 +559,6 @@ setInterval(async () => {
         console.log('📨 Авто-уведомления о задержке включены (15 минут)');
         console.log('❌ Авто-отмена заказов ОТКЛЮЧЕНА — заказы остаются активными до ручного управления');
         console.log('📍 Геолокация клиентов сохраняется в заказах');
+        console.log('🎁 Система подарков (gifts) активирована!');
     });
 })();

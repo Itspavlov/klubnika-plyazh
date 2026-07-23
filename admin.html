@@ -108,6 +108,7 @@
         .btn-outline { background: #fff; border: 2px solid #F1F5F9; color: var(--text-dark); }
         .btn-danger { background: #EF4444; color: #fff; }
         .btn-success { background: #22C55E; color: #fff; }
+        .btn-warning { background: #F59E0B; color: #fff; }
         .btn-sm { padding: 6px 14px; font-size: 11px; }
         .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
         .tech-card { background: linear-gradient(135deg, #4ADE80, #22C55E); color: #fff; cursor: pointer; transition: var(--transition); }
@@ -675,6 +676,7 @@
                 <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
                 <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
                 <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
+                <button data-tab="gifts"><i class="fas fa-gift"></i> Подарки <span class="tab-badge" id="giftsBadge">0</span></button>
             </div>
 
             <div class="panel active" id="panel-orders">
@@ -709,6 +711,35 @@
             <div class="panel" id="panel-reviews">
                 <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
                 <div id="reviewsList"><div class="empty-state"><i class="fas fa-star"></i>Отзывов пока нет</div></div>
+            </div>
+
+            <!-- ===== ПАНЕЛЬ ПОДАРКОВ ===== -->
+            <div class="panel" id="panel-gifts">
+                <div class="row-btns">
+                    <button class="btn btn-primary btn-sm" onclick="loadGifts()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                    <button class="btn btn-success btn-sm" onclick="manualGift()"><i class="fas fa-plus"></i> Выдать подарок</button>
+                    <button class="btn btn-danger btn-sm" onclick="resetAllGifts()" style="background:#EF4444;color:#fff;">
+                        <i class="fas fa-trash"></i> Сбросить все IP
+                    </button>
+                    <button class="btn btn-warning btn-sm" onclick="resetMyGift()" style="background:#F59E0B;color:#fff;">
+                        <i class="fas fa-undo"></i> Сбросить мой IP
+                    </button>
+                </div>
+                <div class="stats-gifts" style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+                    <div class="stat-card" style="flex:1;background:#E8F5E9;padding:12px;border-radius:var(--radius-lg);text-align:center;">
+                        <div style="font-size:24px;font-weight:800;color:#2E7D32;" id="giftTotal">0</div>
+                        <div style="font-size:11px;color:#4CAF50;">Всего</div>
+                    </div>
+                    <div class="stat-card" style="flex:1;background:#FFF8E1;padding:12px;border-radius:var(--radius-lg);text-align:center;">
+                        <div style="font-size:24px;font-weight:800;color:#F59E0B;" id="giftPending">0</div>
+                        <div style="font-size:11px;color:#F59E0B;">Ожидают выдачи</div>
+                    </div>
+                    <div class="stat-card" style="flex:1;background:#E3F2FD;padding:12px;border-radius:var(--radius-lg);text-align:center;">
+                        <div style="font-size:24px;font-weight:800;color:#1565C0;" id="giftClaimed">0</div>
+                        <div style="font-size:11px;color:#1976D2;">Выдано</div>
+                    </div>
+                </div>
+                <div id="giftsList"><div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div></div>
             </div>
         </div>
     </div>
@@ -870,7 +901,6 @@
             const placeholder = document.getElementById('mapPlaceholder');
             const details = document.getElementById('mapOrderDetails');
 
-            // Заполняем информацию о заказе
             const date = new Date(order.createdAt);
             const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
             const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
@@ -899,7 +929,6 @@
                 <div>${locationText}</div>
             `;
 
-            // Загружаем карту
             if (hasLocation) {
                 const clientPin = `${order.lng},${order.lat},flag`;
                 const shopPin = `${MY_LOCATION.lng},${MY_LOCATION.lat},round`;
@@ -962,7 +991,6 @@
             }
         }
 
-        // Закрытие модалки по клику вне
         document.getElementById('mapModal').addEventListener('click', function(e) {
             if (e.target === this) closeMapModal();
         });
@@ -977,7 +1005,9 @@
             chatPhone: null,
             orders: [],
             chats: [],
-            totalUnread: 0
+            totalUnread: 0,
+            gifts: [],
+            giftStats: { total: 0, claimed: 0, pending: 0 }
         };
 
         const $ = id => document.getElementById(id);
@@ -1009,6 +1039,7 @@
                 if (S.tab === 'menu') loadMenu();
                 if (S.tab === 'chats') loadChats();
                 if (S.tab === 'reviews') loadReviews();
+                if (S.tab === 'gifts') loadGifts();
             });
         });
 
@@ -1112,13 +1143,11 @@
                     paymentClass = 'transfer';
                 }
 
-                // Определяем наличие геолокации
                 const hasLocation = order.lat && order.lng;
                 const locationBadge = hasLocation 
                     ? `<span class="location-badge"><i class="fas fa-location-dot"></i> 📍 На карте</span>`
                     : `<span class="location-badge no-location"><i class="fas fa-exclamation-triangle"></i> Без гео</span>`;
 
-                // Добавляем обработчик клика для открытия карты
                 const clickHandler = hasLocation ? `onclick="openMapModal(${JSON.stringify(order).replace(/"/g, '&quot;')})"` : '';
                 
                 return `<div class="order-card ${borderClass}" ${clickHandler} style="${hasLocation ? '' : 'cursor:default;'}">
@@ -1159,23 +1188,22 @@
         async function clearOrders() { if(!confirm('Удалить все заказы?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
 
         // ===== MENU =====
-      const CATALOG = [
-    { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
-    { id:'2', name:'Клубника в сливках', desc:'Нежная клубника в бельгийских сливках', price:350, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/klubnika-v-slivkah.jpg', badge:'⭐' },
-    { id:'9', name:'Клубника в сливках и шоколаде', desc:'Нежная клубника в сливках и шоколаде', price:350, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/klubnika-v-slivkah-shokolad.jpg', badge:'🔥 Хит' },
-    { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-    { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-    { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
-    { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-    { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-    { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-    { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-    { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-    { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-    { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-    { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
-    // Шаурму удалили ↓
-];
+        const CATALOG = [
+            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
+            { id:'2', name:'Клубника в сливках', desc:'Нежная клубника в бельгийских сливках', price:350, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/klubnika-v-slivkah.jpg', badge:'⭐' },
+            { id:'9', name:'Клубника в сливках и шоколаде', desc:'Нежная клубника в сливках и шоколаде', price:350, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/klubnika-v-slivkah-shokolad.jpg', badge:'🔥 Хит' },
+            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
+            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
+            { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
+            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
+            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
+            { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
+            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
+            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
+            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
+            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
+            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' }
+        ];
 
         async function loadMenu() {
             try {
@@ -1461,6 +1489,162 @@
 
         async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
 
+        // ================================================================
+        // ===== API: ПОДАРКИ (GIFTS) =====
+        // ================================================================
+
+        async function loadGifts() {
+            try {
+                const stats = await api('/gifts/stats');
+                S.giftStats = stats;
+                $('giftTotal').textContent = stats.total || 0;
+                $('giftPending').textContent = stats.pending || 0;
+                $('giftClaimed').textContent = stats.claimed || 0;
+
+                const data = await api('/gifts');
+                S.gifts = data.gifts || [];
+                renderGifts();
+                updateGiftsBadge();
+            } catch(e) {
+                console.error('Ошибка загрузки подарков:', e);
+            }
+        }
+
+        function renderGifts() {
+            const list = $('giftsList');
+            const gifts = S.gifts;
+            if (!gifts.length) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div>';
+                return;
+            }
+
+            list.innerHTML = gifts.map(g => `
+                <div class="order-card ${g.claimed ? 'status-done' : 'status-waiting'}" style="cursor:default;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                        <span style="font-weight:700;font-size:14px;color:var(--text-dark);">
+                            🎫 #${g.id} — ${g.ip || 'Без IP'}
+                            ${g.bungalow ? `🏠 #${g.bungalow}` : ''}
+                        </span>
+                        <span class="order-status-badge ${g.claimed ? 'status-done' : 'status-waiting'}">
+                            ${g.claimed ? '✅ Выдан' : '🕒 Ожидает'}
+                        </span>
+                    </div>
+                    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+                        📅 ${new Date(g.created_at).toLocaleString('ru-RU')}
+                        ${g.claimed_at ? ` | 🎁 Выдан: ${new Date(g.claimed_at).toLocaleString('ru-RU')}` : ''}
+                    </div>
+                    ${!g.claimed ? `
+                        <div style="margin-top:8px;">
+                            <button class="btn btn-success btn-xs" onclick="claimGift(${g.id})">
+                                <i class="fas fa-check"></i> Выдать подарок
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateGiftsBadge() {
+            const badge = $('giftsBadge');
+            const pending = S.giftStats.pending || 0;
+            if (pending > 0) {
+                badge.textContent = pending;
+                badge.classList.add('show');
+            } else {
+                badge.classList.remove('show');
+            }
+        }
+
+        async function claimGift(giftId) {
+            if (!confirm(`Выдать подарок #${giftId}?`)) return;
+            try {
+                const res = await fetch('/api/gift/claim', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ giftId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast('✅ Подарок выдан!');
+                    loadGifts();
+                } else {
+                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+                }
+            } catch(e) {
+                toast('❌ Ошибка соединения');
+            }
+        }
+
+        // ===== КНОПКА: СБРОСИТЬ ВСЕ IP =====
+        async function resetAllGifts() {
+            if (!confirm('⚠️ УДАЛИТЬ ВСЕ ЗАПИСИ О ПОДАРКАХ?\nЭто позволит всем пользователям получить подарок заново!')) return;
+            if (!confirm('❗ ТОЧНО? Это действие НЕЛЬЗЯ ОТМЕНИТЬ!')) return;
+            
+            try {
+                const res = await fetch('/api/gift/reset-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast('🗑️ Все IP сброшены! Теперь каждый может получить подарок заново.');
+                    loadGifts();
+                } else {
+                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+                }
+            } catch(e) {
+                toast('❌ Ошибка соединения');
+            }
+        }
+
+        // ===== КНОПКА: СБРОСИТЬ МОЙ IP (ДЛЯ ТЕСТИРОВАНИЯ) =====
+        async function resetMyGift() {
+            if (!confirm('Сбросить ваш IP для тестирования?')) return;
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                const myIp = data.ip;
+                
+                const resetRes = await fetch('/api/gift/reset-ip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ip: myIp })
+                });
+                const resetData = await resetRes.json();
+                if (resetData.success) {
+                    toast(`✅ Ваш IP (${myIp}) сброшен! Обновите страницу.`);
+                    loadGifts();
+                } else {
+                    toast('❌ Ошибка: ' + (resetData.error || 'неизвестная'));
+                }
+            } catch(e) {
+                toast('❌ Ошибка соединения');
+            }
+        }
+
+        // ===== РУЧНАЯ ВЫДАЧА ПОДАРКА =====
+        async function manualGift() {
+            const ip = prompt('Введите IP-адрес для выдачи подарка:');
+            if (!ip) return;
+            
+            try {
+                const res = await fetch('/api/gift/manual', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ip, bungalow: null })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast(`✅ Подарок для IP ${ip} создан!`);
+                    loadGifts();
+                } else {
+                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+                }
+            } catch(e) {
+                toast('❌ Ошибка соединения');
+            }
+        }
+
         // ===== MODALS =====
         $('itemModal').addEventListener('click', function(e) { if(e.target===this) closeItemModal(); });
         $('chatModal').addEventListener('click', function(e) { if(e.target===this) closeChatModal(); });
@@ -1478,6 +1662,7 @@
                     lastCount = o.length;
                     if (S.tab === 'orders') { S.orders = o; updateStats(o); renderOrders(); }
                     if (S.tab === 'chats') loadChats();
+                    if (S.tab === 'gifts') loadGifts();
                 } catch(e) {}
             }, 10000);
         }
@@ -1487,10 +1672,12 @@
             await loadMenu();
             await loadOrders();
             await loadChats();
+            await loadGifts();
             lastCount = S.orders.length;
             startAutoRefresh();
             console.log('🍓 Админка готова');
             console.log('📍 Нажмите на заказ с меткой "На карте" для просмотра местоположения');
+            console.log('🎁 Вкладка "Подарки" — управление бесплатными подарками');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1502,5 +1689,5 @@
         });
     </script>
 
-</body>
+</body> 
 </html>
