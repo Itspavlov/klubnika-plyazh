@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍓 Меню Strawberry in Chocolate</title>
+    <title>🍓 Квест: Найди киоск!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -55,7 +55,6 @@
             min-height: 100vh;
         }
 
-        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 8px 0 16px;
@@ -128,7 +127,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== LOADING OVERLAY ===== */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -181,7 +179,6 @@
             transition: width 0.3s ease;
         }
 
-        /* ===== SCROLL HINT ===== */
         .scroll-hint {
             display: none;
             text-align: center;
@@ -205,7 +202,6 @@
             color: var(--primary);
         }
 
-        /* ===== LOCATION CARD ===== */
         .location-card {
             background: linear-gradient(135deg, #FF4757, #E63946);
             border-radius: var(--radius-xl);
@@ -246,7 +242,6 @@
             margin-top: 4px;
         }
 
-        /* ===== MAP CARD ===== */
         .map-card {
             background: #FFFFFF;
             border-radius: var(--radius-xl);
@@ -350,7 +345,6 @@
             box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
         }
 
-        /* ===== LOCATION STATUS ===== */
         .location-status {
             display: none;
             padding: 10px 16px;
@@ -392,7 +386,6 @@
             50% { opacity: 0.4; transform: scale(0.8); }
         }
 
-        /* ===== ROUTE INFO ===== */
         .route-info {
             display: none;
             padding: 12px 16px;
@@ -420,6 +413,166 @@
 
         .route-info .route-text strong {
             font-weight: 700;
+        }
+
+        /* ===== GIFT MODAL ===== */
+        .gift-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(16px);
+            z-index: 800;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeInOverlay 0.5s ease;
+        }
+
+        .gift-modal-overlay.open {
+            display: flex;
+        }
+
+        .gift-modal-content {
+            background: linear-gradient(145deg, #FFFFFF, #FFF5F5);
+            border-radius: var(--radius-2xl);
+            max-width: 400px;
+            width: 100%;
+            padding: 32px 24px 28px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 71, 87, 0.25);
+            animation: giftPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gift-modal-content::before {
+            content: '🍓';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.05;
+            top: -20px;
+            right: -20px;
+            transform: rotate(20deg);
+        }
+
+        @keyframes giftPop {
+            from {
+                transform: scale(0.8) translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .gift-icon {
+            font-size: 72px;
+            display: block;
+            margin-bottom: 8px;
+            animation: giftFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes giftFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        .gift-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .gift-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .gift-text {
+            font-size: 18px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .gift-text strong {
+            color: var(--primary);
+        }
+
+        .gift-instruction {
+            background: #FFF8E1;
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+            font-size: 13px;
+            color: #E65100;
+            border: 1px solid #FFE0B2;
+        }
+
+        .gift-instruction i {
+            font-size: 24px;
+            flex-shrink: 0;
+            color: var(--primary);
+        }
+
+        .gift-instruction strong {
+            color: #BF360C;
+        }
+
+        .gift-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+            font-family: var(--font-family);
+            margin-bottom: 8px;
+        }
+
+        .gift-btn:active {
+            transform: scale(0.97);
+        }
+
+        .gift-close-btn {
+            width: 100%;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            font-family: var(--font-family);
+        }
+
+        .gift-code {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .gift-code span {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
         }
 
         /* ===== MENU GRID ===== */
@@ -504,7 +657,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        /* ===== SECTION TITLE ===== */
         .section-title {
             font-size: 18px;
             font-weight: 700;
@@ -521,7 +673,6 @@
             color: var(--primary);
         }
 
-        /* ===== FOOTER ===== */
         .footer {
             text-align: center;
             padding: 24px 0 12px;
@@ -538,7 +689,6 @@
             text-decoration: none;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 400px) {
             .menu-container {
                 padding: 12px 12px 16px;
@@ -568,6 +718,15 @@
                 flex: 1 1 100%;
                 padding: 12px;
             }
+            .gift-modal-content {
+                padding: 24px 16px 20px;
+            }
+            .gift-title {
+                font-size: 22px;
+            }
+            .gift-text {
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 340px) {
@@ -590,13 +749,35 @@
                 transform: translateY(0);
             }
         }
+
+        /* ===== TEST BUTTON ===== */
+        .test-gift-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 10px;
+            z-index: 999;
+            background: #FF4757;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+            font-family: var(--font-family);
+            transition: var(--transition);
+        }
+
+        .test-gift-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
 
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner">🍓</div>
-        <div class="loading-text">Загрузка меню...</div>
+        <div class="loading-text">Загрузка...</div>
         <div class="loading-progress">
             <div class="bar" id="loadingBar"></div>
         </div>
@@ -641,7 +822,7 @@
                     <i class="fas fa-map-marked-alt"></i>
                     <span>Карта загружается...</span>
                 </div>
-                <iframe id="mapIframe" src="" style="display:none;"></iframe>
+                <iframe id="mapIframe" src="" style="display:none;" allow="geolocation"></iframe>
             </div>
             <div class="location-status" id="locationStatus">
                 <span class="status-dot" id="statusDot"></span>
@@ -680,6 +861,38 @@
 
     </div>
 
+    <!-- ===== ТЕСТОВАЯ КНОПКА ===== -->
+    <button class="test-gift-btn" onclick="testGiftManually()">
+        🎁 Тест подарка
+    </button>
+
+    <!-- ===== МОДАЛКА ПОДАРКА ===== -->
+    <div class="gift-modal-overlay" id="giftModal">
+        <div class="gift-modal-content">
+            <div class="gift-icon">🎉🍓</div>
+            <div class="gift-title">Поздравляем!</div>
+            <div class="gift-subtitle">Вы наш гость! 🥳</div>
+            <div class="gift-text">
+                Вас ждет <strong>бесплатная мини-порция</strong><br>
+                клубники в шоколаде! 🍫
+            </div>
+            <div class="gift-instruction">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Найдите наш киоск на карте и подойдите<br>
+                <strong>с этим экраном</strong> для получения подарка</span>
+            </div>
+            <button class="gift-btn" onclick="openGiftMap()">
+                <i class="fas fa-location-arrow"></i> Показать киоск на карте
+            </button>
+            <button class="gift-close-btn" onclick="closeGiftModal()">
+                Хорошо, спасибо!
+            </button>
+            <div class="gift-code">
+                🎫 Код подарка: <span id="giftIdDisplay">---</span>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ================================================================
         // ===== DATA =====
@@ -696,6 +909,7 @@
         let mapLoaded = false;
         let autoScrollDone = false;
         let isBuildingRoute = false;
+        let giftId = null;
 
         // ================================================================
         // ===== LOADING SCREEN =====
@@ -715,6 +929,169 @@
                 overlay.classList.remove('show');
             }
         }
+
+        // ================================================================
+        // ===== ПОЛУЧЕНИЕ IP =====
+        // ================================================================
+        async function getUserIP() {
+            console.log('🔍 getUserIP() вызвана');
+            try {
+                // Пробуем через ipify
+                console.log('📡 Запрос к ipify...');
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                console.log('✅ IP получен через ipify:', data.ip);
+                return data.ip;
+            } catch (e) {
+                console.error('❌ Ошибка получения IP через ipify:', e);
+                // Fallback: получаем IP через сервер
+                try {
+                    console.log('📡 Fallback: запрос к /api/my-ip...');
+                    const res2 = await fetch('/api/my-ip');
+                    const data2 = await res2.json();
+                    console.log('✅ IP получен через сервер:', data2.ip);
+                    return data2.ip;
+                } catch (e2) {
+                    console.error('❌ Ошибка получения IP через сервер:', e2);
+                    return null;
+                }
+            }
+        }
+
+        // ================================================================
+        // ===== ПРОВЕРКА ПОДАРКА =====
+        // ================================================================
+        async function checkGift() {
+            console.log('🎁 checkGift() вызвана!');
+            
+            const ip = await getUserIP();
+            console.log('📡 Получен IP:', ip);
+            
+            if (!ip) {
+                console.log('❌ Не удалось получить IP');
+                console.log('🧪 Показываем тестовое окно подарка (заглушка)');
+                showGiftModal('TEST-IP-FAIL');
+                return;
+            }
+
+            try {
+                console.log('📤 Отправляем запрос на /api/gift/check с IP:', ip);
+                const res = await fetch('/api/gift/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ip })
+                });
+                const data = await res.json();
+                console.log('📥 Ответ от сервера:', data);
+
+                if (data.hasGift) {
+                    console.log('🎁 Есть активный подарок! ID:', data.giftId);
+                    giftId = data.giftId;
+                    showGiftModal(giftId);
+                } else if (data.canActivate) {
+                    console.log('🆕 Можно активировать подарок');
+                    await activateGift(ip);
+                } else if (data.reason === 'already_claimed') {
+                    console.log('✅ Подарок уже был получен ранее');
+                } else {
+                    console.log('ℹ️ Подарка нет, причина:', data.reason || 'неизвестно');
+                }
+            } catch (e) {
+                console.error('❌ Ошибка проверки подарка:', e);
+                // Для теста показываем окно принудительно
+                console.log('🧪 Показываем тестовое окно из-за ошибки');
+                showGiftModal('ERROR-TEST');
+            }
+        }
+
+        // ================================================================
+        // ===== АКТИВАЦИЯ ПОДАРКА =====
+        // ================================================================
+        async function activateGift(ip) {
+            console.log('🔄 activateGift() вызвана для IP:', ip);
+            try {
+                const res = await fetch('/api/gift/activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ip })
+                });
+                const data = await res.json();
+                console.log('📥 Ответ активации:', data);
+
+                if (data.success) {
+                    giftId = data.giftId;
+                    console.log('🎁 Подарок активирован! ID:', giftId);
+                    showGiftModal(giftId);
+                } else {
+                    console.log('❌ Активация не удалась:', data.message);
+                }
+            } catch (e) {
+                console.error('❌ Ошибка активации подарка:', e);
+            }
+        }
+
+        // ================================================================
+        // ===== МОДАЛКА ПОДАРКА =====
+        // ================================================================
+        function showGiftModal(id) {
+            console.log('🎁 showGiftModal() вызвана с ID:', id);
+            const modal = document.getElementById('giftModal');
+            const display = document.getElementById('giftIdDisplay');
+            if (display) display.textContent = id || '---';
+            
+            // Сохраняем в localStorage, чтобы не показывать повторно
+            try {
+                localStorage.setItem('gift_shown_' + id, 'true');
+            } catch (e) {}
+
+            if (modal) {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                console.log('✅ Модалка подарка открыта');
+            } else {
+                console.log('❌ Модалка не найдена!');
+            }
+        }
+
+        function closeGiftModal() {
+            const modal = document.getElementById('giftModal');
+            if (modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
+                console.log('❌ Модалка подарка закрыта');
+            }
+        }
+
+        function openGiftMap() {
+            closeGiftModal();
+            const mapCard = document.querySelector('.map-card');
+            if (mapCard) {
+                const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: mapPosition - 20,
+                    behavior: 'smooth'
+                });
+            }
+            const container = document.getElementById('mapContainer');
+            if (container) {
+                container.style.border = '3px solid #FF4757';
+                container.style.borderRadius = 'var(--radius-lg)';
+                setTimeout(() => {
+                    container.style.border = 'none';
+                }, 3000);
+            }
+        }
+
+        // ===== ТЕСТОВАЯ ФУНКЦИЯ =====
+        function testGiftManually() {
+            console.log('🧪 Ручной тест подарка');
+            showGiftModal('MANUAL-TEST-' + Date.now());
+        }
+
+        // Закрытие по клику вне модалки
+        document.getElementById('giftModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeGiftModal();
+        });
 
         // ================================================================
         // ===== АВТОМАТИЧЕСКАЯ ПРОКРУТКА =====
@@ -782,7 +1159,6 @@
             }, 500);
         }
 
-        // ===== ОПРЕДЕЛЕНИЕ МЕСТОПОЛОЖЕНИЯ =====
         function getMyLocation(event) {
             if (event) {
                 event.preventDefault();
@@ -845,7 +1221,6 @@
             return false;
         }
 
-        // ===== ПОСТРОИТЬ ПЕШИЙ МАРШРУТ =====
         function buildWalkRoute(event) {
             if (event) {
                 event.preventDefault();
@@ -981,8 +1356,16 @@
         // ===== INIT =====
         // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM загружен, запускаем...');
+            
             showLoading(10);
             renderMenu();
+
+            // Проверяем подарок с задержкой
+            setTimeout(() => {
+                console.log('🔍 Запускаем проверку подарка...');
+                checkGift();
+            }, 1500);
 
             setTimeout(() => {
                 const hint = document.getElementById('scrollHint');
@@ -1011,8 +1394,10 @@
             }
         });
 
-        console.log('🍓 Меню-страница загружена');
+        console.log('🍓 Квест-страница загружена!');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
+        console.log('🎁 Найди киоск и получи подарок!');
+        console.log('🧪 Для теста нажми на кнопку "🎁 Тест подарка" в правом нижнем углу');
     </script>
 
 </body>
