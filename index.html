@@ -2280,11 +2280,33 @@
             { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
         ];
 
-        const ROMANTIC_ITEM = {
-            id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде',
-            price: 420, volume: '300 мл',
-            image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757'
-        };
+     function renderMenu(settings) {
+    const strawberryGrid = document.getElementById('strawberryGrid');
+    let html = '';
+
+    STRAWBERRY_ITEMS.forEach(item => {
+        let customItem = null;
+        if (settings.customItems) {
+            customItem = settings.customItems.find(ci => ci.id === item.id);
+        }
+        const displayItem = customItem || item;
+        const available = settings.menuItems[item.id] !== false;
+        html += `
+            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
+                ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
+                <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
+                <div class="item-content">
+                    <div class="item-name">${displayItem.name}</div>
+                    <div class="item-desc">${displayItem.desc || item.desc}</div>
+                    <div class="item-price">${displayItem.price} ₽</div>
+                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
+                </div>
+            </div>
+        `;
+    });
+
+    // ... остальной код (фрукты, напитки, кастомные позиции)
+}
 
         const DRINK_ITEMS = [
             { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.webp', emoji: '🍋' },
