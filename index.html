@@ -138,7 +138,7 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== BUNGALO CARD WITH BACKGROUND ===== */
+        /* ===== BUNGALO CARD ===== */
         .bungalo-display {
             position: relative;
             border-radius: var(--radius-2xl);
@@ -1130,7 +1130,7 @@
             right: 0;
             background: #FFFFFF;
             border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-            max-height: 75vh;
+            max-height: 85vh;
             z-index: 250;
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
             max-width: 480px;
@@ -1158,7 +1158,7 @@
 
         .cart-modal .cart-content {
             padding: 16px 20px 20px;
-            max-height: 55vh;
+            max-height: 60vh;
             overflow-y: auto;
         }
 
@@ -1259,11 +1259,13 @@
         .payment-options {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .payment-btn {
             flex: 1;
-            padding: 12px;
+            min-width: 80px;
+            padding: 12px 8px;
             border: 2px solid #F1F5F9;
             border-radius: var(--radius-md);
             background: #FFFFFF;
@@ -1279,14 +1281,15 @@
         }
 
         .payment-btn .payment-icon {
-            font-size: 24px;
+            font-size: 22px;
+            display: block;
+            margin-bottom: 2px;
         }
 
         .payment-btn .payment-name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-dark);
-            margin-top: 4px;
         }
 
         .payment-info {
@@ -1744,6 +1747,12 @@
                 width: 100%;
                 justify-content: center;
             }
+            .payment-options {
+                flex-wrap: wrap;
+            }
+            .payment-btn {
+                flex: 1 1 100%;
+            }
         }
 
         @media (max-width: 340px) {
@@ -1791,13 +1800,16 @@
             <div class="modal-title">
                 <i class="fas fa-sparkles" style="color: var(--primary);"></i> Присыпка
             </div>
-            <div class="modal-subtitle">Добавьте изюминку к вашему стаканчику</div>
+            <div class="modal-subtitle">Выберите до 2 присыпок (бесплатно)</div>
             <div class="modal-product" id="selectedProductDisplay" style="background: #F8FAFC; border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
                 <span class="product-icon" id="productIcon" style="font-size: 28px;">
                     <i class="fas fa-chocolate-bar"></i>
                 </span>
                 <span class="product-name" id="productName" style="font-weight: 600; color: var(--text-dark);">Классика</span>
                 <span class="product-price" id="productPrice" style="margin-left: auto; font-weight: 700; color: var(--primary);">350 ₽</span>
+            </div>
+            <div id="selectedToppingsDisplay" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; min-height: 32px; padding: 4px;">
+                <span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>
             </div>
             <div class="topping-options" id="toppingOptions" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
             <button class="confirm-btn" id="confirmToppingBtn" disabled>
@@ -2206,6 +2218,10 @@
                         <span class="payment-icon">📱</span>
                         <span class="payment-name">Переводом</span>
                     </button>
+                    <button class="payment-btn" data-method="card" onclick="selectPayment('card')">
+                        <span class="payment-icon">💳</span>
+                        <span class="payment-name">Картой</span>
+                    </button>
                 </div>
                 <div class="payment-info" id="paymentInfo">💡 Оплата наличными при получении</div>
             </div>
@@ -2276,12 +2292,13 @@
             { id: '10', name: 'Шаурма с курицей', desc: 'Сочная курица, овощи, соус в лаваше', price: 350, image: 'images/shaurma.webp', emoji: '🌯', shaurma: true }
         ];
 
+        // ===== ТОППИНГИ (БЕСПЛАТНЫЕ) =====
         const TOPPINGS = [
-            { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban', price: 0 },
-            { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling', price: 30 },
-            { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut', price: 25 },
-            { id: 'oreo', name: 'Орео', icon: 'fas fa-cookie', price: 35 },
-            { id: 'waffle', name: 'Вафельная крошка', icon: 'fas fa-crumb', price: 30 }
+            { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban' },
+            { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling' },
+            { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut' },
+            { id: 'oreo', name: 'Орео', icon: 'fas fa-cookie' },
+            { id: 'waffle', name: 'Вафельная крошка', icon: 'fas fa-crumb' }
         ];
 
         // ================================================================
@@ -2290,7 +2307,7 @@
         const state = {
             cart: [],
             selectedProduct: null,
-            selectedTopping: null,
+            selectedToppings: [],
             settings: { technicalBreak: false, menuItems: {} },
             reviewRating: 0,
             reviewOrderId: null,
@@ -3204,76 +3221,159 @@
         document.getElementById('authModal').addEventListener('click', function(e) { if (e.target === this) closeAuthModal(); });
 
         // ================================================================
-        // ===== TOPPINGS =====
+        // ===== TOPPINGS (БЕСПЛАТНЫЕ, ДО 2 ШТУК) =====
         // ================================================================
         function openToppingModal(product) {
             state.selectedProduct = product;
-            state.selectedTopping = null;
+            state.selectedToppings = [];
+            
             document.getElementById('productIcon').innerHTML = '<i class="fas fa-chocolate-bar" style="color: var(--primary);"></i>';
             document.getElementById('productName').textContent = product.name;
             document.getElementById('productPrice').textContent = product.price + ' ₽' + (product.isRomantic ? ' (за 2 шт)' : '');
-            document.getElementById('toppingOptions').innerHTML = TOPPINGS.map(t => `
-                <div class="topping-option" data-id="${t.id}" onclick="selectTopping('${t.id}')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition);">
+            
+            let html = `
+                <div style="background: #E8F5E9; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; color: #2E7D32; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-gift"></i>
+                    <span>Выберите <strong>до 2 присыпок</strong> (бесплатно)</span>
+                </div>
+                <div id="selectedToppingsDisplay" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; min-height: 32px; padding: 4px;">
+                    <span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>
+                </div>
+            `;
+            
+            html += TOPPINGS.map(t => `
+                <div class="topping-option" data-id="${t.id}" onclick="toggleTopping('${t.id}')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition);">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <span style="font-size: 18px; color: var(--primary);"><i class="${t.icon}"></i></span>
                         <span style="font-weight: 500; color: var(--text-dark);">${t.name}</span>
                     </div>
                     <div>
-                        ${t.price > 0 ? `<span style="font-weight: 600; color: var(--primary);">+${t.price} ₽</span>` : ''}
                         <span class="option-check" style="display: none; color: #4ADE80; margin-left: 8px;"><i class="fas fa-check-circle"></i></span>
                     </div>
                 </div>
             `).join('');
-            document.querySelectorAll('.topping-option').forEach(el => el.classList.remove('selected'));
+            
+            document.getElementById('toppingOptions').innerHTML = html;
             document.getElementById('confirmToppingBtn').disabled = true;
             document.getElementById('toppingModal').classList.add('open');
         }
 
-        function selectTopping(toppingId) {
-            state.selectedTopping = TOPPINGS.find(t => t.id === toppingId);
+        function toggleTopping(toppingId) {
+            // Если выбрана "Без присыпки" — очищаем всё
+            if (toppingId === 'none') {
+                state.selectedToppings = ['none'];
+                updateToppingUI();
+                document.getElementById('confirmToppingBtn').disabled = false;
+                return;
+            }
+            
+            // Если была выбрана "Без присыпки" — убираем её
+            if (state.selectedToppings.includes('none')) {
+                state.selectedToppings = [];
+            }
+            
+            const index = state.selectedToppings.indexOf(toppingId);
+            if (index > -1) {
+                state.selectedToppings.splice(index, 1);
+            } else {
+                if (state.selectedToppings.length >= 2) {
+                    showNotification('⚠️ Можно выбрать не более 2 присыпок!', 'error');
+                    return;
+                }
+                state.selectedToppings.push(toppingId);
+            }
+            
+            updateToppingUI();
+            document.getElementById('confirmToppingBtn').disabled = state.selectedToppings.length === 0;
+        }
+
+        function updateToppingUI() {
+            const display = document.getElementById('selectedToppingsDisplay');
+            
+            // Обновляем стили выбранных опций
             document.querySelectorAll('.topping-option').forEach(el => {
-                el.classList.toggle('selected', el.dataset.id === toppingId);
-                el.style.borderColor = el.dataset.id === toppingId ? 'var(--primary)' : '#F1F5F9';
-                el.style.background = el.dataset.id === toppingId ? '#FFF5F5' : '#FFFFFF';
-                el.querySelector('.option-check').style.display = el.dataset.id === toppingId ? 'inline' : 'none';
+                const id = el.dataset.id;
+                const isSelected = state.selectedToppings.includes(id);
+                el.classList.toggle('selected', isSelected);
+                el.style.borderColor = isSelected ? 'var(--primary)' : '#F1F5F9';
+                el.style.background = isSelected ? '#FFF5F5' : '#FFFFFF';
+                el.querySelector('.option-check').style.display = isSelected ? 'inline' : 'none';
             });
-            document.getElementById('confirmToppingBtn').disabled = false;
+            
+            // Обновляем отображение выбранных
+            if (state.selectedToppings.length === 0 || (state.selectedToppings.length === 1 && state.selectedToppings[0] === 'none')) {
+                display.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>';
+                return;
+            }
+            
+            const selectedNames = state.selectedToppings.map(id => {
+                const t = TOPPINGS.find(t => t.id === id);
+                return t ? t.name : id;
+            });
+            
+            display.innerHTML = selectedNames.map((name, idx) => {
+                const id = state.selectedToppings[idx];
+                return `
+                    <span style="background: #FFF5F5; color: var(--primary); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 500; border: 1px solid var(--primary);">
+                        ${name}
+                        <span onclick="event.stopPropagation(); toggleTopping('${id}')" style="cursor:pointer;margin-left:4px;color:var(--text-muted);">&times;</span>
+                    </span>
+                `;
+            }).join('');
         }
 
         function closeToppingModal() {
             document.getElementById('toppingModal').classList.remove('open');
             state.selectedProduct = null;
-            state.selectedTopping = null;
+            state.selectedToppings = [];
         }
 
         document.getElementById('toppingModal').addEventListener('click', function(e) { if (e.target === this) closeToppingModal(); });
 
         document.getElementById('confirmToppingBtn').addEventListener('click', function() {
-            if (!state.selectedProduct || !state.selectedTopping) { showNotification('⚠️ Выберите присыпку!', 'error'); return; }
+            if (!state.selectedProduct) { showNotification('⚠️ Ошибка!', 'error'); return; }
+            if (state.selectedToppings.length === 0) { showNotification('⚠️ Выберите присыпку!', 'error'); return; }
+            
             const product = state.selectedProduct;
-            const topping = state.selectedTopping;
-            let finalPrice = product.price + (product.isRomantic ? 0 : topping.price);
-            let toppingText = topping.id === 'none' ? '' : ' (' + topping.name + ')';
+            const toppingNames = state.selectedToppings.map(id => {
+                const t = TOPPINGS.find(t => t.id === id);
+                return t ? t.name : id;
+            });
+            
+            const toppingText = state.selectedToppings.includes('none') ? '' : ' (' + toppingNames.join(' + ') + ')';
             const itemName = product.isRomantic ? `${product.name} (2 стаканчика)` : `${product.name}${toppingText}`;
+            
             const phone = document.getElementById('customerPhone').value.trim();
             const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
+            
             if (!hasTrustShown(phoneClean)) {
                 setTrustShown(phoneClean);
                 window._pendingAddToCart = {
                     id: product.id,
                     name: itemName,
-                    price: finalPrice,
+                    price: product.price,
                     quantity: 1,
                     category: product.category,
-                    topping: topping.id,
-                    toppingName: topping.name,
+                    topping: state.selectedToppings.join(','),
+                    toppingName: toppingNames.join(' + '),
                     isRomantic: product.isRomantic || false
                 };
                 closeToppingModal();
                 showTrustModal();
                 return;
             }
-            addToCart({ id: product.id, name: itemName, price: finalPrice, quantity: 1, category: product.category, topping: topping.id, toppingName: topping.name, isRomantic: product.isRomantic || false });
+            
+            addToCart({
+                id: product.id,
+                name: itemName,
+                price: product.price,
+                quantity: 1,
+                category: product.category,
+                topping: state.selectedToppings.join(','),
+                toppingName: toppingNames.join(' + '),
+                isRomantic: product.isRomantic || false
+            });
+            
             closeToppingModal();
             showNotification(`✅ ${itemName} добавлен!`);
             const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
@@ -3397,7 +3497,13 @@
             selectedPayment = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
-            document.getElementById('paymentInfo').textContent = method === 'cash' ? '💡 Оплата наличными при получении' : '💡 Перевод по номеру телефона при получении';
+            
+            const messages = {
+                cash: '💡 Оплата наличными при получении',
+                transfer: '💡 Перевод по номеру телефона при получении',
+                card: '💳 Оплата картой при получении (терминал)'
+            };
+            document.getElementById('paymentInfo').textContent = messages[method] || messages.cash;
         }
 
         // ================================================================
@@ -3444,7 +3550,7 @@
                 }
             } catch (e) {}
 
-            const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом' };
+            const paymentLabels = { cash: '💵 Наличными', transfer: '📱 Переводом', card: '💳 Картой' };
             const order = {
                 bungalow: bungaloNumber || 0,
                 customerName: name,
@@ -4122,15 +4228,15 @@
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v5');
+        console.log('🍓 Strawberry in Chocolate - v9');
         console.log('✅ Валидация телефона');
         console.log('✅ Автосохранение данных');
         console.log('✅ Полноэкранные заказы и отзывы');
         console.log('✅ Красивые карточки заказов');
         console.log('✅ Проверка возраста 18+ для алкоголя');
-        console.log('✅ oldPrice из админки');
+        console.log('✅ Бесплатные присыпки (до 2 видов)');
+        console.log('✅ Оплата: наличные, перевод, карта при получении');
         console.log('✅ Анимация клубнички в корзину');
-        console.log('✅ Кастомные позиции из админки');
         console.log('✅ Сохранение корзины в localStorage');
         console.log('✅ Чат с таймером 10 минут и кнопкой звонка');
         console.log('✅ Доверительное окно при первом добавлении в корзину');
