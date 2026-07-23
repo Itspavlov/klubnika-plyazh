@@ -1159,23 +1159,23 @@
         async function clearOrders() { if(!confirm('Удалить все заказы?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
 
         // ===== MENU =====
-        const CATALOG = [
-            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
-            { id:'2', name:'Клубника в сливках', desc:'Нежная клубника в бельгийских сливках', price:350, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/klubnika-v-slivkah.jpg', badge:'⭐' },
-            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-            { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
-            { id:'9', name:'Клубника в сливках и шоколаде', desc:'Нежная клубника в сливках и шоколаде', price:420, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/klubnika-v-slivkah-shokolad.jpg', badge:'🔥 Хит' },
-            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-            { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
-            { id:'10', name:'Шаурма с курицей', desc:'Сочная курица, овощи', price:350, volume:'', emoji:'🌯', category:'drinks', image:'images/shaurma.webp' }
-        ];
+      const CATALOG = [
+    { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
+    { id:'2', name:'Клубника в сливках', desc:'Нежная клубника в бельгийских сливках', price:350, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/klubnika-v-slivkah.jpg', badge:'⭐' },
+    { id:'9', name:'Клубника в сливках и шоколаде', desc:'Нежная клубника в сливках и шоколаде', price:350, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/klubnika-v-slivkah-shokolad.jpg', badge:'🔥 Хит' },
+    { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
+    { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
+    { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
+    { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
+    { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
+    { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
+    { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
+    { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
+    { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
+    { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
+    { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' },
+    // Шаурму удалили ↓
+];
 
         async function loadMenu() {
             try {
