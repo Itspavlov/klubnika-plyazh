@@ -479,7 +479,7 @@
         .order-card .payment-badge.cash { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
         .order-card .payment-badge.transfer { background: #E3F2FD; color: #1565C0; border-color: #90CAF9; }
 
-        /* ===== QR SCANNER FULLSCREEN ===== */
+        /* ===== QR FULLSCREEN ===== */
         .qr-fullscreen {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -815,7 +815,7 @@
         </div>
     </div>
 
-    <!-- ===== QR SCANNER FULLSCREEN ===== -->
+    <!-- ===== QR FULLSCREEN ===== -->
     <div class="qr-fullscreen" id="qrFullscreen">
         <div class="qr-header">
             <div class="qr-title">
@@ -951,6 +951,7 @@
         let scannedGiftId = null;
         let html5QrCode = null;
         let isScannerRunning = false;
+        let isCameraStarting = false;
 
         // ================================================================
         // ===== LOGIN =====
@@ -1620,9 +1621,25 @@
         async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
 
         // ================================================================
-        // ===== QR СКАНЕР FULLSCREEN С АВТО-ВЫДАЧЕЙ =====
+        // ===== QR FULLSCREEN С АВТО-ВЫДАЧЕЙ =====
         // ================================================================
         function startQRScanner() {
+            // Если сканер уже запущен — останавливаем
+            if (html5QrCode) {
+                stopQRScanner();
+                // Даем время на освобождение
+                setTimeout(() => {
+                    startQRScannerInternal();
+                }, 500);
+                return;
+            }
+            startQRScannerInternal();
+        }
+
+        function startQRScannerInternal() {
+            if (isCameraStarting) return;
+            isCameraStarting = true;
+            
             const fullscreen = document.getElementById('qrFullscreen');
             fullscreen.classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -1634,10 +1651,14 @@
             document.getElementById('qrActions').style.display = 'none';
             scannedGiftId = null;
 
-            // Показываем оверлей
             const overlay = document.getElementById('qrOverlay');
             overlay.style.display = 'flex';
+            overlay.querySelector('.qr-hint').innerHTML = `
+                📱 Наведите камеру на QR-код
+                <small>Поверните телефон горизонтально для лучшего сканирования</small>
+            `;
 
+            // Проверяем, загружена ли библиотека
             if (typeof Html5Qrcode === 'undefined') {
                 const script = document.createElement('script');
                 script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
@@ -1647,6 +1668,7 @@
                 script.onerror = function() {
                     result.className = 'qr-result error';
                     result.innerHTML = '❌ Не удалось загрузить библиотеку сканера';
+                    isCameraStarting = false;
                 };
                 document.head.appendChild(script);
             } else {
@@ -1654,45 +1676,61 @@
             }
         }
 
-       function initScannerFullscreen() {
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            html5QrCode.clear();
-        }).catch(() => {});
-    }
+        function initScannerFullscreen() {
+            const readerElement = document.getElementById('qrReader');
+            
+            // Полностью очищаем reader
+            if (readerElement) {
+                const elements = readerElement.querySelectorAll('video, canvas, div:not(.qr-overlay)');
+                elements.forEach(el => el.remove());
+            }
+            
+            // Если есть старый экземпляр — уничтожаем
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().then(() => {
+                        html5QrCode.clear();
+                    }).catch(() => {});
+                } catch(e) {}
+                html5QrCode = null;
+            }
 
-    html5QrCode = new Html5Qrcode("qrReader");
-    
-    const config = {
-        fps: 20,
-        qrbox: { width: 300, height: 300 },
-        aspectRatio: 1.0
-    };
+            // Создаем новый экземпляр
+            html5QrCode = new Html5Qrcode("qrReader");
+            
+            const config = {
+                fps: 20,
+                qrbox: { width: 300, height: 300 },
+                aspectRatio: 1.0
+            };
 
-    const result = document.getElementById('qrResult');
-    result.className = 'qr-result';
-    result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
 
-    const overlay = document.getElementById('qrOverlay');
-    setTimeout(() => {
-        overlay.style.display = 'none';
-    }, 1500);
+            const overlay = document.getElementById('qrOverlay');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1500);
 
-    html5QrCode.start(
-        { facingMode: "environment" },
-        config,
-        onScanSuccessFullscreen,
-        onScanErrorFullscreen
-    ).catch(function(err) {
-        result.className = 'qr-result error';
-        result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
-        overlay.style.display = 'flex';
-        overlay.querySelector('.qr-hint').innerHTML = `
-            ❌ Ошибка доступа к камере<br>
-            <small style="font-size:12px;opacity:0.5;">Разрешите доступ к камере в браузере</small>
-        `;
-    });
-}
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                onScanSuccessFullscreen,
+                onScanErrorFullscreen
+            ).then(() => {
+                isCameraStarting = false;
+            }).catch(function(err) {
+                result.className = 'qr-result error';
+                result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
+                overlay.style.display = 'flex';
+                overlay.querySelector('.qr-hint').innerHTML = `
+                    ❌ Ошибка доступа к камере<br>
+                    <small style="font-size:12px;opacity:0.5;">Разрешите доступ к камере в браузере</small>
+                `;
+                isCameraStarting = false;
+            });
+        }
 
         function onScanSuccessFullscreen(decodedText, decodedResult) {
             if (isScannerRunning) return;
@@ -1716,6 +1754,7 @@
 
             scannedGiftId = giftId;
             
+            // Останавливаем камеру после сканирования
             if (html5QrCode) {
                 html5QrCode.stop().then(() => {
                     html5QrCode.clear();
@@ -1813,18 +1852,27 @@
                 html5QrCode = null;
             }
             
+            // Очищаем reader от видео
+            const reader = document.getElementById('qrReader');
+            if (reader) {
+                const videos = reader.querySelectorAll('video');
+                videos.forEach(v => v.remove());
+            }
+            
             document.getElementById('qrFullscreen').classList.remove('open');
             document.body.style.overflow = '';
             scannedGiftId = null;
             isScannerRunning = false;
+            isCameraStarting = false;
             
-            // Восстанавливаем оверлей
             const overlay = document.getElementById('qrOverlay');
-            overlay.style.display = 'flex';
-            overlay.querySelector('.qr-hint').innerHTML = `
-                📱 Наведите камеру на QR-код
-                <small>Поверните телефон горизонтально для лучшего сканирования</small>
-            `;
+            if (overlay) {
+                overlay.style.display = 'flex';
+                overlay.querySelector('.qr-hint').innerHTML = `
+                    📱 Наведите камеру на QR-код
+                    <small>Поверните телефон горизонтально для лучшего сканирования</small>
+                `;
+            }
         }
 
         // ===== РУЧНОЙ ВВОД КОДА =====
