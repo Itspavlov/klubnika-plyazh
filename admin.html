@@ -109,6 +109,7 @@
         .btn-danger { background: #EF4444; color: #fff; }
         .btn-success { background: #22C55E; color: #fff; }
         .btn-warning { background: #F59E0B; color: #fff; }
+        .btn-purple { background: linear-gradient(135deg, #8B5CF6, #7C3AED); color: #fff; box-shadow: 0 4px 12px rgba(139,92,246,0.3); }
         .btn-sm { padding: 6px 14px; font-size: 11px; }
         .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
         .tech-card { background: linear-gradient(135deg, #4ADE80, #22C55E); color: #fff; cursor: pointer; transition: var(--transition); }
@@ -611,6 +612,168 @@
             border-color: #90CAF9;
         }
 
+        /* ===== QR SCANNER MODAL ===== */
+        .qr-scanner-modal .modal {
+            max-width: 420px;
+        }
+
+        .qr-scanner-modal .qr-reader {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .qr-scanner-modal .qr-reader video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .qr-scanner-modal .qr-result {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            background: #F8FAFC;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            min-height: 50px;
+        }
+
+        .qr-scanner-modal .qr-result.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .qr-scanner-modal .qr-result.error {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+
+        .qr-scanner-modal .qr-result .found-gift {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .qr-scanner-modal .qr-result .found-gift .gift-id {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .qr-scanner-modal .qr-result .found-gift .gift-ip {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .qr-scanner-modal .qr-result .found-gift .gift-status {
+            font-weight: 600;
+        }
+
+        .qr-scanner-modal .qr-result .found-gift .gift-status.claimed {
+            color: #2E7D32;
+        }
+
+        .qr-scanner-modal .qr-result .found-gift .gift-status.pending {
+            color: #F59E0B;
+        }
+
+        .qr-scanner-modal .qr-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .qr-scanner-modal .qr-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* ===== GIFTS LIST ===== */
+        .gift-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 2px solid #F1F5F9;
+            transition: var(--transition);
+        }
+
+        .gift-card.claimed {
+            border-color: #22C55E;
+            background: #F8FAFC;
+        }
+
+        .gift-card.pending {
+            border-color: #F59E0B;
+            background: #FFFBEB;
+        }
+
+        .gift-card .gift-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .gift-card .gift-id {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+
+        .gift-card .gift-status-badge {
+            padding: 3px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .gift-card .gift-status-badge.claimed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .gift-card .gift-status-badge.pending {
+            background: #FFF8E1;
+            color: #F59E0B;
+        }
+
+        .gift-card .gift-details {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .gift-card .gift-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .gift-card .gift-qr-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px 8px;
+            transition: var(--transition);
+        }
+
+        .gift-card .gift-qr-btn:active {
+            transform: scale(0.9);
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 500px) {
             .stats { grid-template-columns: 1fr 1fr; }
@@ -623,6 +786,9 @@
             }
             .map-modal-content .map-container {
                 height: 280px;
+            }
+            .qr-scanner-modal .qr-reader {
+                height: 250px;
             }
         }
     </style>
@@ -717,6 +883,9 @@
             <div class="panel" id="panel-gifts">
                 <div class="row-btns">
                     <button class="btn btn-primary btn-sm" onclick="loadGifts()"><i class="fas fa-sync-alt"></i> Обновить</button>
+                    <button class="btn btn-purple btn-sm" onclick="startQRScanner()">
+                        <i class="fas fa-qrcode"></i> Сканировать QR
+                    </button>
                     <button class="btn btn-success btn-sm" onclick="manualGift()"><i class="fas fa-plus"></i> Выдать подарок</button>
                     <button class="btn btn-danger btn-sm" onclick="resetAllGifts()" style="background:#EF4444;color:#fff;">
                         <i class="fas fa-trash"></i> Сбросить все IP
@@ -740,6 +909,31 @@
                     </div>
                 </div>
                 <div id="giftsList"><div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== QR SCANNER MODAL ===== -->
+    <div class="modal-overlay qr-scanner-modal" id="qrScannerModal">
+        <div class="modal">
+            <button class="modal-close" onclick="stopQRScanner()"><i class="fas fa-times"></i></button>
+            <div style="font-weight:700;font-size:18px;margin-bottom:12px;text-align:center;color:var(--text-dark);">
+                <i class="fas fa-qrcode" style="color:var(--primary);"></i> Сканируйте QR-код
+            </div>
+            <div class="qr-reader" id="qrReader">
+                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;font-size:14px;flex-direction:column;gap:12px;">
+                    <i class="fas fa-camera" style="font-size:48px;opacity:0.5;"></i>
+                    <span>Наведите камеру на QR-код</span>
+                </div>
+            </div>
+            <div class="qr-result" id="qrResult">
+                <i class="fas fa-info-circle"></i> Ожидание сканирования...
+            </div>
+            <div class="qr-actions" id="qrActions" style="display:none;">
+                <button class="btn btn-success" onclick="claimScannedGift()">
+                    <i class="fas fa-gift"></i> Выдать подарок
+                </button>
+                <button class="btn btn-outline" onclick="stopQRScanner()">Закрыть</button>
             </div>
         </div>
     </div>
@@ -843,6 +1037,9 @@
         };
 
         let selectedOrder = null;
+        let scannedGiftId = null;
+        let html5QrCode = null;
+        let isScannerRunning = false;
 
         // ================================================================
         // ===== LOGIN =====
@@ -1490,7 +1687,204 @@
         async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
 
         // ================================================================
-        // ===== API: ПОДАРКИ (GIFTS) =====
+        // ===== QR СКАНЕР =====
+        // ================================================================
+        function startQRScanner() {
+            const modal = document.getElementById('qrScannerModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Запуск камеры...';
+            
+            document.getElementById('qrActions').style.display = 'none';
+            scannedGiftId = null;
+
+            if (typeof Html5Qrcode === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+                script.onload = function() {
+                    initScanner();
+                };
+                script.onerror = function() {
+                    result.className = 'qr-result error';
+                    result.innerHTML = '❌ Не удалось загрузить библиотеку сканера';
+                };
+                document.head.appendChild(script);
+            } else {
+                initScanner();
+            }
+        }
+
+        function initScanner() {
+            const readerElement = document.getElementById('qrReader');
+            
+            // Очищаем предыдущий сканер
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                }).catch(() => {});
+            }
+
+            html5QrCode = new Html5Qrcode("qrReader");
+            
+            const config = {
+                fps: 15,
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0
+            };
+
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                onScanSuccess,
+                onScanError
+            ).catch(function(err) {
+                result.className = 'qr-result error';
+                result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
+            });
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Останавливаем сканер после успешного сканирования
+            if (isScannerRunning) return;
+            isScannerRunning = true;
+            
+            // Парсим ID из QR-кода (формат: gift-123 или просто 123)
+            let giftId = decodedText;
+            if (giftId.startsWith('gift-')) {
+                giftId = giftId.replace('gift-', '');
+            }
+            giftId = parseInt(giftId);
+            
+            if (isNaN(giftId)) {
+                const result = document.getElementById('qrResult');
+                result.className = 'qr-result error';
+                result.innerHTML = '❌ Неверный QR-код. Ожидается gift-123';
+                isScannerRunning = false;
+                return;
+            }
+
+            scannedGiftId = giftId;
+            
+            // Останавливаем сканер
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                }).catch(() => {});
+            }
+
+            // Получаем информацию о подарке
+            fetchGiftInfo(giftId);
+        }
+
+        function onScanError(err) {
+            // Игнорируем ошибки сканирования (они частые при поиске)
+        }
+
+        async function fetchGiftInfo(giftId) {
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Загрузка информации...';
+
+            try {
+                const res = await fetch(`/api/gift/${giftId}`);
+                const data = await res.json();
+
+                if (!data.success) {
+                    result.className = 'qr-result error';
+                    result.innerHTML = `❌ ${data.error || 'Подарок не найден'}`;
+                    isScannerRunning = false;
+                    return;
+                }
+
+                const gift = data.gift;
+                const isClaimed = gift.claimed;
+                const statusText = isClaimed ? '✅ Уже выдан' : '🕒 Ожидает выдачи';
+                const statusClass = isClaimed ? 'claimed' : 'pending';
+
+                result.className = 'qr-result success';
+                result.innerHTML = `
+                    <div class="found-gift">
+                        <div class="gift-id">🎁 Подарок #${gift.id}</div>
+                        <div class="gift-ip">📍 IP: ${gift.ip || 'неизвестен'}</div>
+                        <div class="gift-ip">📅 ${new Date(gift.created_at).toLocaleString('ru-RU')}</div>
+                        <div class="gift-status ${statusClass}">${statusText}</div>
+                    </div>
+                `;
+
+                if (!isClaimed) {
+                    document.getElementById('qrActions').style.display = 'flex';
+                } else {
+                    document.getElementById('qrActions').style.display = 'none';
+                    setTimeout(() => {
+                        stopQRScanner();
+                    }, 3000);
+                }
+                
+                isScannerRunning = false;
+
+            } catch (e) {
+                result.className = 'qr-result error';
+                result.innerHTML = '❌ Ошибка загрузки информации';
+                isScannerRunning = false;
+            }
+        }
+
+        async function claimScannedGift() {
+            if (!scannedGiftId) return;
+            
+            if (!confirm(`Выдать подарок #${scannedGiftId}?`)) return;
+            
+            try {
+                const res = await fetch('/api/gift/claim', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ giftId: scannedGiftId })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    toast('✅ Подарок выдан!');
+                    stopQRScanner();
+                    loadGifts();
+                } else {
+                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+                }
+            } catch(e) {
+                toast('❌ Ошибка соединения');
+            }
+        }
+
+        function stopQRScanner() {
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().then(() => {
+                        html5QrCode.clear();
+                    }).catch(() => {});
+                } catch(e) {}
+                html5QrCode = null;
+            }
+            
+            document.getElementById('qrScannerModal').classList.remove('open');
+            document.body.style.overflow = '';
+            document.getElementById('qrActions').style.display = 'none';
+            scannedGiftId = null;
+            isScannerRunning = false;
+        }
+
+        // Закрытие сканера по клику вне
+        document.getElementById('qrScannerModal').addEventListener('click', function(e) {
+            if (e.target === this) stopQRScanner();
+        });
+
+        // ================================================================
+        // ===== API: ПОДАРКИ =====
         // ================================================================
 
         async function loadGifts() {
@@ -1519,27 +1913,29 @@
             }
 
             list.innerHTML = gifts.map(g => `
-                <div class="order-card ${g.claimed ? 'status-done' : 'status-waiting'}" style="cursor:default;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-                        <span style="font-weight:700;font-size:14px;color:var(--text-dark);">
-                            🎫 #${g.id} — ${g.ip || 'Без IP'}
-                            ${g.bungalow ? `🏠 #${g.bungalow}` : ''}
-                        </span>
-                        <span class="order-status-badge ${g.claimed ? 'status-done' : 'status-waiting'}">
+                <div class="gift-card ${g.claimed ? 'claimed' : 'pending'}">
+                    <div class="gift-header">
+                        <span class="gift-id">🎫 #${g.id}</span>
+                        <span class="gift-status-badge ${g.claimed ? 'claimed' : 'pending'}">
                             ${g.claimed ? '✅ Выдан' : '🕒 Ожидает'}
                         </span>
                     </div>
-                    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
-                        📅 ${new Date(g.created_at).toLocaleString('ru-RU')}
-                        ${g.claimed_at ? ` | 🎁 Выдан: ${new Date(g.claimed_at).toLocaleString('ru-RU')}` : ''}
+                    <div class="gift-details">
+                        <span>📡 IP: ${g.ip || 'неизвестен'}</span>
+                        ${g.bungalow ? `<span>🏠 Бунгало #${g.bungalow}</span>` : ''}
+                        <span>📅 ${new Date(g.created_at).toLocaleString('ru-RU')}</span>
+                        ${g.claimed_at ? `<span>🎁 Выдан: ${new Date(g.claimed_at).toLocaleString('ru-RU')}</span>` : ''}
                     </div>
-                    ${!g.claimed ? `
-                        <div style="margin-top:8px;">
+                    <div class="gift-actions">
+                        ${!g.claimed ? `
                             <button class="btn btn-success btn-xs" onclick="claimGift(${g.id})">
-                                <i class="fas fa-check"></i> Выдать подарок
+                                <i class="fas fa-check"></i> Выдать
                             </button>
-                        </div>
-                    ` : ''}
+                        ` : ''}
+                        <button class="gift-qr-btn" onclick="showGiftQR(${g.id})" title="Показать QR-код">
+                            <i class="fas fa-qrcode"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -1575,7 +1971,13 @@
             }
         }
 
-        // ===== КНОПКА: СБРОСИТЬ ВСЕ IP =====
+        function showGiftQR(giftId) {
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=gift-${giftId}&color=FF4757&bgcolor=FFFFFF`;
+            // Открываем в новой вкладке или показываем модалку
+            window.open(qrUrl, '_blank');
+        }
+
+        // ===== КНОПКИ СБРОСА =====
         async function resetAllGifts() {
             if (!confirm('⚠️ УДАЛИТЬ ВСЕ ЗАПИСИ О ПОДАРКАХ?\nЭто позволит всем пользователям получить подарок заново!')) return;
             if (!confirm('❗ ТОЧНО? Это действие НЕЛЬЗЯ ОТМЕНИТЬ!')) return;
@@ -1587,7 +1989,7 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    toast('🗑️ Все IP сброшены! Теперь каждый может получить подарок заново.');
+                    toast('🗑️ Все IP сброшены!');
                     loadGifts();
                 } else {
                     toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
@@ -1597,7 +1999,6 @@
             }
         }
 
-        // ===== КНОПКА: СБРОСИТЬ МОЙ IP (ДЛЯ ТЕСТИРОВАНИЯ) =====
         async function resetMyGift() {
             if (!confirm('Сбросить ваш IP для тестирования?')) return;
             try {
@@ -1612,7 +2013,7 @@
                 });
                 const resetData = await resetRes.json();
                 if (resetData.success) {
-                    toast(`✅ Ваш IP (${myIp}) сброшен! Обновите страницу.`);
+                    toast(`✅ Ваш IP (${myIp}) сброшен!`);
                     loadGifts();
                 } else {
                     toast('❌ Ошибка: ' + (resetData.error || 'неизвестная'));
@@ -1622,7 +2023,6 @@
             }
         }
 
-        // ===== РУЧНАЯ ВЫДАЧА ПОДАРКА =====
         async function manualGift() {
             const ip = prompt('Введите IP-адрес для выдачи подарка:');
             if (!ip) return;
@@ -1677,7 +2077,7 @@
             startAutoRefresh();
             console.log('🍓 Админка готова');
             console.log('📍 Нажмите на заказ с меткой "На карте" для просмотра местоположения');
-            console.log('🎁 Вкладка "Подарки" — управление бесплатными подарками');
+            console.log('🎁 Вкладка "Подарки" — сканируйте QR-коды для выдачи подарков');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1689,5 +2089,5 @@
         });
     </script>
 
-</body> 
+</body>
 </html>

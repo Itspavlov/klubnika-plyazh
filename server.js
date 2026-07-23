@@ -390,7 +390,7 @@ app.post('/api/gift/activate', async (req, res) => {
     }
 });
 
-// Выдача подарка (админка)
+// Выдача подарка
 app.post('/api/gift/claim', async (req, res) => {
     const { giftId } = req.body;
     if (!giftId) return res.json({ success: false, error: 'Нет ID' });
@@ -406,7 +406,23 @@ app.post('/api/gift/claim', async (req, res) => {
     }
 });
 
-// Список подарков (админка)
+// Получение подарка по ID (для QR)
+app.get('/api/gift/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) return res.json({ success: false, error: 'Неверный ID' });
+    
+    try {
+        const result = await pool.query('SELECT * FROM gifts WHERE id = $1', [id]);
+        if (result.rows.length === 0) {
+            return res.json({ success: false, error: 'Подарок не найден' });
+        }
+        res.json({ success: true, gift: result.rows[0] });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
+// Список подарков
 app.get('/api/gifts', async (req, res) => {
     try {
         const result = await pool.query(
@@ -434,7 +450,7 @@ app.get('/api/gifts/stats', async (req, res) => {
     }
 });
 
-// Ручное добавление подарка (админка)
+// Ручное добавление подарка
 app.post('/api/gift/manual', async (req, res) => {
     const { ip, bungalow } = req.body;
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
@@ -550,6 +566,14 @@ app.delete('/api/review/:id', async (req, res) => {
     res.json({ success: true });
 });
 
+// ===== IP ДЛЯ КЛИЕНТА (FALLBACK) =====
+app.get('/api/my-ip', (req, res) => {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    // Если ip содержит запятые (прокси), берем первый
+    const cleanIp = ip ? ip.split(',')[0].trim() : 'unknown';
+    res.json({ ip: cleanIp });
+});
+
 // ===== QR-КОД =====
 app.get('/generate-qr', (req, res) => {
     const bungalow = req.query.b || 1;
@@ -589,6 +613,6 @@ setInterval(async () => {
         console.log('❌ Авто-отмена заказов ОТКЛЮЧЕНА — заказы остаются активными до ручного управления');
         console.log('📍 Геолокация клиентов сохраняется в заказах');
         console.log('🎁 Система подарков (gifts) активирована!');
-        console.log('🗑️ Кнопки сброса подарков добавлены для тестирования');
+        console.log('📷 QR-сканер подарков доступен в админке');
     });
 })();

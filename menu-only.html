@@ -575,6 +575,46 @@
             font-size: 14px;
         }
 
+        /* ===== QR CODE IN MODAL ===== */
+        .gift-qr-section {
+            margin: 12px 0;
+            padding: 12px;
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            border: 2px dashed #FFE0B2;
+        }
+
+        .gift-qr-section .qr-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        .gift-qr-section .qr-container img {
+            max-width: 180px;
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+        }
+
+        .gift-qr-section .qr-container .qr-placeholder {
+            font-size: 60px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+
+        .gift-qr-section .qr-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .gift-qr-section .qr-hint strong {
+            color: var(--primary);
+        }
+
         /* ===== MENU GRID ===== */
         .menu-grid {
             display: grid;
@@ -727,6 +767,9 @@
             .gift-text {
                 font-size: 16px;
             }
+            .gift-qr-section .qr-container img {
+                max-width: 140px;
+            }
         }
 
         @media (max-width: 340px) {
@@ -748,28 +791,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        /* ===== TEST BUTTON ===== */
-        .test-gift-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 10px;
-            z-index: 999;
-            background: #FF4757;
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 50px;
-            font-size: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-            font-family: var(--font-family);
-            transition: var(--transition);
-        }
-
-        .test-gift-btn:active {
-            transform: scale(0.95);
         }
     </style>
 </head>
@@ -861,11 +882,6 @@
 
     </div>
 
-    <!-- ===== ТЕСТОВАЯ КНОПКА ===== -->
-    <button class="test-gift-btn" onclick="testGiftManually()">
-        🎁 Тест подарка
-    </button>
-
     <!-- ===== МОДАЛКА ПОДАРКА ===== -->
     <div class="gift-modal-overlay" id="giftModal">
         <div class="gift-modal-content">
@@ -876,11 +892,27 @@
                 Вас ждет <strong>бесплатная мини-порция</strong><br>
                 клубники в шоколаде! 🍫
             </div>
+
+            <!-- ===== QR-КОД ПОДАРКА ===== -->
+            <div class="gift-qr-section">
+                <div class="qr-container" id="giftQrContainer">
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <img id="giftQrImage" src="" alt="QR-код подарка" style="display:none;">
+                </div>
+                <div class="qr-hint">
+                    🎫 Покажите этот <strong>QR-код</strong> в киоске<br>
+                    для получения подарка
+                </div>
+            </div>
+
             <div class="gift-instruction">
                 <i class="fas fa-map-marked-alt"></i>
                 <span>Найдите наш киоск на карте и подойдите<br>
-                <strong>с этим экраном</strong> для получения подарка</span>
+                <strong>с этим QR-кодом</strong> для получения подарка</span>
             </div>
+
             <button class="gift-btn" onclick="openGiftMap()">
                 <i class="fas fa-location-arrow"></i> Показать киоск на карте
             </button>
@@ -931,12 +963,45 @@
         }
 
         // ================================================================
+        // ===== QR-КОД ПОДАРКА =====
+        // ================================================================
+        function generateGiftQR(giftId) {
+            const qrContainer = document.getElementById('giftQrContainer');
+            const qrImage = document.getElementById('giftQrImage');
+            const placeholder = document.getElementById('qrPlaceholder');
+            
+            if (!giftId) {
+                placeholder.style.display = 'block';
+                qrImage.style.display = 'none';
+                return;
+            }
+
+            // Формируем данные для QR-кода (gift-123)
+            const qrData = `gift-${giftId}`;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
+            
+            qrImage.src = qrApiUrl;
+            qrImage.onload = function() {
+                placeholder.style.display = 'none';
+                qrImage.style.display = 'block';
+            };
+            
+            qrImage.onerror = function() {
+                placeholder.innerHTML = `
+                    <i class="fas fa-qrcode" style="font-size:48px;color:var(--primary);"></i>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">gift-${giftId}</div>
+                `;
+                placeholder.style.display = 'block';
+                qrImage.style.display = 'none';
+            };
+        }
+
+        // ================================================================
         // ===== ПОЛУЧЕНИЕ IP =====
         // ================================================================
         async function getUserIP() {
             console.log('🔍 getUserIP() вызвана');
             try {
-                // Пробуем через ipify
                 console.log('📡 Запрос к ipify...');
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
@@ -944,7 +1009,6 @@
                 return data.ip;
             } catch (e) {
                 console.error('❌ Ошибка получения IP через ipify:', e);
-                // Fallback: получаем IP через сервер
                 try {
                     console.log('📡 Fallback: запрос к /api/my-ip...');
                     const res2 = await fetch('/api/my-ip');
@@ -969,8 +1033,6 @@
             
             if (!ip) {
                 console.log('❌ Не удалось получить IP');
-                console.log('🧪 Показываем тестовое окно подарка (заглушка)');
-                showGiftModal('TEST-IP-FAIL');
                 return;
             }
 
@@ -994,13 +1056,10 @@
                 } else if (data.reason === 'already_claimed') {
                     console.log('✅ Подарок уже был получен ранее');
                 } else {
-                    console.log('ℹ️ Подарка нет, причина:', data.reason || 'неизвестно');
+                    console.log('ℹ️ Подарка нет');
                 }
             } catch (e) {
                 console.error('❌ Ошибка проверки подарка:', e);
-                // Для теста показываем окно принудительно
-                console.log('🧪 Показываем тестовое окно из-за ошибки');
-                showGiftModal('ERROR-TEST');
             }
         }
 
@@ -1039,10 +1098,8 @@
             const display = document.getElementById('giftIdDisplay');
             if (display) display.textContent = id || '---';
             
-            // Сохраняем в localStorage, чтобы не показывать повторно
-            try {
-                localStorage.setItem('gift_shown_' + id, 'true');
-            } catch (e) {}
+            // Генерируем QR-код подарка
+            generateGiftQR(id);
 
             if (modal) {
                 modal.classList.add('open');
@@ -1080,12 +1137,6 @@
                     container.style.border = 'none';
                 }, 3000);
             }
-        }
-
-        // ===== ТЕСТОВАЯ ФУНКЦИЯ =====
-        function testGiftManually() {
-            console.log('🧪 Ручной тест подарка');
-            showGiftModal('MANUAL-TEST-' + Date.now());
         }
 
         // Закрытие по клику вне модалки
@@ -1361,7 +1412,6 @@
             showLoading(10);
             renderMenu();
 
-            // Проверяем подарок с задержкой
             setTimeout(() => {
                 console.log('🔍 Запускаем проверку подарка...');
                 checkGift();
@@ -1397,7 +1447,6 @@
         console.log('🍓 Квест-страница загружена!');
         console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
         console.log('🎁 Найди киоск и получи подарок!');
-        console.log('🧪 Для теста нажми на кнопку "🎁 Тест подарка" в правом нижнем углу');
     </script>
 
 </body>
