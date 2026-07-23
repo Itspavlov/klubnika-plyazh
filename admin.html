@@ -1654,51 +1654,45 @@
             }
         }
 
-        function initScannerFullscreen() {
-            const readerElement = document.getElementById('qrReader');
-            
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(() => {});
-            }
+       function initScannerFullscreen() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            html5QrCode.clear();
+        }).catch(() => {});
+    }
 
-            html5QrCode = new Html5Qrcode("qrReader");
-            
-            const config = {
-                fps: 20,
-                qrbox: { width: 300, height: 300 },
-                aspectRatio: 1.0
-            };
+    html5QrCode = new Html5Qrcode("qrReader");
+    
+    const config = {
+        fps: 20,
+        qrbox: { width: 300, height: 300 },
+        aspectRatio: 1.0
+    };
 
-            const result = document.getElementById('qrResult');
-            result.className = 'qr-result';
-            result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
+    const result = document.getElementById('qrResult');
+    result.className = 'qr-result';
+    result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
 
-            // Скрываем оверлей после запуска
-            const overlay = document.getElementById('qrOverlay');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 1500);
+    const overlay = document.getElementById('qrOverlay');
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 1500);
 
-            html5QrCode.start(
-                { 
-                    facingMode: "environment",
-                    aspectRatio: { ideal: 0.75 }
-                },
-                config,
-                onScanSuccessFullscreen,
-                onScanErrorFullscreen
-            ).catch(function(err) {
-                result.className = 'qr-result error';
-                result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
-                overlay.style.display = 'flex';
-                overlay.querySelector('.qr-hint').innerHTML = `
-                    ❌ Ошибка доступа к камере<br>
-                    <small style="font-size:12px;opacity:0.5;">Разрешите доступ к камере в браузере</small>
-                `;
-            });
-        }
+    html5QrCode.start(
+        { facingMode: "environment" },
+        config,
+        onScanSuccessFullscreen,
+        onScanErrorFullscreen
+    ).catch(function(err) {
+        result.className = 'qr-result error';
+        result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
+        overlay.style.display = 'flex';
+        overlay.querySelector('.qr-hint').innerHTML = `
+            ❌ Ошибка доступа к камере<br>
+            <small style="font-size:12px;opacity:0.5;">Разрешите доступ к камере в браузере</small>
+        `;
+    });
+}
 
         function onScanSuccessFullscreen(decodedText, decodedResult) {
             if (isScannerRunning) return;
