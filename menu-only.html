@@ -423,7 +423,7 @@
         }
 
         /* ================================================================
-           ===== GIFT MODAL (ПОЛ-ЭКРАНА, КРАСИВЫЙ) =====
+           ===== GIFT MODAL (ПОЛ-ЭКРАНА, КРАСИВЫЙ С КАРТИНКОЙ) =====
            ================================================================ */
         .gift-modal-overlay {
             display: none;
@@ -431,7 +431,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            top: 50%;
+            top: 40%;
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -462,8 +462,8 @@
             border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
             max-width: 480px;
             width: 100%;
-            max-height: 55vh;
-            padding: 24px 20px 28px;
+            max-height: 60vh;
+            padding: 20px 20px 24px;
             text-align: center;
             box-shadow: 0 -10px 40px rgba(255, 71, 87, 0.15);
             position: relative;
@@ -484,20 +484,21 @@
 
         .gift-modal-content .gift-close-top {
             position: absolute;
-            top: 12px;
-            right: 16px;
+            top: 10px;
+            right: 14px;
             background: rgba(0, 0, 0, 0.05);
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 14px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 5;
         }
 
         .gift-modal-content .gift-close-top:active {
@@ -505,16 +506,43 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
-        .gift-modal-content .gift-icon-wrap {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 4px;
-            animation: giftFloat 3s ease-in-out infinite;
+        /* ===== КАРТИНКА ПОДАРКА ===== */
+        .gift-modal-content .gift-image-wrap {
+            margin: -4px auto 4px;
+            text-align: center;
+            position: relative;
         }
 
-        @keyframes giftFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-6px) scale(1.05); }
+        .gift-modal-content .gift-image-wrap .gift-image {
+            max-width: 130px;
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(255, 71, 87, 0.2);
+            border: 3px solid #FFFFFF;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            display: inline-block;
+            background: #FFF5F5;
+        }
+
+        .gift-modal-content .gift-image-wrap .gift-image-fallback {
+            font-size: 56px;
+            line-height: 1;
+        }
+
+        .gift-modal-content .gift-image-wrap .gift-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #FF4757, #E63946);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 100px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
         }
 
         .gift-modal-content .gift-title {
@@ -528,16 +556,16 @@
         }
 
         .gift-modal-content .gift-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .gift-modal-content .gift-text {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-dark);
             line-height: 1.5;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .gift-modal-content .gift-text strong {
@@ -546,30 +574,30 @@
 
         /* ===== QR В МОДАЛКЕ ===== */
         .gift-modal-content .gift-qr-section {
-            margin: 8px auto;
-            padding: 10px;
+            margin: 6px auto;
+            padding: 8px;
             background: #FFFFFF;
             border-radius: var(--radius-lg);
             border: 2px dashed #FFE0B2;
-            max-width: 200px;
+            max-width: 170px;
         }
 
         .gift-modal-content .gift-qr-section .qr-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 120px;
+            min-height: 100px;
         }
 
         .gift-modal-content .gift-qr-section .qr-container img {
-            max-width: 140px;
+            max-width: 120px;
             width: 100%;
             height: auto;
             border-radius: var(--radius-md);
         }
 
         .gift-modal-content .gift-qr-section .qr-container .qr-placeholder {
-            font-size: 48px;
+            font-size: 40px;
             color: var(--primary);
             opacity: 0.3;
         }
@@ -577,7 +605,7 @@
         .gift-modal-content .gift-qr-section .qr-hint {
             font-size: 10px;
             color: var(--text-muted);
-            margin-top: 4px;
+            margin-top: 3px;
             text-align: center;
         }
 
@@ -589,19 +617,19 @@
         .gift-modal-content .gift-instruction {
             background: #FFF8E1;
             border-radius: var(--radius-md);
-            padding: 10px 14px;
-            margin: 8px 0 12px;
+            padding: 8px 12px;
+            margin: 6px 0 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             text-align: left;
-            font-size: 12px;
+            font-size: 11px;
             color: #E65100;
             border: 1px solid #FFE0B2;
         }
 
         .gift-modal-content .gift-instruction i {
-            font-size: 20px;
+            font-size: 18px;
             flex-shrink: 0;
             color: var(--primary);
         }
@@ -613,18 +641,18 @@
         /* ===== КНОПКИ ===== */
         .gift-modal-content .gift-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
             border-radius: var(--radius-lg);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
             font-family: var(--font-family);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .gift-modal-content .gift-btn:active {
@@ -633,11 +661,11 @@
 
         .gift-modal-content .gift-close-btn {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             font-family: var(--font-family);
         }
@@ -647,17 +675,17 @@
         }
 
         .gift-modal-content .gift-code {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-top: 6px;
-            padding-top: 6px;
+            margin-top: 4px;
+            padding-top: 4px;
             border-top: 1px solid #F1F5F9;
         }
 
         .gift-modal-content .gift-code span {
             font-weight: 700;
             color: var(--primary);
-            font-size: 13px;
+            font-size: 12px;
         }
 
         /* ================================================================
@@ -727,20 +755,23 @@
                 display: inline;
             }
             .gift-modal-content {
-                max-height: 65vh;
-                padding: 20px 16px 24px;
+                max-height: 70vh;
+                padding: 16px 14px 20px;
             }
             .gift-modal-content .gift-title {
                 font-size: 20px;
             }
             .gift-modal-content .gift-text {
-                font-size: 15px;
+                font-size: 14px;
+            }
+            .gift-modal-content .gift-image-wrap .gift-image {
+                max-width: 100px;
             }
             .gift-modal-content .gift-qr-section {
-                max-width: 160px;
+                max-width: 140px;
             }
             .gift-modal-content .gift-qr-section .qr-container img {
-                max-width: 120px;
+                max-width: 100px;
             }
         }
 
@@ -985,13 +1016,13 @@
             <button class="gift-close-top" onclick="closeFloatQrModal()">
                 <i class="fas fa-times"></i>
             </button>
-            <span class="gift-icon-wrap">🎁</span>
-            <div class="gift-title">Ваш подарок</div>
-            <div class="gift-subtitle">Покажите QR-код в киоске</div>
+            <span class="gift-icon-wrap" style="font-size:40px;display:block;margin-bottom:2px;">🎁</span>
+            <div class="gift-title" style="font-size:20px;">Ваш подарок</div>
+            <div class="gift-subtitle" style="font-size:12px;">Покажите QR-код в киоске</div>
 
-            <div class="gift-qr-section">
-                <div class="qr-container">
-                    <img id="floatQrImage" src="" alt="QR-код подарка" style="max-width:160px;width:100%;height:auto;display:none;">
+            <div class="gift-qr-section" style="max-width:180px;">
+                <div class="qr-container" style="min-height:120px;">
+                    <img id="floatQrImage" src="" alt="QR-код подарка" style="max-width:140px;width:100%;height:auto;display:none;">
                     <div id="floatQrPlaceholder" style="font-size:48px;color:var(--primary);opacity:0.3;">
                         <i class="fas fa-qrcode"></i>
                     </div>
@@ -1001,14 +1032,14 @@
                 </div>
             </div>
 
-            <button class="gift-btn" onclick="closeFloatQrModal()" style="padding:12px;font-size:14px;margin-bottom:0;">
+            <button class="gift-btn" onclick="closeFloatQrModal()" style="padding:10px;font-size:13px;margin-bottom:0;">
                 <i class="fas fa-check"></i> Понятно, спасибо!
             </button>
         </div>
     </div>
 
     <!-- ================================================================
-         ===== МОДАЛКА ПОДАРКА (ПЕРВАЯ, ПОЛ-ЭКРАНА) =====
+         ===== МОДАЛКА ПОДАРКА (ПЕРВАЯ, С КАРТИНКОЙ) =====
          ================================================================ -->
     <div class="gift-modal-overlay" id="giftModal">
         <div class="gift-modal-content">
@@ -1016,7 +1047,16 @@
                 <i class="fas fa-times"></i>
             </button>
 
-            <span class="gift-icon-wrap">🎉🍓</span>
+            <!-- ===== КАРТИНКА БЕСПЛАТНОЙ ПОРЦИИ ===== -->
+            <div class="gift-image-wrap">
+                <img src="images/gift-free.jpg" alt="Бесплатная порция" class="gift-image" loading="lazy" 
+                     onerror="this.style.display='none';this.parentElement.querySelector('.gift-image-fallback').style.display='block'">
+                <div class="gift-image-fallback" style="display:none;">
+                    <span style="font-size:56px;display:block;">🍓</span>
+                </div>
+                <span class="gift-badge">🎁 БЕСПЛАТНО</span>
+            </div>
+
             <div class="gift-title">Поздравляем!</div>
             <div class="gift-subtitle">Вы наш гость! 🥳</div>
 
