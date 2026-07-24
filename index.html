@@ -901,21 +901,23 @@
             box-shadow: none;
         }
 
-        .auth-modal-content,
-        .topping-modal-content,
-        .beach-restrict-content,
-        .review-modal-content,
-        .age-verify-content {
-            background: #FFFFFF;
-            border-radius: var(--radius-2xl);
-            max-width: 420px;
-            width: 100%;
-            padding: 28px 24px 24px;
-            position: relative;
-            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--shadow-lg);
-        }
-
+       .auth-modal-content,
+.topping-modal-content,
+.beach-restrict-content,
+.review-modal-content,
+.age-verify-content {
+    background: #FFFFFF;
+    border-radius: var(--radius-2xl);
+    max-width: 420px;
+    width: 100%;
+    padding: 28px 24px 24px;
+    position: relative;
+    animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow-lg);
+    max-height: 85vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
         @keyframes modalPop {
             from {
                 transform: scale(0.9) translateY(20px);
