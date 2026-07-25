@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🍓 Квест: Найди киоск!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF4757;
@@ -13,20 +13,22 @@
             --primary-light: #FF6B81;
             --accent: #FF8A80;
             --gold: #FFB74D;
+            --gold-light: #FFE0B2;
             --bg: #FFF5F5;
             --card-bg: #FFFFFF;
             --text-dark: #1A1A2E;
             --text-secondary: #6B7280;
             --text-muted: #9CA3AF;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
             --radius-2xl: 24px;
             --radius-xl: 20px;
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
@@ -41,8 +43,7 @@
             font-family: var(--font-family);
             background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
             min-height: 100vh;
-            padding: 0;
-            padding-bottom: 30px;
+            padding: 0 0 40px 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             background-attachment: fixed;
@@ -63,18 +64,18 @@
         }
 
         .header .logo-icon {
-            font-size: 48px;
+            font-size: 52px;
             display: block;
             margin-bottom: 4px;
             animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
+            filter: drop-shadow(0 4px 12px rgba(255,71,87,0.25));
         }
 
         .header-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             color: var(--primary);
@@ -84,14 +85,14 @@
             border-radius: 100px;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255,71,87,0.15);
             box-shadow: var(--shadow-sm);
         }
 
         .header h1 {
             font-size: 28px;
             color: var(--text-dark);
-            font-weight: 800;
+            font-weight: 900;
             letter-spacing: -0.5px;
             line-height: 1.2;
             margin-bottom: 4px;
@@ -120,12 +121,12 @@
             font-weight: 600;
             color: var(--primary);
             font-size: 12px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255,71,87,0.15);
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-10px); }
         }
 
         /* ===== LOADING ===== */
@@ -136,8 +137,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -150,7 +152,7 @@
         }
 
         .loading-overlay .spinner {
-            font-size: 48px;
+            font-size: 52px;
             animation: spin 1s linear infinite;
         }
 
@@ -181,30 +183,6 @@
             transition: width 0.3s ease;
         }
 
-        /* ===== SCROLL HINT ===== */
-        .scroll-hint {
-            display: none;
-            text-align: center;
-            padding: 8px 0 4px;
-            color: var(--text-muted);
-            font-size: 12px;
-            animation: bounceHint 2s ease-in-out infinite;
-        }
-
-        .scroll-hint.show {
-            display: block;
-        }
-
-        @keyframes bounceHint {
-            0%, 100% { transform: translateY(0); opacity: 0.6; }
-            50% { transform: translateY(4px); opacity: 1; }
-        }
-
-        .scroll-hint i {
-            font-size: 16px;
-            color: var(--primary);
-        }
-
         /* ===== LOCATION CARD ===== */
         .location-card {
             background: linear-gradient(135deg, #FF4757, #E63946);
@@ -213,9 +191,35 @@
             margin-bottom: 16px;
             text-align: center;
             color: #FFFFFF;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 6px 24px rgba(255,71,87,0.3);
             cursor: pointer;
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .location-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .location-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
         .location-card:active {
@@ -226,6 +230,8 @@
             font-size: 32px;
             display: block;
             margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
         }
 
         .location-card .loc-text {
@@ -233,6 +239,8 @@
             font-weight: 500;
             line-height: 1.5;
             opacity: 0.95;
+            position: relative;
+            z-index: 1;
         }
 
         .location-card .loc-text strong {
@@ -242,8 +250,10 @@
 
         .location-card .loc-sub {
             font-size: 12px;
-            opacity: 0.8;
+            opacity: 0.85;
             margin-top: 4px;
+            position: relative;
+            z-index: 1;
         }
 
         /* ===== MAP CARD ===== */
@@ -257,7 +267,7 @@
 
         .map-card .map-container {
             width: 100%;
-            height: 400px;
+            height: 380px;
             position: relative;
             background: #F1F5F9;
         }
@@ -323,7 +333,7 @@
         .map-btn.location-btn {
             background: linear-gradient(135deg, #8B5CF6, #7C3AED);
             color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 12px rgba(139,92,246,0.3);
         }
 
         .map-btn.location-btn i {
@@ -338,7 +348,7 @@
         .map-btn.walk-btn {
             background: linear-gradient(135deg, #22C55E, #16A34A);
             color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
         }
 
         .map-btn.walk-btn i {
@@ -347,7 +357,7 @@
 
         .map-btn.walk-btn.active {
             background: linear-gradient(135deg, #16A34A, #15803D);
-            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+            box-shadow: 0 4px 12px rgba(22,163,74,0.4);
         }
 
         /* ===== LOCATION STATUS ===== */
@@ -355,12 +365,11 @@
             display: none;
             padding: 10px 16px;
             background: #F8FAFC;
-            border-radius: var(--radius-md);
-            margin: 8px 16px;
             font-size: 13px;
             color: var(--text-secondary);
             align-items: center;
             gap: 10px;
+            border-bottom: 1px solid #F1F5F9;
         }
 
         .location-status.show {
@@ -395,19 +404,23 @@
         /* ===== ROUTE INFO ===== */
         .route-info {
             display: none;
-            padding: 12px 16px;
+            padding: 10px 16px;
             background: #F0FDF4;
-            border-radius: var(--radius-md);
-            margin: 8px 16px;
             font-size: 13px;
             color: #166534;
             align-items: center;
             gap: 10px;
-            border: 1px solid #86EFAC;
+            border-bottom: 1px solid #86EFAC;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
         .route-info.show {
             display: flex;
+        }
+
+        .route-info:active {
+            background: #DCFCE7;
         }
 
         .route-info .route-icon {
@@ -423,73 +436,67 @@
         }
 
         /* ================================================================
-           ===== GIFT MODAL (ПОЛ-ЭКРАНА, КРАСИВЫЙ С КАРТИНКОЙ) =====
+           ===== СОВРЕМЕННОЕ ВСПЛЫВАЮЩЕЕ ОКНО ПОЗДРАВЛЕНИЯ =====
            ================================================================ */
-        .gift-modal-overlay {
+        .congrats-overlay {
             display: none;
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
             right: 0;
-            top: 5%;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 800;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 900;
             justify-content: center;
-            align-items: flex-end;
-            padding: 0;
-            animation: fadeInUp 0.5s ease;
+            align-items: center;
+            padding: 20px;
+            animation: fadeInOverlay 0.5s ease;
         }
 
-        .gift-modal-overlay.open {
+        .congrats-overlay.open {
             display: flex;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .gift-modal-content {
-            background: linear-gradient(160deg, #FFFFFF 0%, #FFF5F5 100%);
-            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-            max-width: 480px;
+        .congrats-modal {
+            background: #FFFFFF;
+            border-radius: var(--radius-2xl);
+            max-width: 420px;
             width: 100%;
-            max-height: 60vh;
-            padding: 20px 20px 24px;
-            text-align: center;
-            box-shadow: 0 -10px 40px rgba(255, 71, 87, 0.15);
+            max-height: 82vh;
+            padding: 24px 20px 20px;
             position: relative;
+            animation: congratsPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-xl);
             overflow-y: auto;
-            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
         }
 
-        @keyframes slideUp {
+        @keyframes congratsPop {
             from {
-                transform: translateY(40px);
+                transform: scale(0.85) translateY(30px);
                 opacity: 0;
             }
             to {
-                transform: translateY(0);
+                transform: scale(1) translateY(0);
                 opacity: 1;
             }
         }
 
-        .gift-modal-content .gift-close-top {
+        .congrats-modal .congrats-close {
             position: absolute;
-            top: 10px;
+            top: 12px;
             right: 14px;
-            background: rgba(0, 0, 0, 0.05);
+            background: #F8FAFC;
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             font-size: 14px;
             color: var(--text-muted);
@@ -498,124 +505,144 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 5;
         }
 
-        .gift-modal-content .gift-close-top:active {
+        .congrats-modal .congrats-close:active {
             transform: scale(0.9);
-            background: rgba(0, 0, 0, 0.1);
+            background: #F1F5F9;
         }
 
-        /* ===== КАРТИНКА ПОДАРКА ===== */
-        .gift-modal-content .gift-image-wrap {
-            margin: -4px auto 4px;
-            text-align: center;
+        .congrats-modal .congrats-icon-wrap {
             position: relative;
-        }
-
-        .gift-modal-content .gift-image-wrap .gift-image {
-            max-width: 130px;
-            width: 100%;
-            height: auto;
-            border-radius: 50%;
-            box-shadow: 0 4px 20px rgba(255, 71, 87, 0.2);
-            border: 3px solid #FFFFFF;
-            object-fit: cover;
-            aspect-ratio: 1/1;
             display: inline-block;
-            background: #FFF5F5;
+            margin-bottom: 4px;
         }
 
-        .gift-modal-content .gift-image-wrap .gift-image-fallback {
-            font-size: 56px;
-            line-height: 1;
+        .congrats-modal .congrats-icon-wrap .main-icon {
+            font-size: 64px;
+            display: block;
+            animation: congratsFloat 3s ease-in-out infinite;
         }
 
-        .gift-modal-content .gift-image-wrap .gift-badge {
+        @keyframes congratsFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.05); }
+        }
+
+        .congrats-modal .congrats-icon-wrap .sparkle {
             position: absolute;
-            bottom: -2px;
-            right: -2px;
+            font-size: 20px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .congrats-modal .congrats-icon-wrap .sparkle:nth-child(2) {
+            top: -8px;
+            right: -12px;
+            animation-delay: 0.3s;
+        }
+
+        .congrats-modal .congrats-icon-wrap .sparkle:nth-child(3) {
+            bottom: -4px;
+            left: -12px;
+            animation-delay: 0.7s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
+            50% { transform: scale(1.2) rotate(20deg); opacity: 1; }
+        }
+
+        .congrats-modal .congrats-badge {
+            display: inline-block;
             background: linear-gradient(135deg, #FF4757, #E63946);
-            color: #fff;
+            color: #FFFFFF;
             font-size: 10px;
             font-weight: 700;
-            padding: 3px 10px;
+            padding: 4px 14px;
             border-radius: 100px;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            box-shadow: 0 2px 12px rgba(255,71,87,0.3);
         }
 
-        .gift-modal-content .gift-title {
-            font-size: 22px;
-            font-weight: 800;
+        .congrats-modal .congrats-title {
+            font-size: 26px;
+            font-weight: 900;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 2px;
+            letter-spacing: -0.5px;
         }
 
-        .gift-modal-content .gift-subtitle {
-            font-size: 13px;
+        .congrats-modal .congrats-subtitle {
+            font-size: 14px;
             color: var(--text-secondary);
+            font-weight: 400;
             margin-bottom: 6px;
         }
 
-        .gift-modal-content .gift-text {
+        .congrats-modal .congrats-text {
             font-size: 15px;
             color: var(--text-dark);
-            line-height: 1.5;
-            margin-bottom: 8px;
+            line-height: 1.6;
+            margin-bottom: 6px;
+            background: #FFF8E1;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid #FFE0B2;
         }
 
-        .gift-modal-content .gift-text strong {
+        .congrats-modal .congrats-text strong {
             color: var(--primary);
         }
 
         /* ===== QR В МОДАЛКЕ ===== */
-        .gift-modal-content .gift-qr-section {
+        .congrats-modal .congrats-qr-section {
             margin: 6px auto;
-            padding: 8px;
+            padding: 10px;
             background: #FFFFFF;
             border-radius: var(--radius-lg);
             border: 2px dashed #FFE0B2;
-            max-width: 170px;
+            max-width: 180px;
         }
 
-        .gift-modal-content .gift-qr-section .qr-container {
+        .congrats-modal .congrats-qr-section .qr-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100px;
+            min-height: 110px;
         }
 
-        .gift-modal-content .gift-qr-section .qr-container img {
-            max-width: 120px;
+        .congrats-modal .congrats-qr-section .qr-container img {
+            max-width: 130px;
             width: 100%;
             height: auto;
             border-radius: var(--radius-md);
         }
 
-        .gift-modal-content .gift-qr-section .qr-container .qr-placeholder {
-            font-size: 40px;
+        .congrats-modal .congrats-qr-section .qr-container .qr-placeholder {
+            font-size: 44px;
             color: var(--primary);
             opacity: 0.3;
         }
 
-        .gift-modal-content .gift-qr-section .qr-hint {
+        .congrats-modal .congrats-qr-section .qr-hint {
             font-size: 10px;
             color: var(--text-muted);
             margin-top: 3px;
             text-align: center;
         }
 
-        .gift-modal-content .gift-qr-section .qr-hint strong {
+        .congrats-modal .congrats-qr-section .qr-hint strong {
             color: var(--primary);
         }
 
         /* ===== ИНСТРУКЦИЯ ===== */
-        .gift-modal-content .gift-instruction {
-            background: #FFF8E1;
+        .congrats-modal .congrats-instruction {
+            background: #F0FDF4;
             border-radius: var(--radius-md);
             padding: 8px 12px;
             margin: 6px 0 10px;
@@ -624,22 +651,22 @@
             gap: 8px;
             text-align: left;
             font-size: 11px;
-            color: #E65100;
-            border: 1px solid #FFE0B2;
+            color: #166534;
+            border: 1px solid #86EFAC;
         }
 
-        .gift-modal-content .gift-instruction i {
-            font-size: 18px;
+        .congrats-modal .congrats-instruction i {
+            font-size: 16px;
             flex-shrink: 0;
-            color: var(--primary);
+            color: #22C55E;
         }
 
-        .gift-modal-content .gift-instruction strong {
-            color: #BF360C;
+        .congrats-modal .congrats-instruction strong {
+            color: #15803D;
         }
 
-        /* ===== КНОПКИ ===== */
-        .gift-modal-content .gift-btn {
+        /* ===== КНОПКИ В МОДАЛКЕ ===== */
+        .congrats-modal .congrats-btn-primary {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -650,16 +677,16 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+            box-shadow: 0 4px 16px rgba(255,71,87,0.3);
             font-family: var(--font-family);
             margin-bottom: 4px;
         }
 
-        .gift-modal-content .gift-btn:active {
+        .congrats-modal .congrats-btn-primary:active {
             transform: scale(0.97);
         }
 
-        .gift-modal-content .gift-close-btn {
+        .congrats-modal .congrats-btn-secondary {
             width: 100%;
             padding: 8px;
             background: none;
@@ -670,11 +697,11 @@
             font-family: var(--font-family);
         }
 
-        .gift-modal-content .gift-close-btn:active {
+        .congrats-modal .congrats-btn-secondary:active {
             opacity: 0.6;
         }
 
-        .gift-modal-content .gift-code {
+        .congrats-modal .congrats-code {
             font-size: 10px;
             color: var(--text-muted);
             margin-top: 4px;
@@ -682,54 +709,55 @@
             border-top: 1px solid #F1F5F9;
         }
 
-        .gift-modal-content .gift-code span {
+        .congrats-modal .congrats-code span {
             font-weight: 700;
             color: var(--primary);
             font-size: 12px;
         }
 
         /* ================================================================
-           ===== ПЛАВАЮЩАЯ КНОПКА QR =====
+           ===== ПЛАВАЮЩАЯ КНОПКА =====
            ================================================================ */
-        .float-qr-btn {
+        .float-gift-btn {
             position: fixed;
             bottom: 30px;
             right: 20px;
-            z-index: 900;
-            background: linear-gradient(135deg, #FF4757, #E63946);
-            color: #FFFFFF;
-            border: none;
+            z-index: 800;
+            background: linear-gradient(135deg, #FFFFFF, #FFF5F5);
+            color: var(--text-dark);
+            border: 2px solid rgba(255,71,87,0.2);
             border-radius: 60px;
             padding: 12px 18px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 6px 24px rgba(255, 71, 87, 0.4);
+            box-shadow: 0 6px 24px rgba(255,71,87,0.25);
             font-family: var(--font-family);
             transition: var(--transition);
             display: none;
             align-items: center;
-            gap: 8px;
-            animation: floatBounce 2s ease-in-out infinite;
+            gap: 10px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        .float-qr-btn:active {
+        .float-gift-btn:active {
             transform: scale(0.95);
         }
 
-        .float-qr-btn i {
-            font-size: 20px;
+        .float-gift-btn .btn-icon-wrap {
+            position: relative;
         }
 
-        @keyframes floatBounce {
-            0%, 100% { transform: translateY(0px); box-shadow: 0 6px 24px rgba(255, 71, 87, 0.4); }
-            50% { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(255, 71, 87, 0.5); }
+        .float-gift-btn .btn-icon-wrap i {
+            font-size: 22px;
+            color: var(--primary);
         }
 
-        .float-qr-btn .badge-dot {
+        .float-gift-btn .btn-icon-wrap .badge-dot {
             position: absolute;
             top: -4px;
-            right: -4px;
+            right: -6px;
             width: 10px;
             height: 10px;
             background: #4ADE80;
@@ -738,44 +766,69 @@
             animation: pulseDot 1.5s ease-in-out infinite;
         }
 
+        .float-gift-btn .btn-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+
+        .float-gift-btn .btn-text .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .float-gift-btn .btn-text .value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
         @keyframes pulseDot {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.6; }
+            50% { transform: scale(1.4); opacity: 0.5; }
         }
 
         @media (max-width: 400px) {
-            .float-qr-btn {
+            .float-gift-btn {
                 bottom: 20px;
                 right: 12px;
                 padding: 10px 14px;
                 font-size: 12px;
                 border-radius: 50px;
             }
-            .float-qr-btn span {
-                display: inline;
+            .float-gift-btn .btn-icon-wrap i {
+                font-size: 18px;
             }
-            .gift-modal-content {
-                max-height: 70vh;
-                padding: 16px 14px 20px;
+            .float-gift-btn .btn-text .label {
+                font-size: 10px;
             }
-            .gift-modal-content .gift-title {
-                font-size: 20px;
+            .float-gift-btn .btn-text .value {
+                font-size: 12px;
             }
-            .gift-modal-content .gift-text {
+            .congrats-modal {
+                max-height: 78vh;
+                padding: 20px 16px 16px;
+            }
+            .congrats-modal .congrats-title {
+                font-size: 22px;
+            }
+            .congrats-modal .congrats-text {
                 font-size: 14px;
             }
-            .gift-modal-content .gift-image-wrap .gift-image {
-                max-width: 100px;
+            .congrats-modal .congrats-icon-wrap .main-icon {
+                font-size: 52px;
             }
-            .gift-modal-content .gift-qr-section {
-                max-width: 140px;
+            .congrats-modal .congrats-qr-section {
+                max-width: 150px;
             }
-            .gift-modal-content .gift-qr-section .qr-container img {
-                max-width: 100px;
+            .congrats-modal .congrats-qr-section .qr-container img {
+                max-width: 110px;
             }
         }
 
-        /* ===== MENU GRID ===== */
+        /* ===== MENU ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -792,6 +845,10 @@
             box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
         }
 
         .menu-item .item-image {
@@ -845,7 +902,7 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             color: var(--primary);
@@ -934,14 +991,10 @@
                 <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
             </h1>
             <p class="subtitle">
-                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде
-               
+                <i class="fas fa-strawberry" style="color: var(--primary);"></i>
+                Свежая клубника в шоколаде
             </p>
         </header>
-
-        <div class="scroll-hint show" id="scrollHint">
-            <i class="fas fa-chevron-down"></i> Листайте вниз, чтобы увидеть меню
-        </div>
 
         <!-- ===== ЛОКАЦИЯ ===== -->
         <div class="location-card" onclick="buildWalkRoute(event)">
@@ -1000,97 +1053,70 @@
     </div>
 
     <!-- ================================================================
-         ===== ПЛАВАЮЩАЯ КНОПКА QR =====
+         ===== ПЛАВАЮЩАЯ КНОПКА (ЗА МОДАЛКОЙ ПОЗДРАВЛЕНИЯ) =====
          ================================================================ -->
-    <div class="float-qr-btn" id="floatQrBtn" onclick="showFloatQrModal()">
-        <span class="badge-dot"></span>
-        <i class="fas fa-qrcode"></i>
-        <span>Мой подарок</span>
-    </div>
-
-    <!-- ================================================================
-         ===== МОДАЛКА QR ДЛЯ КИОСКА (ПОЛ-ЭКРАНА) =====
-         ================================================================ -->
-    <div class="gift-modal-overlay" id="floatQrModal">
-        <div class="gift-modal-content" style="max-width:400px;">
-            <button class="gift-close-top" onclick="closeFloatQrModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <span class="gift-icon-wrap" style="font-size:40px;display:block;margin-bottom:2px;">🎁</span>
-            <div class="gift-title" style="font-size:20px;">Ваш подарок</div>
-            <div class="gift-subtitle" style="font-size:12px;">Покажите QR-код в киоске</div>
-
-            <div class="gift-qr-section" style="max-width:180px;">
-                <div class="qr-container" style="min-height:120px;">
-                    <img id="floatQrImage" src="" alt="QR-код подарка" style="max-width:140px;width:100%;height:auto;display:none;">
-                    <div id="floatQrPlaceholder" style="font-size:48px;color:var(--primary);opacity:0.3;">
-                        <i class="fas fa-qrcode"></i>
-                    </div>
-                </div>
-                <div class="qr-hint">
-                    🎫 Код: <span id="floatGiftIdDisplay" style="font-weight:700;color:var(--primary);">---</span>
-                </div>
-            </div>
-
-            <button class="gift-btn" onclick="closeFloatQrModal()" style="padding:10px;font-size:13px;margin-bottom:0;">
-                <i class="fas fa-check"></i> Понятно, спасибо!
-            </button>
+    <div class="float-gift-btn" id="floatGiftBtn" onclick="showFloatGiftModal()">
+        <div class="btn-icon-wrap">
+            <i class="fas fa-gift"></i>
+            <span class="badge-dot"></span>
+        </div>
+        <div class="btn-text">
+            <span class="label">Мой подарок</span>
+            <span class="value" id="floatGiftValue">🎁 Активен</span>
         </div>
     </div>
 
     <!-- ================================================================
-         ===== МОДАЛКА ПОДАРКА (ПЕРВАЯ, С КАРТИНКОЙ) =====
+         ===== ВСПЛЫВАЮЩЕЕ ОКНО ПОЗДРАВЛЕНИЯ =====
          ================================================================ -->
-    <div class="gift-modal-overlay" id="giftModal">
-        <div class="gift-modal-content">
-            <button class="gift-close-top" onclick="closeGiftModal()">
+    <div class="congrats-overlay" id="congratsModal">
+        <div class="congrats-modal">
+            <button class="congrats-close" onclick="closeCongratsModal()">
                 <i class="fas fa-times"></i>
             </button>
 
-            <!-- ===== КАРТИНКА БЕСПЛАТНОЙ ПОРЦИИ ===== -->
-            <div class="gift-image-wrap">
-                <img src="images/gift-free.jpg" alt="Бесплатная порция" class="gift-image" loading="lazy" 
-                     onerror="this.style.display='none';this.parentElement.querySelector('.gift-image-fallback').style.display='block'">
-                <div class="gift-image-fallback" style="display:none;">
-                    <span style="font-size:56px;display:block;">🍓</span>
-                </div>
-                <span class="gift-badge">🎁 БЕСПЛАТНО</span>
+            <div class="congrats-icon-wrap">
+                <span class="main-icon">🍓</span>
+                <span class="sparkle">✨</span>
+                <span class="sparkle">✨</span>
             </div>
 
-            <div class="gift-title">Поздравляем!</div>
-            <div class="gift-subtitle">Вы наш гость! 🥳</div>
+            <span class="congrats-badge">🎁 БЕСПЛАТНО</span>
 
-            <div class="gift-text">
-                Вас ждет <strong>бесплатная мини-порция</strong><br>
+            <div class="congrats-title">Поздравляем!</div>
+            <div class="congrats-subtitle">Вы наш гость! 🥳</div>
+
+            <div class="congrats-text">
+                Вас ждёт <strong>бесплатная мини-порция</strong><br>
                 клубники в шоколаде! 🍫
             </div>
 
-            <div class="gift-qr-section">
-                <div class="qr-container" id="giftQrContainer">
+            <div class="congrats-qr-section">
+                <div class="qr-container" id="congratsQrContainer">
                     <div class="qr-placeholder" id="qrPlaceholder">
                         <i class="fas fa-qrcode"></i>
                     </div>
-                    <img id="giftQrImage" src="" alt="QR-код подарка" style="display:none;">
+                    <img id="congratsQrImage" src="" alt="QR-код подарка" style="display:none;">
                 </div>
                 <div class="qr-hint">
                     🎫 Покажите этот <strong>QR-код</strong> в киоске
                 </div>
             </div>
 
-            <div class="gift-instruction">
+            <div class="congrats-instruction">
                 <i class="fas fa-map-marked-alt"></i>
                 <span>Найдите киоск на карте и подойдите<br>
                 <strong>с этим QR-кодом</strong></span>
             </div>
 
-            <button class="gift-btn" onclick="openGiftMap()">
+            <button class="congrats-btn-primary" onclick="openGiftMap()">
                 <i class="fas fa-location-arrow"></i> Показать киоск
             </button>
-            <button class="gift-close-btn" onclick="closeGiftModal()">
+            <button class="congrats-btn-secondary" onclick="closeCongratsModal()">
                 Хорошо, спасибо!
             </button>
 
-            <div class="gift-code">
+            <div class="congrats-code">
                 🎫 Код: <span id="giftIdDisplay">---</span>
             </div>
         </div>
@@ -1110,7 +1136,6 @@
 
         let userLocation = null;
         let mapLoaded = false;
-        let autoScrollDone = false;
         let isBuildingRoute = false;
         let giftId = null;
 
@@ -1137,9 +1162,9 @@
         // ===== QR-КОД =====
         // ================================================================
         function generateGiftQR(id) {
-            const qrImage = document.getElementById('giftQrImage');
+            const qrImage = document.getElementById('congratsQrImage');
             const placeholder = document.getElementById('qrPlaceholder');
-            
+
             if (!id) {
                 if (placeholder) placeholder.style.display = 'block';
                 if (qrImage) qrImage.style.display = 'none';
@@ -1148,13 +1173,13 @@
 
             const qrData = `gift-${id}`;
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
-            
+
             qrImage.src = qrApiUrl;
             qrImage.onload = function() {
                 placeholder.style.display = 'none';
                 qrImage.style.display = 'block';
             };
-            
+
             qrImage.onerror = function() {
                 placeholder.innerHTML = `
                     <i class="fas fa-qrcode" style="font-size:40px;color:var(--primary);"></i>
@@ -1201,7 +1226,7 @@
 
                 if (data.hasGift) {
                     giftId = data.giftId;
-                    showGiftModal(giftId);
+                    showCongratsModal(giftId);
                 } else if (data.canActivate) {
                     await activateGift(ip);
                 }
@@ -1224,7 +1249,7 @@
 
                 if (data.success) {
                     giftId = data.giftId;
-                    showGiftModal(giftId);
+                    showCongratsModal(giftId);
                 }
             } catch (e) {
                 console.error('Ошибка активации:', e);
@@ -1232,15 +1257,15 @@
         }
 
         // ================================================================
-        // ===== МОДАЛКА ПОДАРКА =====
+        // ===== ВСПЛЫВАЮЩЕЕ ОКНО ПОЗДРАВЛЕНИЯ =====
         // ================================================================
-        function showGiftModal(id) {
-            const modal = document.getElementById('giftModal');
+        function showCongratsModal(id) {
+            const modal = document.getElementById('congratsModal');
             const display = document.getElementById('giftIdDisplay');
             if (display) display.textContent = id || '---';
-            
+
             generateGiftQR(id);
-            showFloatQrButton(id);
+            showFloatGiftButton(id);
 
             if (modal) {
                 modal.classList.add('open');
@@ -1248,8 +1273,8 @@
             }
         }
 
-        function closeGiftModal() {
-            const modal = document.getElementById('giftModal');
+        function closeCongratsModal() {
+            const modal = document.getElementById('congratsModal');
             if (modal) {
                 modal.classList.remove('open');
                 document.body.style.overflow = '';
@@ -1257,7 +1282,7 @@
         }
 
         function openGiftMap() {
-            closeGiftModal();
+            closeCongratsModal();
             const mapCard = document.querySelector('.map-card');
             if (mapCard) {
                 const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
@@ -1276,87 +1301,44 @@
             }
         }
 
-        document.getElementById('giftModal')?.addEventListener('click', function(e) {
-            if (e.target === this) closeGiftModal();
+        document.getElementById('congratsModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeCongratsModal();
         });
 
         // ================================================================
         // ===== ПЛАВАЮЩАЯ КНОПКА =====
         // ================================================================
-        function showFloatQrButton(id) {
-            const btn = document.getElementById('floatQrBtn');
-            const display = document.getElementById('floatGiftIdDisplay');
-            const qrImage = document.getElementById('floatQrImage');
-            const placeholder = document.getElementById('floatQrPlaceholder');
-            
+        function showFloatGiftButton(id) {
+            const btn = document.getElementById('floatGiftBtn');
             if (!btn) return;
-            
+
             btn.dataset.giftId = id;
-            if (display) display.textContent = id || '---';
-            
-            if (id) {
-                const qrData = `gift-${id}`;
-                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
-                qrImage.src = qrApiUrl;
-                qrImage.onload = function() {
-                    placeholder.style.display = 'none';
-                    qrImage.style.display = 'block';
-                };
-                qrImage.onerror = function() {
-                    placeholder.innerHTML = `<i class="fas fa-qrcode" style="font-size:40px;color:var(--primary);"></i><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">gift-${id}</div>`;
-                    placeholder.style.display = 'block';
-                    qrImage.style.display = 'none';
-                };
-            }
-            
             btn.style.display = 'flex';
-        }
 
-        function showFloatQrModal() {
-            const modal = document.getElementById('floatQrModal');
-            if (modal) {
-                modal.classList.add('open');
-                document.body.style.overflow = 'hidden';
+            // Обновляем значение
+            const valueEl = document.getElementById('floatGiftValue');
+            if (valueEl) {
+                valueEl.textContent = id ? `#${id}` : '🎁 Активен';
             }
         }
 
-        function closeFloatQrModal() {
-            const modal = document.getElementById('floatQrModal');
-            if (modal) {
-                modal.classList.remove('open');
-                document.body.style.overflow = '';
+        function showFloatGiftModal() {
+            // Если есть ID — показываем модалку с QR
+            if (giftId) {
+                // Закрываем модалку поздравления, если открыта
+                closeCongratsModal();
+
+                // Показываем модалку с QR
+                showCongratsModal(giftId);
+            } else {
+                // Если нет подарка — пробуем проверить ещё раз
+                checkGift();
             }
         }
-
-        document.getElementById('floatQrModal')?.addEventListener('click', function(e) {
-            if (e.target === this) closeFloatQrModal();
-        });
 
         // ================================================================
         // ===== MAP =====
         // ================================================================
-        function autoScrollToMenu() {
-            if (autoScrollDone) return;
-            autoScrollDone = true;
-
-            const menuSection = document.getElementById('section-strawberry');
-            if (!menuSection) return;
-
-            const hint = document.getElementById('scrollHint');
-            if (hint) {
-                hint.classList.remove('show');
-                setTimeout(() => { hint.style.display = 'none'; }, 500);
-            }
-
-            const menuPosition = menuSection.getBoundingClientRect().top + window.pageYOffset;
-            setTimeout(() => {
-                window.scrollTo({
-                    top: menuPosition - 30,
-                    behavior: 'smooth'
-                });
-            }, 400);
-        }
-
         function loadMap() {
             showLoading(20);
             setTimeout(() => {
@@ -1374,7 +1356,6 @@
                     placeholder.style.display = 'none';
                     mapLoaded = true;
                     setTimeout(hideLoading, 500);
-                    setTimeout(autoScrollToMenu, 800);
                 };
 
                 setTimeout(() => {
@@ -1384,7 +1365,6 @@
                         mapLoaded = true;
                         showLoading(100);
                         setTimeout(hideLoading, 500);
-                        setTimeout(autoScrollToMenu, 800);
                     }
                 }, 5000);
             }, 500);
@@ -1395,7 +1375,7 @@
                 event.preventDefault();
                 event.stopPropagation();
             }
-            
+
             const btn = document.getElementById('locationBtn');
             const status = document.getElementById('locationStatus');
             const dot = document.getElementById('statusDot');
@@ -1448,7 +1428,7 @@
                     maximumAge: 0
                 }
             );
-            
+
             return false;
         }
 
@@ -1457,10 +1437,10 @@
                 event.preventDefault();
                 event.stopPropagation();
             }
-            
+
             if (isBuildingRoute) return false;
             isBuildingRoute = true;
-            
+
             const iframe = document.getElementById('mapIframe');
             const routeInfo = document.getElementById('routeInfo');
             const routeText = document.getElementById('routeText');
@@ -1479,7 +1459,7 @@
                 if (statusText) statusText.textContent = '📍 Нажмите "Где я?" для определения местоположения';
                 if (status) status.classList.add('show');
                 if (routeInfo) routeInfo.classList.remove('show');
-                
+
                 const staticMapUrl = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=17&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
                 iframe.src = staticMapUrl;
 
@@ -1487,14 +1467,13 @@
                     if (status) status.classList.remove('show');
                 }, 4000);
 
-                scrollToMap();
                 isBuildingRoute = false;
                 return false;
             }
 
             const routeUrl = `https://yandex.ru/map-widget/v1/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=15`;
             const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=15`;
-            
+
             iframe.src = routeUrl;
 
             if (routeInfo) {
@@ -1504,38 +1483,23 @@
                     window.open(yandexMapsUrl, '_blank');
                 };
             }
-            
+
             if (routeText) {
                 routeText.innerHTML = '<strong>🚶 Пеший маршрут</strong> до киоска<br><small style="color:#16A34A;">👆 Нажмите для открытия в Яндекс.Картах</small>';
             }
-            
+
             if (status) status.classList.remove('show');
             if (walkBtn) walkBtn.classList.add('active');
 
-            scrollToMap();
-            
             setTimeout(() => {
                 window.open(yandexMapsUrl, '_blank');
             }, 1500);
-            
+
             setTimeout(() => {
                 isBuildingRoute = false;
             }, 2000);
-            
-            return false;
-        }
 
-        function scrollToMap() {
-            const mapCard = document.querySelector('.map-card');
-            if (mapCard) {
-                const mapPosition = mapCard.getBoundingClientRect().top + window.pageYOffset;
-                setTimeout(() => {
-                    window.scrollTo({
-                        top: mapPosition - 20,
-                        behavior: 'smooth'
-                    });
-                }, 300);
-            }
+            return false;
         }
 
         // ================================================================
@@ -1555,7 +1519,7 @@
 
             const strawberryGrid = document.getElementById('strawberryGrid');
             if (!strawberryGrid) return;
-            
+
             let html = '';
 
             STRAWBERRY_ITEMS.forEach(item => {
@@ -1591,30 +1555,8 @@
             }, 1500);
 
             setTimeout(() => {
-                const hint = document.getElementById('scrollHint');
-                if (hint && !autoScrollDone) {
-                    hint.classList.add('show');
-                }
-            }, 2000);
-
-            setTimeout(() => {
                 loadMap();
             }, 400);
-            
-            document.querySelectorAll('.map-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    return false;
-                });
-            });
-        });
-
-        document.addEventListener('scroll', function() {
-            const hint = document.getElementById('scrollHint');
-            if (hint && window.scrollY > 50) {
-                hint.classList.remove('show');
-                setTimeout(() => { hint.style.display = 'none'; }, 500);
-            }
         });
 
         console.log('🍓 Квест-страница загружена!');
