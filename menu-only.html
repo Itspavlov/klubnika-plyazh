@@ -1370,6 +1370,7 @@
                     treasureData = data;
                     updateTreasureUI();
                     if (mapInstance) {
+                        // Центрируем на кладе ТОЛЬКО если пользователь не двигал карту
                         if (!isUserInteracting) {
                             mapInstance.setCenter([data.lat, data.lng], 17);
                         }
@@ -1456,6 +1457,7 @@
                         controls: ['zoomControl', 'typeSelector', 'geolocationControl']
                     });
 
+                    // Слушаем взаимодействие с картой
                     mapInstance.events.add('actionbegin', () => {
                         isUserInteracting = true;
                     });
@@ -1466,6 +1468,7 @@
                         }, 5000);
                     });
 
+                    // Слушаем изменение зума
                     mapInstance.events.add('boundschange', () => {
                         isUserInteracting = true;
                         clearTimeout(mapInstance._zoomTimeout);
@@ -1476,7 +1479,7 @@
 
                     if (placeholder) placeholder.style.display = 'none';
 
-                    // Киоск с ПОДПИСЬЮ
+                    // Киоск с подписью
                     kioskPlacemark = new ymaps.Placemark(
                         [MY_LOCATION.lat, MY_LOCATION.lng],
                         {
@@ -1561,9 +1564,10 @@
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
                     updateUserMarker(userLocation.lat, userLocation.lng);
 
-                    // ✅ ПРИНУДИТЕЛЬНО ЦЕНТРИРУЕМ НА ПОЛЬЗОВАТЕЛЕ
+                    // ✅ ЦЕНТРИРУЕМ НА ПОЛЬЗОВАТЕЛЕ ТОЛЬКО ПО КНОПКЕ!
                     if (mapInstance) {
                         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+                        // Сбрасываем флаг, чтобы авто-центрирование не мешало
                         isUserInteracting = false;
                     }
 
@@ -1621,10 +1625,12 @@
             );
 
             mapInstance.geoObjects.add(userPlacemark);
+
+            // ❌ НЕ ЦЕНТРИРУЕМ КАРТУ НА ПОЛЬЗОВАТЕЛЕ АВТОМАТИЧЕСКИ!
         }
 
         // ================================================================
-        // ===== ТОЛЬКО ПУЛЬСИРУЮЩИЙ КРУГ (БЕЗ СУНДУКА) =====
+        // ===== ТОЛЬКО ПУЛЬСИРУЮЩИЙ КРУГ =====
         // ================================================================
         function showTreasureCircle(lat, lng, radius = 15) {
             if (!mapInstance) return;
@@ -1793,6 +1799,7 @@
                         treasureActive = true;
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
                         if (mapInstance) {
+                            // Центрируем на кладе ТОЛЬКО если пользователь не двигал карту
                             if (!isUserInteracting) {
                                 mapInstance.setCenter([data.lat, data.lng], 17);
                             }
