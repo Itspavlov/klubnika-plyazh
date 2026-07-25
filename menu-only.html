@@ -1249,7 +1249,6 @@
         let treasurePlacemark = null;
         let treasureCircle = null;
         let kioskPlacemark = null;
-        let routeLine = null;
         let watchId = null;
         let treasureActive = false;
         let treasureData = null;
@@ -1262,6 +1261,7 @@
         let selectedHero = localStorage.getItem('selectedHero') || '🍓';
         let isRouteBuilt = false;
         let isUserInteracting = false;
+        let lastUserLocation = null;
 
         // ================================================================
         // ===== ONBOARDING (ПРИ ВХОДЕ) =====
@@ -1281,7 +1281,6 @@
             document.body.style.overflow = '';
             localStorage.setItem('onboarding_seen', 'true');
 
-            // После закрытия онбординга — показываем подарок
             setTimeout(() => {
                 checkGift();
             }, 500);
@@ -1494,7 +1493,16 @@
                     mapInstance.events.add('actionend', () => {
                         setTimeout(() => {
                             isUserInteracting = false;
-                        }, 3000);
+                        }, 5000);
+                    });
+
+                    // ===== СЛУШАЕМ ИЗМЕНЕНИЕ ЗУМА =====
+                    mapInstance.events.add('boundschange', () => {
+                        isUserInteracting = true;
+                        clearTimeout(mapInstance._zoomTimeout);
+                        mapInstance._zoomTimeout = setTimeout(() => {
+                            isUserInteracting = false;
+                        }, 5000);
                     });
 
                     if (placeholder) placeholder.style.display = 'none';
@@ -1584,8 +1592,9 @@
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
                     updateUserMarker(userLocation.lat, userLocation.lng);
 
+                    // НЕ центрируем на пользователе, если он двигал карту
                     if (treasureActive && treasureData && !isUserInteracting) {
-                        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+                        // Центрируем только если пользователь не взаимодействовал с картой
                     }
 
                     sendUserLocation();
@@ -1642,14 +1651,10 @@
             );
 
             mapInstance.geoObjects.add(userPlacemark);
-
-            if (treasureActive && !isUserInteracting) {
-                mapInstance.setCenter([lat, lng], 17);
-            }
         }
 
         // ================================================================
-        // ===== КЛАД НА КАРТЕ (СУНДУК + КРУГ) =====
+        // ===== ПУЛЬСИРУЮЩАЯ МЕТКА КЛАДА (СУНДУК + КРУГ) =====
         // ================================================================
         function showTreasureMarker(lat, lng, radius = 15) {
             if (!mapInstance) return;
@@ -1663,7 +1668,7 @@
                 treasureCircle = null;
             }
 
-            // 🎁 СУНДУК вместо булавки!
+            // 🎁 СУНДУК с пульсацией
             treasurePlacemark = new ymaps.Placemark(
                 [lat, lng],
                 {
@@ -1678,7 +1683,7 @@
             );
             mapInstance.geoObjects.add(treasurePlacemark);
 
-            // ⭕ Круг зоны 15 метров
+            // ⭕ ПУЛЬСИРУЮЩИЙ КРУГ зоны 15 метров
             treasureCircle = new ymaps.Circle(
                 [[lat, lng], radius],
                 {
@@ -1692,6 +1697,22 @@
                 }
             );
             mapInstance.geoObjects.add(treasureCircle);
+
+            // Анимируем круг — пульсация
+            let pulse = 0;
+            let pulseInterval = setInterval(() => {
+                if (!treasureCircle) {
+                    clearInterval(pulseInterval);
+                    return;
+                }
+                pulse = (pulse + 1) % 20;
+                const opacity = 0.5 + 0.4 * Math.sin(pulse / 20 * Math.PI * 2);
+                treasureCircle.options.set('strokeOpacity', opacity);
+                treasureCircle.options.set('fillOpacity', 0.1 + 0.15 * Math.sin(pulse / 20 * Math.PI * 2));
+            }, 100);
+
+            // Сохраняем интервал для очистки
+            treasureCircle._pulseInterval = pulseInterval;
 
             updateTreasureUI();
         }
@@ -1740,6 +1761,9 @@
                         treasurePlacemark = null;
                     }
                     if (treasureCircle) {
+                        if (treasureCircle._pulseInterval) {
+                            clearInterval(treasureCircle._pulseInterval);
+                        }
                         mapInstance.geoObjects.remove(treasureCircle);
                         treasureCircle = null;
                     }
@@ -1842,6 +1866,9 @@
                             treasurePlacemark = null;
                         }
                         if (treasureCircle) {
+                            if (treasureCircle._pulseInterval) {
+                                clearInterval(treasureCircle._pulseInterval);
+                            }
                             mapInstance.geoObjects.remove(treasureCircle);
                             treasureCircle = null;
                         }
@@ -1896,7 +1923,6 @@
             const yandexNavUrl = `yandexnavi://build_route_on_map?lat_to=${MY_LOCATION.lat}&lon_to=${MY_LOCATION.lng}`;
             const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
 
-            // Сначала пробуем открыть в Яндекс.Навигаторе
             try {
                 window.open(yandexNavUrl, '_blank');
                 setTimeout(() => {
@@ -2061,7 +2087,6 @@
                 initMap();
             }, 500);
 
-            // Показываем онбординг при первом входе
             setTimeout(() => {
                 showOnboarding();
             }, 800);
