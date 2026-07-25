@@ -6,6 +6,8 @@
     <title>🍓 Админ-панель</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Yandex Maps API -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
     <style>
         :root {
             --primary: #FF4757;
@@ -46,11 +48,11 @@
         .header { text-align: center; padding: 20px 0; }
         .header-badge {
             display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(255,255,255,0.95); 
+            background: rgba(255,255,255,0.95);
             color: var(--green-dark);
             font-size: 11px; font-weight: 600;
             padding: 6px 16px; border-radius: 100px; margin-bottom: 12px;
-            border: 1px solid rgba(45, 138, 78, 0.2); 
+            border: 1px solid rgba(45, 138, 78, 0.2);
             box-shadow: var(--shadow-sm);
         }
         .header h1 { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
@@ -60,26 +62,28 @@
             background: rgba(255,255,255,0.92);
             backdrop-filter: blur(20px);
             padding: 14px 10px; border-radius: var(--radius-lg); text-align: center;
-            border: 1px solid rgba(255,255,255,0.3); 
+            border: 1px solid rgba(255,255,255,0.3);
             box-shadow: var(--shadow-sm);
         }
         .stat-card .val { font-size: 22px; font-weight: 800; color: var(--green-dark); }
         .stat-card .lbl { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
         .tabs {
-            display: flex; gap: 6px; margin-bottom: 16px; padding: 4px;
+            display: flex; gap: 4px; margin-bottom: 16px; padding: 4px;
             background: rgba(255,255,255,0.85);
             backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl); 
+            border-radius: var(--radius-xl);
             border: 1px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap;
         }
         .tabs button {
-            flex: 1; padding: 10px 8px; border-radius: var(--radius-lg); border: none;
-            background: transparent; font-size: 12px; font-weight: 500;
+            flex: 1; padding: 8px 6px; border-radius: var(--radius-lg); border: none;
+            background: transparent; font-size: 11px; font-weight: 500;
             color: var(--text-secondary); cursor: pointer; transition: var(--transition);
             font-family: var(--font); display: flex; align-items: center;
-            justify-content: center; gap: 5px; position: relative;
+            justify-content: center; gap: 4px; position: relative;
+            min-width: 50px;
         }
-        .tabs button i { font-size: 14px; }
+        .tabs button i { font-size: 13px; }
         .tabs button.active { background: var(--green); color: #fff; font-weight: 600; box-shadow: var(--shadow); }
         .tabs button .tab-badge {
             position: absolute; top: 2px; right: 4px;
@@ -95,7 +99,7 @@
             background: rgba(255,255,255,0.92);
             backdrop-filter: blur(20px);
             border-radius: var(--radius-xl); padding: 18px; margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.3); 
+            border: 1px solid rgba(255,255,255,0.3);
             box-shadow: var(--shadow-sm);
         }
         .btn {
@@ -113,10 +117,14 @@
         .btn-sm { padding: 6px 14px; font-size: 11px; }
         .btn-xs { padding: 4px 10px; font-size: 10px; border-radius: 20px; }
         .btn-full { width: 100%; justify-content: center; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
         .tech-card { background: linear-gradient(135deg, #4ADE80, #22C55E); color: #fff; cursor: pointer; transition: var(--transition); }
         .tech-card.off { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
         .row-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
         .row-btns select { padding: 8px 14px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); font-size: 13px; font-family: var(--font); background: #fff; }
+
+        /* ===== MENU ===== */
         .menu-item {
             background: #fff; border-radius: var(--radius-lg); padding: 14px;
             display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
@@ -138,7 +146,7 @@
         .btn-on { background: #E8F5E9; color: #2E7D32; }
         .btn-off { background: #FFEBEE; color: #D32F2F; }
 
-        /* ===== ORDER CARDS ===== */
+        /* ===== ORDERS ===== */
         .order-card {
             background: #fff;
             border-radius: var(--radius-lg);
@@ -199,10 +207,7 @@
             height: 6px;
             border-radius: 50%;
         }
-        .order-card .order-time .time-dot.red {
-            background: #EF4444;
-            animation: pulseDot 1.5s ease-in-out infinite;
-        }
+        .order-card .order-time .time-dot.red { background: #EF4444; animation: pulseDot 1.5s ease-in-out infinite; }
         .order-card .order-time .time-dot.green { background: #22C55E; }
         .order-card .order-time .time-dot.gray { background: #9CA3AF; }
         @keyframes pulseDot {
@@ -243,7 +248,7 @@
         }
         .location-badge i { font-size: 12px; }
 
-        /* ===== MAP MODAL ===== */
+        /* ===== MAP ===== */
         .map-modal-overlay {
             display: none;
             position: fixed;
@@ -337,7 +342,7 @@
         }
         .map-modal-content .action-row .btn { flex: 1; justify-content: center; }
 
-        /* ===== CHAT ITEM ===== */
+        /* ===== CHAT ===== */
         .chat-item-wrapper {
             position: relative;
             overflow: hidden;
@@ -432,185 +437,73 @@
         .img-upload:hover { border-color: var(--primary); background: #FFF5F5; }
         .img-upload img { max-width: 100%; max-height: 150px; border-radius: var(--radius-md); margin-top: 8px; }
 
-        /* ===== LOGIN SCREEN ===== */
-        .login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-        }
-        .login-box {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-2xl);
-            padding: 40px 30px;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .login-box .login-icon { font-size: 64px; display: block; margin-bottom: 16px; }
-        .login-box h2 { font-size: 24px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
-        .login-box p { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
-        .login-box input {
-            width: 100%; padding: 14px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md);
-            font-size: 16px; margin-bottom: 16px; outline: none; font-family: var(--font); transition: var(--transition);
-        }
-        .login-box input:focus {
-            border-color: var(--green);
-            box-shadow: 0 0 0 4px rgba(45,138,78,0.1);
-        }
-        .login-box .btn { width: 100%; justify-content: center; padding: 14px; font-size: 16px; }
-        .login-box .error-msg { color: #EF4444; font-size: 13px; margin-top: 12px; display: none; }
-
-        .order-card .payment-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 10px;
-            border-radius: 100px;
+        /* ===== TREASURE PANEL ===== */
+        .treasure-status-card {
             background: #F8FAFC;
-            color: var(--text-secondary);
-            border: 1px solid #E5E7EB;
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 2px solid #E5E7EB;
+            transition: all 0.3s ease;
         }
-        .order-card .payment-badge.cash { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
-        .order-card .payment-badge.transfer { background: #E3F2FD; color: #1565C0; border-color: #90CAF9; }
-
-        /* ===== QR FULLSCREEN ===== */
-        .qr-fullscreen {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #000;
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
+        .treasure-status-card.active {
+            border-color: #22C55E;
+            background: #F0FDF4;
         }
-        .qr-fullscreen.open { display: flex; }
-
-        .qr-fullscreen .qr-header {
+        .treasure-status-card .status-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
-            background: rgba(0,0,0,0.8);
-            flex-shrink: 0;
-            z-index: 10;
+            flex-wrap: wrap;
+            gap: 8px;
         }
-        .qr-fullscreen .qr-header .qr-title {
-            color: #fff;
+        .treasure-status-card .status-label {
             font-weight: 700;
             font-size: 16px;
         }
-        .qr-fullscreen .qr-header .qr-title i { color: var(--primary); }
-        .qr-fullscreen .qr-header .qr-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 4px 8px;
+        .treasure-status-card .status-label.active {
+            color: #22C55E;
         }
-        .qr-fullscreen .qr-header .qr-close:active { opacity: 0.6; }
-
-        .qr-fullscreen .qr-reader {
-            flex: 1;
-            width: 100%;
-            background: #000;
-            position: relative;
-            overflow: hidden;
+        .treasure-status-card .status-label.inactive {
+            color: #EF4444;
         }
-        .qr-fullscreen .qr-reader video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .qr-fullscreen .qr-reader .qr-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 12px;
-            color: #fff;
-            font-size: 16px;
-            pointer-events: none;
-            z-index: 1;
-            background: rgba(0,0,0,0.3);
-        }
-        .qr-fullscreen .qr-reader .qr-overlay .qr-icon {
-            font-size: 64px;
-            opacity: 0.3;
-        }
-        .qr-fullscreen .qr-reader .qr-overlay .qr-hint {
-            text-align: center;
-            padding: 0 20px;
-            opacity: 0.7;
-        }
-        .qr-fullscreen .qr-reader .qr-overlay .qr-hint small {
-            font-size: 12px;
-            opacity: 0.5;
-            display: block;
+        .treasure-status-card .status-detail {
+            font-size: 13px;
+            color: var(--text-secondary);
             margin-top: 4px;
         }
-
-        .qr-fullscreen .qr-footer {
-            padding: 12px 16px;
-            background: rgba(0,0,0,0.85);
-            flex-shrink: 0;
-            z-index: 10;
+        .treasure-status-card .status-detail strong {
+            color: var(--text-dark);
         }
-        .qr-fullscreen .qr-footer .qr-result {
-            margin: 0;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            text-align: center;
-            font-size: 14px;
-            min-height: 48px;
+        .treasure-map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: #F1F5F9;
+            border: 1px solid #E5E7EB;
+            position: relative;
+        }
+        .treasure-map-container #treasureMap {
+            width: 100%;
+            height: 100%;
+        }
+        .treasure-map-container .map-placeholder {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 14px;
             gap: 8px;
         }
-        .qr-fullscreen .qr-footer .qr-result.success {
-            background: rgba(34, 197, 94, 0.3);
-            color: #4ADE80;
-        }
-        .qr-fullscreen .qr-footer .qr-result.error {
-            background: rgba(239, 68, 68, 0.3);
-            color: #F87171;
-        }
-        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-id {
-            font-weight: 700;
-            font-size: 18px;
+        .treasure-map-container .map-placeholder i {
+            font-size: 48px;
             color: var(--primary);
         }
-        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-ip {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-status {
-            font-weight: 600;
-        }
-        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-status.claimed { color: #4ADE80; }
-        .qr-fullscreen .qr-footer .qr-result .found-gift .gift-status.pending { color: #FBBF24; }
 
-        .qr-fullscreen .qr-footer .qr-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .qr-fullscreen .qr-footer .qr-actions .btn {
-            flex: 1;
-            justify-content: center;
-        }
-
-        /* ===== GIFTS LIST ===== */
+        /* ===== GIFTS ===== */
         .gift-card {
             background: #fff;
             border-radius: var(--radius-lg);
@@ -672,14 +565,89 @@
         }
         .gift-card .gift-qr-btn:active { transform: scale(0.9); }
 
+        /* ===== QR SCANNER ===== */
+        .qr-scanner-modal .modal {
+            max-width: 420px;
+        }
+        .qr-scanner-modal .qr-reader {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+        }
+        .qr-scanner-modal .qr-reader video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .qr-scanner-modal .qr-result {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            background: #F8FAFC;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            min-height: 50px;
+        }
+        .qr-scanner-modal .qr-result.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        .qr-scanner-modal .qr-result.error {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+        .qr-scanner-modal .qr-result .found-gift {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .qr-scanner-modal .qr-result .found-gift .gift-id {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+        .qr-scanner-modal .qr-result .found-gift .gift-ip {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .qr-scanner-modal .qr-result .found-gift .gift-status {
+            font-weight: 600;
+        }
+        .qr-scanner-modal .qr-result .found-gift .gift-status.claimed {
+            color: #2E7D32;
+        }
+        .qr-scanner-modal .qr-result .found-gift .gift-status.pending {
+            color: #F59E0B;
+        }
+        .qr-scanner-modal .qr-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .qr-scanner-modal .qr-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 500px) {
             .stats { grid-template-columns: 1fr 1fr; }
-            .tabs button { font-size: 10px; padding: 8px 4px; }
+            .tabs button { font-size: 10px; padding: 6px 4px; }
+            .tabs button i { font-size: 11px; }
             .menu-item { flex-direction: column; align-items: flex-start; }
             .menu-item .actions { align-self: flex-end; }
             .form-row { flex-direction: column; gap: 0; }
+            .treasure-map-container { height: 280px; }
             .map-modal-content .map-container { height: 280px; }
+            .qr-scanner-modal .qr-reader { height: 250px; }
+        }
+        @media (max-width: 400px) {
+            .tabs button { font-size: 9px; padding: 4px 2px; min-width: 40px; }
+            .tabs button i { font-size: 10px; }
         }
     </style>
 </head>
@@ -733,8 +701,10 @@
                 <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
                 <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
                 <button data-tab="gifts"><i class="fas fa-gift"></i> Подарки <span class="tab-badge" id="giftsBadge">0</span></button>
+                <button data-tab="treasure"><i class="fas fa-map-marked-alt"></i> Клад</button>
             </div>
 
+            <!-- ===== PANEL: ORDERS ===== -->
             <div class="panel active" id="panel-orders">
                 <div class="row-btns">
                     <button class="btn btn-primary btn-sm" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Обновить</button>
@@ -743,6 +713,7 @@
                 <div id="ordersList"><div class="empty-state"><i class="fas fa-inbox"></i>Заказов пока нет</div></div>
             </div>
 
+            <!-- ===== PANEL: MENU ===== -->
             <div class="panel" id="panel-menu">
                 <div class="row-btns">
                     <button class="btn btn-primary btn-sm" onclick="openItemModal()"><i class="fas fa-plus"></i> Добавить позицию</button>
@@ -757,6 +728,7 @@
                 <div id="menuList"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i>Загрузка меню...</div></div>
             </div>
 
+            <!-- ===== PANEL: CHATS ===== -->
             <div class="panel" id="panel-chats">
                 <div class="row-btns">
                     <button class="btn btn-primary btn-sm" onclick="loadChats()"><i class="fas fa-sync-alt"></i> Обновить</button>
@@ -764,20 +736,18 @@
                 <div id="chatsList"><div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов пока нет</div></div>
             </div>
 
+            <!-- ===== PANEL: REVIEWS ===== -->
             <div class="panel" id="panel-reviews">
                 <div class="row-btns"><button class="btn btn-primary btn-sm" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Обновить</button></div>
                 <div id="reviewsList"><div class="empty-state"><i class="fas fa-star"></i>Отзывов пока нет</div></div>
             </div>
 
-            <!-- ===== ПАНЕЛЬ ПОДАРКОВ ===== -->
+            <!-- ===== PANEL: GIFTS ===== -->
             <div class="panel" id="panel-gifts">
                 <div class="row-btns">
                     <button class="btn btn-primary btn-sm" onclick="loadGifts()"><i class="fas fa-sync-alt"></i> Обновить</button>
                     <button class="btn btn-purple btn-sm" onclick="startQRScanner()">
                         <i class="fas fa-qrcode"></i> Сканировать QR
-                    </button>
-                    <button class="btn btn-outline btn-sm" onclick="manualClaimGift()">
-                        <i class="fas fa-keyboard"></i> Ввести код
                     </button>
                     <button class="btn btn-success btn-sm" onclick="manualGift()"><i class="fas fa-plus"></i> Выдать подарок</button>
                     <button class="btn btn-danger btn-sm" onclick="resetAllGifts()" style="background:#EF4444;color:#fff;">
@@ -789,7 +759,7 @@
                 </div>
                 <div style="background:#F8FAFC;padding:12px 16px;border-radius:var(--radius-lg);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
                     <span style="font-size:13px;color:var(--text-secondary);">
-                        <i class="fas fa-location-dot"></i> Ваш IP: 
+                        <i class="fas fa-location-dot"></i> Ваш IP:
                         <strong id="adminIpDisplay" style="color:var(--text-dark);">загрузка...</strong>
                     </span>
                     <button class="btn btn-xs btn-outline" onclick="copyAdminIp()">
@@ -812,29 +782,95 @@
                 </div>
                 <div id="giftsList"><div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div></div>
             </div>
-        </div>
-    </div>
 
-    <!-- ===== QR FULLSCREEN ===== -->
-    <div class="qr-fullscreen" id="qrFullscreen">
-        <div class="qr-header">
-            <div class="qr-title">
-                <i class="fas fa-qrcode"></i> Сканирование QR
-            </div>
-            <button class="qr-close" onclick="stopQRScanner()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="qr-reader" id="qrReader">
-            <div class="qr-overlay" id="qrOverlay">
-                <div class="qr-icon"><i class="fas fa-camera"></i></div>
-                <div class="qr-hint">
-                    📱 Наведите камеру на QR-код
-                    <small>Поверните телефон горизонтально для лучшего сканирования</small>
+            <!-- ===== PANEL: TREASURE (GPS КЛАД) ===== -->
+            <div class="panel" id="panel-treasure">
+                <div class="row-btns">
+                    <button class="btn btn-primary btn-sm" onclick="loadTreasureStatus()">
+                        <i class="fas fa-sync-alt"></i> Обновить статус
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deactivateTreasure()">
+                        <i class="fas fa-stop"></i> Деактивировать
+                    </button>
+                </div>
+
+                <!-- Статус -->
+                <div class="treasure-status-card" id="treasureStatusCard">
+                    <div class="status-row">
+                        <span class="status-label inactive" id="treasureStatusLabel">🔴 Не активен</span>
+                        <span style="font-size:12px;color:var(--text-muted);" id="treasureTimeLabel">—</span>
+                    </div>
+                    <div class="status-detail">
+                        📍 <span id="treasureCoords">Координаты не заданы</span>
+                    </div>
+                    <div class="status-detail">
+                        👤 Победитель: <span id="treasureWinner">—</span>
+                    </div>
+                    <div class="status-detail">
+                        📍 В зоне: <span id="treasureUsersInZone">0</span> человек
+                    </div>
+                    <div class="status-detail" id="treasureWinnerTime" style="display:none;">
+                        🏆 Победа в: <span id="treasureWinnerTimeValue">—</span>
+                    </div>
+                </div>
+
+                <!-- Карта -->
+                <div style="background:#fff;border-radius:var(--radius-xl);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow);">
+                    <div class="treasure-map-container" id="treasureMapContainer">
+                        <div id="treasureMap"></div>
+                        <div class="map-placeholder" id="treasureMapPlaceholder">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Карта загружается...</span>
+                            <span style="font-size:11px;color:#9CA3AF;">Кликните на карту, чтобы выбрать место для клада</span>
+                        </div>
+                    </div>
+                    <div class="map-actions" style="display:flex;gap:8px;padding:12px 16px;background:#F8FAFC;border-top:1px solid #F1F5F9;flex-wrap:wrap;">
+                        <button class="btn btn-success" id="activateTreasureBtn" onclick="activateTreasure()" disabled>
+                            <i class="fas fa-flag-checkered"></i> Активировать клад
+                        </button>
+                        <button class="btn btn-outline" onclick="clearTreasureMarker()">
+                            <i class="fas fa-eraser"></i> Очистить метку
+                        </button>
+                    </div>
+                    <div style="padding:8px 16px 12px;font-size:11px;color:var(--text-muted);text-align:center;">
+                        💡 Кликните на карту, чтобы выбрать место. Радиус зоны: <strong>15 метров</strong>
+                    </div>
+                </div>
+
+                <!-- История победителей -->
+                <div style="background:#fff;border-radius:var(--radius-xl);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <div style="font-weight:700;font-size:15px;color:var(--text-dark);">
+                            <i class="fas fa-trophy" style="color:#FFD700;"></i> История победителей
+                        </div>
+                        <button class="btn btn-danger btn-xs" onclick="clearTreasureWinners()">
+                            <i class="fas fa-trash"></i> Очистить
+                        </button>
+                    </div>
+                    <div id="treasureWinnersList">
+                        <div class="empty-state" style="padding:20px;">
+                            <i class="fas fa-trophy" style="font-size:32px;color:#FFD700;opacity:0.3;"></i>
+                            <span style="font-size:13px;">Победителей пока нет</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="qr-footer">
+    </div>
+
+    <!-- ===== QR SCANNER MODAL ===== -->
+    <div class="modal-overlay qr-scanner-modal" id="qrScannerModal">
+        <div class="modal">
+            <button class="modal-close" onclick="stopQRScanner()"><i class="fas fa-times"></i></button>
+            <div style="font-weight:700;font-size:18px;margin-bottom:12px;text-align:center;color:var(--text-dark);">
+                <i class="fas fa-qrcode" style="color:var(--primary);"></i> Сканируйте QR-код
+            </div>
+            <div class="qr-reader" id="qrReader">
+                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;font-size:14px;flex-direction:column;gap:12px;">
+                    <i class="fas fa-camera" style="font-size:48px;opacity:0.5;"></i>
+                    <span>Наведите камеру на QR-код</span>
+                </div>
+            </div>
             <div class="qr-result" id="qrResult">
                 <i class="fas fa-info-circle"></i> Ожидание сканирования...
             </div>
@@ -842,9 +878,7 @@
                 <button class="btn btn-success" onclick="claimScannedGift()">
                     <i class="fas fa-gift"></i> Выдать подарок
                 </button>
-                <button class="btn btn-outline" onclick="stopQRScanner()" style="background:rgba(255,255,255,0.2);color:#fff;border-color:rgba(255,255,255,0.3);">
-                    Закрыть
-                </button>
+                <button class="btn btn-outline" onclick="stopQRScanner()">Закрыть</button>
             </div>
         </div>
     </div>
@@ -881,7 +915,7 @@
         </div>
     </div>
 
-    <!-- Модалка товара -->
+    <!-- ===== ITEM MODAL ===== -->
     <div class="modal-overlay" id="itemModal">
         <div class="modal">
             <button class="modal-close" onclick="closeItemModal()"><i class="fas fa-times"></i></button>
@@ -892,7 +926,7 @@
             <div class="form-group"><label>Описание</label><textarea id="fDesc" rows="2" placeholder="Краткое описание"></textarea></div>
             <div class="form-row">
                 <div class="form-group"><label>Цена (₽)</label><input type="number" id="fPrice" placeholder="350"></div>
-                <div class="form-group"><label>Старая цена (₽) <small style="color:var(--text-muted);">(перечеркнутая)</small></label><input type="number" id="fOldPrice" placeholder="400" style="border-color: #FEE2E2;"></div>
+                <div class="form-group"><label>Старая цена (₽)</label><input type="number" id="fOldPrice" placeholder="400" style="border-color: #FEE2E2;"></div>
             </div>
             <div class="form-group"><label>Объём/Вес</label><input type="text" id="fVolume" placeholder="300 мл"></div>
             <div class="form-group"><label>Категория</label>
@@ -920,7 +954,7 @@
         </div>
     </div>
 
-    <!-- Модалка чата -->
+    <!-- ===== CHAT MODAL ===== -->
     <div class="modal-overlay" id="chatModal">
         <div class="modal" style="display:flex;flex-direction:column;max-height:75vh;padding:0;">
             <div style="padding:14px 20px;border-bottom:1px solid #F1F5F9;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
@@ -951,7 +985,14 @@
         let scannedGiftId = null;
         let html5QrCode = null;
         let isScannerRunning = false;
-        let isCameraStarting = false;
+
+        // ===== ПЕРЕМЕННЫЕ ДЛЯ КАРТЫ И КЛАДА =====
+        let treasureMap = null;
+        let treasurePlacemark = null;
+        let treasureCircle = null;
+        let treasureSelectedCoords = null;
+        let treasureStatusInterval = null;
+        let treasureActive = false;
 
         // ================================================================
         // ===== LOGIN =====
@@ -972,12 +1013,12 @@
         function login() {
             const input = document.getElementById('loginPassword');
             const error = document.getElementById('loginError');
-            
+
             if (input.value === ADMIN_PASSWORD) {
                 try {
                     localStorage.setItem(AUTH_STORAGE_KEY, 'true');
                 } catch (e) {}
-                
+
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 error.style.display = 'none';
@@ -993,7 +1034,7 @@
             try {
                 localStorage.removeItem(AUTH_STORAGE_KEY);
             } catch (e) {}
-            
+
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('loginPassword').value = '';
@@ -1001,26 +1042,657 @@
         }
 
         // ================================================================
-        // ===== IP ДЛЯ АДМИНКИ =====
+        // ===== TOAST =====
         // ================================================================
-        async function loadAdminIp() {
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._t);
+            t._t = setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        // ================================================================
+        // ===== API HELPER =====
+        // ================================================================
+        async function api(url, method = 'GET', body = null) {
+            const opts = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) opts.body = JSON.stringify(body);
+            const res = await fetch('/api' + url, opts);
+            return res.json();
+        }
+
+        // ================================================================
+        // ===== TABS =====
+        // ================================================================
+        document.querySelectorAll('.tabs button').forEach(b => {
+            b.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('panel-' + tab).classList.add('active');
+                if (tab === 'orders') loadOrders();
+                if (tab === 'menu') loadMenu();
+                if (tab === 'chats') loadChats();
+                if (tab === 'reviews') loadReviews();
+                if (tab === 'gifts') loadGifts();
+                if (tab === 'treasure') {
+                    loadTreasureStatus();
+                    loadTreasureWinners();
+                    setTimeout(initTreasureMap, 500);
+                }
+            });
+        });
+
+        // ================================================================
+        // ===== TECH BREAK =====
+        // ================================================================
+        async function toggleTechBreak() {
+            const v = !settings.technicalBreak;
+            const d = await api('/settings', 'POST', { technicalBreak: v });
+            if (d.success) { settings = d.settings; updateTechUI(); toast(v ? '🔧 Технический перерыв' : '✅ Работаем'); }
+        }
+
+        function updateTechUI() {
+            const card = document.getElementById('techCard'), label = document.getElementById('techLabel');
+            if (settings.technicalBreak) { card.classList.add('off'); label.textContent = '🔧 Технический перерыв'; }
+            else { card.classList.remove('off'); label.textContent = '✅ Всё работает'; }
+        }
+
+        // ================================================================
+        // ===== ORDERS =====
+        // ================================================================
+        let settings = {};
+        let S = { orders: [], chats: [], menu: [] };
+
+        async function loadOrders() {
+            const orders = await api('/orders');
+            S.orders = orders;
+            updateStats(orders);
+            renderOrders();
+        }
+
+        function updateStats(orders) {
+            const today = new Date().toDateString();
+            const active = orders.filter(o => o.status === 'ожидает');
+            let revenue = 0;
+            orders.forEach(o => { if (o.items) o.items.forEach(i => revenue += (i.price || 0) * (i.quantity || 1)); });
+            document.getElementById('statTotal').textContent = orders.length;
+            document.getElementById('statActive').textContent = active.length;
+            document.getElementById('statToday').textContent = orders.filter(o => new Date(o.createdAt).toDateString() === today).length;
+            document.getElementById('statRevenue').textContent = revenue + ' ₽';
+        }
+
+        function renderOrders() {
+            const orders = S.orders;
+            const list = document.getElementById('ordersList');
+            if (!orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
+
+            list.innerHTML = orders.map(order => {
+                const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
+                let borderClass = 'status-waiting';
+                let dotColor = 'red';
+                let isNew = false;
+                if (order.status === 'выполнен') { borderClass = 'status-done'; dotColor = 'green'; }
+                else if (order.status?.includes('отменен')) { borderClass = 'status-cancelled'; dotColor = 'gray'; }
+                else {
+                    const orderAge = (Date.now() - new Date(order.createdAt)) / 1000 / 60;
+                    if (orderAge < 15) isNew = true;
+                }
+
+                const acts = order.status === 'ожидает' ?
+                    `<button class="btn btn-success btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅ Подтвердить</button>
+                     <button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌ Отменить</button>` : '';
+
+                const hasLocation = order.lat && order.lng;
+                const locationBadge = hasLocation ?
+                    `<span class="location-badge"><i class="fas fa-location-dot"></i> 📍 На карте</span>` :
+                    `<span class="location-badge no-location"><i class="fas fa-exclamation-triangle"></i> Без гео</span>`;
+
+                let paymentLabel = order.paymentLabel || 'Наличными';
+                let paymentIcon = '💵';
+                let paymentClass = 'cash';
+                if (order.paymentMethod === 'transfer' || order.paymentLabel?.includes('Перевод')) {
+                    paymentIcon = '📱';
+                    paymentClass = 'transfer';
+                }
+
+                const orderDate = new Date(order.createdAt);
+                const timeStr = orderDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const dateStr = orderDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+
+                const clickHandler = hasLocation ? `onclick="openMapModal(${JSON.stringify(order).replace(/"/g, '&quot;')})"` : '';
+
+                return `<div class="order-card ${borderClass}" ${clickHandler} style="${hasLocation ? '' : 'cursor:default;'}">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
+                        <span style="font-weight:600;font-size:14px;">
+                            🏠 #${order.bungalow||'?'} — #${order.id}
+                            ${isNew ? `<span class="new-badge">🆕 Новый</span>` : ''}
+                            <span class="payment-badge ${paymentClass}">${paymentIcon} ${paymentLabel}</span>
+                            ${locationBadge}
+                            ${hasLocation ? `<span style="font-size:10px;color:#22C55E;font-weight:600;">👆 Нажмите</span>` : ''}
+                        </span>
+                        <span style="font-size:12px;color:var(--text-secondary);">
+                            ${order.status || 'ожидает'}
+                        </span>
+                    </div>
+                    <div style="font-size:12px;color:var(--text-secondary);display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
+                        <span>👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} ${order.confirmCode ? '🔑 <b>'+order.confirmCode+'</b>' : ''}</span>
+                        <span class="order-time"><span class="time-dot ${dotColor}"></span> ${dateStr} в ${timeStr}</span>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-dark);margin:4px 0;">${itemsHtml}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
+                        <span style="font-weight:700;color:var(--primary);">💰 ${order.total||0} ₽</span>
+                        <div style="display:flex;gap:4px;flex-wrap:wrap;">${acts}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        async function confirmOrder(id, code) { if (!confirm('Подтвердить выполнение заказа?')) return; await api('/confirm', 'POST', { orderId: id, code }); toast('✅ Заказ выполнен!'); loadOrders(); }
+        async function cancelOrder(id) { if (!confirm('Отменить заказ?')) return; await api('/cancel', 'POST', { orderId: id }); toast('❌ Заказ отменён'); loadOrders(); }
+        async function clearOrders() { if (!confirm('Удалить все заказы?')) return; await api('/clear-orders', 'POST'); toast('🗑️ Очищено'); loadOrders(); }
+
+        // ================================================================
+        // ===== MENU =====
+        // ================================================================
+        const CATALOG = [
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, volume: '300 мл', emoji: '🍫', category: 'strawberry', image: 'images/klassika.jpg', badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, volume: '300 мл', emoji: '🤍', category: 'strawberry', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, volume: '300 мл', emoji: '❤️', category: 'strawberry', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан', price: 450, volume: '300 мл', emoji: '🍌', category: 'strawberry', image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан', price: 450, volume: '300 мл', emoji: '🍌', category: 'strawberry', image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, volume: '300 мл', emoji: '🍓', category: 'strawberry', image: 'images/klubnika-bez-shokolada.jpg' },
+            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз', price: 200, volume: '300 мл', emoji: '🍉', category: 'fruits', image: 'images/watermelon.jpg' },
+            { id: '12', name: 'Дыня', desc: 'Нежная дыня', price: 200, volume: '300 мл', emoji: '🍈', category: 'fruits', image: 'images/melon.jpg' },
+            { id: '13', name: 'Малина', desc: 'Свежая малина', price: 250, volume: '200 мл', emoji: '🍓', category: 'fruits', image: 'images/raspberry.jpg' },
+            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика', price: 200, volume: '200 мл', emoji: '🫐', category: 'fruits', image: 'images/blackberry.jpg' },
+            { id: '15', name: 'Голубика', desc: 'Полезная голубика', price: 250, volume: '200 мл', emoji: '🫐', category: 'fruits', image: 'images/blueberry.jpg' },
+            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад', price: 150, volume: '', emoji: '🍋', category: 'drinks', image: 'images/limonad.webp' },
+            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная', price: 120, volume: '', emoji: '🥤', category: 'drinks', image: 'images/kola.jpg' },
+            { id: '8', name: 'Пиво', desc: 'Охлажденное', price: 200, volume: '', emoji: '🍺', category: 'drinks', image: 'images/pivo.webp' }
+        ];
+
+        async function loadMenu() {
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                document.getElementById('adminIpDisplay').textContent = data.ip;
-            } catch(e) {
-                document.getElementById('adminIpDisplay').textContent = 'не определен';
+                const d = await api('/settings');
+                settings = d;
+                updateTechUI();
+                S.menu = CATALOG.map(item => ({ ...item, available: d.menuItems?.[item.id] !== false }));
+                if (d.customItems && Array.isArray(d.customItems)) {
+                    d.customItems.forEach(ci => {
+                        const idx = S.menu.findIndex(x => x.id === ci.id);
+                        if (idx >= 0) S.menu[idx] = { ...S.menu[idx], ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true };
+                        else S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
+                    });
+                }
+                renderMenu();
+            } catch (e) { document.getElementById('menuList').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i>Ошибка</div>'; }
+        }
+
+        function renderMenu() {
+            const filter = document.getElementById('menuFilter').value;
+            let items = S.menu;
+            if (filter !== 'all') items = items.filter(x => x.category === filter);
+            const list = document.getElementById('menuList');
+            if (!items.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-utensils"></i>Нет позиций</div>'; return; }
+            list.innerHTML = items.map(x => `
+                <div class="menu-item">
+                    <img src="${x.image}" onerror="this.style.display='none'" loading="lazy" alt="${x.name}">
+                    <div class="info">
+                        <div class="name">${x.emoji||''} ${x.name} ${x.badge?`<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;">${x.badge}</span>`:''}</div>
+                        <div class="desc">${x.desc} ${x.volume?'• '+x.volume:''}</div>
+                        <div class="price">${x.price} ₽ ${x.oldPrice ? `<span class="old-price">${x.oldPrice} ₽</span>` : ''}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
+                        <button class="${x.available?'btn-on':'btn-off'}" onclick="toggleItem('${x.id}')"><i class="fas ${x.available?'fa-eye':'fa-eye-slash'}"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function openItemModal(item = null) {
+            document.getElementById('fId').value = item ? item.id : '';
+            document.getElementById('fName').value = item ? item.name : '';
+            document.getElementById('fDesc').value = item ? item.desc : '';
+            document.getElementById('fPrice').value = item ? item.price : '';
+            document.getElementById('fOldPrice').value = item && item.oldPrice ? item.oldPrice : '';
+            document.getElementById('fVolume').value = item ? (item.volume || '') : '';
+            document.getElementById('fCategory').value = item ? (item.category || 'strawberry') : 'strawberry';
+            document.getElementById('fEmoji').value = item ? (item.emoji || '') : '';
+            document.getElementById('fBadge').value = item ? (item.badge || '') : '';
+            document.getElementById('fImageData').value = item ? (item.image || '') : '';
+            document.getElementById('fDeleteBtn').style.display = item ? 'block' : 'none';
+            document.getElementById('modalTitle').innerHTML = item ? '<i class="fas fa-pen"></i> Редактирование' : '<i class="fas fa-plus-circle"></i> Новая позиция';
+            const prev = document.getElementById('fImagePreview');
+            if (item && item.image) { prev.src = item.image; prev.style.display = 'block'; }
+            else { prev.style.display = 'none'; }
+            document.getElementById('itemModal').classList.add('open');
+        }
+
+        function editItem(id) { const item = S.menu.find(x => x.id === id); if (item) openItemModal(item); }
+        function closeItemModal() { document.getElementById('itemModal').classList.remove('open'); }
+
+        function previewImage(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                document.getElementById('fImagePreview').src = ev.target.result;
+                document.getElementById('fImagePreview').style.display = 'block';
+                document.getElementById('fImageData').value = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function toggleItem(id) {
+            const cur = settings.menuItems?.[id] !== false;
+            const d = await api('/settings', 'POST', { menuItems: { [id]: !cur } });
+            if (d.success) {
+                settings = d.settings;
+                const mi = S.menu.find(x => x.id === id);
+                if (mi) mi.available = !cur;
+                renderMenu();
+                toast(cur ? '❌ Скрыто' : '✅ Показано');
             }
         }
 
-        function copyAdminIp() {
-            const ip = document.getElementById('adminIpDisplay').textContent;
-            navigator.clipboard.writeText(ip).then(() => {
-                toast('✅ IP скопирован!');
-            }).catch(() => {
-                toast('❌ Не удалось скопировать');
+        async function saveItem() {
+            const id = document.getElementById('fId').value,
+                name = document.getElementById('fName').value.trim(),
+                price = parseInt(document.getElementById('fPrice').value);
+            if (!name || !price || isNaN(price)) { toast('❌ Заполните название и цену'); return; }
+            const oldPrice = document.getElementById('fOldPrice').value.trim() ? parseInt(document.getElementById('fOldPrice').value.trim()) : null;
+            const item = {
+                id: id || String(Date.now()),
+                name,
+                desc: document.getElementById('fDesc').value.trim(),
+                price,
+                oldPrice: oldPrice,
+                volume: document.getElementById('fVolume').value.trim(),
+                category: document.getElementById('fCategory').value,
+                emoji: document.getElementById('fEmoji').value.trim(),
+                badge: document.getElementById('fBadge').value.trim(),
+                image: document.getElementById('fImageData').value || 'images/placeholder.jpg',
+                isCustom: true
+            };
+            if (!settings.customItems) settings.customItems = [];
+            const idx = settings.customItems.findIndex(x => x.id === item.id);
+            if (idx >= 0) settings.customItems[idx] = item;
+            else settings.customItems.push(item);
+            settings.menuItems = settings.menuItems || {};
+            settings.menuItems[item.id] = true;
+            const d = await api('/settings', 'POST', { customItems: settings.customItems, menuItems: settings.menuItems });
+            if (d.success) { settings = d.settings;
+                closeItemModal();
+                await loadMenu();
+                toast('✅ Сохранено'); } else toast('❌ Ошибка');
+        }
+
+        async function deleteItem() {
+            const id = document.getElementById('fId').value;
+            if (!id || !confirm('Удалить позицию?')) return;
+            if (settings.customItems) settings.customItems = settings.customItems.filter(x => x.id !== id);
+            settings.menuItems = settings.menuItems || {};
+            settings.menuItems[id] = false;
+            const d = await api('/settings', 'POST', { customItems: settings.customItems, menuItems: settings.menuItems });
+            if (d.success) { settings = d.settings;
+                closeItemModal();
+                await loadMenu();
+                toast('🗑️ Удалено'); }
+        }
+
+        // ================================================================
+        // ===== CHATS =====
+        // ================================================================
+        async function loadChats() {
+            const d = await api('/chats');
+            S.chats = d.chats || [];
+            const totalUnread = S.chats.reduce((sum, c) => sum + (c.unread || 0), 0);
+            const badge = document.getElementById('chatsBadge');
+            if (totalUnread > 0) { badge.textContent = totalUnread;
+                badge.classList.add('show'); } else badge.classList.remove('show');
+
+            const list = document.getElementById('chatsList');
+            if (!S.chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
+
+            list.innerHTML = S.chats.map(c => `
+                <div class="chat-item-wrapper">
+                    <button class="chat-delete-btn" onclick="deleteChat('${c.phone}')">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                    <div class="chat-item" onclick="openChat('${c.phone}','${c.name||'Клиент'}')">
+                        <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div>
+                        <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'}</div>
+                    </div>
+                </div>`).join('');
+
+            // swipe logic
+            document.querySelectorAll('.chat-item-wrapper').forEach(wrapper => {
+                let startX = 0,
+                    isDragging = false;
+                const item = wrapper.querySelector('.chat-item');
+
+                wrapper.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX;
+                    isDragging = true; }, { passive: true });
+                wrapper.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    const diff = startX - e.touches[0].clientX;
+                    if (diff > 0 && diff < 100) item.style.transform = `translateX(-${diff}px)`;
+                    else if (diff >= 100) { item.style.transform = 'translateX(-80px)';
+                        item.classList.add('swiped'); } else { item.style.transform = 'translateX(0)';
+                        item.classList.remove('swiped'); }
+                }, { passive: true });
+                wrapper.addEventListener('touchend', () => {
+                    isDragging = false;
+                    if (!item.classList.contains('swiped')) item.style.transform = 'translateX(0)';
+                }, { passive: true });
             });
         }
+
+        async function deleteChat(phone) {
+            if (!confirm(`🗑️ Удалить чат с ${phone}?`)) return;
+            try {
+                const res = await fetch('/api/delete-chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
+                const data = await res.json();
+                if (data.success) { toast('🗑️ Чат удален');
+                    loadChats(); } else toast('❌ Ошибка удаления');
+            } catch (e) { toast('❌ Ошибка соединения'); }
+        }
+
+        async function openChat(phone, name) {
+            document.getElementById('chatTitle').textContent = `💬 ${name} (${phone})`;
+            document.getElementById('chatModal').classList.add('open');
+            await loadMessages(phone);
+            await api('/chat-read', 'POST', { phone });
+            loadChats();
+        }
+
+        async function loadMessages(phone) {
+            const d = await api('/chat-messages?phone=' + phone);
+            const msgs = d.messages || [];
+            const c = document.getElementById('chatMessages');
+            if (!msgs.length) { c.innerHTML = '<div class="empty-state">Начните диалог</div>'; return; }
+            c.innerHTML = msgs.map(m => `
+                <div style="margin-bottom:6px;display:flex;justify-content:${m.from==='client'?'flex-start':'flex-end'};">
+                    <div style="max-width:80%;padding:8px 12px;border-radius:${m.from==='client'?'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px':'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from==='client'?'#F8FAFC':'linear-gradient(135deg,var(--primary),var(--primary-dark))'};color:${m.from==='client'?'var(--text-dark)':'#fff'};font-size:13px;">
+                        ${m.text}<span style="font-size:9px;display:block;margin-top:3px;opacity:0.6;">${new Date(m.time).toLocaleTimeString()}</span>
+                    </div>
+                </div>`).join('');
+            c.scrollTop = c.scrollHeight;
+        }
+
+        async function sendChat() {
+            const t = document.getElementById('chatInput').value.trim();
+            const phone = document.getElementById('chatTitle').textContent.match(/\(([^)]+)\)/)?.[1];
+            if (!t || !phone) return;
+            await api('/chat-send', 'POST', { phone, text: t, from: 'admin' });
+            document.getElementById('chatInput').value = '';
+            await loadMessages(phone);
+            loadChats();
+        }
+
+        function closeChatModal() { document.getElementById('chatModal').classList.remove('open'); }
+
+        // ================================================================
+        // ===== REVIEWS =====
+        // ================================================================
+        async function loadReviews() {
+            const d = await api('/reviews');
+            const revs = d.reviews || [];
+            const list = document.getElementById('reviewsList');
+            if (!revs.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Отзывов нет</div>'; return; }
+            list.innerHTML = revs.map(r => `
+                <div class="review-card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-weight:600;">${r.name||'Клиент'}</span>
+                        <span class="stars">${'⭐'.repeat(r.rating||5)}</span>
+                    </div>
+                    <div style="font-size:13px;color:var(--text-secondary);margin:4px 0;">${r.text||''}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:10px;color:var(--text-muted);">#${r.orderId} • ${new Date(r.createdAt).toLocaleString()}</span>
+                        <button class="btn btn-danger btn-xs" onclick="deleteReview(${r.id})">🗑️</button>
+                    </div>
+                </div>`).join('');
+        }
+
+        async function deleteReview(id) { if (!confirm('Удалить?')) return; await fetch('/api/review/' + id, { method: 'DELETE' });
+            toast('🗑️ Удалён');
+            loadReviews(); }
+
+        // ================================================================
+        // ===== GIFTS =====
+        // ================================================================
+        async function loadGifts() {
+            try {
+                const stats = await api('/gifts/stats');
+                document.getElementById('giftTotal').textContent = stats.total || 0;
+                document.getElementById('giftPending').textContent = stats.pending || 0;
+                document.getElementById('giftClaimed').textContent = stats.claimed || 0;
+
+                const data = await api('/gifts');
+                const gifts = data.gifts || [];
+                const badge = document.getElementById('giftsBadge');
+                if (stats.pending > 0) { badge.textContent = stats.pending;
+                    badge.classList.add('show'); } else badge.classList.remove('show');
+
+                const list = document.getElementById('giftsList');
+                if (!gifts.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div>'; return; }
+
+                list.innerHTML = gifts.map(g => `
+                    <div class="gift-card ${g.claimed ? 'claimed' : 'pending'}">
+                        <div class="gift-header">
+                            <span class="gift-id">🎫 #${g.id}</span>
+                            <span class="gift-status-badge ${g.claimed ? 'claimed' : 'pending'}">
+                                ${g.claimed ? '✅ Выдан' : '🕒 Ожидает'}
+                            </span>
+                        </div>
+                        <div class="gift-details">
+                            <span>📡 IP: ${g.ip || 'неизвестен'}</span>
+                            ${g.bungalow ? `<span>🏠 Бунгало #${g.bungalow}</span>` : ''}
+                            <span>📅 ${new Date(g.created_at).toLocaleString('ru-RU')}</span>
+                            ${g.claimed_at ? `<span>🎁 Выдан: ${new Date(g.claimed_at).toLocaleString('ru-RU')}</span>` : ''}
+                        </div>
+                        <div class="gift-actions">
+                            ${!g.claimed ? `
+                                <button class="btn btn-success btn-xs" onclick="claimGift(${g.id})">
+                                    <i class="fas fa-check"></i> Выдать
+                                </button>
+                            ` : ''}
+                            <button class="gift-qr-btn" onclick="showGiftQR(${g.id})" title="Показать QR-код">
+                                <i class="fas fa-qrcode"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error('Ошибка загрузки подарков:', e); }
+        }
+
+        async function claimGift(giftId) {
+            if (!confirm(`Выдать подарок #${giftId}?`)) return;
+            try {
+                const res = await fetch('/api/gift/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ giftId }) });
+                const data = await res.json();
+                if (data.success) { toast('✅ Подарок выдан!');
+                    loadGifts(); } else toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+            } catch (e) { toast('❌ Ошибка соединения'); }
+        }
+
+        function showGiftQR(giftId) {
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=gift-${giftId}&color=FF4757&bgcolor=FFFFFF`;
+            window.open(qrUrl, '_blank');
+        }
+
+        async function resetAllGifts() {
+            if (!confirm('⚠️ УДАЛИТЬ ВСЕ ЗАПИСИ О ПОДАРКАХ?')) return;
+            if (!confirm('❗ ТОЧНО? Это действие НЕЛЬЗЯ ОТМЕНИТЬ!')) return;
+            try {
+                const res = await fetch('/api/gift/reset-all', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) { toast('🗑️ Все IP сброшены!');
+                    loadGifts(); } else toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+            } catch (e) { toast('❌ Ошибка соединения'); }
+        }
+
+        async function resetMyGift() {
+            if (!confirm('Сбросить ваш IP для тестирования?')) return;
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                const myIp = data.ip;
+                const resetRes = await fetch('/api/gift/reset-ip', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ip: myIp }) });
+                const resetData = await resetRes.json();
+                if (resetData.success) { toast(`✅ Ваш IP (${myIp}) сброшен!`);
+                    loadGifts(); } else toast('❌ Ошибка: ' + (resetData.error || 'неизвестная'));
+            } catch (e) { toast('❌ Ошибка соединения'); }
+        }
+
+        async function manualGift() {
+            const ip = prompt('Введите IP-адрес для выдачи подарка:');
+            if (!ip) return;
+            try {
+                const res = await fetch('/api/gift/manual', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ip }) });
+                const data = await res.json();
+                if (data.success) { toast(`✅ Подарок для IP ${ip} создан!`);
+                    loadGifts(); } else toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+            } catch (e) { toast('❌ Ошибка соединения'); }
+        }
+
+        // ================================================================
+        // ===== QR SCANNER =====
+        // ================================================================
+        function startQRScanner() {
+            const modal = document.getElementById('qrScannerModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Запуск камеры...';
+            document.getElementById('qrActions').style.display = 'none';
+            scannedGiftId = null;
+            if (typeof Html5Qrcode === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+                script.onload = function() { initScanner(); };
+                script.onerror = function() {
+                    result.className = 'qr-result error';
+                    result.innerHTML = '❌ Не удалось загрузить библиотеку сканера';
+                };
+                document.head.appendChild(script);
+            } else {
+                initScanner();
+            }
+        }
+
+        function initScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(() => {});
+            }
+            html5QrCode = new Html5Qrcode("qrReader");
+            const config = { fps: 15, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
+            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError)
+                .catch(function(err) {
+                    result.className = 'qr-result error';
+                    result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
+                });
+        }
+
+        function onScanSuccess(decodedText) {
+            if (isScannerRunning) return;
+            isScannerRunning = true;
+            let giftId = decodedText;
+            if (giftId.startsWith('gift-')) giftId = giftId.replace('gift-', '');
+            giftId = parseInt(giftId);
+            if (isNaN(giftId)) {
+                const result = document.getElementById('qrResult');
+                result.className = 'qr-result error';
+                result.innerHTML = '❌ Неверный QR-код. Ожидается gift-123';
+                isScannerRunning = false;
+                return;
+            }
+            scannedGiftId = giftId;
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(() => {});
+            }
+            fetchGiftInfo(giftId);
+        }
+
+        function onScanError(err) {}
+
+        async function fetchGiftInfo(giftId) {
+            const result = document.getElementById('qrResult');
+            result.className = 'qr-result';
+            result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Загрузка информации...';
+            try {
+                const res = await fetch(`/api/gift/${giftId}`);
+                const data = await res.json();
+                if (!data.success) {
+                    result.className = 'qr-result error';
+                    result.innerHTML = `❌ ${data.error || 'Подарок не найден'}`;
+                    isScannerRunning = false;
+                    return;
+                }
+                const gift = data.gift;
+                const isClaimed = gift.claimed;
+                const statusText = isClaimed ? '✅ Уже выдан' : '🕒 Ожидает выдачи';
+                const statusClass = isClaimed ? 'claimed' : 'pending';
+                result.className = 'qr-result success';
+                result.innerHTML = `
+                    <div class="found-gift">
+                        <div class="gift-id">🎁 Подарок #${gift.id}</div>
+                        <div class="gift-ip">📍 IP: ${gift.ip || 'неизвестен'}</div>
+                        <div class="gift-ip">📅 ${new Date(gift.created_at).toLocaleString('ru-RU')}</div>
+                        <div class="gift-status ${statusClass}">${statusText}</div>
+                    </div>
+                `;
+                if (!isClaimed) {
+                    document.getElementById('qrActions').style.display = 'flex';
+                } else {
+                    document.getElementById('qrActions').style.display = 'none';
+                    setTimeout(() => { stopQRScanner(); }, 3000);
+                }
+                isScannerRunning = false;
+            } catch (e) {
+                result.className = 'qr-result error';
+                result.innerHTML = '❌ Ошибка загрузки информации';
+                isScannerRunning = false;
+            }
+        }
+
+        async function claimScannedGift() {
+            if (!scannedGiftId) return;
+            if (!confirm(`Выдать подарок #${scannedGiftId}?`)) return;
+            try {
+                const res = await fetch('/api/gift/claim', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ giftId: scannedGiftId }) });
+                const data = await res.json();
+                if (data.success) { toast('✅ Подарок выдан!');
+                    stopQRScanner();
+                    loadGifts(); } else toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+            } catch (e) { toast('❌ Ошибка соединения'); }
+        }
+
+        function stopQRScanner() {
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(() => {});
+                } catch (e) {}
+                html5QrCode = null;
+            }
+            document.getElementById('qrScannerModal').classList.remove('open');
+            document.body.style.overflow = '';
+            document.getElementById('qrActions').style.display = 'none';
+            scannedGiftId = null;
+            isScannerRunning = false;
+        }
+
+        document.getElementById('qrScannerModal').addEventListener('click', function(e) {
+            if (e.target === this) stopQRScanner();
+        });
 
         // ================================================================
         // ===== MAP MODAL =====
@@ -1035,7 +1707,7 @@
             const date = new Date(order.createdAt);
             const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
             const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-            
+
             let itemsStr = order.items?.map(i => `${i.name} ×${i.quantity}`).join(', ') || 'нет товаров';
             let paymentLabel = order.paymentLabel || 'Наличными';
             if (order.paymentMethod === 'transfer') paymentLabel = '📱 Переводом';
@@ -1115,10 +1787,7 @@
                 `https://yandex.ru/maps/?pt=${lng},${lat}&z=18`
             ];
             for (const scheme of schemes) {
-                try {
-                    window.open(scheme, '_blank');
-                    break;
-                } catch (e) {}
+                try { window.open(scheme, '_blank'); break; } catch (e) {}
             }
         }
 
@@ -1127,950 +1796,346 @@
         });
 
         // ================================================================
-        // ===== ADMIN LOGIC =====
+        // ===== TREASURE (GPS КЛАД) =====
         // ================================================================
-        const S = {
-            settings: {},
-            menu: [],
-            tab: 'orders',
-            chatPhone: null,
-            orders: [],
-            chats: [],
-            totalUnread: 0,
-            gifts: [],
-            giftStats: { total: 0, claimed: 0, pending: 0 }
-        };
 
-        const $ = id => document.getElementById(id);
-
-        function toast(msg) {
-            const t = $('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            clearTimeout(t._t);
-            t._t = setTimeout(() => t.classList.remove('show'), 2500);
-        }
-
-        async function api(url, method = 'GET', body = null) {
-            const opts = { method, headers: { 'Content-Type': 'application/json' } };
-            if (body) opts.body = JSON.stringify(body);
-            const res = await fetch('/api' + url, opts);
-            return res.json();
-        }
-
-        // ===== TABS =====
-        document.querySelectorAll('.tabs button').forEach(b => {
-            b.addEventListener('click', function() {
-                S.tab = this.dataset.tab;
-                document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                $('panel-' + S.tab).classList.add('active');
-                if (S.tab === 'orders') loadOrders();
-                if (S.tab === 'menu') loadMenu();
-                if (S.tab === 'chats') loadChats();
-                if (S.tab === 'reviews') loadReviews();
-                if (S.tab === 'gifts') loadGifts();
-            });
-        });
-
-        // ===== TECH BREAK =====
-        async function toggleTechBreak() {
-            const v = !S.settings.technicalBreak;
-            const d = await api('/settings', 'POST', { technicalBreak: v });
-            if (d.success) { S.settings = d.settings; updateTechUI(); toast(v ? '🔧 Технический перерыв' : '✅ Работаем'); }
-        }
-
-        function updateTechUI() {
-            const card = $('techCard'), label = $('techLabel');
-            if (S.settings.technicalBreak) { card.classList.add('off'); label.textContent = '🔧 Технический перерыв'; }
-            else { card.classList.remove('off'); label.textContent = '✅ Всё работает'; }
-        }
-
-        // ===== ORDERS =====
-        async function loadOrders() {
-            const orders = await api('/orders');
-            S.orders = orders;
-            updateStats(orders);
-            renderOrders();
-        }
-
-        function updateStats(orders) {
-            const today = new Date().toDateString();
-            const active = orders.filter(o => o.status === 'ожидает');
-            let revenue = 0;
-            orders.forEach(o => { if (o.items) o.items.forEach(i => revenue += (i.price || 0) * (i.quantity || 1)); });
-            $('statTotal').textContent = orders.length;
-            $('statActive').textContent = active.length;
-            $('statToday').textContent = orders.filter(o => new Date(o.createdAt).toDateString() === today).length;
-            $('statRevenue').textContent = revenue + ' ₽';
-        }
-
-        function getChatInfo(phone) {
-            const chat = S.chats.find(c => c.phone === phone);
-            if (!chat || !chat.lastMessage || chat.lastMessage.from !== 'client') return null;
-            return { text: chat.lastMessage.text, unread: chat.unread || 0 };
-        }
-
-        function renderOrders() {
-            const orders = S.orders;
-            const list = $('ordersList');
-            if (!orders.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Заказов нет</div>'; return; }
-            
-            const sortedOrders = [...orders].sort((a, b) => {
-                const statusOrder = { 'ожидает': 0, 'выполнен': 1, 'отменен': 2, 'отменен (таймаут)': 2 };
-                const aOrder = statusOrder[a.status] ?? 1;
-                const bOrder = statusOrder[b.status] ?? 1;
-                if (aOrder !== bOrder) return aOrder - bOrder;
-                return new Date(b.createdAt) - new Date(a.createdAt);
-            });
-
-            list.innerHTML = sortedOrders.map(order => {
-                const itemsHtml = order.items?.map(i => `${i.name} ×${i.quantity} — ${(i.price||0)*(i.quantity||1)}₽`).join('<br>') || '';
-                
-                let borderClass = '';
-                let statusLabel = order.status || 'ожидает';
-                let dotColor = 'gray';
-                let isNew = false;
-                
-                if (order.status === 'ожидает') {
-                    borderClass = 'status-waiting';
-                    dotColor = 'red';
-                    const orderAge = (Date.now() - new Date(order.createdAt)) / 1000 / 60;
-                    if (orderAge < 15) {
-                        isNew = true;
-                    }
-                } else if (order.status === 'выполнен') {
-                    borderClass = 'status-done';
-                    dotColor = 'green';
-                } else if (order.status?.includes('отменен')) {
-                    borderClass = 'status-cancelled';
-                    dotColor = 'gray';
-                }
-                
-                const acts = order.status === 'ожидает' ? 
-                    `<button class="btn btn-success btn-xs" onclick="confirmOrder(${order.id},'${order.confirmCode}')">✅ Подтвердить</button>
-                     <button class="btn btn-danger btn-xs" onclick="cancelOrder(${order.id})">❌ Отменить</button>` : '';
-                
-                const chatInfo = getChatInfo(order.customerPhone);
-                let chatPlate = '';
-                if (chatInfo && order.status === 'ожидает') {
-                    chatPlate = `
-                        <div class="chat-plate" onclick="openChat('${order.customerPhone}','${order.customerName||'Клиент'}')">
-                            <span class="msg-preview">💬 ${chatInfo.text}</span>
-                            ${chatInfo.unread > 0 ? `<span class="msg-badge">${chatInfo.unread}</span>` : ''}
-                        </div>`;
-                }
-                
-                const orderDate = new Date(order.createdAt);
-                const timeStr = orderDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                const dateStr = orderDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-                
-                let paymentLabel = order.paymentLabel || 'Наличными';
-                let paymentIcon = '💵';
-                let paymentClass = 'cash';
-                if (order.paymentMethod === 'transfer' || order.paymentLabel?.includes('Перевод')) {
-                    paymentIcon = '📱';
-                    paymentClass = 'transfer';
-                }
-
-                const hasLocation = order.lat && order.lng;
-                const locationBadge = hasLocation 
-                    ? `<span class="location-badge"><i class="fas fa-location-dot"></i> 📍 На карте</span>`
-                    : `<span class="location-badge no-location"><i class="fas fa-exclamation-triangle"></i> Без гео</span>`;
-
-                const clickHandler = hasLocation ? `onclick="openMapModal(${JSON.stringify(order).replace(/"/g, '&quot;')})"` : '';
-                
-                return `<div class="order-card ${borderClass}" ${clickHandler} style="${hasLocation ? '' : 'cursor:default;'}">
-                    <div class="top">
-                        <span class="oid">
-                            🏠 #${order.bungalow||'?'} — #${order.id}
-                            ${isNew ? `<span class="new-badge">🆕 Новый</span>` : ''}
-                            <span class="payment-badge ${paymentClass}">${paymentIcon} ${paymentLabel}</span>
-                            ${locationBadge}
-                            ${hasLocation ? `<span style="font-size:10px;color:#22C55E;font-weight:600;">👆 Нажмите на карту</span>` : ''}
-                        </span>
-                        <span class="status ${borderClass}">${statusLabel}</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">
-                        <div style="font-size:12px;color:var(--text-secondary);">
-                            👤 ${order.customerName||'-'} 📞 ${order.customerPhone||'-'} 
-                            ${order.confirmCode ? '🔑 <b>'+order.confirmCode+'</b>' : ''}
-                            ${hasLocation ? `📍 <span style="color:#1565C0;">${order.lat.toFixed(5)}, ${order.lng.toFixed(5)}</span>` : ''}
-                        </div>
-                        <div class="order-time">
-                            <span class="time-dot ${dotColor}"></span>
-                            ${dateStr} в ${timeStr}
-                            ${isNew ? ` <span style="color:#EF4444;font-weight:600;">⚡</span>` : ''}
-                        </div>
-                    </div>
-                    <div class="items">${itemsHtml}</div>
-                    <div class="bottom">
-                        <span class="total">💰 ${order.total||0} ₽</span>
-                        <div style="display:flex;gap:4px;flex-wrap:wrap;">${acts}</div>
-                    </div>
-                    ${chatPlate}
-                </div>`;
-            }).join('');
-        }
-
-        async function confirmOrder(id, code) { if(!confirm('Подтвердить выполнение заказа?'))return; await api('/confirm','POST',{orderId:id,code}); toast('✅ Заказ выполнен!'); loadOrders(); }
-        async function cancelOrder(id) { if(!confirm('Отменить заказ?'))return; await api('/cancel','POST',{orderId:id}); toast('❌ Заказ отменён'); loadOrders(); }
-        async function clearOrders() { if(!confirm('Удалить все заказы?'))return; await api('/clear-orders','POST'); toast('🗑️ Очищено'); loadOrders(); }
-
-        // ===== MENU =====
-        const CATALOG = [
-            { id:'1', name:'Классика', desc:'Клубника в молочном шоколаде', price:350, volume:'300 мл', emoji:'🍫', category:'strawberry', image:'images/klassika.jpg', badge:'🔥 Хит' },
-            { id:'2', name:'Клубника в сливках', desc:'Нежная клубника в бельгийских сливках', price:350, volume:'300 мл', emoji:'🤍', category:'strawberry', image:'images/klubnika-v-slivkah.jpg', badge:'⭐' },
-            { id:'9', name:'Клубника в сливках и шоколаде', desc:'Нежная клубника в сливках и шоколаде', price:350, volume:'300 мл', emoji:'❤️', category:'strawberry', image:'images/klubnika-v-slivkah-shokolad.jpg', badge:'🔥 Хит' },
-            { id:'4', name:'Микс клубника-банан', desc:'Клубника и банан', price:400, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/miks.jpg' },
-            { id:'5', name:'Банан в шоколаде', desc:'Спелый банан', price:320, volume:'300 мл', emoji:'🍌', category:'strawberry', image:'images/banan.jpg' },
-            { id:'16', name:'Клубника в стакане', desc:'Свежая клубника без шоколада', price:250, volume:'300 мл', emoji:'🍓', category:'strawberry', image:'images/klubnika-bez-shokolada.jpg' },
-            { id:'11', name:'Сладкий арбуз', desc:'Сочный арбуз', price:200, volume:'300 мл', emoji:'🍉', category:'fruits', image:'images/watermelon.jpg' },
-            { id:'12', name:'Дыня', desc:'Нежная дыня', price:200, volume:'300 мл', emoji:'🍈', category:'fruits', image:'images/melon.jpg' },
-            { id:'13', name:'Малина', desc:'Свежая малина', price:250, volume:'200 мл', emoji:'🍓', category:'fruits', image:'images/raspberry.jpg' },
-            { id:'14', name:'Ежевика', desc:'Сочная ежевика', price:200, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blackberry.jpg' },
-            { id:'15', name:'Голубика', desc:'Полезная голубика', price:250, volume:'200 мл', emoji:'🫐', category:'fruits', image:'images/blueberry.jpg' },
-            { id:'6', name:'Лимонад', desc:'Домашний лимонад', price:150, volume:'', emoji:'🍋', category:'drinks', image:'images/limonad.webp' },
-            { id:'7', name:'Кока-Кола', desc:'Охлажденная', price:120, volume:'', emoji:'🥤', category:'drinks', image:'images/kola.jpg' },
-            { id:'8', name:'Пиво', desc:'Охлажденное', price:200, volume:'', emoji:'🍺', category:'drinks', image:'images/pivo.webp' }
-        ];
-
-        async function loadMenu() {
+        // Загрузка статуса клада
+        async function loadTreasureStatus() {
             try {
-                const d = await api('/settings');
-                S.settings = d;
-                updateTechUI();
-                S.menu = CATALOG.map(item => ({ ...item, available: d.menuItems?.[item.id] !== false }));
-                if (d.customItems && Array.isArray(d.customItems)) {
-                    d.customItems.forEach(ci => {
-                        const idx = S.menu.findIndex(x => x.id === ci.id);
-                        if (idx >= 0) S.menu[idx] = { ...S.menu[idx], ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true };
-                        else S.menu.push({ ...ci, available: d.menuItems?.[ci.id] !== false, isCustom: true });
-                    });
-                }
-                renderMenu();
-            } catch(e) { $('menuList').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i>Ошибка</div>'; }
-        }
-
-        function renderMenu() {
-            const filter = $('menuFilter').value;
-            let items = S.menu;
-            if (filter !== 'all') items = items.filter(x => x.category === filter);
-            const list = $('menuList');
-            if (!items.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-utensils"></i>Нет позиций</div>'; return; }
-            list.innerHTML = items.map(x => `
-                <div class="menu-item">
-                    <img src="${x.image}" onerror="this.style.display='none'" loading="lazy" alt="${x.name}">
-                    <div class="info">
-                        <div class="name">${x.emoji||''} ${x.name} ${x.badge?`<span style="font-size:10px;background:#FCE4EC;color:#E91E63;padding:2px 8px;border-radius:10px;">${x.badge}</span>`:''}</div>
-                        <div class="desc">${x.desc} ${x.volume?'• '+x.volume:''}</div>
-                        <div class="price">
-                            ${x.price} ₽
-                            ${x.oldPrice ? `<span class="old-price">${x.oldPrice} ₽</span>` : ''}
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button class="btn-edit" onclick="editItem('${x.id}')"><i class="fas fa-pen"></i></button>
-                        <button class="${x.available?'btn-on':'btn-off'}" onclick="toggleItem('${x.id}')"><i class="fas ${x.available?'fa-eye':'fa-eye-slash'}"></i></button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function openItemModal(item = null) {
-            $('fId').value = item ? item.id : '';
-            $('fName').value = item ? item.name : '';
-            $('fDesc').value = item ? item.desc : '';
-            $('fPrice').value = item ? item.price : '';
-            $('fOldPrice').value = item && item.oldPrice ? item.oldPrice : '';
-            $('fVolume').value = item ? (item.volume || '') : '';
-            $('fCategory').value = item ? (item.category || 'strawberry') : 'strawberry';
-            $('fEmoji').value = item ? (item.emoji || '') : '';
-            $('fBadge').value = item ? (item.badge || '') : '';
-            $('fImageData').value = item ? (item.image || '') : '';
-            $('fDeleteBtn').style.display = item ? 'block' : 'none';
-            $('modalTitle').innerHTML = item ? '<i class="fas fa-pen"></i> Редактирование' : '<i class="fas fa-plus-circle"></i> Новая позиция';
-            const prev = $('fImagePreview');
-            if (item && item.image) { prev.src = item.image; prev.style.display = 'block'; }
-            else { prev.style.display = 'none'; }
-            $('itemModal').classList.add('open');
-        }
-
-        function editItem(id) { const item = S.menu.find(x => x.id === id); if (item) openItemModal(item); }
-        function closeItemModal() { $('itemModal').classList.remove('open'); }
-
-        function previewImage(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => { $('fImagePreview').src = ev.target.result; $('fImagePreview').style.display = 'block'; $('fImageData').value = ev.target.result; };
-            reader.readAsDataURL(file);
-        }
-
-        async function toggleItem(id) {
-            const cur = S.settings.menuItems?.[id] !== false;
-            const d = await api('/settings', 'POST', { menuItems: { [id]: !cur } });
-            if (d.success) { S.settings = d.settings; const mi = S.menu.find(x => x.id === id); if (mi) mi.available = !cur; renderMenu(); toast(cur ? '❌ Скрыто' : '✅ Показано'); }
-        }
-
-        async function saveItem() {
-            const id = $('fId').value, name = $('fName').value.trim(), price = parseInt($('fPrice').value);
-            if (!name || !price || isNaN(price)) { toast('❌ Заполните название и цену'); return; }
-            const oldPrice = $('fOldPrice').value.trim() ? parseInt($('fOldPrice').value.trim()) : null;
-            const item = { 
-                id: id || String(Date.now()), 
-                name, 
-                desc: $('fDesc').value.trim(), 
-                price, 
-                oldPrice: oldPrice,
-                volume: $('fVolume').value.trim(), 
-                category: $('fCategory').value, 
-                emoji: $('fEmoji').value.trim(), 
-                badge: $('fBadge').value.trim(), 
-                image: $('fImageData').value || 'images/placeholder.jpg', 
-                isCustom: true 
-            };
-            if (!S.settings.customItems) S.settings.customItems = [];
-            const idx = S.settings.customItems.findIndex(x => x.id === item.id);
-            if (idx >= 0) S.settings.customItems[idx] = item; else S.settings.customItems.push(item);
-            S.settings.menuItems = S.settings.menuItems || {};
-            S.settings.menuItems[item.id] = true;
-            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
-            if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('✅ Сохранено'); }
-            else toast('❌ Ошибка');
-        }
-
-        async function deleteItem() {
-            const id = $('fId').value;
-            if (!id || !confirm('Удалить позицию?')) return;
-            if (S.settings.customItems) S.settings.customItems = S.settings.customItems.filter(x => x.id !== id);
-            S.settings.menuItems = S.settings.menuItems || {};
-            S.settings.menuItems[id] = false;
-            const d = await api('/settings', 'POST', { customItems: S.settings.customItems, menuItems: S.settings.menuItems });
-            if (d.success) { S.settings = d.settings; closeItemModal(); await loadMenu(); toast('🗑️ Удалено'); }
-        }
-
-        // ===== CHATS WITH SWIPE =====
-        async function loadChats() {
-            const d = await api('/chats');
-            S.chats = d.chats || [];
-            S.totalUnread = S.chats.reduce((sum, c) => sum + (c.unread || 0), 0);
-            updateChatsBadge();
-            
-            const list = $('chatsList');
-            if (!S.chats.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-comment-dots"></i>Чатов нет</div>'; return; }
-            
-            list.innerHTML = S.chats.map(c => `
-                <div class="chat-item-wrapper">
-                    <button class="chat-delete-btn" onclick="deleteChat('${c.phone}')">
-                        <i class="fas fa-trash"></i> Удалить
-                    </button>
-                    <div class="chat-item" data-phone="${c.phone}" onclick="openChat('${c.phone}','${c.name||'Клиент'}')">
-                        <div class="cname">👤 ${c.name||'Клиент'} 📞 ${c.phone} ${c.unread?`<span style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${c.unread}</span>`:''}</div>
-                        <div class="cpreview">${c.lastMessage?.text||'Нет сообщений'}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            document.querySelectorAll('.chat-item-wrapper').forEach(wrapper => {
-                let startX = 0;
-                let currentX = 0;
-                let isDragging = false;
-                const item = wrapper.querySelector('.chat-item');
-
-                wrapper.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                    isDragging = true;
-                }, { passive: true });
-
-                wrapper.addEventListener('touchmove', (e) => {
-                    if (!isDragging) return;
-                    currentX = e.touches[0].clientX;
-                    const diff = startX - currentX;
-                    if (diff > 0 && diff < 100) {
-                        item.style.transform = `translateX(-${diff}px)`;
-                    } else if (diff >= 100) {
-                        item.style.transform = 'translateX(-80px)';
-                        item.classList.add('swiped');
-                    } else {
-                        item.style.transform = 'translateX(0)';
-                        item.classList.remove('swiped');
-                    }
-                }, { passive: true });
-
-                wrapper.addEventListener('touchend', () => {
-                    isDragging = false;
-                    if (!item.classList.contains('swiped')) {
-                        item.style.transform = 'translateX(0)';
-                    } else {
-                        item.style.transform = 'translateX(-80px)';
-                    }
-                }, { passive: true });
-
-                let mouseStartX = 0;
-                let isMouseDown = false;
-
-                wrapper.addEventListener('mousedown', (e) => {
-                    if (e.target.closest('.chat-delete-btn')) return;
-                    mouseStartX = e.clientX;
-                    isMouseDown = true;
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (!isMouseDown) return;
-                    const diff = mouseStartX - e.clientX;
-                    if (diff > 0 && diff < 100) {
-                        item.style.transform = `translateX(-${diff}px)`;
-                    } else if (diff >= 100) {
-                        item.style.transform = 'translateX(-80px)';
-                        item.classList.add('swiped');
-                    } else {
-                        item.style.transform = 'translateX(0)';
-                        item.classList.remove('swiped');
-                    }
-                });
-
-                document.addEventListener('mouseup', () => {
-                    isMouseDown = false;
-                    if (!item.classList.contains('swiped')) {
-                        item.style.transform = 'translateX(0)';
-                    }
-                });
-            });
-        }
-
-        async function deleteChat(phone) {
-            if (!confirm(`🗑️ Удалить чат с ${phone}?`)) return;
-            try {
-                const res = await fetch('/api/delete-chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone })
-                });
+                const res = await fetch('/api/treasure/status');
                 const data = await res.json();
-                if (data.success) {
-                    toast('🗑️ Чат удален');
-                    loadChats();
+
+                treasureActive = data.active;
+
+                const label = document.getElementById('treasureStatusLabel');
+                const card = document.getElementById('treasureStatusCard');
+                const coords = document.getElementById('treasureCoords');
+                const winner = document.getElementById('treasureWinner');
+                const users = document.getElementById('treasureUsersInZone');
+                const timeLabel = document.getElementById('treasureTimeLabel');
+                const winnerTime = document.getElementById('treasureWinnerTime');
+                const winnerTimeValue = document.getElementById('treasureWinnerTimeValue');
+                const activateBtn = document.getElementById('activateTreasureBtn');
+
+                if (data.active) {
+                    label.textContent = '🟢 АКТИВЕН!';
+                    label.className = 'status-label active';
+                    card.classList.add('active');
+                    coords.textContent = `${data.lat.toFixed(6)}, ${data.lng.toFixed(6)}`;
+                    winner.textContent = data.winnerName || '—';
+                    users.textContent = data.usersInZone?.length || 0;
+
+                    const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
+                    const mins = Math.floor(elapsed / 60);
+                    const secs = elapsed % 60;
+                    timeLabel.textContent = `⏱️ Активен ${mins}м ${secs}с`;
+
+                    if (data.winnerName) {
+                        winnerTime.style.display = 'block';
+                        winnerTimeValue.textContent = new Date().toLocaleTimeString();
+                    } else {
+                        winnerTime.style.display = 'none';
+                    }
+
+                    activateBtn.disabled = true;
+                    activateBtn.textContent = '🔴 Клад активен';
                 } else {
-                    toast('❌ Ошибка удаления');
-                }
-            } catch(e) {
-                toast('❌ Ошибка соединения');
-            }
-        }
+                    label.textContent = '🔴 Не активен';
+                    label.className = 'status-label inactive';
+                    card.classList.remove('active');
+                    coords.textContent = 'Координаты не заданы';
+                    winner.textContent = '—';
+                    users.textContent = '0';
+                    timeLabel.textContent = '—';
+                    winnerTime.style.display = 'none';
 
-        function updateChatsBadge() {
-            const badge = $('chatsBadge');
-            if (S.totalUnread > 0) { badge.textContent = S.totalUnread; badge.classList.add('show'); }
-            else badge.classList.remove('show');
-        }
-
-        async function openChat(phone, name) {
-            S.chatPhone = phone;
-            $('chatTitle').textContent = `💬 ${name} (${phone})`;
-            $('chatModal').classList.add('open');
-            loadMessages();
-            api('/chat-read', 'POST', { phone }).then(() => loadChats());
-        }
-
-        async function loadMessages() {
-            const d = await api('/chat-messages?phone=' + S.chatPhone);
-            const msgs = d.messages || [];
-            const c = $('chatMessages');
-            if (!msgs.length) { c.innerHTML = '<div class="empty-state">Начните диалог</div>'; return; }
-            c.innerHTML = msgs.map(m => `
-                <div style="margin-bottom:6px;display:flex;justify-content:${m.from==='client'?'flex-start':'flex-end'};">
-                    <div style="max-width:80%;padding:8px 12px;border-radius:${m.from==='client'?'var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px':'var(--radius-lg) var(--radius-lg) 4px var(--radius-lg)'};background:${m.from==='client'?'#F8FAFC':'linear-gradient(135deg,var(--primary),var(--primary-dark))'};color:${m.from==='client'?'var(--text-dark)':'#fff'};font-size:13px;">
-                        ${m.text}<span style="font-size:9px;display:block;margin-top:3px;opacity:0.6;">${new Date(m.time).toLocaleTimeString()}</span>
-                    </div>
-                </div>`).join('');
-            c.scrollTop = c.scrollHeight;
-        }
-
-        async function sendChat() {
-            const t = $('chatInput').value.trim();
-            if (!t || !S.chatPhone) return;
-            await api('/chat-send', 'POST', { phone: S.chatPhone, text: t, from: 'admin' });
-            $('chatInput').value = '';
-            loadMessages();
-            loadChats();
-        }
-
-        function closeChatModal() { $('chatModal').classList.remove('open'); S.chatPhone = null; }
-
-        // ===== REVIEWS =====
-        async function loadReviews() {
-            const d = await api('/reviews');
-            const revs = d.reviews || [];
-            const list = $('reviewsList');
-            if (!revs.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i>Отзывов нет</div>'; return; }
-            list.innerHTML = revs.map(r => `
-                <div class="review-card">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-weight:600;">${r.name||'Клиент'}</span>
-                        <span class="stars">${'⭐'.repeat(r.rating||5)}</span>
-                    </div>
-                    <div style="font-size:13px;color:var(--text-secondary);margin:4px 0;">${r.text||''}</div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-size:10px;color:var(--text-muted);">#${r.orderId} • ${new Date(r.createdAt).toLocaleString()}</span>
-                        <button class="btn btn-danger btn-xs" onclick="deleteReview(${r.id})">🗑️</button>
-                    </div>
-                </div>`).join('');
-        }
-
-        async function deleteReview(id) { if(!confirm('Удалить?'))return; await fetch('/api/review/'+id,{method:'DELETE'}); toast('🗑️ Удалён'); loadReviews(); }
-
-        // ================================================================
-        // ===== QR FULLSCREEN С АВТО-ВЫДАЧЕЙ =====
-        // ================================================================
-        function startQRScanner() {
-            // Если сканер уже запущен — останавливаем
-            if (html5QrCode) {
-                stopQRScanner();
-                // Даем время на освобождение
-                setTimeout(() => {
-                    startQRScannerInternal();
-                }, 500);
-                return;
-            }
-            startQRScannerInternal();
-        }
-
-        function startQRScannerInternal() {
-            if (isCameraStarting) return;
-            isCameraStarting = true;
-            
-            const fullscreen = document.getElementById('qrFullscreen');
-            fullscreen.classList.add('open');
-            document.body.style.overflow = 'hidden';
-            
-            const result = document.getElementById('qrResult');
-            result.className = 'qr-result';
-            result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Запуск камеры...';
-            
-            document.getElementById('qrActions').style.display = 'none';
-            scannedGiftId = null;
-
-            const overlay = document.getElementById('qrOverlay');
-            overlay.style.display = 'flex';
-            overlay.querySelector('.qr-hint').innerHTML = `
-                📱 Наведите камеру на QR-код
-                <small>Поверните телефон горизонтально для лучшего сканирования</small>
-            `;
-
-            // Проверяем, загружена ли библиотека
-            if (typeof Html5Qrcode === 'undefined') {
-                const script = document.createElement('script');
-                script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
-                script.onload = function() {
-                    initScannerFullscreen();
-                };
-                script.onerror = function() {
-                    result.className = 'qr-result error';
-                    result.innerHTML = '❌ Не удалось загрузить библиотеку сканера';
-                    isCameraStarting = false;
-                };
-                document.head.appendChild(script);
-            } else {
-                initScannerFullscreen();
-            }
-        }
-
-        function initScannerFullscreen() {
-            const readerElement = document.getElementById('qrReader');
-            
-            // Полностью очищаем reader
-            if (readerElement) {
-                const elements = readerElement.querySelectorAll('video, canvas, div:not(.qr-overlay)');
-                elements.forEach(el => el.remove());
-            }
-            
-            // Если есть старый экземпляр — уничтожаем
-            if (html5QrCode) {
-                try {
-                    html5QrCode.stop().then(() => {
-                        html5QrCode.clear();
-                    }).catch(() => {});
-                } catch(e) {}
-                html5QrCode = null;
-            }
-
-            // Создаем новый экземпляр
-            html5QrCode = new Html5Qrcode("qrReader");
-            
-            const config = {
-                fps: 20,
-                qrbox: { width: 300, height: 300 },
-                aspectRatio: 1.0
-            };
-
-            const result = document.getElementById('qrResult');
-            result.className = 'qr-result';
-            result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
-
-            const overlay = document.getElementById('qrOverlay');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 1500);
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                config,
-                onScanSuccessFullscreen,
-                onScanErrorFullscreen
-            ).then(() => {
-                isCameraStarting = false;
-            }).catch(function(err) {
-                result.className = 'qr-result error';
-                result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
-                overlay.style.display = 'flex';
-                overlay.querySelector('.qr-hint').innerHTML = `
-                    ❌ Ошибка доступа к камере<br>
-                    <small style="font-size:12px;opacity:0.5;">Разрешите доступ к камере в браузере</small>
-                `;
-                isCameraStarting = false;
-            });
-        }
-
-        function onScanSuccessFullscreen(decodedText, decodedResult) {
-            if (isScannerRunning) return;
-            isScannerRunning = true;
-            
-            console.log('✅ Распознан QR:', decodedText);
-            
-            let giftId = decodedText;
-            if (giftId.startsWith('gift-')) {
-                giftId = giftId.replace('gift-', '');
-            }
-            giftId = parseInt(giftId);
-            
-            if (isNaN(giftId)) {
-                const result = document.getElementById('qrResult');
-                result.className = 'qr-result error';
-                result.innerHTML = '❌ Неверный QR-код. Ожидается gift-123';
-                isScannerRunning = false;
-                return;
-            }
-
-            scannedGiftId = giftId;
-            
-            // Останавливаем камеру после сканирования
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(() => {});
-            }
-
-            autoClaimGiftFullscreen(giftId);
-        }
-
-        function onScanErrorFullscreen(err) {
-            // Игнорируем
-        }
-
-        async function autoClaimGiftFullscreen(giftId) {
-            const result = document.getElementById('qrResult');
-            result.className = 'qr-result';
-            result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Проверка подарка...';
-
-            try {
-                const checkRes = await fetch(`/api/gift/${giftId}`);
-                const checkData = await checkRes.json();
-
-                if (!checkData.success) {
-                    result.className = 'qr-result error';
-                    result.innerHTML = `❌ ${checkData.error || 'Подарок не найден'}`;
-                    isScannerRunning = false;
-                    return;
+                    if (treasureSelectedCoords) {
+                        activateBtn.disabled = false;
+                        activateBtn.textContent = '✅ Активировать клад';
+                    } else {
+                        activateBtn.disabled = true;
+                        activateBtn.textContent = '📍 Выберите место на карте';
+                    }
                 }
 
-                const gift = checkData.gift;
-
-                if (gift.claimed) {
-                    result.className = 'qr-result error';
-                    result.innerHTML = `
-                        <div class="found-gift">
-                            <div class="gift-id">🎁 Подарок #${gift.id}</div>
-                            <div class="gift-ip">📍 IP: ${gift.ip || 'неизвестен'}</div>
-                            <div style="color:#F87171;font-weight:700;font-size:16px;margin-top:4px;">
-                                ❌ УЖЕ ВЫДАН
-                            </div>
-                            <div style="font-size:12px;opacity:0.7;">
-                                Выдан: ${gift.claimed_at ? new Date(gift.claimed_at).toLocaleString('ru-RU') : 'неизвестно'}
-                            </div>
-                        </div>
-                    `;
-                    setTimeout(() => stopQRScanner(), 3000);
-                    isScannerRunning = false;
-                    return;
+                // Обновляем маркер на карте
+                if (data.active && data.lat && data.lng) {
+                    updateTreasureMarker(data.lat, data.lng);
+                } else if (treasureSelectedCoords) {
+                    updateTreasureMarker(treasureSelectedCoords.lat, treasureSelectedCoords.lng);
                 }
-
-                result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Выдача подарка...';
-
-                const claimRes = await fetch('/api/gift/claim', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ giftId })
-                });
-                const claimData = await claimRes.json();
-
-                if (claimData.success) {
-                    result.className = 'qr-result success';
-                    result.innerHTML = `
-                        <div class="found-gift">
-                            <div class="gift-id" style="color:#4ADE80;">🎁 Подарок #${gift.id} ВЫДАН! ✅</div>
-                            <div class="gift-ip">📍 IP: ${gift.ip || 'неизвестен'}</div>
-                            <div style="font-size:14px;color:#4ADE80;font-weight:600;margin-top:4px;">
-                                🎉 Поздравляем! Подарок получен!
-                            </div>
-                        </div>
-                    `;
-                    toast('✅ Подарок #' + giftId + ' успешно выдан!');
-                    setTimeout(() => stopQRScanner(), 2000);
-                    loadGifts();
-                } else {
-                    result.className = 'qr-result error';
-                    result.innerHTML = '❌ Ошибка выдачи: ' + (claimData.error || 'неизвестная');
-                }
-
-                isScannerRunning = false;
 
             } catch (e) {
-                result.className = 'qr-result error';
-                result.innerHTML = '❌ Ошибка соединения';
-                isScannerRunning = false;
+                console.error('Ошибка загрузки статуса клада:', e);
+                toast('❌ Ошибка загрузки статуса клада');
             }
         }
 
-        function stopQRScanner() {
-            if (html5QrCode) {
+        // Загрузка победителей
+        async function loadTreasureWinners() {
+            try {
+                const res = await fetch('/api/treasure/winners');
+                const data = await res.json();
+                const list = document.getElementById('treasureWinnersList');
+
+                if (!data.success || !data.winners || data.winners.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-state" style="padding:20px;">
+                            <i class="fas fa-trophy" style="font-size:32px;color:#FFD700;opacity:0.3;"></i>
+                            <span style="font-size:13px;">Победителей пока нет</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                list.innerHTML = data.winners.map(w => `
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #F1F5F9;">
+                        <div>
+                            <span style="font-weight:600;">🏆 ${w.name || 'Клиент'}</span>
+                            <span style="font-size:11px;color:var(--text-muted);margin-left:8px;">${w.phone || ''}</span>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:12px;font-weight:600;color:#FFD700;">${w.prize || 'МЕГА-СТАКАН'}</div>
+                            <div style="font-size:10px;color:var(--text-muted);">${new Date(w.claimed_at).toLocaleString('ru-RU')}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                console.error('Ошибка загрузки победителей:', e);
+            }
+        }
+
+        // Инициализация карты
+        function initTreasureMap() {
+            if (typeof ymaps === 'undefined') {
+                setTimeout(initTreasureMap, 1000);
+                return;
+            }
+
+            const container = document.getElementById('treasureMap');
+            const placeholder = document.getElementById('treasureMapPlaceholder');
+
+            ymaps.ready(() => {
                 try {
-                    html5QrCode.stop().then(() => {
-                        html5QrCode.clear();
-                    }).catch(() => {});
-                } catch(e) {}
-                html5QrCode = null;
-            }
-            
-            // Очищаем reader от видео
-            const reader = document.getElementById('qrReader');
-            if (reader) {
-                const videos = reader.querySelectorAll('video');
-                videos.forEach(v => v.remove());
-            }
-            
-            document.getElementById('qrFullscreen').classList.remove('open');
-            document.body.style.overflow = '';
-            scannedGiftId = null;
-            isScannerRunning = false;
-            isCameraStarting = false;
-            
-            const overlay = document.getElementById('qrOverlay');
-            if (overlay) {
-                overlay.style.display = 'flex';
-                overlay.querySelector('.qr-hint').innerHTML = `
-                    📱 Наведите камеру на QR-код
-                    <small>Поверните телефон горизонтально для лучшего сканирования</small>
-                `;
-            }
-        }
+                    treasureMap = new ymaps.Map('treasureMap', {
+                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                        zoom: 16,
+                        controls: ['zoomControl', 'typeSelector']
+                    });
 
-        // ===== РУЧНОЙ ВВОД КОДА =====
-        function manualClaimGift() {
-            const code = prompt('Введите код подарка (например: gift-123 или просто 123):');
-            if (!code) return;
-            
-            let giftId = code;
-            if (giftId.startsWith('gift-')) {
-                giftId = giftId.replace('gift-', '');
-            }
-            giftId = parseInt(giftId);
-            
-            if (isNaN(giftId)) {
-                toast('❌ Неверный формат кода');
-                return;
-            }
-            
-            // Открываем сканер с результатом
-            const fullscreen = document.getElementById('qrFullscreen');
-            fullscreen.classList.add('open');
-            document.body.style.overflow = 'hidden';
-            
-            const result = document.getElementById('qrResult');
-            result.className = 'qr-result';
-            result.innerHTML = `<i class="fas fa-keyboard"></i> Код: <strong>gift-${giftId}</strong>`;
-            
-            autoClaimGiftFullscreen(giftId);
-        }
+                    // Убираем placeholder
+                    if (placeholder) placeholder.style.display = 'none';
 
-        // ================================================================
-        // ===== API: ПОДАРКИ =====
-        // ================================================================
+                    // Клик по карте для выбора места
+                    treasureMap.events.add('click', (e) => {
+                        const coords = e.get('coords');
+                        treasureSelectedCoords = { lat: coords[0], lng: coords[1] };
+                        updateTreasureMarker(coords[0], coords[1]);
+                        document.getElementById('activateTreasureBtn').disabled = false;
+                        document.getElementById('activateTreasureBtn').textContent = '✅ Активировать клад';
+                        toast(`📍 Место выбрано: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`);
+                    });
 
-        async function loadGifts() {
-            try {
-                const stats = await api('/gifts/stats');
-                S.giftStats = stats;
-                $('giftTotal').textContent = stats.total || 0;
-                $('giftPending').textContent = stats.pending || 0;
-                $('giftClaimed').textContent = stats.claimed || 0;
+                    // Проверяем, есть ли активный клад
+                    loadTreasureStatus();
 
-                const data = await api('/gifts');
-                S.gifts = data.gifts || [];
-                renderGifts();
-                updateGiftsBadge();
-            } catch(e) {
-                console.error('Ошибка загрузки подарков:', e);
-            }
-        }
+                    // Автообновление статуса каждые 5 секунд
+                    if (treasureStatusInterval) clearInterval(treasureStatusInterval);
+                    treasureStatusInterval = setInterval(() => {
+                        loadTreasureStatus();
+                    }, 5000);
 
-        function renderGifts() {
-            const list = $('giftsList');
-            const gifts = S.gifts;
-            if (!gifts.length) {
-                list.innerHTML = '<div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div>';
-                return;
-            }
-
-            list.innerHTML = gifts.map(g => `
-                <div class="gift-card ${g.claimed ? 'claimed' : 'pending'}">
-                    <div class="gift-header">
-                        <span class="gift-id">🎫 #${g.id}</span>
-                        <span class="gift-status-badge ${g.claimed ? 'claimed' : 'pending'}">
-                            ${g.claimed ? '✅ Выдан' : '🕒 Ожидает'}
-                        </span>
-                    </div>
-                    <div class="gift-details">
-                        <span>📡 IP: ${g.ip || 'неизвестен'}</span>
-                        ${g.bungalow ? `<span>🏠 Бунгало #${g.bungalow}</span>` : ''}
-                        <span>📅 ${new Date(g.created_at).toLocaleString('ru-RU')}</span>
-                        ${g.claimed_at ? `<span>🎁 Выдан: ${new Date(g.claimed_at).toLocaleString('ru-RU')}</span>` : ''}
-                    </div>
-                    <div class="gift-actions">
-                        ${!g.claimed ? `
-                            <button class="btn btn-success btn-xs" onclick="claimGift(${g.id})">
-                                <i class="fas fa-check"></i> Выдать
+                } catch (e) {
+                    console.error('Ошибка инициализации карты:', e);
+                    if (placeholder) {
+                        placeholder.innerHTML = `
+                            <i class="fas fa-exclamation-triangle" style="color:#F59E0B;"></i>
+                            <span>Ошибка загрузки карты</span>
+                            <span style="font-size:11px;color:#9CA3AF;">Проверьте ключ API Яндекс.Карт</span>
+                            <button class="btn btn-primary btn-sm" onclick="initTreasureMap()" style="margin-top:8px;">
+                                <i class="fas fa-sync-alt"></i> Повторить
                             </button>
-                        ` : ''}
-                        <button class="gift-qr-btn" onclick="showGiftQR(${g.id})" title="Показать QR-код">
-                            <i class="fas fa-qrcode"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+                        `;
+                        placeholder.style.display = 'flex';
+                    }
+                }
+            });
         }
 
-        function updateGiftsBadge() {
-            const badge = $('giftsBadge');
-            const pending = S.giftStats.pending || 0;
-            if (pending > 0) {
-                badge.textContent = pending;
-                badge.classList.add('show');
-            } else {
-                badge.classList.remove('show');
+        // Обновление маркера на карте
+        function updateTreasureMarker(lat, lng) {
+            if (!treasureMap) return;
+
+            // Удаляем старые объекты
+            if (treasurePlacemark) {
+                treasureMap.geoObjects.remove(treasurePlacemark);
+                treasurePlacemark = null;
             }
+            if (treasureCircle) {
+                treasureMap.geoObjects.remove(treasureCircle);
+                treasureCircle = null;
+            }
+
+            // Создаём маркер
+            treasurePlacemark = new ymaps.Placemark([lat, lng], {
+                balloonContent: '🎯 <strong>КЛАД</strong><br>Радиус 15 метров'
+            }, {
+                preset: 'islands#redStretchyIcon',
+                draggable: true
+            });
+
+            // Создаём круг зоны
+            treasureCircle = new ymaps.Circle(
+                [[lat, lng], 15],
+                {
+                    balloonContent: 'Зона поиска клада (15 метров)',
+                },
+                {
+                    fillColor: "rgba(255, 71, 87, 0.15)",
+                    strokeColor: "#FF4757",
+                    strokeWidth: 2,
+                    strokeOpacity: 0.8
+                }
+            );
+
+            treasureMap.geoObjects.add(treasurePlacemark);
+            treasureMap.geoObjects.add(treasureCircle);
+
+            // Центрируем карту на маркере
+            treasureMap.setCenter([lat, lng], 17);
+
+            // Обновляем координаты в статусе
+            document.getElementById('treasureCoords').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
         }
 
-        async function claimGift(giftId) {
-            if (!confirm(`Выдать подарок #${giftId}?`)) return;
+        // Очистка маркера
+        function clearTreasureMarker() {
+            if (treasurePlacemark) {
+                treasureMap.geoObjects.remove(treasurePlacemark);
+                treasurePlacemark = null;
+            }
+            if (treasureCircle) {
+                treasureMap.geoObjects.remove(treasureCircle);
+                treasureCircle = null;
+            }
+            treasureSelectedCoords = null;
+            document.getElementById('activateTreasureBtn').disabled = true;
+            document.getElementById('activateTreasureBtn').textContent = '📍 Выберите место на карте';
+            document.getElementById('treasureCoords').textContent = 'Координаты не заданы';
+            toast('🗑️ Метка очищена');
+        }
+
+        // Активация клада
+        async function activateTreasure() {
+            if (!treasureSelectedCoords) {
+                toast('❌ Сначала выберите место на карте');
+                return;
+            }
+
+            const btn = document.getElementById('activateTreasureBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Активация...';
+
             try {
-                const res = await fetch('/api/gift/claim', {
+                const res = await fetch('/api/treasure/activate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ giftId })
+                    body: JSON.stringify({
+                        lat: treasureSelectedCoords.lat,
+                        lng: treasureSelectedCoords.lng,
+                        radius: 15
+                    })
                 });
                 const data = await res.json();
+
                 if (data.success) {
-                    toast('✅ Подарок выдан!');
-                    loadGifts();
+                    toast('🎯 Клад активирован!');
+                    loadTreasureStatus();
                 } else {
-                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+                    toast('❌ ' + (data.message || 'Ошибка активации'));
+                    btn.disabled = false;
+                    btn.innerHTML = '✅ Активировать клад';
                 }
-            } catch(e) {
+            } catch (e) {
                 toast('❌ Ошибка соединения');
+                btn.disabled = false;
+                btn.innerHTML = '✅ Активировать клад';
             }
         }
 
-        function showGiftQR(giftId) {
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=gift-${giftId}&color=FF4757&bgcolor=FFFFFF`;
-            window.open(qrUrl, '_blank');
-        }
+        // Деактивация клада
+        async function deactivateTreasure() {
+            if (!confirm('Деактивировать текущий клад?')) return;
 
-        // ===== КНОПКИ СБРОСА =====
-        async function resetAllGifts() {
-            if (!confirm('⚠️ УДАЛИТЬ ВСЕ ЗАПИСИ О ПОДАРКАХ?\nЭто позволит всем пользователям получить подарок заново!')) return;
-            if (!confirm('❗ ТОЧНО? Это действие НЕЛЬЗЯ ОТМЕНИТЬ!')) return;
-            
             try {
-                const res = await fetch('/api/gift/reset-all', {
+                const res = await fetch('/api/treasure/deactivate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await res.json();
+
                 if (data.success) {
-                    toast('🗑️ Все IP сброшены!');
-                    loadGifts();
+                    toast('⏹️ Клад деактивирован');
+                    loadTreasureStatus();
+                    loadTreasureWinners();
                 } else {
-                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
+                    toast('❌ ' + (data.message || 'Ошибка'));
                 }
-            } catch(e) {
+            } catch (e) {
                 toast('❌ Ошибка соединения');
             }
         }
 
-        async function resetMyGift() {
-            if (!confirm('Сбросить ваш IP для тестирования?')) return;
+        // Очистка истории победителей
+        async function clearTreasureWinners() {
+            if (!confirm('🗑️ Удалить всю историю победителей?')) return;
+            if (!confirm('❗ ТОЧНО? Это действие НЕЛЬЗЯ ОТМЕНИТЬ!')) return;
+
+            try {
+                const res = await fetch('/api/treasure/winners', {
+                    method: 'DELETE'
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    toast('🗑️ История очищена');
+                    loadTreasureWinners();
+                } else {
+                    toast('❌ Ошибка');
+                }
+            } catch (e) {
+                toast('❌ Ошибка соединения');
+            }
+        }
+
+        // ================================================================
+        // ===== IP =====
+        // ================================================================
+        async function loadAdminIp() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
-                const myIp = data.ip;
-                
-                const resetRes = await fetch('/api/gift/reset-ip', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ip: myIp })
-                });
-                const resetData = await resetRes.json();
-                if (resetData.success) {
-                    toast(`✅ Ваш IP (${myIp}) сброшен!`);
-                    loadGifts();
-                } else {
-                    toast('❌ Ошибка: ' + (resetData.error || 'неизвестная'));
-                }
-            } catch(e) {
-                toast('❌ Ошибка соединения');
+                document.getElementById('adminIpDisplay').textContent = data.ip;
+            } catch (e) {
+                document.getElementById('adminIpDisplay').textContent = 'не определен';
             }
         }
 
-        async function manualGift() {
-            const ip = prompt('Введите IP-адрес для выдачи подарка:');
-            if (!ip) return;
-            
-            try {
-                const res = await fetch('/api/gift/manual', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ip, bungalow: null })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    toast(`✅ Подарок для IP ${ip} создан!`);
-                    loadGifts();
-                } else {
-                    toast('❌ Ошибка: ' + (data.error || 'неизвестная'));
-                }
-            } catch(e) {
-                toast('❌ Ошибка соединения');
-            }
+        function copyAdminIp() {
+            const ip = document.getElementById('adminIpDisplay').textContent;
+            navigator.clipboard.writeText(ip).then(() => {
+                toast('✅ IP скопирован!');
+            }).catch(() => {
+                toast('❌ Не удалось скопировать');
+            });
         }
 
-        // ===== MODALS =====
-        $('itemModal').addEventListener('click', function(e) { if(e.target===this) closeItemModal(); });
-        $('chatModal').addEventListener('click', function(e) { if(e.target===this) closeChatModal(); });
-
-        // ===== AUTO REFRESH =====
-        let lastCount = 0;
+        // ================================================================
+        // ===== INIT =====
+        // ================================================================
         let autoRefreshInterval;
+        let lastCount = 0;
 
         function startAutoRefresh() {
             if (autoRefreshInterval) clearInterval(autoRefreshInterval);
@@ -2079,14 +2144,20 @@
                     const o = await api('/orders');
                     if (o.length > lastCount && lastCount > 0) toast('📦 Новый заказ!');
                     lastCount = o.length;
-                    if (S.tab === 'orders') { S.orders = o; updateStats(o); renderOrders(); }
-                    if (S.tab === 'chats') loadChats();
-                    if (S.tab === 'gifts') loadGifts();
-                } catch(e) {}
+                    if (document.getElementById('panel-orders').classList.contains('active')) {
+                        S.orders = o;
+                        updateStats(o);
+                        renderOrders();
+                    }
+                    if (document.getElementById('panel-chats').classList.contains('active')) loadChats();
+                    if (document.getElementById('panel-gifts').classList.contains('active')) loadGifts();
+                    if (document.getElementById('panel-treasure').classList.contains('active')) {
+                        loadTreasureStatus();
+                    }
+                } catch (e) {}
             }, 10000);
         }
 
-        // ===== INIT =====
         async function initAdmin() {
             await loadMenu();
             await loadOrders();
@@ -2095,10 +2166,16 @@
             await loadAdminIp();
             lastCount = S.orders.length;
             startAutoRefresh();
+
+            // Инициализируем карту, если вкладка "Клад" активна
+            if (document.getElementById('panel-treasure').classList.contains('active')) {
+                setTimeout(initTreasureMap, 1000);
+            }
+
             console.log('🍓 Админка готова');
             console.log('📍 Нажмите на заказ с меткой "На карте" для просмотра местоположения');
-            console.log('🎁 Вкладка "Подарки" — сканируйте QR-коды для автоматической выдачи');
-            console.log('📋 Ваш IP отображается в панели подарков');
+            console.log('🎁 Вкладка "Подарки" — сканируйте QR-коды для выдачи подарков');
+            console.log('🎯 Вкладка "Клад" — управление GPS-охотой за сокровищами');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -2107,6 +2184,14 @@
                 document.getElementById('loginScreen').style.display = 'flex';
                 document.getElementById('adminPanel').style.display = 'none';
             }
+        });
+
+        // Закрытие модалок по клику вне
+        document.getElementById('itemModal').addEventListener('click', function(e) {
+            if (e.target === this) closeItemModal();
+        });
+        document.getElementById('chatModal').addEventListener('click', function(e) {
+            if (e.target === this) closeChatModal();
         });
     </script>
 
