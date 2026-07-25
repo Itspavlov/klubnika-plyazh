@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
+const http = require('http');
+const socketIo = require('socket.io');
+
+// ===== ПОДКЛЮЧАЕМ МЕХАНИКУ КЛАДА =====
+const treasure = require('./server/treasure');
 
 const app = express();
 app.use(cors());
@@ -61,6 +66,16 @@ async function initDB() {
                 claimed BOOLEAN DEFAULT false,
                 claimed_at TIMESTAMPTZ,
                 created_at TIMESTAMPTZ DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS treasure (
+                id SERIAL PRIMARY KEY,
+                user_id TEXT,
+                name TEXT,
+                phone TEXT,
+                lat FLOAT,
+                lng FLOAT,
+                prize TEXT DEFAULT 'МЕГА-СТАКАН клубники в шоколаде',
+                claimed_at TIMESTAMPTZ DEFAULT NOW()
             );
         `);
         console.log('📦 Таблицы созданы');
@@ -569,9 +584,42 @@ app.delete('/api/review/:id', async (req, res) => {
 // ===== IP ДЛЯ КЛИЕНТА (FALLBACK) =====
 app.get('/api/my-ip', (req, res) => {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    // Если ip содержит запятые (прокси), берем первый
     const cleanIp = ip ? ip.split(',')[0].trim() : 'unknown';
     res.json({ ip: cleanIp });
+});
+
+// ================================================================
+// ===== API: КЛАД (GPS-ОХОТА) =====
+// ================================================================
+
+app.post('/api/treasure/activate', (req, res) => {
+    const { lat, lng, radius } = req.body;
+    if (!lat || !lng) {
+        return res.status(400).json({ success: false, error: '❌ Нужны координаты' });
+    }
+    const result = treasure.activateTreasure(lat, lng, radius || 15);
+    res.json(result);
+});
+
+app.post('/api/treasure/deactivate', (req, res) => {
+    const result = treasure.deactivateTreasure();
+    res.json(result);
+});
+
+app.get('/api/treasure/status', (req, res) => {
+    const status = treasure.getTreasureStatus();
+    res.json(status);
+});
+
+app.get('/api/treasure/winners', async (req, res) => {
+    const limit = parseInt(req.query.limit) || 20;
+    const winners = await treasure.getWinnersHistory(limit);
+    res.json({ success: true, winners });
+});
+
+app.delete('/api/treasure/winners', async (req, res) => {
+    const result = await treasure.clearWinnersHistory();
+    res.json(result);
 });
 
 // ===== QR-КОД =====
@@ -601,18 +649,73 @@ setInterval(async () => {
     await pool.query('DELETE FROM sessions WHERE expires_at < $1', [Date.now()]).catch(() => {});
 }, 30000);
 
+// ================================================================
+// ===== ЗАПУСК СЕРВЕРА С WEBSOCKET =====
+// ================================================================
+
+const server = http.createServer(app);
+const io = socketIo(server, {
+    cors: { origin: '*' }
+});
+
+// ===== WEBSOCKET: GPS-ТРЕКИНГ =====
+io.on('connection', (socket) => {
+    console.log('📡 Новый пользователь подключён:', socket.id);
+
+    socket.on('user-location', async (data) => {
+        const { userId, lat, lng, name, phone } = data;
+        if (!userId || !lat || !lng) return;
+
+        const result = treasure.updateUserLocation(userId, lat, lng, socket.id, name, phone);
+
+        if (result.winner) {
+            const winnerResult = await treasure.declareWinner(userId, io);
+            if (winnerResult.success) {
+                socket.emit('you-won', {
+                    message: '🎉🏆 ТЫ ПОБЕДИЛ!',
+                    prize: 'МЕГА-СТАКАН клубники в шоколаде',
+                    name: name || 'Клиент'
+                });
+                socket.broadcast.emit('treasure-claimed', {
+                    winner: name || 'Кто-то',
+                    message: '😢 Клад уже нашли! Попробуй завтра!'
+                });
+            }
+        } else {
+            const status = treasure.getTreasureStatus();
+            if (status.active) {
+                const distance = treasure.getDistance(lat, lng, status.lat, status.lng);
+                socket.emit('distance-update', {
+                    distance: Math.round(distance),
+                    inZone: distance <= status.radius
+                });
+            }
+        }
+    });
+
+    socket.on('disconnect', () => {
+        for (const [userId, user] of treasure.activeUsers) {
+            if (user.socketId === socket.id) {
+                treasure.activeUsers.delete(userId);
+                console.log(`🗑️ Пользователь ${userId} удалён из активных`);
+                break;
+            }
+        }
+    });
+});
+
 // ===== СТАРТ =====
 (async () => {
     await initDB();
     await loadSettings();
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, '0.0.0.0', () => {
+    server.listen(PORT, '0.0.0.0', () => {
         const endHour = WORK_HOURS.end > 24 ? WORK_HOURS.end - 24 : WORK_HOURS.end;
         console.log(`🍓 Сервер на порту ${PORT} | БД подключена | ${WORK_HOURS.start}:00-${endHour}:00`);
         console.log('📨 Авто-уведомления о задержке включены (15 минут)');
-        console.log('❌ Авто-отмена заказов ОТКЛЮЧЕНА — заказы остаются активными до ручного управления');
         console.log('📍 Геолокация клиентов сохраняется в заказах');
         console.log('🎁 Система подарков (gifts) активирована!');
+        console.log('🎯 Механика GPS-клада (treasure) активирована!');
         console.log('📷 QR-сканер подарков доступен в админке');
     });
 })();
