@@ -48,6 +48,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         .menu-container {
@@ -174,13 +175,6 @@
             border-color: var(--primary);
             background: #FFF5F5;
             box-shadow: 0 0 0 3px rgba(255,71,87,0.15);
-        }
-
-        .hero-btn .hero-label {
-            font-size: 8px;
-            display: block;
-            color: var(--text-muted);
-            margin-top: 2px;
         }
 
         /* ===== TREASURE TIMER ===== */
@@ -576,6 +570,141 @@
             }
         }
 
+        /* ================================================================
+           ===== ONBOARDING MODAL (ПРИ ВХОДЕ) =====
+           ================================================================ */
+        .onboarding-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            animation: fadeInOverlay 0.6s ease;
+        }
+
+        .onboarding-overlay.open {
+            display: flex;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .onboarding-modal {
+            background: linear-gradient(160deg, #FFFFFF 0%, #FFF5F5 100%);
+            border-radius: var(--radius-2xl);
+            max-width: 420px;
+            width: 100%;
+            max-height: 90vh;
+            padding: 28px 20px 24px;
+            position: relative;
+            animation: congratsPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-xl);
+            overflow-y: auto;
+            text-align: center;
+            border: 3px solid #FF4757;
+        }
+
+        .onboarding-modal .onboarding-icon {
+            font-size: 64px;
+            display: block;
+            animation: congratsFloat 3s ease-in-out infinite;
+        }
+
+        .onboarding-modal .onboarding-title {
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 4px 0 2px;
+        }
+
+        .onboarding-modal .onboarding-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 12px;
+            text-align: left;
+            background: #F8FAFC;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid #F1F5F9;
+        }
+
+        .onboarding-modal .onboarding-text strong {
+            color: var(--primary);
+        }
+
+        .onboarding-modal .onboarding-times {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .onboarding-modal .onboarding-times .time-box {
+            background: linear-gradient(135deg, #1A1A2E, #2D3436);
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            color: #fff;
+            text-align: center;
+        }
+
+        .onboarding-modal .onboarding-times .time-box .time {
+            font-size: 20px;
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        .onboarding-modal .onboarding-times .time-box .label {
+            font-size: 10px;
+            color: #9CA3AF;
+        }
+
+        .onboarding-modal .onboarding-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(255,71,87,0.3);
+            font-family: var(--font-family);
+        }
+
+        .onboarding-modal .onboarding-btn:active {
+            transform: scale(0.97);
+        }
+
+        .onboarding-modal .onboarding-gift-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 8px 0 12px;
+            padding: 8px;
+            background: #FFF8E1;
+            border-radius: var(--radius-md);
+            border: 1px solid #FFE0B2;
+        }
+
+        .onboarding-modal .onboarding-gift-hint strong {
+            color: var(--primary);
+        }
+
         /* ===== MODALS ===== */
         .congrats-overlay {
             display: none;
@@ -596,11 +725,6 @@
 
         .congrats-overlay.open {
             display: flex;
-        }
-
-        @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .congrats-modal {
@@ -1024,6 +1148,39 @@
 
     </div>
 
+    <!-- ================================================================
+         ===== ONBOARDING MODAL (ПРИ ВХОДЕ) =====
+         ================================================================ -->
+    <div class="onboarding-overlay" id="onboardingModal">
+        <div class="onboarding-modal">
+            <span class="onboarding-icon">🍓</span>
+            <div class="onboarding-title">Привет, мой друг!</div>
+            <div class="onboarding-text">
+                Ты попал в <strong>клубничные соревнования</strong>! 🎉<br><br>
+                Заглядывай к нам в <strong>15:00</strong> и <strong>19:00</strong> и участвуй в поиске клада.<br><br>
+                На карте будет отмечен <strong>круг</strong> — тебе надо быть самым быстрым и <strong>первым в него зайти</strong>!<br><br>
+                <strong>🏆 Первый, кто зайдёт — получит МЕГА-СТАКАН клубники в шоколаде БЕСПЛАТНО!</strong> 🍓
+            </div>
+            <div class="onboarding-times">
+                <div class="time-box">
+                    <div class="time">15:00</div>
+                    <div class="label">МСК</div>
+                </div>
+                <div class="time-box">
+                    <div class="time">19:00</div>
+                    <div class="label">МСК</div>
+                </div>
+            </div>
+            <div class="onboarding-gift-hint">
+                🎁 А пока для тебя <strong>подарок — мини-порция шоколадной клубнички!</strong><br>
+                Покажи <strong>QR-код</strong> кассиру в киоске 🍓
+            </div>
+            <button class="onboarding-btn" onclick="closeOnboarding()">
+                <i class="fas fa-gift"></i> Забрать подарок!
+            </button>
+        </div>
+    </div>
+
     <!-- ===== WINNER MODAL ===== -->
     <div class="winner-overlay" id="winnerModal">
         <div class="winner-modal">
@@ -1104,6 +1261,31 @@
         let socket = null;
         let selectedHero = localStorage.getItem('selectedHero') || '🍓';
         let isRouteBuilt = false;
+        let isUserInteracting = false;
+
+        // ================================================================
+        // ===== ONBOARDING (ПРИ ВХОДЕ) =====
+        // ================================================================
+        function showOnboarding() {
+            const hasSeen = localStorage.getItem('onboarding_seen');
+            if (hasSeen) return;
+
+            const modal = document.getElementById('onboardingModal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOnboarding() {
+            const modal = document.getElementById('onboardingModal');
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+            localStorage.setItem('onboarding_seen', 'true');
+
+            // После закрытия онбординга — показываем подарок
+            setTimeout(() => {
+                checkGift();
+            }, 500);
+        }
 
         // ================================================================
         // ===== ВЫБОР ГЕРОЯ =====
@@ -1114,7 +1296,6 @@
             document.querySelectorAll('.hero-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.hero === hero);
             });
-            // Обновляем маркер пользователя
             if (userLocation && mapInstance) {
                 updateUserMarker(userLocation.lat, userLocation.lng);
             }
@@ -1135,7 +1316,6 @@
                     return target;
                 }
             }
-            // Если все времена прошли — берём первое на завтра
             const target = new Date(mskTime);
             target.setDate(target.getDate() + 1);
             target.setHours(TREASURE_TIMES[0].hours, TREASURE_TIMES[0].minutes, 0, 0);
@@ -1155,24 +1335,17 @@
             const display = document.getElementById('treasureTimerDisplay');
             display.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-            // Показываем время ближайшего клада
             const timeLabel = document.getElementById('treasureTimeLabel');
             const nextHour = next.getHours();
             const nextMin = String(next.getMinutes()).padStart(2, '0');
             timeLabel.textContent = `${nextHour}:${nextMin} МСК`;
 
-            // Если до клада меньше часа — подсвечиваем
             if (diff < 3600 && diff > 0) {
                 display.style.color = '#FF6B00';
                 display.style.animation = 'pulseGold 1s ease-in-out infinite';
             } else {
                 display.style.color = '#4ADE80';
                 display.style.animation = 'none';
-            }
-
-            // Если клад уже должен был появиться, но не появился — проверяем
-            if (diff < 60 && !treasureActive) {
-                // Ждём активации от админа
             }
         }
 
@@ -1224,10 +1397,10 @@
                     treasureData = data;
                     updateTreasureUI();
                     if (mapInstance) {
-                        // АВТОМАТИЧЕСКИ ЦЕНТРИРУЕМ НА КЛАДЕ
-                        mapInstance.setCenter([data.lat, data.lng], 17);
+                        if (!isUserInteracting) {
+                            mapInstance.setCenter([data.lat, data.lng], 17);
+                        }
                         showTreasureMarker(data.lat, data.lng, data.radius || 15);
-                        // Обновляем подпись над картой
                         document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
                         document.getElementById('mapPulseDot').style.display = 'inline-block';
                     }
@@ -1313,6 +1486,17 @@
                         controls: ['zoomControl', 'typeSelector', 'geolocationControl']
                     });
 
+                    // ===== СЛУШАЕМ ДВИЖЕНИЕ КАРТЫ =====
+                    mapInstance.events.add('actionbegin', () => {
+                        isUserInteracting = true;
+                    });
+
+                    mapInstance.events.add('actionend', () => {
+                        setTimeout(() => {
+                            isUserInteracting = false;
+                        }, 3000);
+                    });
+
                     if (placeholder) placeholder.style.display = 'none';
 
                     // Киоск
@@ -1335,26 +1519,20 @@
                     });
                     selectedHero = savedHero;
 
-                    // Запрашиваем геолокацию
                     getMyLocation();
-
-                    // Проверяем статус клада
                     checkTreasureStatus();
 
-                    // Запускаем периодическую проверку
                     if (statusCheckInterval) clearInterval(statusCheckInterval);
                     statusCheckInterval = setInterval(() => {
                         checkTreasureStatus();
                         if (userLocation && treasureActive) {
                             sendUserLocation();
                         }
-                        // Проверяем расстояние до клада
                         if (userLocation && treasureActive && treasureData) {
                             checkDistanceToTreasure();
                         }
                     }, 3000);
 
-                    // Таймер до клада
                     updateTimer();
                     if (timerInterval) clearInterval(timerInterval);
                     timerInterval = setInterval(updateTimer, 1000);
@@ -1406,20 +1584,16 @@
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
                     updateUserMarker(userLocation.lat, userLocation.lng);
 
-                    // Если клад активен — центрируем на пользователе
-                    if (treasureActive && treasureData) {
+                    if (treasureActive && treasureData && !isUserInteracting) {
                         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
                     }
 
-                    // Отправляем координаты на сервер
                     sendUserLocation();
 
-                    // Проверяем расстояние до клада
                     if (treasureActive && treasureData) {
                         checkDistanceToTreasure();
                     }
 
-                    // Если есть маршрут — обновляем
                     if (isRouteBuilt) {
                         buildRouteToKiosk();
                     }
@@ -1452,7 +1626,6 @@
                 userPlacemark = null;
             }
 
-            // Используем выбранного героя
             const heroEmoji = selectedHero || '🍓';
 
             userPlacemark = new ymaps.Placemark(
@@ -1470,14 +1643,13 @@
 
             mapInstance.geoObjects.add(userPlacemark);
 
-            // Если клад активен — центрируем на пользователе
-            if (treasureActive) {
+            if (treasureActive && !isUserInteracting) {
                 mapInstance.setCenter([lat, lng], 17);
             }
         }
 
         // ================================================================
-        // ===== КЛАД НА КАРТЕ =====
+        // ===== КЛАД НА КАРТЕ (СУНДУК + КРУГ) =====
         // ================================================================
         function showTreasureMarker(lat, lng, radius = 15) {
             if (!mapInstance) return;
@@ -1491,15 +1663,17 @@
                 treasureCircle = null;
             }
 
-            // 🎯 Метка клада с пульсацией
+            // 🎁 СУНДУК вместо булавки!
             treasurePlacemark = new ymaps.Placemark(
                 [lat, lng],
                 {
-                    balloonContent: '🎯 <strong>КЛАД!</strong><br>Беги сюда!'
+                    balloonContent: '🎁 <strong>КЛАД!</strong><br>Беги сюда!'
                 },
                 {
-                    preset: 'islands#redStretchyIcon',
-                    iconContent: '🎯'
+                    iconLayout: 'default#image',
+                    iconImageHref: 'https://emojicdn.elk.sh/🎁',
+                    iconImageSize: [48, 48],
+                    iconImageOffset: [-24, -24]
                 }
             );
             mapInstance.geoObjects.add(treasurePlacemark);
@@ -1519,7 +1693,6 @@
             );
             mapInstance.geoObjects.add(treasureCircle);
 
-            // Обновляем UI
             updateTreasureUI();
         }
 
@@ -1558,7 +1731,6 @@
                 emoji = '🎯';
                 color = '#4ADE80';
                 distanceEl.textContent = '0 м';
-                // АВТОМАТИЧЕСКАЯ ПОБЕДА!
                 if (treasureActive) {
                     treasureActive = false;
                     treasureData = null;
@@ -1647,16 +1819,16 @@
                     if (!treasureActive) {
                         treasureActive = true;
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
-                        // АВТОМАТИЧЕСКИ ПОКАЗЫВАЕМ КЛАД
                         if (mapInstance) {
-                            mapInstance.setCenter([data.lat, data.lng], 17);
+                            if (!isUserInteracting) {
+                                mapInstance.setCenter([data.lat, data.lng], 17);
+                            }
                             showTreasureMarker(data.lat, data.lng, data.radius || 15);
                             document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
                             document.getElementById('mapPulseDot').style.display = 'inline-block';
                         }
                         showNotification('🎯 КЛАД ПОЯВИЛСЯ! Беги в отмеченный круг!');
                     } else {
-                        // Обновляем данные
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
                     }
                     updateTreasureUI();
@@ -1702,7 +1874,7 @@
         }
 
         // ================================================================
-        // ===== МАРШРУТ К КИОСКУ (АВТОМАТИЧЕСКИЙ ПЕШИЙ) =====
+        // ===== МАРШРУТ К КИОСКУ =====
         // ================================================================
         function routeToKiosk() {
             if (!userLocation) {
@@ -1714,19 +1886,27 @@
             btn.classList.add('loading');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Строим маршрут...';
 
-            // Показываем киоск на карте
             mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
 
-            // Открываем баллон киоска
             if (kioskPlacemark) {
                 kioskPlacemark.balloon.open();
             }
 
-            // Строим маршрут через Яндекс.Карты (открываем в новой вкладке)
-            const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+            // Яндекс.Навигатор или Яндекс.Карты
+            const yandexNavUrl = `yandexnavi://build_route_on_map?lat_to=${MY_LOCATION.lat}&lon_to=${MY_LOCATION.lng}`;
+            const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+
+            // Сначала пробуем открыть в Яндекс.Навигаторе
+            try {
+                window.open(yandexNavUrl, '_blank');
+                setTimeout(() => {
+                    window.open(yandexMapsUrl, '_blank');
+                }, 1500);
+            } catch (e) {
+                window.open(yandexMapsUrl, '_blank');
+            }
 
             setTimeout(() => {
-                window.open(url, '_blank');
                 btn.classList.remove('loading');
                 btn.innerHTML = '<i class="fas fa-route"></i> Киоск';
                 isRouteBuilt = true;
@@ -1740,8 +1920,6 @@
         function showKioskOnMap() {
             closeWinnerModal();
             if (!mapInstance) return;
-
-            // Центрируем на киоске, НЕ возвращаем к пользователю
             mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 17);
             if (kioskPlacemark) {
                 kioskPlacemark.balloon.open();
@@ -1777,10 +1955,8 @@
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
 
-            // Вибрация
             if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
 
-            // Звук (пытаемся)
             try {
                 const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
                 audio.play().catch(() => {});
@@ -1808,29 +1984,6 @@
             modal.classList.remove('open');
             document.body.style.overflow = '';
         }
-
-        // ================================================================
-        // ===== INIT =====
-        // ================================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            renderMenu();
-            connectSocket();
-
-            // Загружаем карту с задержкой
-            setTimeout(() => {
-                initMap();
-            }, 500);
-
-            // Проверяем подарок
-            setTimeout(() => {
-                checkGift();
-            }, 2000);
-
-            console.log('🍓 Квест-страница с GPS-кладом загружена!');
-            console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
-            console.log(`🆔 User ID: ${userId}`);
-            console.log(`🎮 Твой герой: ${selectedHero}`);
-        });
 
         // ================================================================
         // ===== СИСТЕМА ПОДАРКОВ (GIFTS) =====
@@ -1896,6 +2049,28 @@
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
+
+        // ================================================================
+        // ===== INIT =====
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMenu();
+            connectSocket();
+
+            setTimeout(() => {
+                initMap();
+            }, 500);
+
+            // Показываем онбординг при первом входе
+            setTimeout(() => {
+                showOnboarding();
+            }, 800);
+
+            console.log('🍓 Квест-страница с GPS-кладом загружена!');
+            console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
+            console.log(`🆔 User ID: ${userId}`);
+            console.log(`🎮 Твой герой: ${selectedHero}`);
+        });
     </script>
 
 </body>
