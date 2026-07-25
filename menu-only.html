@@ -1160,6 +1160,7 @@
         </div>
     </div>
 
+    <!-- ===== WINNER MODAL (ОБНОВЛЁННЫЙ) ===== -->
     <div class="winner-overlay" id="winnerModal">
         <div class="winner-modal">
             <span class="winner-icon">🍓</span>
@@ -1171,8 +1172,8 @@
             <button class="winner-btn" onclick="routeToKiosk()">
                 <i class="fas fa-route"></i> Проложить маршрут
             </button>
-            <button class="winner-btn winner-btn-purple" onclick="showKioskOnMap()">
-                <i class="fas fa-location-arrow"></i> Показать киоск
+            <button class="winner-btn winner-btn-purple" onclick="routeToKiosk()">
+                <i class="fas fa-walking"></i> Пешком до киоска
             </button>
             <button class="winner-secondary-btn" onclick="closeWinnerModal()">
                 Хорошо, иду! 🏃‍♂️
@@ -1195,8 +1196,8 @@
                 Вас ждёт <strong>бесплатная мини-порция</strong><br>
                 клубники в шоколаде! 🍫
             </div>
-            <button class="congrats-btn-primary" onclick="openGiftMap()">
-                <i class="fas fa-location-arrow"></i> Показать киоск
+            <button class="congrats-btn-primary" onclick="routeToKiosk()">
+                <i class="fas fa-route"></i> Проложить маршрут
             </button>
             <button class="congrats-btn-secondary" onclick="closeGiftModal()">
                 Хорошо, спасибо!
@@ -1236,6 +1237,7 @@
         let selectedHero = localStorage.getItem('selectedHero') || '🍓';
         let isRouteBuilt = false;
         let isFirstLocation = true;
+        let isWinner = false;
 
         // ================================================================
         // ===== ONBOARDING =====
@@ -1365,12 +1367,17 @@
                 console.log('📡 WebSocket подключён');
 
                 socket.on('treasure-activated', (data) => {
+                    // Если уже есть победитель — игнорируем новый клад
+                    if (isWinner) {
+                        console.log('⏭️ Победитель уже есть, игнорируем новый клад');
+                        return;
+                    }
+
                     console.log('🎯 Клад активирован!', data);
                     treasureActive = true;
                     treasureData = data;
                     updateTreasureUI();
                     if (mapInstance) {
-                        // Центрируем на кладе при появлении
                         mapInstance.setCenter([data.lat, data.lng], 17);
                         showTreasureCircle(data.lat, data.lng, data.radius || 15);
                         document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
@@ -1384,13 +1391,7 @@
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
-                    if (treasureCircle) {
-                        if (treasureCircle._pulseInterval) {
-                            clearInterval(treasureCircle._pulseInterval);
-                        }
-                        mapInstance.geoObjects.remove(treasureCircle);
-                        treasureCircle = null;
-                    }
+                    removeTreasureCircle();
                     document.getElementById('mapLabelText').innerHTML = '📍 Клад уже нашли! Следующий в 15:00';
                     document.getElementById('mapPulseDot').style.display = 'none';
                     showNotification('😢 Клад уже нашли! Попробуй в 15:00!');
@@ -1401,29 +1402,18 @@
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
-                    if (treasureCircle) {
-                        if (treasureCircle._pulseInterval) {
-                            clearInterval(treasureCircle._pulseInterval);
-                        }
-                        mapInstance.geoObjects.remove(treasureCircle);
-                        treasureCircle = null;
-                    }
+                    removeTreasureCircle();
                     document.getElementById('mapLabelText').innerHTML = '📍 Клад отменён. Жди следующий!';
                     document.getElementById('mapPulseDot').style.display = 'none';
                 });
 
                 socket.on('you-won', (data) => {
                     console.log('🏆 ПОБЕДА!', data);
+                    isWinner = true;
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
-                    if (treasureCircle) {
-                        if (treasureCircle._pulseInterval) {
-                            clearInterval(treasureCircle._pulseInterval);
-                        }
-                        mapInstance.geoObjects.remove(treasureCircle);
-                        treasureCircle = null;
-                    }
+                    removeTreasureCircle();
                     document.getElementById('mapLabelText').innerHTML = '🎉 ТЫ ПОБЕДИЛ! Иди в киоск!';
                     document.getElementById('mapPulseDot').style.display = 'none';
                     showWinnerModal();
@@ -1432,6 +1422,19 @@
             } catch (e) {
                 console.error('❌ Ошибка WebSocket:', e);
                 setTimeout(connectSocket, 5000);
+            }
+        }
+
+        // ================================================================
+        // ===== УДАЛЕНИЕ КРУГА КЛАДА =====
+        // ================================================================
+        function removeTreasureCircle() {
+            if (treasureCircle) {
+                if (treasureCircle._pulseInterval) {
+                    clearInterval(treasureCircle._pulseInterval);
+                }
+                mapInstance.geoObjects.remove(treasureCircle);
+                treasureCircle = null;
             }
         }
 
@@ -1543,7 +1546,6 @@
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
                     updateUserMarker(userLocation.lat, userLocation.lng);
 
-                    // ✅ ЦЕНТРИРУЕМ ТОЛЬКО 1 РАЗ ПРИ ПЕРВОМ ОПРЕДЕЛЕНИИ
                     if (isFirstLocation && mapInstance) {
                         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
                         isFirstLocation = false;
@@ -1556,9 +1558,6 @@
                         checkDistanceToTreasure();
                     }
 
-                    if (isRouteBuilt) {
-                        buildRouteToKiosk();
-                    }
                 },
                 (error) => {
                     btn.classList.remove('loading');
@@ -1624,13 +1623,7 @@
         function showTreasureCircle(lat, lng, radius = 15) {
             if (!mapInstance) return;
 
-            if (treasureCircle) {
-                if (treasureCircle._pulseInterval) {
-                    clearInterval(treasureCircle._pulseInterval);
-                }
-                mapInstance.geoObjects.remove(treasureCircle);
-                treasureCircle = null;
-            }
+            removeTreasureCircle();
 
             // ⭕ ПУЛЬСИРУЮЩИЙ КРУГ
             treasureCircle = new ymaps.Circle(
@@ -1680,7 +1673,7 @@
         }
 
         function checkDistanceToTreasure() {
-            if (!userLocation || !treasureData) return;
+            if (!userLocation || !treasureData || isWinner) return;
 
             const distance = getDistance(
                 userLocation.lat, userLocation.lng,
@@ -1700,19 +1693,17 @@
                 emoji = '🎯';
                 color = '#4ADE80';
                 distanceEl.textContent = '0 м';
-                if (treasureActive) {
+                // ✅ ПОБЕДА! Останавливаем всё
+                if (treasureActive && !isWinner) {
+                    isWinner = true;
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
-                    if (treasureCircle) {
-                        if (treasureCircle._pulseInterval) {
-                            clearInterval(treasureCircle._pulseInterval);
-                        }
-                        mapInstance.geoObjects.remove(treasureCircle);
-                        treasureCircle = null;
-                    }
+                    removeTreasureCircle();
                     document.getElementById('mapLabelText').innerHTML = '🎉 ТЫ ПОБЕДИЛ! Иди в киоск!';
                     document.getElementById('mapPulseDot').style.display = 'none';
+                    // Отправляем на сервер
+                    sendWinToServer();
                     showWinnerModal();
                 }
             } else if (distance <= 30) {
@@ -1743,6 +1734,18 @@
         }
 
         // ================================================================
+        // ===== ОТПРАВКА ПОБЕДЫ НА СЕРВЕР =====
+        // ================================================================
+        function sendWinToServer() {
+            if (!socket) return;
+            socket.emit('treasure-win', {
+                userId: userId,
+                lat: userLocation.lat,
+                lng: userLocation.lng
+            });
+        }
+
+        // ================================================================
         // ===== ОБНОВЛЕНИЕ UI =====
         // ================================================================
         function updateTreasureUI() {
@@ -1763,13 +1766,13 @@
                 document.getElementById('mapPulseDot').style.display = 'inline-block';
             } else {
                 bar.classList.remove('active');
-                label.textContent = '🔴 Клад не активен';
-                label.className = 'status-label inactive';
-                statusText.textContent = 'Ожидайте активации клада администратором';
-                emoji.textContent = '⏳';
-                distance.textContent = '—';
+                label.textContent = isWinner ? '🏆 ПОБЕДА!' : '🔴 Клад не активен';
+                label.className = isWinner ? 'status-label active' : 'status-label inactive';
+                statusText.textContent = isWinner ? '🎉 Ты победил! Иди в киоск!' : 'Ожидайте активации клада администратором';
+                emoji.textContent = isWinner ? '🏆' : '⏳';
+                distance.textContent = isWinner ? '🏆' : '—';
                 if (!document.getElementById('winnerModal').classList.contains('open')) {
-                    document.getElementById('mapLabelText').innerHTML = '📍 Найди клад на карте!';
+                    document.getElementById('mapLabelText').innerHTML = isWinner ? '🎉 ТЫ ПОБЕДИЛ! Иди в киоск!' : '📍 Найди клад на карте!';
                     document.getElementById('mapPulseDot').style.display = 'none';
                 }
             }
@@ -1782,6 +1785,11 @@
             try {
                 const res = await fetch('/api/treasure/status');
                 const data = await res.json();
+
+                // Если уже есть победитель — игнорируем
+                if (isWinner) {
+                    return;
+                }
 
                 if (data.active) {
                     if (!treasureActive) {
@@ -1799,17 +1807,11 @@
                     }
                     updateTreasureUI();
                 } else {
-                    if (treasureActive) {
+                    if (treasureActive && !isWinner) {
                         treasureActive = false;
                         treasureData = null;
                         updateTreasureUI();
-                        if (treasureCircle) {
-                            if (treasureCircle._pulseInterval) {
-                                clearInterval(treasureCircle._pulseInterval);
-                            }
-                            mapInstance.geoObjects.remove(treasureCircle);
-                            treasureCircle = null;
-                        }
+                        removeTreasureCircle();
                         document.getElementById('mapLabelText').innerHTML = '📍 Найди клад на карте!';
                         document.getElementById('mapPulseDot').style.display = 'none';
                     }
@@ -1839,7 +1841,7 @@
         }
 
         // ================================================================
-        // ===== МАРШРУТ К КИОСКУ =====
+        // ===== МАРШРУТ К КИОСКУ (ПЕШИЙ, В ПРИЛОЖЕНИИ) =====
         // ================================================================
         function routeToKiosk() {
             if (!userLocation) {
@@ -1848,33 +1850,48 @@
             }
 
             const btn = document.getElementById('kioskBtn');
-            btn.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Строим маршрут...';
-
-            mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
-
-            if (kioskPlacemark) {
-                kioskPlacemark.balloon.open();
+            if (btn) {
+                btn.classList.add('loading');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Строим маршрут...';
             }
 
-            const yandexNavUrl = `yandexnavi://build_route_on_map?lat_to=${MY_LOCATION.lat}&lon_to=${MY_LOCATION.lng}`;
+            // Закрываем все модалки
+            closeWinnerModal();
+            closeGiftModal();
+
+            // Центрируем на киоске
+            if (mapInstance) {
+                mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
+                if (kioskPlacemark) {
+                    kioskPlacemark.balloon.open();
+                }
+            }
+
+            // Строим пеший маршрут через Яндекс.Карты (открывается в приложении)
             const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
 
+            // Открываем Яндекс.Карты в приложении (если установлено) или в браузере
             try {
-                window.open(yandexNavUrl, '_blank');
+                // Пробуем открыть в приложении Яндекс.Карты
+                const yandexAppUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
+                window.open(yandexAppUrl, '_blank');
+                // Если приложение не открылось, через 1.5 секунды открываем веб-версию
                 setTimeout(() => {
                     window.open(yandexMapsUrl, '_blank');
                 }, 1500);
             } catch (e) {
+                // Если приложение не установлено, открываем веб-версию
                 window.open(yandexMapsUrl, '_blank');
             }
 
             setTimeout(() => {
-                btn.classList.remove('loading');
-                btn.innerHTML = '<i class="fas fa-route"></i> Киоск';
-                isRouteBuilt = true;
-                showNotification('🚶 Маршрут к киоску построен!');
-            }, 500);
+                if (btn) {
+                    btn.classList.remove('loading');
+                    btn.innerHTML = '<i class="fas fa-route"></i> Киоск';
+                }
+            }, 1000);
+
+            showNotification('🚶 Маршрут к киоску построен!');
         }
 
         // ================================================================
@@ -1882,12 +1899,7 @@
         // ================================================================
         function showKioskOnMap() {
             closeWinnerModal();
-            if (!mapInstance) return;
-            mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 17);
-            if (kioskPlacemark) {
-                kioskPlacemark.balloon.open();
-            }
-            showNotification('📍 Киоск на карте!');
+            routeToKiosk();
         }
 
         // ================================================================
@@ -1930,13 +1942,11 @@
             const modal = document.getElementById('winnerModal');
             modal.classList.remove('open');
             document.body.style.overflow = '';
-            document.getElementById('mapLabelText').innerHTML = '📍 Найди клад на карте!';
-            document.getElementById('mapPulseDot').style.display = 'none';
         }
 
         function openGiftMap() {
             closeGiftModal();
-            showKioskOnMap();
+            routeToKiosk();
         }
 
         function closeGiftModal() {
