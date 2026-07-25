@@ -1102,7 +1102,7 @@
                     </div>
                 </div>
                 <div class="map-actions">
-                    <button class="map-btn location-btn" id="locationBtn" onclick="getMyLocation()">
+                    <button class="map-btn location-btn" id="locationBtn" onclick="centerOnUser()">
                         <i class="fas fa-location-dot"></i> Где я?
                     </button>
                     <button class="map-btn kiosk-btn" id="kioskBtn" onclick="routeToKiosk()">
@@ -1235,7 +1235,7 @@
         let socket = null;
         let selectedHero = localStorage.getItem('selectedHero') || '🍓';
         let isRouteBuilt = false;
-        let isUserInteracting = false;
+        let isFirstLocation = true;
 
         // ================================================================
         // ===== ONBOARDING =====
@@ -1370,10 +1370,8 @@
                     treasureData = data;
                     updateTreasureUI();
                     if (mapInstance) {
-                        // Центрируем на кладе ТОЛЬКО если пользователь не двигал карту
-                        if (!isUserInteracting) {
-                            mapInstance.setCenter([data.lat, data.lng], 17);
-                        }
+                        // Центрируем на кладе при появлении
+                        mapInstance.setCenter([data.lat, data.lng], 17);
                         showTreasureCircle(data.lat, data.lng, data.radius || 15);
                         document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
                         document.getElementById('mapPulseDot').style.display = 'inline-block';
@@ -1457,26 +1455,6 @@
                         controls: ['zoomControl', 'typeSelector', 'geolocationControl']
                     });
 
-                    // Слушаем взаимодействие с картой
-                    mapInstance.events.add('actionbegin', () => {
-                        isUserInteracting = true;
-                    });
-
-                    mapInstance.events.add('actionend', () => {
-                        setTimeout(() => {
-                            isUserInteracting = false;
-                        }, 5000);
-                    });
-
-                    // Слушаем изменение зума
-                    mapInstance.events.add('boundschange', () => {
-                        isUserInteracting = true;
-                        clearTimeout(mapInstance._zoomTimeout);
-                        mapInstance._zoomTimeout = setTimeout(() => {
-                            isUserInteracting = false;
-                        }, 5000);
-                    });
-
                     if (placeholder) placeholder.style.display = 'none';
 
                     // Киоск с подписью
@@ -1500,6 +1478,7 @@
                     selectedHero = savedHero;
 
                     getMyLocation();
+
                     checkTreasureStatus();
 
                     if (statusCheckInterval) clearInterval(statusCheckInterval);
@@ -1564,11 +1543,11 @@
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
                     updateUserMarker(userLocation.lat, userLocation.lng);
 
-                    // ✅ ЦЕНТРИРУЕМ НА ПОЛЬЗОВАТЕЛЕ ТОЛЬКО ПО КНОПКЕ!
-                    if (mapInstance) {
+                    // ✅ ЦЕНТРИРУЕМ ТОЛЬКО 1 РАЗ ПРИ ПЕРВОМ ОПРЕДЕЛЕНИИ
+                    if (isFirstLocation && mapInstance) {
                         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
-                        // Сбрасываем флаг, чтобы авто-центрирование не мешало
-                        isUserInteracting = false;
+                        isFirstLocation = false;
+                        console.log('📍 Первое центрирование на пользователе');
                     }
 
                     sendUserLocation();
@@ -1599,6 +1578,18 @@
         }
 
         // ================================================================
+        // ===== ЦЕНТРИРОВАНИЕ ПО КНОПКЕ "ГДЕ Я?" =====
+        // ================================================================
+        function centerOnUser() {
+            if (!userLocation || !mapInstance) {
+                showNotification('📍 Не могу определить ваше местоположение');
+                return;
+            }
+            mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+            showNotification('📍 Ты здесь!');
+        }
+
+        // ================================================================
         // ===== ПОЛЬЗОВАТЕЛЬ НА КАРТЕ =====
         // ================================================================
         function updateUserMarker(lat, lng) {
@@ -1625,8 +1616,6 @@
             );
 
             mapInstance.geoObjects.add(userPlacemark);
-
-            // ❌ НЕ ЦЕНТРИРУЕМ КАРТУ НА ПОЛЬЗОВАТЕЛЕ АВТОМАТИЧЕСКИ!
         }
 
         // ================================================================
@@ -1799,10 +1788,7 @@
                         treasureActive = true;
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
                         if (mapInstance) {
-                            // Центрируем на кладе ТОЛЬКО если пользователь не двигал карту
-                            if (!isUserInteracting) {
-                                mapInstance.setCenter([data.lat, data.lng], 17);
-                            }
+                            mapInstance.setCenter([data.lat, data.lng], 17);
                             showTreasureCircle(data.lat, data.lng, data.radius || 15);
                             document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
                             document.getElementById('mapPulseDot').style.display = 'inline-block';
