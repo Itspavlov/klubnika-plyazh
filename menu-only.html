@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <style>
         :root {
             --primary: #6C5CE7;
@@ -1119,7 +1120,16 @@
         // ================================================================
         function connectSocket() {
             try {
+                // Проверяем, определён ли io
+                if (typeof io === 'undefined') {
+                    console.warn('⚠️ Socket.IO не загружен, повторная попытка...');
+                    setTimeout(connectSocket, 2000);
+                    return;
+                }
+                
                 socket = io();
+                console.log('📡 WebSocket подключён');
+
                 socket.on('treasure-activated', (data) => {
                     if (isWinner) return;
                     treasureActive = true;
@@ -1132,6 +1142,7 @@
                     }
                     showNotification('🎯 КЛАД ПОЯВИЛСЯ! Нажми "Маршрут до клада"');
                 });
+                
                 socket.on('treasure-claimed', () => { resetTreasure(); });
                 socket.on('treasure-end', () => { resetTreasure(); });
                 socket.on('you-won', () => {
@@ -1139,6 +1150,7 @@
                     resetTreasure();
                     showWinnerModal();
                 });
+                
             } catch (e) {
                 console.error('WS error:', e);
                 setTimeout(connectSocket, 5000);
@@ -1158,7 +1170,13 @@
         // ===== MAP =====
         // ================================================================
         function initMap() {
-            if (typeof ymaps === 'undefined') { setTimeout(initMap, 1000); return; }
+            // Проверяем, загрузился ли ymaps
+            if (typeof ymaps === 'undefined') {
+                console.warn('⚠️ Яндекс.Карты не загружены, повторная попытка...');
+                setTimeout(initMap, 2000);
+                return;
+            }
+            
             ymaps.ready(() => {
                 try {
                     mapInstance = new ymaps.Map('treasureMap', {
@@ -1171,13 +1189,15 @@
                     $('mapPlaceholder').style.display = 'none';
 
                     kioskPlacemark = new ymaps.Placemark(
-                        [MY_LOCATION.lat, MY_LOCATION.lng], { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
+                        [MY_LOCATION.lat, MY_LOCATION.lng], 
+                        { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
                         { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
                     );
                     mapInstance.geoObjects.add(kioskPlacemark);
 
                     getMyLocation();
                     checkTreasureStatus();
+                    
                     if (statusCheckInterval) clearInterval(statusCheckInterval);
                     statusCheckInterval = setInterval(() => {
                         checkTreasureStatus();
@@ -1186,10 +1206,17 @@
                             checkDistanceToTreasure();
                         }
                     }, 3000);
+                    
                     updateTimer();
                     if (timerInterval) clearInterval(timerInterval);
                     timerInterval = setInterval(updateTimer, 1000);
-                } catch (e) { console.error('Map error:', e); }
+                    
+                    console.log('🗺️ Карта загружена!');
+                } catch (e) {
+                    console.error('Map error:', e);
+                    // Повторная попытка через 3 секунды
+                    setTimeout(initMap, 3000);
+                }
             });
         }
 
@@ -1614,9 +1641,10 @@
         // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
             renderMenu();
-            connectSocket();
-            setTimeout(initMap, 500);
-            setTimeout(showOnboarding, 800);
+            // Подключаем Socket.IO с проверкой
+            setTimeout(connectSocket, 500);
+            setTimeout(initMap, 800);
+            setTimeout(showOnboarding, 1000);
             console.log('🍓 AR-квест загружен!');
         });
     </script>
