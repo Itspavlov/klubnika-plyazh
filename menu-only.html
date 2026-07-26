@@ -141,6 +141,12 @@
             border-color: rgba(34,197,94,0.2);
             color: #4ADE80;
         }
+        .map-btn.clear-route-btn {
+            background: rgba(239,68,68,0.12);
+            border-color: rgba(239,68,68,0.2);
+            color: #EF4444;
+        }
+        .map-btn.clear-route-btn:active { transform: scale(0.97); }
 
         .route-info {
             display: none;
@@ -384,15 +390,6 @@
             from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-
-        /* Стили для кнопки сброса маршрута */
-        .clear-route-btn {
-            background: rgba(239,68,68,0.12);
-            border-color: rgba(239,68,68,0.2);
-            color: #EF4444;
-        }
-        .clear-route-btn:hover { background: rgba(239,68,68,0.2); }
-        .clear-route-btn:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
@@ -425,7 +422,7 @@
         <div class="route-info" id="routeInfo">
             <span class="stat"><i class="fas fa-walking"></i> <span class="value" id="routeDistance">0</span> км</span>
             <span class="stat"><i class="fas fa-clock"></i> <span class="value" id="routeTime">0</span> мин</span>
-            <span class="stat"><i class="fas fa-flag-checkered"></i> <span class="value" id="routeSteps">0</span> шагов</span>
+            <span class="stat"><i class="fas fa-shoe-prints"></i> <span class="value" id="routeSteps">0</span> шагов</span>
         </div>
     </div>
 
@@ -469,15 +466,13 @@
     // ================================================================
     // ===== КОНСТАНТЫ =====
     // ================================================================
-    const MY_LOCATION = { lat: 44.358193, lng: 38.528773 };
-    const MY_LOCATION_NAME = 'Strawberry in Chocolate 🍓';
+    const MY_LOCATION = { lat: 44.358182, lng: 38.528738 };
 
     let userLocation = null;
     let mapInstance = null;
     let userPlacemark = null;
     let kioskPlacemark = null;
-    let routeLine = null;
-    let routePolyline = null;
+    let routeObject = null;
     let watchId = null;
     let giftId = null;
     let mapReady = false;
@@ -639,12 +634,6 @@
                 });
                 mapReady = true;
 
-                mapInstance.events.add('load', function() {
-                    try {
-                        mapInstance.setType('satellite');
-                    } catch(e) {}
-                });
-
                 kioskPlacemark = new ymaps.Placemark(
                     [MY_LOCATION.lat, MY_LOCATION.lng],
                     { 
@@ -695,8 +684,7 @@
                 }
                 updateUserMarker(userLocation.lat, userLocation.lng);
                 
-                // Если маршрут уже построен — перестраиваем его
-                if (isRouteBuilt && routePolyline) {
+                if (isRouteBuilt && routeObject) {
                     buildWalkingRoute(userLocation.lat, userLocation.lng);
                 }
             },
@@ -734,7 +722,6 @@
             }
         );
         mapInstance.geoObjects.add(userPlacemark);
-        mapInstance.setCenter([lat, lng], 17);
     }
 
     function centerOnUser() {
@@ -743,25 +730,24 @@
             getMyLocation();
             return;
         }
-        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17, { duration: 300 });
         if (userPlacemark) userPlacemark.balloon.open();
         showNotification('📍 Ты здесь!');
     }
 
     // ================================================================
-    // ===== ПЕШЕХОДНЫЙ МАРШРУТ НА КАРТЕ =====
+    // ===== ПЕШЕХОДНЫЙ МАРШРУТ =====
     // ================================================================
 
     function routeToKiosk() {
         if (!userLocation) {
             showNotification('📍 Определяю местоположение...');
             getMyLocation();
-            // Пробуем построить маршрут через 3 секунды
             setTimeout(() => {
                 if (userLocation) {
                     buildWalkingRoute(userLocation.lat, userLocation.lng);
                 } else {
-                    showNotification('❌ Не удалось определить ваше местоположение');
+                    showNotification('❌ Не удалось определить местоположение');
                 }
             }, 3000);
             return;
@@ -775,14 +761,10 @@
             return;
         }
 
-        // Удаляем старый маршрут
         clearRouteObjects();
-
-        // Показываем загрузку
         showNotification('🚶 Строим пешеходный маршрут...');
 
         try {
-            // Создаём маршрут через API Яндекс.Карт — ПЕШЕХОДНЫЙ!
             const multiRoute = new ymaps.multiRouter.MultiRoute(
                 {
                     referencePoints: [
@@ -790,73 +772,50 @@
                         [MY_LOCATION.lat, MY_LOCATION.lng]
                     ],
                     params: {
-                        routingMode: 'pedestrian', // ПЕШЕХОДНЫЙ режим!
+                        routingMode: 'pedestrian',
                         results: 1
                     }
                 },
                 {
                     wayPointVisible: false,
                     routeStrokeColor: '#22C55E',
-                    routeStrokeWidth: 6,
+                    routeStrokeWidth: 5,
                     routeStrokeOpacity: 0.9,
                     pinVisible: false,
                     boundsAutoApply: true
                 }
             );
 
-            // Добавляем маршрут на карту
             mapInstance.geoObjects.add(multiRoute);
-            routePolyline = multiRoute;
-
-            // Показываем кнопку сброса
+            routeObject = multiRoute;
             $('clearRouteBtn').style.display = 'flex';
 
-            // Обработчик загрузки маршрута
             multiRoute.events.add('load', function() {
                 try {
                     const routes = multiRoute.getRoutes();
                     if (routes && routes.length > 0) {
                         const route = routes[0];
+                        const props = route.getProperties();
                         
-                        // Получаем расстояние и время
-                        const distance = route.getProperties().distance;
-                        const duration = route.getProperties().duration;
+                        let distance = props.distance || 0;
+                        let duration = props.duration || 0;
                         
-                        let distanceText = '';
-                        let durationText = '';
-                        let stepsText = '';
-                        
-                        if (distance) {
-                            const km = (distance / 1000).toFixed(1);
-                            distanceText = km;
-                            // Примерное количество шагов (1 шаг ≈ 0.75м)
-                            const steps = Math.round(distance / 0.75);
-                            stepsText = steps > 1000 ? (steps/1000).toFixed(1) + 'k' : steps;
-                        }
-                        
-                        if (duration) {
-                            const minutes = Math.round(duration / 60);
-                            if (minutes < 60) {
-                                durationText = minutes;
-                            } else {
-                                const hours = Math.floor(minutes / 60);
-                                const mins = minutes % 60;
-                                durationText = `${hours}ч ${mins}м`;
-                            }
-                        }
+                        let distanceKm = (distance / 1000).toFixed(1);
+                        let minutes = Math.round(duration / 60);
+                        let timeText = minutes < 60 ? minutes + ' мин' : Math.floor(minutes/60) + 'ч ' + (minutes%60) + 'м';
+                        let steps = Math.round(distance / 0.75);
+                        let stepsText = steps > 1000 ? (steps/1000).toFixed(1) + 'k' : steps;
                         
                         isRouteBuilt = true;
                         
-                        // Показываем информацию о маршруте
                         const routeInfo = $('routeInfo');
                         routeInfo.classList.add('show');
-                        $('routeDistance').textContent = distanceText;
-                        $('routeTime').textContent = durationText;
+                        $('routeDistance').textContent = distanceKm;
+                        $('routeTime').textContent = timeText;
                         $('routeSteps').textContent = stepsText;
                         
-                        showNotification(`🚶 ${distanceText} км • ${durationText} мин пешком`);
+                        showNotification(`🚶 ${distanceKm} км • ${timeText} пешком`);
                         
-                        // Автоматически центрируем карту на маршрут
                         if (route.getWayPoints && route.getWayPoints().getLength() > 0) {
                             const bounds = route.getWayPoints().getBounds();
                             if (bounds) {
@@ -868,38 +827,79 @@
                         }
                     } else {
                         showNotification('❌ Маршрут не найден');
-                        // Fallback — простая линия
                         drawSimpleRoute(fromLat, fromLng);
                     }
                 } catch (e) {
-                    console.error('Ошибка маршрута:', e);
+                    console.error('Route load error:', e);
                     drawSimpleRoute(fromLat, fromLng);
                 }
             });
 
-            // Обработчик ошибки
             multiRoute.events.add('error', function(err) {
-                console.error('Ошибка построения маршрута:', err);
-                showNotification('❌ Не удалось построить маршрут');
+                console.error('Route error:', err);
+                showNotification('❌ Ошибка построения маршрута');
                 drawSimpleRoute(fromLat, fromLng);
             });
 
         } catch (e) {
-            console.error('Ошибка создания маршрута:', e);
+            console.error('Route creation error:', e);
             showNotification('❌ Ошибка построения маршрута');
             drawSimpleRoute(fromLat, fromLng);
         }
     }
 
-    // ===== ОЧИСТКА ОБЪЕКТОВ МАРШРУТА =====
-    function clearRouteObjects() {
-        if (routePolyline) {
-            mapInstance.geoObjects.remove(routePolyline);
-            routePolyline = null;
+    function drawSimpleRoute(fromLat, fromLng) {
+        try {
+            clearRouteObjects();
+            
+            const line = new ymaps.Polyline(
+                [
+                    [fromLat, fromLng],
+                    [MY_LOCATION.lat, MY_LOCATION.lng]
+                ],
+                {
+                    balloonContent: '🚶 Прямая линия к киоску'
+                },
+                {
+                    strokeColor: '#22C55E',
+                    strokeWidth: 4,
+                    strokeOpacity: 0.9,
+                    strokeStyle: 'solid'
+                }
+            );
+            mapInstance.geoObjects.add(line);
+            routeObject = line;
+            $('clearRouteBtn').style.display = 'flex';
+            
+            const distance = getDistance(fromLat, fromLng, MY_LOCATION.lat, MY_LOCATION.lng);
+            const distanceKm = distance.toFixed(1);
+            const minutes = Math.round(distance * 15);
+            const timeText = minutes < 60 ? minutes + ' мин' : Math.floor(minutes/60) + 'ч ' + (minutes%60) + 'м';
+            const steps = Math.round(distance * 1333);
+            const stepsText = steps > 1000 ? (steps/1000).toFixed(1) + 'k' : steps;
+            
+            isRouteBuilt = true;
+            
+            const routeInfo = $('routeInfo');
+            routeInfo.classList.add('show');
+            $('routeDistance').textContent = distanceKm;
+            $('routeTime').textContent = timeText;
+            $('routeSteps').textContent = stepsText;
+            
+            const center = [(fromLat + MY_LOCATION.lat) / 2, (fromLng + MY_LOCATION.lng) / 2];
+            mapInstance.setCenter(center, 15, { duration: 300 });
+            
+            showNotification(`🚶 ${distanceKm} км • ${timeText} (прямая линия)`);
+        } catch(e) {
+            console.error('Fallback error:', e);
+            showNotification('❌ Ошибка построения маршрута');
         }
-        if (routeLine) {
-            mapInstance.geoObjects.remove(routeLine);
-            routeLine = null;
+    }
+
+    function clearRouteObjects() {
+        if (routeObject) {
+            mapInstance.geoObjects.remove(routeObject);
+            routeObject = null;
         }
         isRouteBuilt = false;
         $('routeInfo').classList.remove('show');
@@ -911,59 +911,6 @@
         showNotification('🗑️ Маршрут удалён');
     }
 
-    // ===== FALLBACK: ПРОСТАЯ ЛИНИЯ =====
-    function drawSimpleRoute(fromLat, fromLng) {
-        try {
-            clearRouteObjects();
-
-            // Рисуем прямую линию от пользователя до киоска
-            routeLine = new ymaps.Polyline(
-                [
-                    [fromLat, fromLng],
-                    [MY_LOCATION.lat, MY_LOCATION.lng]
-                ],
-                {
-                    balloonContent: '🚶 Прямая линия к киоску',
-                    hintContent: '🚶 К киоску'
-                },
-                {
-                    strokeColor: '#22C55E',
-                    strokeWidth: 4,
-                    strokeOpacity: 0.9,
-                    strokeStyle: 'solid'
-                }
-            );
-            mapInstance.geoObjects.add(routeLine);
-
-            // Показываем кнопку сброса
-            $('clearRouteBtn').style.display = 'flex';
-
-            // Центрируем на маршруте
-            const center = [
-                (fromLat + MY_LOCATION.lat) / 2,
-                (fromLng + MY_LOCATION.lng) / 2
-            ];
-            mapInstance.setCenter(center, 15);
-
-            // Показываем расстояние
-            const distance = getDistance(fromLat, fromLng, MY_LOCATION.lat, MY_LOCATION.lng);
-            
-            // Показываем информацию
-            const routeInfo = $('routeInfo');
-            routeInfo.classList.add('show');
-            $('routeDistance').textContent = distance.toFixed(1);
-            $('routeTime').textContent = Math.round(distance * 15); // ~15 мин на км
-            $('routeSteps').textContent = Math.round(distance * 1333); // ~1333 шага на км
-            
-            showNotification(`🚶 ${distance.toFixed(1)} км до киоска (прямая линия)`);
-            isRouteBuilt = true;
-        } catch(e) {
-            console.error('Fallback route error:', e);
-            showNotification('❌ Ошибка построения маршрута');
-        }
-    }
-
-    // ===== РАСЧЁТ РАССТОЯНИЯ =====
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
