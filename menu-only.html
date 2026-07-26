@@ -85,7 +85,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== MAP ===== */
         .map-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -142,7 +141,6 @@
             color: #4ADE80;
         }
 
-        /* ===== MENU ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -231,7 +229,7 @@
             .menu-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== МАЛЕНЬКАЯ МОДАЛКА ===== */
+        /* ===== МОДАЛКА (МАЛЕНЬКАЯ) ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -406,7 +404,7 @@
 
 </div>
 
-<!-- ===== МАЛЕНЬКАЯ МОДАЛКА ===== -->
+<!-- ===== МОДАЛКА ===== -->
 <div class="modal-overlay" id="giftModal">
     <div class="modal">
         <img src="images/gift-free.jpg" alt="Подарок" class="modal-image" 
@@ -480,7 +478,7 @@
     // ================================================================
     function generateGiftQR(id) {
         const img = document.createElement('img');
-        if (!id) { return; }
+        if (!id) { return ''; }
         const qrData = `gift-${id}`;
         img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&color=6C5CE7&bgcolor=FFFFFF`;
         img.style.width = '100%';
@@ -580,7 +578,7 @@
     }
 
     // ================================================================
-    // ===== КАРТА =====
+    // ===== КАРТА (ИСПРАВЛЕННАЯ) =====
     // ================================================================
     function initMap() {
         if (typeof ymaps === 'undefined') { 
@@ -594,8 +592,17 @@
                     zoom: 17,
                     controls: ['zoomControl', 'typeSelector']
                 });
-                mapInstance.setType('satellite');
                 mapReady = true;
+
+                // Спутник включаем ПОСЛЕ загрузки карты
+                mapInstance.events.add('load', function() {
+                    try {
+                        mapInstance.setType('satellite');
+                        console.log('🛰️ Спутниковый режим включён');
+                    } catch(e) {
+                        console.warn('⚠️ Ошибка включения спутника:', e);
+                    }
+                });
 
                 kioskPlacemark = new ymaps.Placemark(
                     [MY_LOCATION.lat, MY_LOCATION.lng],
