@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍓 Квест: Найди клад!</title>
+    <title>🍓 Квест: AR-поиск клада!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
@@ -23,7 +23,6 @@
             --shadow: 0 8px 32px rgba(0,0,0,0.4);
             --radius: 16px;
             --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
@@ -41,8 +40,8 @@
             padding: 0 0 40px 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            background-attachment: fixed;
             color: var(--text-primary);
+            overflow-x: hidden;
         }
 
         .menu-container {
@@ -56,85 +55,66 @@
         .header {
             text-align: center;
             padding: 12px 0 16px;
-            position: relative;
         }
-
         .header .logo-icon {
             font-size: 48px;
             display: block;
-            margin-bottom: 2px;
             animation: float 3s ease-in-out infinite;
             filter: drop-shadow(0 4px 20px rgba(108,92,231,0.3));
         }
-
         .header-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             color: var(--primary-light);
             font-size: 10px;
             font-weight: 600;
             padding: 4px 14px;
             border-radius: 100px;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
             border: 1px solid var(--glass-border);
+            margin-bottom: 6px;
         }
-
         .header h1 {
             font-size: 24px;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
             background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .header .subtitle {
             color: var(--text-secondary);
             font-size: 12px;
-            font-weight: 400;
-            line-height: 1.5;
-            max-width: 300px;
-            margin: 0 auto;
         }
-
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== HERO SELECTOR (COMPACT) ===== */
+        /* ===== HERO SELECTOR ===== */
         .hero-selector {
             display: flex;
             align-items: center;
             gap: 10px;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-sm);
             padding: 8px 14px;
             margin-bottom: 12px;
             border: 1px solid var(--glass-border);
         }
-
         .hero-selector .hero-label {
             font-size: 11px;
             color: var(--text-secondary);
             font-weight: 500;
             white-space: nowrap;
         }
-
         .hero-selector .hero-dropdown {
             flex: 1;
             position: relative;
         }
-
         .hero-selector .hero-dropdown select {
             width: 100%;
             padding: 6px 12px;
@@ -149,19 +129,15 @@
             -webkit-appearance: none;
             cursor: pointer;
             outline: none;
-            transition: var(--transition);
         }
-
         .hero-selector .hero-dropdown select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(108,92,231,0.2);
         }
-
         .hero-selector .hero-dropdown select option {
             background: #1A1A2E;
             color: #fff;
         }
-
         .hero-selector .hero-dropdown::after {
             content: '▾';
             position: absolute;
@@ -172,19 +148,16 @@
             font-size: 10px;
             pointer-events: none;
         }
-
         .hero-selector .hero-preview {
             font-size: 24px;
-            line-height: 1;
             min-width: 32px;
             text-align: center;
         }
 
-        /* ===== TREASURE TIMER ===== */
+        /* ===== TIMER & STATUS ===== */
         .treasure-timer {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-sm);
             padding: 10px 16px;
             margin-bottom: 12px;
@@ -195,73 +168,42 @@
             flex-wrap: wrap;
             gap: 4px;
         }
-
         .treasure-timer .timer-label {
             font-size: 10px;
             color: var(--text-muted);
-            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .treasure-timer .timer-value {
             font-size: 20px;
             font-weight: 700;
             color: #4ADE80;
             font-variant-numeric: tabular-nums;
-            font-feature-settings: "tnum";
         }
-
         .treasure-timer .timer-value.next {
             color: #FFD700;
         }
-
         .treasure-timer .timer-time {
             font-size: 11px;
             color: var(--text-secondary);
         }
 
-        /* ===== TREASURE STATUS BAR ===== */
         .treasure-status-bar {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-sm);
             padding: 12px 16px;
             margin-bottom: 12px;
             border: 1px solid var(--glass-border);
             transition: all 0.5s ease;
-            position: relative;
-            overflow: hidden;
         }
-
-        .treasure-status-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(108,92,231,0.05), rgba(253,121,168,0.05));
-            opacity: 0;
-            transition: var(--transition);
-            pointer-events: none;
-        }
-
-        .treasure-status-bar.active::before {
-            opacity: 1;
-        }
-
         .treasure-status-bar .top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 4px;
-            position: relative;
-            z-index: 1;
         }
-
         .treasure-status-bar .status-label {
             font-size: 14px;
             font-weight: 600;
@@ -269,35 +211,20 @@
             align-items: center;
             gap: 6px;
         }
-
         .treasure-status-bar .status-label .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
             display: inline-block;
         }
-
-        .treasure-status-bar .status-label .dot.inactive {
-            background: #F87171;
-        }
-
-        .treasure-status-bar .status-label .dot.active {
-            background: #4ADE80;
-            animation: pulseDot 1.5s ease-in-out infinite;
-        }
-
-        .treasure-status-bar .status-label .dot.winner {
-            background: #FFD700;
-            animation: pulseDot 0.8s ease-in-out infinite;
-        }
-
+        .treasure-status-bar .status-label .dot.inactive { background: #F87171; }
+        .treasure-status-bar .status-label .dot.active { background: #4ADE80; animation: pulseDot 1.5s ease-in-out infinite; }
+        .treasure-status-bar .status-label .dot.winner { background: #FFD700; animation: pulseDot 0.8s ease-in-out infinite; }
         .treasure-status-bar .status-distance {
             font-size: 18px;
             font-weight: 700;
             color: #FFD700;
-            font-feature-settings: "tnum";
         }
-
         .treasure-status-bar .status-detail {
             font-size: 12px;
             color: var(--text-secondary);
@@ -307,38 +234,53 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 4px;
-            position: relative;
-            z-index: 1;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
         }
 
-        .treasure-status-bar .status-detail .emoji-status {
-            font-size: 16px;
+        /* ===== BUTTONS ===== */
+        .btn-route {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4ADE80, #22C55E);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: var(--transition);
+            margin-bottom: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+        .btn-route:active { transform: scale(0.97); }
+        .btn-route.show { display: flex; }
 
         /* ===== MAP ===== */
         .map-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius);
             overflow: hidden;
-            margin-bottom: 12px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
         }
-
         .map-card .map-container {
             width: 100%;
             height: 420px;
             position: relative;
             background: #0A0A1A;
         }
-
         .map-card .map-container #treasureMap {
             width: 100%;
             height: 100%;
         }
-
         .map-card .map-container .map-placeholder {
             display: flex;
             flex-direction: column;
@@ -349,13 +291,11 @@
             font-size: 13px;
             gap: 8px;
         }
-
         .map-card .map-container .map-placeholder i {
             font-size: 40px;
             color: var(--primary);
             opacity: 0.5;
         }
-
         .map-card .map-actions {
             display: flex;
             gap: 6px;
@@ -364,7 +304,6 @@
             border-top: 1px solid var(--glass-border);
             flex-wrap: wrap;
         }
-
         .map-btn {
             flex: 1;
             min-width: 60px;
@@ -377,50 +316,176 @@
             border: 1px solid var(--glass-border);
             background: rgba(255,255,255,0.05);
             color: var(--text-secondary);
-            font-family: var(--font-family);
             font-size: 11px;
             font-weight: 500;
             cursor: pointer;
+            font-family: var(--font-family);
             transition: var(--transition);
-            text-decoration: none;
         }
-
-        .map-btn:active {
-            transform: scale(0.97);
-        }
-
-        .map-btn i {
-            font-size: 13px;
-        }
-
+        .map-btn:active { transform: scale(0.97); }
         .map-btn.location-btn {
             background: rgba(108,92,231,0.15);
             border-color: rgba(108,92,231,0.3);
             color: var(--primary-light);
         }
-
-        .map-btn.location-btn:active {
-            background: rgba(108,92,231,0.25);
-        }
-
-        .map-btn.location-btn.loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
         .map-btn.kiosk-btn {
             background: rgba(74,222,128,0.12);
             border-color: rgba(74,222,128,0.25);
             color: #4ADE80;
         }
 
-        .map-btn.kiosk-btn:active {
-            background: rgba(74,222,128,0.2);
+        /* ===== AR CONTAINER ===== */
+        .ar-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            z-index: 3000;
+            flex-direction: column;
+        }
+        .ar-container.active {
+            display: flex;
+        }
+        .ar-container .ar-video-wrap {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+        .ar-container .ar-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .ar-container .ar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
         }
 
-        .map-btn.kiosk-btn.loading {
-            opacity: 0.6;
+        /* AR Target */
+        .ar-target {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 52px;
+            text-align: center;
+            filter: drop-shadow(0 0 30px rgba(108,92,231,0.8));
+            animation: pulseTarget 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseTarget {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+        .ar-target .ar-distance {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            padding: 4px 14px;
+            border-radius: 100px;
+            margin-top: 4px;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* AR Compass */
+        .ar-compass {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 40px;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+            transition: transform 0.1s ease;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            padding: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* AR Info */
+        .ar-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            padding: 10px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+        }
+        .ar-info .ar-status-text {
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        /* AR Buttons */
+        .ar-back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: var(--transition);
+            z-index: 10;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ar-back-btn:active { transform: scale(0.95); }
+
+        /* AR Camera Permission */
+        .ar-permission {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            z-index: 5;
             pointer-events: none;
+        }
+        .ar-permission i {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        .ar-permission span {
+            font-size: 14px;
+            opacity: 0.7;
         }
 
         /* ===== MENU ===== */
@@ -429,85 +494,57 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
-
         .menu-item {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-radius: var(--radius-sm);
             border: 1px solid var(--glass-border);
-            transition: var(--transition);
-            position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
-
-        .menu-item:active {
-            transform: scale(0.98);
-        }
-
+        .menu-item:active { transform: scale(0.98); }
         .menu-item .item-image {
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
             background: rgba(255,255,255,0.03);
         }
-
         .menu-item .item-content {
             padding: 10px 12px 12px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-
         .menu-item .item-name {
             font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
-            letter-spacing: -0.2px;
-            line-height: 1.3;
         }
-
         .menu-item .item-desc {
             font-size: 10px;
             color: var(--text-muted);
             margin-bottom: 6px;
-            font-weight: 400;
-            line-height: 1.4;
             flex: 1;
         }
-
         .menu-item .item-price {
             color: var(--accent);
             font-weight: 700;
             font-size: 16px;
         }
-
-        .menu-item .item-old-price {
-            color: var(--text-muted);
-            font-size: 12px;
-            text-decoration: line-through;
-            margin-left: 6px;
-            font-weight: 400;
-        }
-
         .menu-item .badge {
             position: absolute;
             top: 8px;
             left: 8px;
             background: rgba(0,0,0,0.7);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             color: var(--accent);
             font-size: 9px;
             font-weight: 600;
             padding: 2px 10px;
             border-radius: 100px;
-            z-index: 2;
             border: 1px solid var(--glass-border);
         }
-
         .section-title {
             font-size: 16px;
             font-weight: 700;
@@ -516,21 +553,17 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            letter-spacing: -0.3px;
         }
-
         .section-title i {
             font-size: 18px;
             color: var(--primary-light);
         }
-
         .footer {
             text-align: center;
             padding: 20px 0 8px;
             color: var(--text-muted);
             font-size: 11px;
         }
-
         .footer .footer-phone {
             display: inline-block;
             margin-top: 4px;
@@ -541,28 +574,11 @@
         }
 
         @media (max-width: 340px) {
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .menu-section {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            .menu-grid { grid-template-columns: 1fr; }
         }
 
         /* ===== MODALS ===== */
-        .onboarding-overlay {
+        .onboarding-overlay, .winner-overlay, .congrats-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -571,24 +587,18 @@
             bottom: 0;
             background: rgba(0,0,0,0.7);
             backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            animation: fadeInOverlay 0.5s ease;
+            animation: fadeIn 0.4s ease;
         }
-
-        .onboarding-overlay.open {
+        .onboarding-overlay.open, .winner-overlay.open, .congrats-overlay.open {
             display: flex;
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .onboarding-modal {
+        .onboarding-modal, .winner-modal, .congrats-modal {
             background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
             border-radius: var(--radius);
             max-width: 400px;
@@ -596,31 +606,27 @@
             max-height: 90vh;
             padding: 24px 20px 20px;
             position: relative;
-            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
             overflow-y: auto;
             text-align: center;
         }
-
         @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .onboarding-modal .onboarding-icon {
+        .onboarding-modal .onboarding-icon,
+        .winner-modal .winner-icon,
+        .congrats-modal .congrats-icon-wrap .main-icon {
             font-size: 56px;
             display: block;
             animation: float 3s ease-in-out infinite;
         }
-
-        .onboarding-modal .onboarding-title {
+        .onboarding-modal .onboarding-title,
+        .winner-modal .winner-title,
+        .congrats-modal .congrats-title {
             font-size: 20px;
             font-weight: 800;
             background: linear-gradient(135deg, #FFFFFF, var(--primary-light));
@@ -629,8 +635,8 @@
             background-clip: text;
             margin: 4px 0 2px;
         }
-
-        .onboarding-modal .onboarding-text {
+        .onboarding-modal .onboarding-text,
+        .congrats-modal .congrats-text {
             font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.7;
@@ -641,18 +647,16 @@
             border-radius: var(--radius-sm);
             border: 1px solid var(--glass-border);
         }
-
-        .onboarding-modal .onboarding-text strong {
+        .onboarding-modal .onboarding-text strong,
+        .congrats-modal .congrats-text strong {
             color: var(--primary-light);
         }
-
         .onboarding-modal .onboarding-times {
             display: flex;
             gap: 10px;
             justify-content: center;
             margin-bottom: 12px;
         }
-
         .onboarding-modal .onboarding-times .time-box {
             background: rgba(255,255,255,0.06);
             padding: 6px 14px;
@@ -660,18 +664,15 @@
             border: 1px solid var(--glass-border);
             text-align: center;
         }
-
         .onboarding-modal .onboarding-times .time-box .time {
             font-size: 18px;
             font-weight: 700;
             color: #FFD700;
         }
-
         .onboarding-modal .onboarding-times .time-box .label {
             font-size: 9px;
             color: var(--text-muted);
         }
-
         .onboarding-modal .onboarding-gift-hint {
             font-size: 11px;
             color: var(--text-secondary);
@@ -681,84 +682,26 @@
             border-radius: var(--radius-sm);
             border: 1px solid rgba(253,121,168,0.15);
         }
-
         .onboarding-modal .onboarding-gift-hint strong {
             color: var(--accent);
         }
-
-        .onboarding-modal .onboarding-btn {
+        .onboarding-modal .onboarding-btn,
+        .congrats-modal .congrats-btn-primary {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
+            color: #fff;
             border: none;
             border-radius: var(--radius-sm);
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
             font-family: var(--font-family);
+            transition: var(--transition);
         }
-
-        .onboarding-modal .onboarding-btn:active {
+        .onboarding-modal .onboarding-btn:active,
+        .congrats-modal .congrats-btn-primary:active {
             transform: scale(0.97);
-        }
-
-        /* ===== WINNER MODAL ===== */
-        .winner-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-            animation: fadeInOverlay 0.5s ease;
-        }
-
-        .winner-overlay.open {
-            display: flex;
-        }
-
-        .winner-modal {
-            background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
-            border-radius: var(--radius);
-            max-width: 400px;
-            width: 100%;
-            padding: 28px 20px 24px;
-            position: relative;
-            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(255,215,0,0.2);
-            box-shadow: 0 0 60px rgba(255,215,0,0.05);
-            text-align: center;
-        }
-
-        .winner-modal .winner-icon {
-            font-size: 64px;
-            display: block;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .winner-modal .winner-title {
-            font-size: 24px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #FFD700, #FF6B00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 4px 0;
-        }
-
-        .winner-modal .winner-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
         }
 
         .winner-modal .winner-prize {
@@ -771,31 +714,26 @@
             font-size: 16px;
             margin-bottom: 12px;
         }
-
         .winner-modal .winner-btn {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #4ADE80, #22C55E);
-            color: #FFFFFF;
+            color: #fff;
             border: none;
             border-radius: var(--radius-sm);
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
             font-family: var(--font-family);
+            transition: var(--transition);
             margin-top: 6px;
         }
-
-        .winner-modal .winner-btn:active {
-            transform: scale(0.97);
-        }
-
+        .winner-modal .winner-btn:active { transform: scale(0.97); }
         .winner-modal .winner-btn-purple {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         }
-
-        .winner-modal .winner-secondary-btn {
+        .winner-modal .winner-secondary-btn,
+        .congrats-modal .congrats-btn-secondary {
             width: 100%;
             padding: 8px;
             background: none;
@@ -806,44 +744,6 @@
             font-family: var(--font-family);
             margin-top: 4px;
         }
-
-        /* ===== GIFT MODAL ===== */
-        .congrats-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            z-index: 900;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-            animation: fadeInOverlay 0.5s ease;
-        }
-
-        .congrats-overlay.open {
-            display: flex;
-        }
-
-        .congrats-modal {
-            background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
-            border-radius: var(--radius);
-            max-width: 400px;
-            width: 100%;
-            max-height: 82vh;
-            padding: 24px 20px 20px;
-            position: relative;
-            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow);
-            overflow-y: auto;
-            text-align: center;
-        }
-
         .congrats-modal .congrats-close {
             position: absolute;
             top: 10px;
@@ -856,22 +756,11 @@
             font-size: 12px;
             color: var(--text-muted);
             cursor: pointer;
-            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .congrats-modal .congrats-close:active {
-            transform: scale(0.9);
-        }
-
-        .congrats-modal .congrats-icon-wrap .main-icon {
-            font-size: 52px;
-            display: block;
-            animation: float 3s ease-in-out infinite;
-        }
-
+        .congrats-modal .congrats-close:active { transform: scale(0.9); }
         .congrats-modal .congrats-badge {
             display: inline-block;
             background: rgba(255,215,0,0.15);
@@ -880,72 +769,10 @@
             font-weight: 700;
             padding: 2px 12px;
             border-radius: 100px;
+            border: 1px solid rgba(255,215,0,0.1);
+            margin-bottom: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            border: 1px solid rgba(255,215,0,0.1);
-        }
-
-        .congrats-modal .congrats-title {
-            font-size: 22px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2px;
-        }
-
-        .congrats-modal .congrats-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 400;
-            margin-bottom: 6px;
-        }
-
-        .congrats-modal .congrats-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 6px;
-            background: rgba(255,255,255,0.04);
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-        }
-
-        .congrats-modal .congrats-text strong {
-            color: var(--accent);
-        }
-
-        .congrats-modal .congrats-btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            margin-bottom: 4px;
-        }
-
-        .congrats-modal .congrats-btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .congrats-modal .congrats-btn-secondary {
-            width: 100%;
-            padding: 8px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 12px;
-            cursor: pointer;
-            font-family: var(--font-family);
         }
 
         /* ===== NOTIFICATION ===== */
@@ -956,12 +783,11 @@
             transform: translateX(-50%);
             background: rgba(0,0,0,0.8);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             color: #fff;
             padding: 10px 20px;
             border-radius: 100px;
             box-shadow: var(--shadow);
-            z-index: 2000;
+            z-index: 9999;
             max-width: 90%;
             text-align: center;
             font-weight: 500;
@@ -970,29 +796,9 @@
             font-family: var(--font-family);
             border: 1px solid var(--glass-border);
         }
-
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
-        }
-
-        /* ===== YANDEX MAPS OVERRIDE ===== */
-        .ymaps-2-1-79-gotoymaps {
-            display: none !important;
-        }
-        .ymaps-2-1-79-gotoymaps__container {
-            display: none !important;
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
     </style>
 </head>
@@ -1000,19 +806,15 @@
 
     <div class="menu-container">
 
-        <!-- ===== HEADER ===== -->
+        <!-- HEADER -->
         <header class="header">
             <span class="logo-icon">🍓</span>
-            <div class="header-badge">
-                <i class="fas fa-map-marked-alt"></i> Найди клад!
-            </div>
+            <div class="header-badge"><i class="fas fa-map-marked-alt"></i> AR-поиск клада!</div>
             <h1>Strawberry in Chocolate</h1>
-            <p class="subtitle">
-                Найди клад и получи МЕГА-СТАКАН бесплатно! 🍓
-            </p>
+            <p class="subtitle">Найди клад и получи МЕГА-СТАКАН бесплатно! 🍓</p>
         </header>
 
-        <!-- ===== HERO SELECTOR (COMPACT) ===== -->
+        <!-- HERO SELECTOR -->
         <div class="hero-selector">
             <span class="hero-label">🎮 Герой</span>
             <div class="hero-dropdown">
@@ -1030,7 +832,7 @@
             <span class="hero-preview" id="heroPreview">🍓</span>
         </div>
 
-        <!-- ===== TREASURE TIMER ===== -->
+        <!-- TIMER -->
         <div class="treasure-timer">
             <div>
                 <div class="timer-label">⏱️ Следующий клад</div>
@@ -1039,10 +841,10 @@
             <div class="timer-value next" id="treasureTimerDisplay">--:--:--</div>
         </div>
 
-        <!-- ===== TREASURE STATUS BAR ===== -->
+        <!-- STATUS -->
         <div class="treasure-status-bar" id="treasureStatusBar">
             <div class="top-row">
-                <span class="status-label" id="treasureStatusLabel">
+                <span class="status-label">
                     <span class="dot inactive" id="statusDot"></span>
                     <span id="statusLabelText">Клад не активен</span>
                 </span>
@@ -1054,8 +856,13 @@
             </div>
         </div>
 
-        <!-- ===== MAP ===== -->
-        <div class="map-card">
+        <!-- ROUTE BUTTON -->
+        <button class="btn-route" id="routeToTreasureBtn" onclick="startARMode()">
+            <i class="fas fa-location-arrow"></i> Маршрут до клада
+        </button>
+
+        <!-- MAP -->
+        <div class="map-card" id="mapCard">
             <div class="map-container" id="mapContainer">
                 <div id="treasureMap"></div>
                 <div class="map-placeholder" id="mapPlaceholder">
@@ -1065,35 +872,54 @@
                 </div>
             </div>
             <div class="map-actions">
-                <button class="map-btn location-btn" id="locationBtn" onclick="centerOnUser()">
+                <button class="map-btn location-btn" onclick="centerOnUser()">
                     <i class="fas fa-location-dot"></i> Где я?
                 </button>
-                <button class="map-btn kiosk-btn" id="kioskBtn" onclick="routeToKiosk()">
+                <button class="map-btn kiosk-btn" onclick="routeToKiosk()">
                     <i class="fas fa-route"></i> Киоск
                 </button>
             </div>
         </div>
 
-        <!-- ===== MENU ===== -->
+        <!-- MENU -->
         <div class="menu-section active">
-            <div class="section-title">
-                <i class="fas fa-strawberry"></i> Клубника в шоколаде
-            </div>
+            <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
             <div class="menu-grid" id="strawberryGrid"></div>
         </div>
 
         <div class="footer">
-            <i class="fas fa-heart" style="color: var(--accent);"></i>
-            С любовью, Strawberry in Chocolate
-            <br>
-            <a href="tel:+79628557263" class="footer-phone">
-                <i class="fas fa-phone"></i> +7 962 855-72-63
-            </a>
+            <i class="fas fa-heart" style="color: var(--accent);"></i> С любовью, Strawberry in Chocolate
+            <br><a href="tel:+79628557263" class="footer-phone"><i class="fas fa-phone"></i> +7 962 855-72-63</a>
         </div>
 
     </div>
 
-    <!-- ===== ONBOARDING MODAL ===== -->
+    <!-- ===== AR CONTAINER ===== -->
+    <div class="ar-container" id="arContainer">
+        <div class="ar-video-wrap">
+            <video id="arVideo" autoplay playsinline></video>
+            <div class="ar-overlay">
+                <div class="ar-target" id="arTarget">
+                    🎯
+                    <div class="ar-distance" id="arDistance">0 м</div>
+                </div>
+                <div class="ar-compass" id="arCompass">🧭</div>
+                <div class="ar-info">
+                    <span id="arStatusText">🚶 Идите к метке</span>
+                    <span class="ar-status-text" id="arDirectionText">—</span>
+                </div>
+            </div>
+            <button class="ar-back-btn" onclick="stopARMode()">
+                <i class="fas fa-times"></i> На карту
+            </button>
+            <div class="ar-permission" id="arPermission">
+                <i class="fas fa-camera"></i>
+                <span>Разрешите доступ к камере</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODALS ===== -->
     <div class="onboarding-overlay" id="onboardingModal">
         <div class="onboarding-modal">
             <span class="onboarding-icon">🍓</span>
@@ -1105,68 +931,39 @@
                 <strong>🏆 Победитель получает МЕГА-СТАКАН бесплатно!</strong>
             </div>
             <div class="onboarding-times">
-                <div class="time-box">
-                    <div class="time">15:00</div>
-                    <div class="label">МСК</div>
-                </div>
-                <div class="time-box">
-                    <div class="time">19:00</div>
-                    <div class="label">МСК</div>
-                </div>
+                <div class="time-box"><div class="time">15:00</div><div class="label">МСК</div></div>
+                <div class="time-box"><div class="time">19:00</div><div class="label">МСК</div></div>
             </div>
             <div class="onboarding-gift-hint">
                 🎁 А пока — <strong>мини-порция шоколадной клубнички</strong> в подарок!<br>
                 Покажи QR-код кассиру в киоске 🍓
             </div>
-            <button class="onboarding-btn" onclick="closeOnboarding()">
-                <i class="fas fa-gift"></i> Забрать подарок
-            </button>
+            <button class="onboarding-btn" onclick="closeOnboarding()"><i class="fas fa-gift"></i> Забрать подарок</button>
         </div>
     </div>
 
-    <!-- ===== WINNER MODAL ===== -->
     <div class="winner-overlay" id="winnerModal">
         <div class="winner-modal">
             <span class="winner-icon">🏆</span>
             <div class="winner-title">ТЫ ПОБЕДИЛ!</div>
             <div class="winner-subtitle">Ты первый нашёл клад! 🎉</div>
-            <div class="winner-prize">
-                🎁 МЕГА-СТАКАН клубники в шоколаде <strong>БЕСПЛАТНО!</strong>
-            </div>
-            <button class="winner-btn" onclick="routeToKiosk()">
-                <i class="fas fa-route"></i> Проложить маршрут
-            </button>
-            <button class="winner-btn winner-btn-purple" onclick="routeToKiosk()">
-                <i class="fas fa-walking"></i> Пешком до киоска
-            </button>
-            <button class="winner-secondary-btn" onclick="closeWinnerModal()">
-                Хорошо, иду! 🏃‍♂️
-            </button>
+            <div class="winner-prize">🎁 МЕГА-СТАКАН клубники в шоколаде <strong>БЕСПЛАТНО!</strong></div>
+            <button class="winner-btn" onclick="routeToKiosk()"><i class="fas fa-route"></i> Проложить маршрут</button>
+            <button class="winner-btn winner-btn-purple" onclick="routeToKiosk()"><i class="fas fa-walking"></i> Пешком до киоска</button>
+            <button class="winner-secondary-btn" onclick="closeWinnerModal()">Хорошо, иду! 🏃‍♂️</button>
         </div>
     </div>
 
-    <!-- ===== GIFT MODAL ===== -->
     <div class="congrats-overlay" id="giftModal">
         <div class="congrats-modal">
-            <button class="congrats-close" onclick="closeGiftModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="congrats-icon-wrap">
-                <span class="main-icon">🍓</span>
-            </div>
+            <button class="congrats-close" onclick="closeGiftModal()"><i class="fas fa-times"></i></button>
+            <div class="congrats-icon-wrap"><span class="main-icon">🍓</span></div>
             <span class="congrats-badge">🎁 БЕСПЛАТНО</span>
             <div class="congrats-title">Поздравляем!</div>
             <div class="congrats-subtitle">Вы наш гость! 🥳</div>
-            <div class="congrats-text">
-                Вас ждёт <strong>бесплатная мини-порция</strong><br>
-                клубники в шоколаде! 🍫
-            </div>
-            <button class="congrats-btn-primary" onclick="routeToKiosk()">
-                <i class="fas fa-route"></i> Проложить маршрут
-            </button>
-            <button class="congrats-btn-secondary" onclick="closeGiftModal()">
-                Хорошо, спасибо!
-            </button>
+            <div class="congrats-text">Вас ждёт <strong>бесплатная мини-порция</strong> клубники в шоколаде! 🍫</div>
+            <button class="congrats-btn-primary" onclick="routeToKiosk()"><i class="fas fa-route"></i> Проложить маршрут</button>
+            <button class="congrats-btn-secondary" onclick="closeGiftModal()">Хорошо, спасибо!</button>
         </div>
     </div>
 
@@ -1174,16 +971,8 @@
         // ================================================================
         // ===== КОНСТАНТЫ =====
         // ================================================================
-        const MY_LOCATION = {
-            lat: 44.358193,
-            lng: 38.528773,
-            name: '🍓 Strawberry in Chocolate'
-        };
-
-        const TREASURE_TIMES = [
-            { hours: 15, minutes: 0 },
-            { hours: 19, minutes: 0 }
-        ];
+        const MY_LOCATION = { lat: 44.358193, lng: 38.528773 };
+        const TREASURE_TIMES = [{ hours: 15, minutes: 0 }, { hours: 19, minutes: 0 }];
 
         let userLocation = null;
         let mapInstance = null;
@@ -1203,25 +992,47 @@
         let isFirstLocation = true;
         let isWinner = false;
 
+        // AR
+        let arActive = false;
+        let arStream = null;
+        let arAnimationId = null;
+        let arDistance = 0;
+        let arBearing = 0;
+
         // ================================================================
-        // ===== INIT HERO SELECTOR =====
+        // ===== DOM REFS =====
         // ================================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const select = document.getElementById('heroSelect');
-            const preview = document.getElementById('heroPreview');
-            const saved = localStorage.getItem('selectedHero') || '🍓';
-            select.value = saved;
-            preview.textContent = saved;
-            selectedHero = saved;
-        });
+        const $ = id => document.getElementById(id);
+        const heroSelect = $('heroSelect');
+        const heroPreview = $('heroPreview');
+        const treasureTimerDisplay = $('treasureTimerDisplay');
+        const treasureTimeLabel = $('treasureTimeLabel');
+        const treasureStatusBar = $('treasureStatusBar');
+        const statusDot = $('statusDot');
+        const statusLabelText = $('statusLabelText');
+        const treasureDistance = $('treasureDistance');
+        const treasureStatusText = $('treasureStatusText');
+        const treasureEmoji = $('treasureEmoji');
+        const routeBtn = $('routeToTreasureBtn');
+        const arContainer = $('arContainer');
+        const arVideo = $('arVideo');
+        const arTarget = $('arTarget');
+        const arDistanceEl = $('arDistance');
+        const arCompass = $('arCompass');
+        const arStatusText = $('arStatusText');
+        const arDirectionText = $('arDirectionText');
+
+        // ================================================================
+        // ===== INIT HERO =====
+        // ================================================================
+        heroSelect.value = selectedHero;
+        heroPreview.textContent = selectedHero;
 
         function selectHero(hero) {
             selectedHero = hero;
             localStorage.setItem('selectedHero', hero);
-            document.getElementById('heroPreview').textContent = hero;
-            if (userLocation && mapInstance) {
-                updateUserMarker(userLocation.lat, userLocation.lng);
-            }
+            heroPreview.textContent = hero;
+            if (userLocation && mapInstance) updateUserMarker(userLocation.lat, userLocation.lng);
             showNotification(`🎮 Ты теперь ${hero}!`);
         }
 
@@ -1229,31 +1040,30 @@
         // ===== ONBOARDING =====
         // ================================================================
         function showOnboarding() {
-            const hasSeen = localStorage.getItem('onboarding_seen');
-            if (hasSeen) return;
-            document.getElementById('onboardingModal').classList.add('open');
+            if (localStorage.getItem('onboarding_seen')) return;
+            $('onboardingModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
         function closeOnboarding() {
-            document.getElementById('onboardingModal').classList.remove('open');
+            $('onboardingModal').classList.remove('open');
             document.body.style.overflow = '';
             localStorage.setItem('onboarding_seen', 'true');
-            setTimeout(() => { checkGift(); }, 500);
+            setTimeout(checkGift, 500);
         }
 
         // ================================================================
-        // ===== ТАЙМЕР =====
+        // ===== TIMER =====
         // ================================================================
         function getNextTreasureTime() {
             const now = new Date();
-            let mskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-            for (const time of TREASURE_TIMES) {
-                const target = new Date(mskTime);
-                target.setHours(time.hours, time.minutes, 0, 0);
-                if (target > mskTime) return target;
+            const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
+            for (const t of TREASURE_TIMES) {
+                const target = new Date(msk);
+                target.setHours(t.hours, t.minutes, 0, 0);
+                if (target > msk) return target;
             }
-            const target = new Date(mskTime);
+            const target = new Date(msk);
             target.setDate(target.getDate() + 1);
             target.setHours(TREASURE_TIMES[0].hours, TREASURE_TIMES[0].minutes, 0, 0);
             return target;
@@ -1262,46 +1072,46 @@
         function updateTimer() {
             const next = getNextTreasureTime();
             const now = new Date();
-            let mskNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-            const diff = Math.max(0, Math.floor((next - mskNow) / 1000));
-            const hours = Math.floor(diff / 3600);
-            const minutes = Math.floor((diff % 3600) / 60);
-            const seconds = diff % 60;
-            document.getElementById('treasureTimerDisplay').textContent =
-                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            document.getElementById('treasureTimeLabel').textContent =
-                `${next.getHours()}:${String(next.getMinutes()).padStart(2, '0')} МСК`;
+            const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
+            const diff = Math.max(0, Math.floor((next - msk) / 1000));
+            const h = String(Math.floor(diff / 3600)).padStart(2, '0');
+            const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+            const s = String(diff % 60).padStart(2, '0');
+            treasureTimerDisplay.textContent = `${h}:${m}:${s}`;
+            treasureTimeLabel.textContent = `${next.getHours()}:${String(next.getMinutes()).padStart(2, '0')} МСК`;
         }
 
         // ================================================================
         // ===== MENU =====
         // ================================================================
-        const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, oldPrice: null, image: 'images/klassika.jpg', badge: '🔥 Хит' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, oldPrice: null, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, oldPrice: null, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, oldPrice: null, image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, oldPrice: null, image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, oldPrice: null, image: 'images/klubnika-bez-shokolada.jpg' }
+        const MENU_ITEMS = [
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg',
+                badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450,
+                image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450,
+                image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450,
+                image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450,
+                image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350,
+                image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         function renderMenu() {
-            const grid = document.getElementById('strawberryGrid');
-            let html = '';
-            STRAWBERRY_ITEMS.forEach(item => {
-                html += `
-                    <div class="menu-item">
-                        ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
-                        <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
-                        <div class="item-content">
-                            <div class="item-name">${item.name}</div>
-                            <div class="item-desc">${item.desc}</div>
-                            <div class="item-price">${item.price} ₽</div>
-                        </div>
+            const grid = $('strawberryGrid');
+            grid.innerHTML = MENU_ITEMS.map(item => `
+                <div class="menu-item" style="position:relative;">
+                    ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+                    <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                    <div class="item-content">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="item-price">${item.price} ₽</div>
                     </div>
-                `;
-            });
-            grid.innerHTML = html;
+                </div>
+            `).join('');
         }
 
         // ================================================================
@@ -1310,48 +1120,153 @@
         function connectSocket() {
             try {
                 socket = io();
-                console.log('📡 WebSocket подключён');
-
                 socket.on('treasure-activated', (data) => {
                     if (isWinner) return;
                     treasureActive = true;
                     treasureData = data;
                     updateTreasureUI();
+                    routeBtn.classList.add('show');
                     if (mapInstance) {
                         mapInstance.setCenter([data.lat, data.lng], 17);
                         showTreasureCircle(data.lat, data.lng, data.radius || 15);
                     }
-                    showNotification('🎯 КЛАД ПОЯВИЛСЯ! Беги в круг!');
+                    showNotification('🎯 КЛАД ПОЯВИЛСЯ! Нажми "Маршрут до клада"');
                 });
-
-                socket.on('treasure-claimed', (data) => {
-                    treasureActive = false;
-                    treasureData = null;
-                    updateTreasureUI();
-                    removeTreasureCircle();
-                    showNotification('😢 Клад уже нашли! Следующий в 15:00');
-                });
-
-                socket.on('treasure-end', () => {
-                    treasureActive = false;
-                    treasureData = null;
-                    updateTreasureUI();
-                    removeTreasureCircle();
-                });
-
+                socket.on('treasure-claimed', () => { resetTreasure(); });
+                socket.on('treasure-end', () => { resetTreasure(); });
                 socket.on('you-won', () => {
                     isWinner = true;
-                    treasureActive = false;
-                    treasureData = null;
-                    updateTreasureUI();
-                    removeTreasureCircle();
+                    resetTreasure();
                     showWinnerModal();
                 });
-
             } catch (e) {
-                console.error('❌ Ошибка WebSocket:', e);
+                console.error('WS error:', e);
                 setTimeout(connectSocket, 5000);
             }
+        }
+
+        function resetTreasure() {
+            treasureActive = false;
+            treasureData = null;
+            updateTreasureUI();
+            routeBtn.classList.remove('show');
+            removeTreasureCircle();
+            if (arActive) stopARMode();
+        }
+
+        // ================================================================
+        // ===== MAP =====
+        // ================================================================
+        function initMap() {
+            if (typeof ymaps === 'undefined') { setTimeout(initMap, 1000); return; }
+            ymaps.ready(() => {
+                try {
+                    mapInstance = new ymaps.Map('treasureMap', {
+                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                        zoom: 17,
+                        controls: ['zoomControl', 'typeSelector']
+                    });
+                    // Спутник по умолчанию!
+                    mapInstance.setType('satellite');
+                    $('mapPlaceholder').style.display = 'none';
+
+                    kioskPlacemark = new ymaps.Placemark(
+                        [MY_LOCATION.lat, MY_LOCATION.lng], { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
+                        { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
+                    );
+                    mapInstance.geoObjects.add(kioskPlacemark);
+
+                    getMyLocation();
+                    checkTreasureStatus();
+                    if (statusCheckInterval) clearInterval(statusCheckInterval);
+                    statusCheckInterval = setInterval(() => {
+                        checkTreasureStatus();
+                        if (userLocation && treasureActive) {
+                            sendUserLocation();
+                            checkDistanceToTreasure();
+                        }
+                    }, 3000);
+                    updateTimer();
+                    if (timerInterval) clearInterval(timerInterval);
+                    timerInterval = setInterval(updateTimer, 1000);
+                } catch (e) { console.error('Map error:', e); }
+            });
+        }
+
+        // ================================================================
+        // ===== GPS =====
+        // ================================================================
+        function getMyLocation() {
+            if (!navigator.geolocation) { showNotification('❌ Браузер не поддерживает геолокацию'); return; }
+            const btn = document.querySelector('.location-btn');
+            if (btn) { btn.classList.add('loading');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    if (btn) { btn.classList.remove('loading');
+                        btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?'; }
+                    updateUserMarker(userLocation.lat, userLocation.lng);
+                    if (isFirstLocation && mapInstance) {
+                        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+                        isFirstLocation = false;
+                    }
+                    sendUserLocation();
+                    if (treasureActive && treasureData) checkDistanceToTreasure();
+                },
+                () => {
+                    if (btn) { btn.classList.remove('loading');
+                        btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?'; }
+                    showNotification('❌ Ошибка GPS');
+                }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
+            );
+        }
+
+        function centerOnUser() {
+            if (!userLocation || !mapInstance) { showNotification('📍 Не могу определить местоположение'); return; }
+            mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+            showNotification('📍 Ты здесь!');
+        }
+
+        function updateUserMarker(lat, lng) {
+            if (!mapInstance) return;
+            if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
+            userPlacemark = new ymaps.Placemark(
+                [lat, lng], { balloonContent: '🎮 Это ты!' }, {
+                    iconLayout: 'default#image',
+                    iconImageHref: `https://emojicdn.elk.sh/${selectedHero}`,
+                    iconImageSize: [36, 36],
+                    iconImageOffset: [-18, -18]
+                }
+            );
+            mapInstance.geoObjects.add(userPlacemark);
+        }
+
+        // ================================================================
+        // ===== TREASURE CIRCLE =====
+        // ================================================================
+        function showTreasureCircle(lat, lng, radius = 15) {
+            if (!mapInstance) return;
+            removeTreasureCircle();
+            treasureCircle = new ymaps.Circle(
+                [[lat, lng], radius], { balloonContent: '🎯 Зона клада (15м)' }, {
+                    fillColor: 'rgba(108,92,231,0.15)',
+                    strokeColor: '#6C5CE7',
+                    strokeWidth: 3,
+                    strokeOpacity: 0.8
+                }
+            );
+            mapInstance.geoObjects.add(treasureCircle);
+            let pulse = 0;
+            treasureCircle._pulseInterval = setInterval(() => {
+                if (!treasureCircle) { clearInterval(treasureCircle._pulseInterval); return; }
+                pulse = (pulse + 1) % 20;
+                const op = 0.5 + 0.4 * Math.sin(pulse / 20 * Math.PI * 2);
+                treasureCircle.options.set('strokeOpacity', op);
+                treasureCircle.options.set('fillOpacity', 0.08 + 0.12 * Math.sin(pulse / 20 * Math.PI * 2));
+            }, 100);
+            updateTreasureUI();
         }
 
         function removeTreasureCircle() {
@@ -1363,237 +1278,80 @@
         }
 
         // ================================================================
-        // ===== КАРТА =====
-        // ================================================================
-        function initMap() {
-            if (typeof ymaps === 'undefined') {
-                setTimeout(initMap, 1000);
-                return;
-            }
-
-            ymaps.ready(() => {
-                try {
-                    mapInstance = new ymaps.Map('treasureMap', {
-                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                        zoom: 17,
-                        controls: ['zoomControl', 'typeSelector']
-                    });
-
-                    document.getElementById('mapPlaceholder').style.display = 'none';
-
-                    // Киоск
-                    kioskPlacemark = new ymaps.Placemark(
-                        [MY_LOCATION.lat, MY_LOCATION.lng],
-                        { balloonContent: '🍓 Киоск — забирай приз!', iconCaption: '🍓 КИОСК' },
-                        { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
-                    );
-                    mapInstance.geoObjects.add(kioskPlacemark);
-
-                    getMyLocation();
-                    checkTreasureStatus();
-
-                    if (statusCheckInterval) clearInterval(statusCheckInterval);
-                    statusCheckInterval = setInterval(() => {
-                        checkTreasureStatus();
-                        if (userLocation && treasureActive) {
-                            sendUserLocation();
-                            checkDistanceToTreasure();
-                        }
-                    }, 3000);
-
-                    updateTimer();
-                    if (timerInterval) clearInterval(timerInterval);
-                    timerInterval = setInterval(updateTimer, 1000);
-
-                    console.log('🗺️ Карта загружена!');
-
-                } catch (e) {
-                    console.error('❌ Ошибка карты:', e);
-                }
-            });
-        }
-
-        // ================================================================
-        // ===== GPS =====
-        // ================================================================
-        function getMyLocation() {
-            if (!navigator.geolocation) {
-                showNotification('❌ Браузер не поддерживает геолокацию');
-                return;
-            }
-
-            const btn = document.getElementById('locationBtn');
-            btn.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-            if (watchId) navigator.geolocation.clearWatch(watchId);
-
-            watchId = navigator.geolocation.watchPosition(
-                (position) => {
-                    userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    btn.classList.remove('loading');
-                    btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
-                    updateUserMarker(userLocation.lat, userLocation.lng);
-                    if (isFirstLocation && mapInstance) {
-                        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
-                        isFirstLocation = false;
-                    }
-                    sendUserLocation();
-                    if (treasureActive && treasureData) checkDistanceToTreasure();
-                },
-                (error) => {
-                    btn.classList.remove('loading');
-                    btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
-                    let msg = '❌ Ошибка GPS';
-                    if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
-                    showNotification(msg);
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
-            );
-        }
-
-        function centerOnUser() {
-            if (!userLocation || !mapInstance) {
-                showNotification('📍 Не могу определить местоположение');
-                return;
-            }
-            mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
-            showNotification('📍 Ты здесь!');
-        }
-
-        function updateUserMarker(lat, lng) {
-            if (!mapInstance) return;
-            if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
-            userPlacemark = new ymaps.Placemark(
-                [lat, lng],
-                { balloonContent: '🎮 Это ты!' },
-                {
-                    iconLayout: 'default#image',
-                    iconImageHref: `https://emojicdn.elk.sh/${selectedHero}`,
-                    iconImageSize: [36, 36],
-                    iconImageOffset: [-18, -18]
-                }
-            );
-            mapInstance.geoObjects.add(userPlacemark);
-        }
-
-        // ================================================================
-        // ===== КРУГ КЛАДА =====
-        // ================================================================
-        function showTreasureCircle(lat, lng, radius = 15) {
-            if (!mapInstance) return;
-            removeTreasureCircle();
-            treasureCircle = new ymaps.Circle(
-                [[lat, lng], radius],
-                { balloonContent: '🎯 Зона клада (15м)' },
-                {
-                    fillColor: 'rgba(108,92,231,0.15)',
-                    strokeColor: '#6C5CE7',
-                    strokeWidth: 3,
-                    strokeOpacity: 0.8
-                }
-            );
-            mapInstance.geoObjects.add(treasureCircle);
-
-            let pulse = 0;
-            treasureCircle._pulseInterval = setInterval(() => {
-                if (!treasureCircle) { clearInterval(treasureCircle._pulseInterval); return; }
-                pulse = (pulse + 1) % 20;
-                const opacity = 0.5 + 0.4 * Math.sin(pulse / 20 * Math.PI * 2);
-                treasureCircle.options.set('strokeOpacity', opacity);
-                treasureCircle.options.set('fillOpacity', 0.08 + 0.12 * Math.sin(pulse / 20 * Math.PI * 2));
-            }, 100);
-
-            updateTreasureUI();
-        }
-
-        // ================================================================
-        // ===== РАССТОЯНИЕ =====
+        // ===== DISTANCE =====
         // ================================================================
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(
+                dLon / 2) ** 2;
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1000;
         }
 
         function checkDistanceToTreasure() {
             if (!userLocation || !treasureData || isWinner) return;
-            const distance = getDistance(userLocation.lat, userLocation.lng, treasureData.lat, treasureData.lng);
-            const el = document.getElementById('treasureDistance');
-            const text = document.getElementById('treasureStatusText');
-            const emoji = document.getElementById('treasureEmoji');
-
-            if (distance <= 15) {
-                el.textContent = '0 м';
-                text.textContent = '🎯 ТЫ В ЗОНЕ!';
-                emoji.textContent = '🎯';
+            const dist = getDistance(userLocation.lat, userLocation.lng, treasureData.lat, treasureData.lng);
+            treasureDistance.textContent = Math.round(dist) + ' м';
+            if (dist <= 15) {
+                treasureDistance.textContent = '0 м';
+                treasureStatusText.textContent = '🎯 ТЫ В ЗОНЕ!';
+                treasureEmoji.textContent = '🎯';
                 if (treasureActive && !isWinner) {
                     isWinner = true;
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
                     removeTreasureCircle();
+                    routeBtn.classList.remove('show');
+                    if (arActive) stopARMode();
                     sendWinToServer();
                     showWinnerModal();
                 }
-            } else if (distance <= 30) {
-                el.textContent = Math.round(distance) + ' м';
-                text.textContent = '🔥 ГОРЯЧО!';
-                emoji.textContent = '🔥';
-                el.style.color = '#FF6B00';
-            } else if (distance <= 60) {
-                el.textContent = Math.round(distance) + ' м';
-                text.textContent = '🌤️ ТЕПЛО';
-                emoji.textContent = '🌤️';
-                el.style.color = '#FFB74D';
-            } else if (distance <= 120) {
-                el.textContent = Math.round(distance) + ' м';
-                text.textContent = '🌥️ ПРОХЛАДНО';
-                emoji.textContent = '🌥️';
-                el.style.color = '#90CAF9';
+            } else if (dist <= 30) {
+                treasureStatusText.textContent = '🔥 ГОРЯЧО!';
+                treasureEmoji.textContent = '🔥';
+            } else if (dist <= 60) {
+                treasureStatusText.textContent = '🌤️ ТЕПЛО';
+                treasureEmoji.textContent = '🌤️';
+            } else if (dist <= 120) {
+                treasureStatusText.textContent = '🌥️ ПРОХЛАДНО';
+                treasureEmoji.textContent = '🌥️';
             } else {
-                el.textContent = Math.round(distance) + ' м';
-                text.textContent = '❄️ ХОЛОДНО';
-                emoji.textContent = '❄️';
-                el.style.color = '#4FC3F7';
+                treasureStatusText.textContent = '❄️ ХОЛОДНО';
+                treasureEmoji.textContent = '❄️';
             }
-        }
-
-        function sendWinToServer() {
-            if (!socket) return;
-            socket.emit('treasure-win', { userId, lat: userLocation.lat, lng: userLocation.lng });
+            arDistance = dist;
+            if (arActive) {
+                arDistanceEl.textContent = Math.round(dist) + ' м';
+                updateARCompass();
+            }
         }
 
         // ================================================================
         // ===== UI =====
         // ================================================================
         function updateTreasureUI() {
-            const bar = document.getElementById('treasureStatusBar');
-            const label = document.getElementById('statusLabelText');
-            const dot = document.getElementById('statusDot');
-
             if (treasureActive && treasureData) {
-                bar.classList.add('active');
-                label.textContent = 'КЛАД АКТИВЕН!';
-                dot.className = 'dot active';
+                treasureStatusBar.classList.add('active');
+                statusDot.className = 'dot active';
+                statusLabelText.textContent = 'КЛАД АКТИВЕН!';
             } else if (isWinner) {
-                bar.classList.add('active');
-                label.textContent = '🏆 ПОБЕДА!';
-                dot.className = 'dot winner';
+                treasureStatusBar.classList.add('active');
+                statusDot.className = 'dot winner';
+                statusLabelText.textContent = '🏆 ПОБЕДА!';
             } else {
-                bar.classList.remove('active');
-                label.textContent = 'Клад не активен';
-                dot.className = 'dot inactive';
+                treasureStatusBar.classList.remove('active');
+                statusDot.className = 'dot inactive';
+                statusLabelText.textContent = 'Клад не активен';
+                treasureDistance.textContent = '—';
+                treasureStatusText.textContent = 'Ожидайте активации';
+                treasureEmoji.textContent = '⏳';
             }
         }
 
         // ================================================================
-        // ===== ПРОВЕРКА СТАТУСА =====
+        // ===== STATUS CHECK =====
         // ================================================================
         async function checkTreasureStatus() {
             if (isWinner) return;
@@ -1604,11 +1362,12 @@
                     if (!treasureActive) {
                         treasureActive = true;
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
+                        routeBtn.classList.add('show');
                         if (mapInstance) {
                             mapInstance.setCenter([data.lat, data.lng], 17);
                             showTreasureCircle(data.lat, data.lng, data.radius || 15);
                         }
-                        showNotification('🎯 КЛАД ПОЯВИЛСЯ!');
+                        showNotification('🎯 КЛАД ПОЯВИЛСЯ! Нажми "Маршрут до клада"');
                     } else {
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
                     }
@@ -1618,6 +1377,7 @@
                         treasureActive = false;
                         treasureData = null;
                         updateTreasureUI();
+                        routeBtn.classList.remove('show');
                         removeTreasureCircle();
                     }
                 }
@@ -1626,71 +1386,176 @@
 
         function sendUserLocation() {
             if (!userLocation || !socket) return;
-            socket.emit('user-location', {
-                userId,
-                lat: userLocation.lat,
-                lng: userLocation.lng,
-                hero: selectedHero
-            });
+            socket.emit('user-location', { userId, lat: userLocation.lat, lng: userLocation.lng, hero: selectedHero });
+        }
+
+        function sendWinToServer() {
+            if (!socket) return;
+            socket.emit('treasure-win', { userId, lat: userLocation.lat, lng: userLocation.lng });
         }
 
         // ================================================================
-        // ===== МАРШРУТ К КИОСКУ =====
+        // ===== AR MODE =====
+        // ================================================================
+        async function startARMode() {
+            if (!treasureData) { showNotification('❌ Клад не активен!'); return; }
+            if (!userLocation) { showNotification('❌ Не могу определить местоположение'); return; }
+
+            try {
+                arStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+                });
+                arVideo.srcObject = arStream;
+                await arVideo.play();
+                $('arPermission').style.display = 'none';
+
+                arActive = true;
+                arContainer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                // Запускаем компас
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                } else {
+                    arDirectionText.textContent = '⚠️ Компас не поддерживается';
+                }
+
+                // Начинаем обновление
+                updateARCompass();
+                arAnimationId = requestAnimationFrame(updateARLoop);
+
+                showNotification('🧭 Идите к метке! Стрелка покажет направление');
+
+            } catch (err) {
+                console.error('AR error:', err);
+                showNotification('❌ Ошибка доступа к камере. Разрешите доступ.');
+                $('arPermission').style.display = 'flex';
+            }
+        }
+
+        function stopARMode() {
+            arActive = false;
+            arContainer.classList.remove('active');
+            document.body.style.overflow = '';
+            if (arStream) {
+                arStream.getTracks().forEach(t => t.stop());
+                arStream = null;
+            }
+            if (arAnimationId) { cancelAnimationFrame(arAnimationId);
+                arAnimationId = null; }
+            window.removeEventListener('deviceorientation', handleOrientation);
+            arVideo.srcObject = null;
+            showNotification('🗺️ Возврат на карту');
+        }
+
+        // ================================================================
+        // ===== COMPASS =====
+        // ================================================================
+        let currentHeading = 0;
+
+        function handleOrientation(event) {
+            if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+                currentHeading = event.webkitCompassHeading;
+            } else if (event.alpha !== null) {
+                currentHeading = 360 - event.alpha;
+            }
+            // Исправляем для ландшафта
+            if (window.orientation === 90 || window.orientation === -90) {
+                currentHeading = (currentHeading + 90) % 360;
+            }
+            if (arActive) updateARCompass();
+        }
+
+        function getBearingToTreasure() {
+            if (!userLocation || !treasureData) return 0;
+            const lat1 = userLocation.lat * Math.PI / 180;
+            const lat2 = treasureData.lat * Math.PI / 180;
+            const dLng = (treasureData.lng - userLocation.lng) * Math.PI / 180;
+            const y = Math.sin(dLng) * Math.cos(lat2);
+            const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+            let bearing = Math.atan2(y, x) * 180 / Math.PI;
+            return (bearing + 360) % 360;
+        }
+
+        function updateARCompass() {
+            if (!arActive) return;
+            const bearing = getBearingToTreasure();
+            arBearing = bearing;
+            const diff = (bearing - currentHeading + 360) % 360;
+            // Поворачиваем стрелку
+            arCompass.style.transform = `rotate(${diff}deg)`;
+
+            // Обновляем текстовое направление
+            const dirs = ['⬆️ СЕВЕР', '↗️ СЕВЕРО-ВОСТОК', '➡️ ВОСТОК', '↘️ ЮГО-ВОСТОК', '⬇️ ЮГ', '↙️ ЮГО-ЗАПАД', '⬅️ ЗАПАД',
+                '↖️ СЕВЕРО-ЗАПАД'
+            ];
+            const idx = Math.round(((bearing - currentHeading + 360) % 360) / 45) % 8;
+            arDirectionText.textContent = dirs[idx] || '';
+            arStatusText.textContent = arDistance < 15 ? '🎯 ТЫ В ЗОНЕ!' : '🚶 Идите к метке';
+        }
+
+        function updateARLoop() {
+            if (!arActive) return;
+            updateARCompass();
+            if (arDistance < 15 && treasureActive && !isWinner) {
+                // Авто-победа в AR
+                isWinner = true;
+                treasureActive = false;
+                treasureData = null;
+                updateTreasureUI();
+                removeTreasureCircle();
+                routeBtn.classList.remove('show');
+                stopARMode();
+                sendWinToServer();
+                showWinnerModal();
+            }
+            arAnimationId = requestAnimationFrame(updateARLoop);
+        }
+
+        // ================================================================
+        // ===== ROUTE TO KIOSK =====
         // ================================================================
         function routeToKiosk() {
-            if (!userLocation) {
-                showNotification('❌ Не могу определить местоположение');
-                return;
-            }
-
+            if (!userLocation) { showNotification('❌ Не могу определить местоположение'); return; }
             closeWinnerModal();
             closeGiftModal();
-
             if (mapInstance) {
                 mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
                 if (kioskPlacemark) kioskPlacemark.balloon.open();
             }
-
-            const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
-            const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
-
-            try {
-                window.open(appUrl, '_blank');
-                setTimeout(() => window.open(url, '_blank'), 1500);
-            } catch (e) {
-                window.open(url, '_blank');
-            }
-
+            const url =
+                `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+            const appUrl =
+                `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
+            try { window.open(appUrl, '_blank');
+                setTimeout(() => window.open(url, '_blank'), 1500); } catch (e) { window.open(url, '_blank'); }
             showNotification('🚶 Маршрут к киоску построен!');
         }
 
         // ================================================================
-        // ===== МОДАЛКИ =====
+        // ===== MODALS =====
         // ================================================================
         function showWinnerModal() {
-            document.getElementById('winnerModal').classList.add('open');
+            $('winnerModal').classList.add('open');
             document.body.style.overflow = 'hidden';
             if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
         }
 
         function closeWinnerModal() {
-            document.getElementById('winnerModal').classList.remove('open');
+            $('winnerModal').classList.remove('open');
             document.body.style.overflow = '';
         }
 
         function closeGiftModal() {
-            document.getElementById('giftModal').classList.remove('open');
+            $('giftModal').classList.remove('open');
             document.body.style.overflow = '';
         }
 
         // ================================================================
-        // ===== ПОДАРКИ =====
+        // ===== GIFTS =====
         // ================================================================
         async function getUserIP() {
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                return (await res.json()).ip;
-            } catch { return null; }
+            try { const res = await fetch('https://api.ipify.org?format=json'); return (await res.json()).ip; } catch { return null; }
         }
 
         async function checkGift() {
@@ -1722,16 +1587,19 @@
         }
 
         function showGiftModal() {
-            document.getElementById('giftModal').classList.add('open');
+            $('giftModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
-        function showNotification(message) {
+        // ================================================================
+        // ===== NOTIFICATION =====
+        // ================================================================
+        function showNotification(msg) {
             const existing = document.querySelector('.custom-notification');
             if (existing) existing.remove();
             const n = document.createElement('div');
             n.className = 'custom-notification';
-            n.textContent = message;
+            n.textContent = msg;
             document.body.appendChild(n);
             setTimeout(() => {
                 n.style.opacity = '0';
@@ -1747,9 +1615,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderMenu();
             connectSocket();
-            setTimeout(() => { initMap(); }, 500);
-            setTimeout(() => { showOnboarding(); }, 800);
-            console.log('🍓 Квест-страница с GPS-кладом загружена!');
+            setTimeout(initMap, 500);
+            setTimeout(showOnboarding, 800);
+            console.log('🍓 AR-квест загружен!');
         });
     </script>
 
