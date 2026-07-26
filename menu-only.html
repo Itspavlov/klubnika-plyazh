@@ -44,7 +44,6 @@
             min-height: 100vh;
         }
 
-        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 12px 0 16px;
@@ -86,37 +85,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== GIFT CARD ===== */
-        .gift-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid var(--glass-border);
-            text-align: center;
-        }
-        .gift-card .gift-icon { font-size: 48px; display:block; margin-bottom:4px; }
-        .gift-card h2 { font-size: 20px; font-weight:700; background:linear-gradient(135deg,#FFD700,#FF6B00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2px; }
-        .gift-card p { color:var(--text-secondary); font-size:13px; line-height:1.5; }
-        .gift-card .qr-code {
-            background: #fff;
-            border-radius: var(--radius-sm);
-            padding: 12px;
-            margin: 10px auto;
-            max-width: 160px;
-        }
-        .gift-card .qr-code img { width:100%; height:auto; display:block; }
-        .gift-card .btn {
-            display:inline-flex; align-items:center; justify-content:center; gap:8px;
-            padding:10px 20px; border-radius:var(--radius-sm); border:none; font-size:13px; font-weight:600;
-            cursor:pointer; font-family:var(--font-family); transition:0.2s; width:100%;
-        }
-        .gift-card .btn:active { transform:scale(0.97); }
-        .gift-card .btn-success { background:linear-gradient(135deg,#22C55E,#16A34A); color:#fff; }
-        .gift-card .btn-outline { background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:#fff; margin-top:6px; }
-
-        /* ===== MAP ===== */
         .map-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -173,7 +141,6 @@
             color: #4ADE80;
         }
 
-        /* ===== MENU ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -302,14 +269,23 @@
         .modal .icon { font-size: 56px; display:block; margin-bottom:4px; }
         .modal h2 { font-size: 20px; font-weight:800; background:linear-gradient(135deg,#FFD700,#FF6B00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2px; }
         .modal p { color:var(--text-secondary); font-size:13px; line-height:1.6; }
+        .modal .qr-code {
+            background: #fff;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin: 10px auto;
+            max-width: 160px;
+        }
+        .modal .qr-code img { width:100%; height:auto; display:block; }
         .modal .btn {
             width:100%; padding:12px; border-radius:var(--radius-sm); border:none; font-size:15px; font-weight:600;
             cursor:pointer; font-family:var(--font-family); transition:0.2s; margin-top:8px;
         }
         .modal .btn:active { transform:scale(0.97); }
         .modal .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; }
+        .modal .btn-success { background:linear-gradient(135deg,#22C55E,#16A34A); color:#fff; }
+        .modal .btn-outline { background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:#fff; }
 
-        /* ===== NOTIFICATION ===== */
         .notification {
             position: fixed;
             top: 70px;
@@ -339,7 +315,7 @@
 
 <div class="menu-container">
 
-    <!-- ===== HEADER ===== -->
+    <!-- HEADER -->
     <header class="header">
         <span class="logo-icon">🍓</span>
         <div class="header-badge"><i class="fas fa-gift"></i> Получи подарок!</div>
@@ -347,24 +323,7 @@
         <p class="subtitle">Найди киоск и получи бесплатный стаканчик! 🍓</p>
     </header>
 
-    <!-- ===== GIFT CARD ===== -->
-    <div class="gift-card" id="giftCard">
-        <span class="gift-icon">🎁</span>
-        <h2>Поздравляем!</h2>
-        <p>Ты получил <strong>бесплатный стаканчик</strong> клубники в шоколаде! 🍓</p>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:2px;">Покажи QR-код в киоске</p>
-        <div class="qr-code">
-            <img id="giftQR" src="" alt="QR-код подарка">
-        </div>
-        <button class="btn btn-success" onclick="routeToKiosk()">
-            <i class="fas fa-route"></i> Проложить маршрут
-        </button>
-        <button class="btn btn-outline" onclick="centerOnKiosk()">
-            <i class="fas fa-location-dot"></i> Показать киоск
-        </button>
-    </div>
-
-    <!-- ===== MAP ===== -->
+    <!-- MAP -->
     <div class="map-card">
         <div class="map-container">
             <div id="treasureMap"></div>
@@ -379,7 +338,7 @@
         </div>
     </div>
 
-    <!-- ===== MENU ===== -->
+    <!-- MENU -->
     <div class="menu-section active">
         <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
         <div class="menu-grid" id="strawberryGrid"></div>
@@ -392,15 +351,21 @@
 
 </div>
 
-<!-- ===== MODAL ===== -->
-<div class="modal-overlay" id="welcomeModal">
+<!-- ===== МОДАЛКА С ПОДАРКОМ ===== -->
+<div class="modal-overlay" id="giftModal">
     <div class="modal">
         <span class="icon">🍓</span>
         <h2>Ты нашёл киоск!</h2>
-        <p>Ты можешь получить <strong>бесплатный стаканчик</strong> клубники в шоколаде! 🎉</p>
-        <p style="font-size:12px;color:var(--text-muted);">Покажи QR-код в киоске и забери свой приз</p>
-        <button class="btn btn-primary" onclick="closeWelcome()">
-            <i class="fas fa-gift"></i> Забрать подарок
+        <p>Ты получил <strong>бесплатный стаканчик</strong> клубники в шоколаде! 🎉</p>
+        <p style="font-size:12px;color:var(--text-muted);">Покажи QR-код в киоске</p>
+        <div class="qr-code">
+            <img id="giftQR" src="" alt="QR-код подарка">
+        </div>
+        <button class="btn btn-success" onclick="closeModalAndRoute()">
+            <i class="fas fa-route"></i> Проложить маршрут
+        </button>
+        <button class="btn btn-outline" onclick="closeGiftModal()">
+            Хорошо, спасибо!
         </button>
     </div>
 </div>
@@ -410,7 +375,6 @@
     // ===== КОНСТАНТЫ =====
     // ================================================================
     const MY_LOCATION = { lat: 44.358193, lng: 38.528773 };
-    const STORAGE_KEY = 'strawberry_gift_claimed';
 
     let userLocation = null;
     let mapInstance = null;
@@ -418,6 +382,7 @@
     let kioskPlacemark = null;
     let watchId = null;
     let giftId = null;
+    let mapReady = false;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -452,7 +417,7 @@
     }
 
     // ================================================================
-    // ===== QR-КОД ПОДАРКА =====
+    // ===== QR-КОД =====
     // ================================================================
     function generateGiftQR(id) {
         const img = $('giftQR');
@@ -485,7 +450,7 @@
             if (data.hasGift) {
                 giftId = data.giftId;
                 generateGiftQR(giftId);
-                showWelcome();
+                showGiftModal();
             } else if (data.canActivate) {
                 await activateGift(ip);
             }
@@ -503,7 +468,7 @@
             if (data.success) {
                 giftId = data.giftId;
                 generateGiftQR(giftId);
-                showWelcome();
+                showGiftModal();
             }
         } catch(e) { console.error('Gift activate error:', e); }
     }
@@ -511,14 +476,19 @@
     // ================================================================
     // ===== МОДАЛКА =====
     // ================================================================
-    function showWelcome() {
-        $('welcomeModal').classList.add('open');
+    function showGiftModal() {
+        $('giftModal').classList.add('open');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeWelcome() {
-        $('welcomeModal').classList.remove('open');
+    function closeGiftModal() {
+        $('giftModal').classList.remove('open');
         document.body.style.overflow = '';
+    }
+
+    function closeModalAndRoute() {
+        closeGiftModal();
+        routeToKiosk();
     }
 
     // ================================================================
@@ -534,8 +504,9 @@
                     controls: ['zoomControl', 'typeSelector']
                 });
                 mapInstance.setType('satellite');
+                mapReady = true;
 
-                // Киоск с подписью
+                // Киоск
                 kioskPlacemark = new ymaps.Placemark(
                     [MY_LOCATION.lat, MY_LOCATION.lng],
                     { balloonContent: '🍓 <strong>Strawberry in Chocolate</strong><br>Забирай свой подарок!', iconCaption: '🍓 КИОСК' },
@@ -550,23 +521,65 @@
     }
 
     // ================================================================
-    // ===== GPS =====
+    // ===== GPS (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
     // ================================================================
     function getMyLocation() {
-        if (!navigator.geolocation) { showNotification('❌ Браузер не поддерживает геолокацию'); return; }
+        if (!navigator.geolocation) {
+            showNotification('❌ Браузер не поддерживает геолокацию');
+            return;
+        }
+
+        // Показываем уведомление о поиске
+        showNotification('📍 Определение местоположения...');
+
         if (watchId) navigator.geolocation.clearWatch(watchId);
+
         watchId = navigator.geolocation.watchPosition(
+            // УСПЕХ
             (pos) => {
-                userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                userLocation = {
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude
+                };
+                console.log('📍 GPS получен:', userLocation.lat, userLocation.lng);
                 updateUserMarker(userLocation.lat, userLocation.lng);
+                showNotification('✅ Местоположение определено!');
             },
-            () => { showNotification('❌ Ошибка GPS'); },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
+            // ОШИБКА
+            (error) => {
+                console.error('GPS Error:', error);
+                let msg = '❌ Не удалось определить местоположение';
+                if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
+                else if (error.code === 2) msg = '❌ Сигнал GPS слабый';
+                else if (error.code === 3) msg = '⏳ Превышено время ожидания';
+                showNotification(msg);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 5000
+            }
         );
+
+        // Если через 5 секунд нет результата — пробуем ещё раз
+        setTimeout(() => {
+            if (!userLocation && watchId) {
+                console.log('🔄 Повторный запрос GPS...');
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                        updateUserMarker(userLocation.lat, userLocation.lng);
+                        showNotification('✅ Местоположение определено!');
+                    },
+                    () => {},
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
+            }
+        }, 5000);
     }
 
     function updateUserMarker(lat, lng) {
-        if (!mapInstance) return;
+        if (!mapInstance || !mapReady) return;
         if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
         userPlacemark = new ymaps.Placemark(
             [lat, lng],
@@ -574,15 +587,19 @@
             { iconLayout: 'default#image', iconImageHref: 'https://emojicdn.elk.sh/🍓', iconImageSize: [36,36], iconImageOffset: [-18,-18] }
         );
         mapInstance.geoObjects.add(userPlacemark);
-        if (!document.querySelector('.ymaps-2-1-79-map')) {
-            mapInstance.setCenter([lat, lng], 17);
-        }
+        // Центрируем карту на пользователе при первом определении
+        mapInstance.setCenter([lat, lng], 17);
     }
 
     function centerOnUser() {
-        if (!userLocation || !mapInstance) { showNotification('📍 Не могу определить местоположение'); return; }
+        if (!userLocation || !mapInstance) {
+            showNotification('📍 Не могу определить местоположение');
+            getMyLocation();
+            return;
+        }
         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
         if (userPlacemark) userPlacemark.balloon.open();
+        showNotification('📍 Ты здесь!');
     }
 
     function centerOnKiosk() {
@@ -595,7 +612,11 @@
     // ===== МАРШРУТ =====
     // ================================================================
     function routeToKiosk() {
-        if (!userLocation) { showNotification('📍 Не могу определить местоположение'); return; }
+        if (!userLocation) {
+            showNotification('📍 Сначала определите местоположение');
+            getMyLocation();
+            return;
+        }
         const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
         const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
         try { window.open(appUrl, '_blank'); setTimeout(() => window.open(url, '_blank'), 1500); } catch(e) { window.open(url, '_blank'); }
@@ -626,7 +647,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         renderMenu();
         setTimeout(initMap, 500);
-        setTimeout(checkGift, 800);
+        setTimeout(checkGift, 1000);
         console.log('🍓 Страница загружена!');
     });
 </script>
