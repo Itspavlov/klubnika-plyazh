@@ -25,7 +25,6 @@
             --radius: 16px;
             --radius-sm: 10px;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --transition: all 0.3s ease;
         }
 
         * {
@@ -53,7 +52,6 @@
             min-height: 100vh;
         }
 
-        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 12px 0 16px;
@@ -95,7 +93,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ===== HERO SELECTOR ===== */
         .hero-selector {
             display: flex;
             align-items: center;
@@ -156,7 +153,6 @@
             text-align: center;
         }
 
-        /* ===== TIMER & STATUS ===== */
         .treasure-timer {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -242,7 +238,6 @@
             50% { opacity: 0.4; transform: scale(0.7); }
         }
 
-        /* ===== BUTTONS ===== */
         .btn-route {
             width: 100%;
             padding: 12px;
@@ -264,7 +259,6 @@
         .btn-route:active { transform: scale(0.97); }
         .btn-route.show { display: flex; }
 
-        /* ===== MAP ===== */
         .map-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -371,7 +365,6 @@
             pointer-events: none;
         }
 
-        /* AR Target */
         .ar-target {
             position: absolute;
             top: 50%;
@@ -381,7 +374,6 @@
             text-align: center;
             filter: drop-shadow(0 0 30px rgba(108,92,231,0.8));
             animation: pulseTarget 1.5s ease-in-out infinite;
-            z-index: 2;
         }
         @keyframes pulseTarget {
             0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
@@ -400,88 +392,42 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* ===== НОВЫЙ 3D КОМПАС ===== */
+        /* ===== 3D СТРЕЛКА ===== */
         .ar-compass {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 160px;
-            height: 160px;
-            margin-top: -60px;
-            z-index: 10;
+            width: 80px;
+            height: 80px;
+            margin-top: -90px;
             pointer-events: none;
+            z-index: 10;
+            transition: transform 0.08s ease-out;
         }
-        .compass-ring {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.2);
-            background: rgba(0,0,0,0.3);
-            box-shadow: 0 0 30px rgba(108,92,231,0.2), inset 0 0 30px rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
-        }
-        .compass-mark {
-            position: absolute;
-            font-size: 12px; font-weight: 700;
-            color: rgba(255,255,255,0.7);
-        }
-        .compass-north { top: 8px; left: 50%; transform: translateX(-50%); color: #FF4757; }
-        .compass-south { bottom: 8px; left: 50%; transform: translateX(-50%); }
-        .compass-east { right: 8px; top: 50%; transform: translateY(-50%); }
-        .compass-west { left: 8px; top: 50%; transform: translateY(-50%); }
-        .compass-arrow-wrap {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%; height: 100%;
-            transition: transform 0.15s ease-out;
-        }
-        .compass-arrow-top {
-            position: absolute;
-            top: 15px; left: 50%;
-            transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-bottom: 55px solid #FF4757;
-            filter: drop-shadow(0 0 12px rgba(255,71,87,0.8));
-        }
-        .compass-arrow-bottom {
-            position: absolute;
-            bottom: 15px; left: 50%;
-            transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-top: 55px solid rgba(255,255,255,0.3);
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
-        }
-        .compass-center-dot {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px; height: 8px;
-            background: #FFD700;
-            border-radius: 50%;
-            z-index: 3;
-            box-shadow: 0 0 10px rgba(255,215,0,0.8);
+        .ar-compass img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(255,215,0,0.5)) drop-shadow(0 4px 15px rgba(0,0,0,0.3));
         }
 
-        /* AR Info */
         .ar-info {
             position: absolute;
-            bottom: 40px; left: 50%;
+            bottom: 30px;
+            left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.7);
             backdrop-filter: blur(20px);
-            padding: 10px 24px;
+            padding: 8px 20px;
             border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid var(--glass-border);
             color: #fff;
-            font-size: 14px; font-weight: 600;
-            display: flex; align-items: center; gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             white-space: nowrap;
             pointer-events: none;
             z-index: 5;
@@ -489,17 +435,8 @@
         .ar-info .ar-distance-text {
             color: #FFD700;
             font-weight: 700;
-            font-size: 16px;
-        }
-        .ar-info-separator {
-            color: rgba(255,255,255,0.3);
-        }
-        #arDirectionHint {
-            font-size: 13px;
-            color: rgba(255,255,255,0.8);
         }
 
-        /* AR Buttons */
         .ar-back-btn {
             position: absolute;
             top: 20px;
@@ -523,7 +460,6 @@
         }
         .ar-back-btn:active { transform: scale(0.95); }
 
-        /* AR Camera Permission */
         .ar-permission {
             position: absolute;
             top: 50%;
@@ -545,7 +481,94 @@
             opacity: 0.7;
         }
 
-        /* ===== MODALS ===== */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .menu-item {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-item:active { transform: scale(0.98); }
+        .menu-item .item-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: rgba(255,255,255,0.03);
+        }
+        .menu-item .item-content {
+            padding: 10px 12px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-item .item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .menu-item .item-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            flex: 1;
+        }
+        .menu-item .item-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .menu-item .badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            color: var(--accent);
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i {
+            font-size: 18px;
+            color: var(--primary-light);
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0 8px;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+        .footer .footer-phone {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        @media (max-width: 340px) {
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+
         .onboarding-overlay, .winner-overlay, .congrats-overlay {
             display: none;
             position: fixed;
@@ -743,7 +766,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== NOTIFICATION ===== */
         .custom-notification {
             position: fixed;
             top: 70px;
@@ -774,7 +796,6 @@
 
     <div class="menu-container">
 
-        <!-- HEADER -->
         <header class="header">
             <span class="logo-icon">🍓</span>
             <div class="header-badge"><i class="fas fa-map-marked-alt"></i> AR-поиск клада!</div>
@@ -782,7 +803,6 @@
             <p class="subtitle">Найди клад и получи МЕГА-СТАКАН бесплатно! 🍓</p>
         </header>
 
-        <!-- HERO SELECTOR -->
         <div class="hero-selector">
             <span class="hero-label">🎮 Герой</span>
             <div class="hero-dropdown">
@@ -800,7 +820,6 @@
             <span class="hero-preview" id="heroPreview">🍓</span>
         </div>
 
-        <!-- TIMER -->
         <div class="treasure-timer">
             <div>
                 <div class="timer-label">⏱️ Следующий клад</div>
@@ -809,7 +828,6 @@
             <div class="timer-value next" id="treasureTimerDisplay">--:--:--</div>
         </div>
 
-        <!-- STATUS -->
         <div class="treasure-status-bar" id="treasureStatusBar">
             <div class="top-row">
                 <span class="status-label">
@@ -824,12 +842,10 @@
             </div>
         </div>
 
-        <!-- ROUTE BUTTON -->
         <button class="btn-route" id="routeToTreasureBtn" onclick="startARMode()">
             <i class="fas fa-location-arrow"></i> Маршрут до клада
         </button>
 
-        <!-- MAP -->
         <div class="map-card" id="mapCard">
             <div class="map-container" id="mapContainer">
                 <div id="treasureMap"></div>
@@ -849,6 +865,11 @@
             </div>
         </div>
 
+        <div class="menu-section active">
+            <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+            <div class="menu-grid" id="strawberryGrid"></div>
+        </div>
+
         <div class="footer">
             <i class="fas fa-heart" style="color: var(--accent);"></i> С любовью, Strawberry in Chocolate
             <br><a href="tel:+79628557263" class="footer-phone"><i class="fas fa-phone"></i> +7 962 855-72-63</a>
@@ -861,35 +882,16 @@
         <div class="ar-video-wrap">
             <video id="arVideo" autoplay playsinline></video>
             <div class="ar-overlay">
-                
-                <!-- МИШЕНЬ -->
                 <div class="ar-target" id="arTarget">
                     🎯
                     <div class="ar-distance" id="arDistance">0 м</div>
                 </div>
-                
-                <!-- НОВЫЙ КОМПАС -->
                 <div class="ar-compass" id="arCompass">
-                    <div class="compass-ring">
-                        <div class="compass-mark compass-north">N</div>
-                        <div class="compass-mark compass-south">S</div>
-                        <div class="compass-mark compass-east">E</div>
-                        <div class="compass-mark compass-west">W</div>
-                    </div>
-                    <div class="compass-arrow-wrap" id="compassArrowWrap">
-                        <div class="compass-arrow-top"></div>
-                        <div class="compass-arrow-bottom"></div>
-                    </div>
-                    <div class="compass-center-dot"></div>
+                    <img src="images/arrow-3d.jpg" alt="стрелка">
                 </div>
-                
-                <!-- ИНФО-ПАНЕЛЬ -->
                 <div class="ar-info">
                     <span class="ar-distance-text" id="arDistanceText">0 м</span>
-                    <span class="ar-info-separator">•</span>
-                    <span id="arDirectionHint">ищем клад...</span>
                 </div>
-                
             </div>
             <button class="ar-back-btn" onclick="stopARMode()">
                 <i class="fas fa-times"></i> На карту
@@ -1000,6 +1002,7 @@
         const arVideo = $('arVideo');
         const arDistanceEl = $('arDistance');
         const arDistanceText = $('arDistanceText');
+        const arCompass = $('arCompass');
 
         // ================================================================
         // ===== INIT HERO =====
@@ -1058,6 +1061,39 @@
             const s = String(diff % 60).padStart(2, '0');
             treasureTimerDisplay.textContent = `${h}:${m}:${s}`;
             treasureTimeLabel.textContent = `${next.getHours()}:${String(next.getMinutes()).padStart(2, '0')} МСК`;
+        }
+
+        // ================================================================
+        // ===== MENU =====
+        // ================================================================
+        const MENU_ITEMS = [
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg',
+                badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450,
+                image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450,
+                image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450,
+                image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450,
+                image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350,
+                image: 'images/klubnika-bez-shokolada.jpg' }
+        ];
+
+        function renderMenu() {
+            const grid = $('strawberryGrid');
+            grid.innerHTML = MENU_ITEMS.map(item => `
+                <div class="menu-item" style="position:relative;">
+                    ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+                    <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                    <div class="item-content">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="item-price">${item.price} ₽</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // ================================================================
@@ -1373,7 +1409,7 @@
         }
 
         // ================================================================
-        // ===== AR MODE (НОВЫЙ) =====
+        // ===== AR MODE =====
         // ================================================================
         async function startARMode() {
             if (!treasureData) { showNotification('❌ Клад не активен!'); return; }
@@ -1391,30 +1427,42 @@
                 arContainer.classList.add('active');
                 document.body.style.overflow = 'hidden';
 
-                // Запускаем компас
-                if (typeof DeviceOrientationEvent !== 'undefined') {
+                // ✅ ЗАПУСКАЕМ ГИРОСКОП
+                if (window.DeviceOrientationEvent) {
                     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                        // iOS 13+
-                        DeviceOrientationEvent.requestPermission()
-                            .then(state => {
-                                if (state === 'granted') {
-                                    window.addEventListener('deviceorientation', handleOrientation);
-                                    console.log('✅ Компас разрешён (iOS)');
-                                }
-                            })
-                            .catch(() => {
+                        try {
+                            const permission = await DeviceOrientationEvent.requestPermission();
+                            if (permission === 'granted') {
                                 window.addEventListener('deviceorientation', handleOrientation);
-                            });
+                                console.log('✅ Гироскоп активен');
+                            }
+                        } catch (e) {
+                            console.warn('⚠️ Ошибка разрешения:', e);
+                            window.addEventListener('deviceorientation', handleOrientation);
+                        }
                     } else {
-                        // Android / старый iOS
                         window.addEventListener('deviceorientation', handleOrientation);
-                        console.log('✅ Компас запущен (Android)');
+                        console.log('🔄 Гироскоп подключён');
                     }
                 }
 
+                // Если через 2 секунды нет данных — виртуальный гироскоп
+                setTimeout(() => {
+                    if (currentHeading === 0) {
+                        console.log('🔄 Виртуальный гироскоп...');
+                        window.addEventListener('deviceorientation', function(e) {
+                            if (e.alpha !== null) {
+                                currentHeading = 360 - e.alpha;
+                                if (arActive) updateArrow();
+                            }
+                        });
+                    }
+                }, 2000);
+
                 updateArrow();
                 arAnimationId = requestAnimationFrame(updateARLoop);
-                showNotification('🧭 Поворачивай телефон — стрелка покажет направление!');
+
+                showNotification('🧭 Поверните телефон — стрелка будет двигаться');
 
             } catch (err) {
                 console.error('AR error:', err);
@@ -1431,41 +1479,41 @@
                 arStream.getTracks().forEach(t => t.stop());
                 arStream = null;
             }
-            if (arAnimationId) { cancelAnimationFrame(arAnimationId); arAnimationId = null; }
+            if (arAnimationId) { cancelAnimationFrame(arAnimationId);
+                arAnimationId = null; }
             window.removeEventListener('deviceorientation', handleOrientation);
             arVideo.srcObject = null;
-            currentHeading = 0;
             showNotification('🗺️ Возврат на карту');
         }
 
         // ================================================================
-        // ===== КОМПАС (НОВЫЙ) =====
+        // ===== КОМПАС / ГИРОСКОП =====
         // ================================================================
         function handleOrientation(event) {
-            let heading = null;
+            let heading = 0;
             
-            // iOS: webkitCompassHeading (0 = север)
-            if (event.webkitCompassHeading !== undefined) {
+            if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
                 heading = event.webkitCompassHeading;
-            } 
-            // Android: event.alpha (0 = север)
-            else if (event.alpha !== null && event.alpha !== undefined) {
+                console.log('🧭 Компас:', Math.round(heading));
+            } else if (event.alpha !== null && event.alpha !== undefined) {
                 heading = 360 - event.alpha;
+                console.log('🔄 Гироскоп:', Math.round(heading));
+            } else {
+                return;
             }
             
-            // Корректировка для ландшафтной ориентации
-            if (heading !== null && (window.orientation === 90 || window.orientation === -90)) {
+            if (window.orientation === 90 || window.orientation === -90) {
                 heading = (heading + 90) % 360;
             }
             
-            if (heading !== null && heading >= 0) {
+            if (heading > 0) {
                 currentHeading = heading;
                 if (arActive) updateArrow();
             }
         }
 
         // ================================================================
-        // ===== СТРЕЛКА (НОВАЯ) =====
+        // ===== СТРЕЛКА =====
         // ================================================================
         function getBearingToTreasure() {
             if (!userLocation || !treasureData) return 0;
@@ -1484,37 +1532,16 @@
             const bearing = getBearingToTreasure();
             let rotation = bearing;
             
-            // Если компас работает — стрелка поворачивается ПРОТИВ поворота телефона
             if (currentHeading > 0) {
                 rotation = (bearing - currentHeading + 360) % 360;
             }
             
-            // Вращаем стрелку
-            const arrowWrap = document.getElementById('compassArrowWrap');
-            if (arrowWrap) {
-                arrowWrap.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
-            }
-            
-            // Обновляем подсказку
-            const hint = document.getElementById('arDirectionHint');
-            if (hint) {
-                if (currentHeading > 0) {
-                    if (rotation < 10 || rotation > 350) hint.textContent = '⬆️ прямо';
-                    else if (rotation < 45) hint.textContent = '↗️ правее';
-                    else if (rotation < 135) hint.textContent = '➡️ направо';
-                    else if (rotation < 225) hint.textContent = '⬇️ назад';
-                    else if (rotation < 315) hint.textContent = '⬅️ налево';
-                    else hint.textContent = '↖️ левее';
-                } else {
-                    hint.textContent = '📱 поверните телефон';
-                }
-            }
+            arCompass.style.transform = `rotate(${rotation}deg)`;
         }
 
         function updateARLoop() {
             if (!arActive) return;
             updateArrow();
-            
             if (arDistance < 15 && treasureActive && !isWinner) {
                 isWinner = true;
                 treasureActive = false;
@@ -1526,7 +1553,6 @@
                 sendWinToServer();
                 showWinnerModal();
             }
-            
             arAnimationId = requestAnimationFrame(updateARLoop);
         }
 
@@ -1631,6 +1657,7 @@
         // ===== INIT =====
         // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
+            renderMenu();
             setTimeout(connectSocket, 500);
             setTimeout(initMap, 800);
             setTimeout(showOnboarding, 1000);
