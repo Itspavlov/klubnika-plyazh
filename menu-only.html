@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍓 Квест: AR-поиск клада!</title>
+    <title>🍓 Квест: Найди клад!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
@@ -27,12 +27,7 @@
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: var(--font-family);
@@ -40,7 +35,6 @@
             min-height: 100vh;
             padding: 0 0 40px 0;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             color: var(--text-primary);
             overflow-x: hidden;
         }
@@ -396,8 +390,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             margin-top: -90px;
             pointer-events: none;
             z-index: 10;
@@ -582,9 +576,7 @@
             padding: 16px;
             animation: fadeIn 0.4s ease;
         }
-        .onboarding-overlay.open, .winner-overlay.open, .congrats-overlay.open {
-            display: flex;
-        }
+        .onboarding-overlay.open, .winner-overlay.open, .congrats-overlay.open { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .onboarding-modal, .winner-modal, .congrats-modal {
@@ -637,9 +629,7 @@
             border: 1px solid var(--glass-border);
         }
         .onboarding-modal .onboarding-text strong,
-        .congrats-modal .congrats-text strong {
-            color: var(--primary-light);
-        }
+        .congrats-modal .congrats-text strong { color: var(--primary-light); }
         .onboarding-modal .onboarding-times {
             display: flex;
             gap: 10px;
@@ -671,9 +661,7 @@
             border-radius: var(--radius-sm);
             border: 1px solid rgba(253,121,168,0.15);
         }
-        .onboarding-modal .onboarding-gift-hint strong {
-            color: var(--accent);
-        }
+        .onboarding-modal .onboarding-gift-hint strong { color: var(--accent); }
         .onboarding-modal .onboarding-btn,
         .congrats-modal .congrats-btn-primary {
             width: 100%;
@@ -689,9 +677,7 @@
             transition: var(--transition);
         }
         .onboarding-modal .onboarding-btn:active,
-        .congrats-modal .congrats-btn-primary:active {
-            transform: scale(0.97);
-        }
+        .congrats-modal .congrats-btn-primary:active { transform: scale(0.97); }
 
         .winner-modal .winner-prize {
             background: rgba(255,215,0,0.1);
@@ -979,7 +965,6 @@
         let arStream = null;
         let arAnimationId = null;
         let arDistance = 0;
-        let lastAlpha = null;
 
         // ================================================================
         // ===== DOM REFS =====
@@ -1065,18 +1050,12 @@
         // ===== MENU =====
         // ================================================================
         const MENU_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg',
-                badge: '🔥 Хит' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450,
-                image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450,
-                image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450,
-                image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450,
-                image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350,
-                image: 'images/klubnika-bez-shokolada.jpg' }
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg', badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         function renderMenu() {
@@ -1104,7 +1083,6 @@
                     setTimeout(connectSocket, 2000);
                     return;
                 }
-                
                 socket = io();
                 console.log('📡 WebSocket подключён');
 
@@ -1120,7 +1098,6 @@
                     }
                     showNotification('🎯 КЛАД ПОЯВИЛСЯ! Нажми "Маршрут до клада"');
                 });
-                
                 socket.on('treasure-claimed', () => { resetTreasure(); });
                 socket.on('treasure-end', () => { resetTreasure(); });
                 socket.on('you-won', () => {
@@ -1128,7 +1105,6 @@
                     resetTreasure();
                     showWinnerModal();
                 });
-                
             } catch (e) {
                 console.error('WS error:', e);
                 setTimeout(connectSocket, 5000);
@@ -1153,7 +1129,6 @@
                 setTimeout(initMap, 2000);
                 return;
             }
-            
             ymaps.ready(() => {
                 try {
                     mapInstance = new ymaps.Map('treasureMap', {
@@ -1161,7 +1136,6 @@
                         zoom: 17,
                         controls: ['zoomControl', 'typeSelector']
                     });
-                    
                     mapInstance.events.add('load', function() {
                         try {
                             mapInstance.setType('satellite');
@@ -1170,7 +1144,6 @@
                             console.warn('⚠️ Ошибка включения спутника:', e);
                         }
                     });
-                    
                     $('mapPlaceholder').style.display = 'none';
 
                     kioskPlacemark = new ymaps.Placemark(
@@ -1182,7 +1155,6 @@
 
                     getMyLocation();
                     checkTreasureStatus();
-                    
                     if (statusCheckInterval) clearInterval(statusCheckInterval);
                     statusCheckInterval = setInterval(() => {
                         checkTreasureStatus();
@@ -1191,11 +1163,9 @@
                             checkDistanceToTreasure();
                         }
                     }, 3000);
-                    
                     updateTimer();
                     if (timerInterval) clearInterval(timerInterval);
                     timerInterval = setInterval(updateTimer, 1000);
-                    
                     console.log('🗺️ Карта загружена!');
                 } catch (e) {
                     console.error('Map error:', e);
@@ -1295,8 +1265,7 @@
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(
-                dLon / 2) ** 2;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1000;
         }
 
@@ -1425,23 +1394,6 @@
                 arContainer.classList.add('active');
                 document.body.style.overflow = 'hidden';
 
-                // Слушаем гироскоп для вращения стрелки
-                window.addEventListener('deviceorientation', function(e) {
-                    if (e.alpha !== null && e.alpha !== undefined) {
-                        lastAlpha = 360 - e.alpha;
-                        if (arActive) updateArrow();
-                    }
-                });
-
-                // Если через 2 секунды нет данных — стрелка показывает азимут
-                setTimeout(() => {
-                    if (lastAlpha === null) {
-                        console.log('🔄 Гироскоп не активен, стрелка показывает азимут');
-                        // Стрелка всё равно будет показывать направление на клад
-                        if (arActive) updateArrow();
-                    }
-                }, 2000);
-
                 updateArrow();
                 arAnimationId = requestAnimationFrame(updateARLoop);
 
@@ -1464,13 +1416,12 @@
             }
             if (arAnimationId) { cancelAnimationFrame(arAnimationId);
                 arAnimationId = null; }
-            window.removeEventListener('deviceorientation', handleOrientation);
             arVideo.srcObject = null;
             showNotification('🗺️ Возврат на карту');
         }
 
         // ================================================================
-        // ===== СТРЕЛКА (ФИНАЛЬНАЯ ВЕРСИЯ) =====
+        // ===== СТРЕЛКА (ПРОСТАЯ ВЕРСИЯ) =====
         // ================================================================
         function getBearingToTreasure() {
             if (!userLocation || !treasureData) return 0;
@@ -1485,16 +1436,8 @@
 
         function updateArrow() {
             if (!arActive || !treasureData) return;
-            
             const bearing = getBearingToTreasure();
-            let rotation = bearing;
-            
-            // Если есть данные с гироскопа — учитываем их
-            if (lastAlpha !== null) {
-                rotation = (bearing - lastAlpha + 360) % 360;
-            }
-            
-            arCompass.style.transform = `rotate(${rotation}deg)`;
+            arCompass.style.transform = `rotate(${bearing}deg)`;
         }
 
         function updateARLoop() {
@@ -1525,10 +1468,8 @@
                 mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
                 if (kioskPlacemark) kioskPlacemark.balloon.open();
             }
-            const url =
-                `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
-            const appUrl =
-                `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
+            const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+            const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
             try { window.open(appUrl, '_blank');
                 setTimeout(() => window.open(url, '_blank'), 1500); } catch (e) { window.open(url, '_blank'); }
             showNotification('🚶 Маршрут к киоску построен!');
