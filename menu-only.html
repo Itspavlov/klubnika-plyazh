@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🍓 Квест: AR-поиск клада!</title>
+    <title>🍓 Strawberry in Chocolate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
-    <script src="/socket.io/socket.io.js"></script><script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
     <style>
-        
         :root {
             --primary: #6C5CE7;
             --primary-dark: #5A4BD1;
@@ -19,17 +16,16 @@
             --bg-start: #0F0E17;
             --bg-end: #1A1A2E;
             --card-bg: rgba(255,255,255,0.06);
-            --glass-border: rgba(255,255,255,0.1);
+            --glass-border: rgba(255,255,255,0.08);
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255,255,255,0.7);
             --text-muted: rgba(255,255,255,0.4);
-            --shadow: 0 8px 32px rgba(0,0,0,0.4);
             --radius: 16px;
             --radius-sm: 10px;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
         body {
             font-family: var(--font-family);
@@ -48,6 +44,7 @@
             min-height: 100vh;
         }
 
+        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 12px 0 16px;
@@ -89,204 +86,54 @@
             50% { transform: translateY(-8px); }
         }
 
-        .hero-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        /* ===== GIFT CARD ===== */
+        .gift-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border-radius: var(--radius-sm);
-            padding: 8px 14px;
-            margin-bottom: 12px;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
             border: 1px solid var(--glass-border);
-        }
-        .hero-selector .hero-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            white-space: nowrap;
-        }
-        .hero-selector .hero-dropdown {
-            flex: 1;
-            position: relative;
-        }
-        .hero-selector .hero-dropdown select {
-            width: 100%;
-            padding: 6px 12px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 500;
-            font-family: var(--font-family);
-            appearance: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-            outline: none;
-        }
-        .hero-selector .hero-dropdown select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108,92,231,0.2);
-        }
-        .hero-selector .hero-dropdown select option {
-            background: #1A1A2E;
-            color: #fff;
-        }
-        .hero-selector .hero-dropdown::after {
-            content: '▾';
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 10px;
-            pointer-events: none;
-        }
-        .hero-selector .hero-preview {
-            font-size: 24px;
-            min-width: 32px;
             text-align: center;
         }
-
-        .treasure-timer {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
+        .gift-card .gift-icon { font-size: 48px; display:block; margin-bottom:4px; }
+        .gift-card h2 { font-size: 20px; font-weight:700; background:linear-gradient(135deg,#FFD700,#FF6B00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2px; }
+        .gift-card p { color:var(--text-secondary); font-size:13px; line-height:1.5; }
+        .gift-card .qr-code {
+            background: #fff;
             border-radius: var(--radius-sm);
-            padding: 10px 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        .treasure-timer .timer-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .treasure-timer .timer-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #4ADE80;
-            font-variant-numeric: tabular-nums;
-        }
-        .treasure-timer .timer-value.next {
-            color: #FFD700;
-        }
-        .treasure-timer .timer-time {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .treasure-status-bar {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-sm);
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.5s ease;
-        }
-        .treasure-status-bar .top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        .treasure-status-bar .status-label {
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .treasure-status-bar .status-label .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .treasure-status-bar .status-label .dot.inactive { background: #F87171; }
-        .treasure-status-bar .status-label .dot.active { background: #4ADE80; animation: pulseDot 1.5s ease-in-out infinite; }
-        .treasure-status-bar .status-label .dot.winner { background: #FFD700; animation: pulseDot 0.8s ease-in-out infinite; }
-        .treasure-status-bar .status-distance {
-            font-size: 18px;
-            font-weight: 700;
-            color: #FFD700;
-        }
-        .treasure-status-bar .status-detail {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
-        }
-
-        .btn-route {
-            width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #4ADE80, #22C55E);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            transition: var(--transition);
-            margin-bottom: 12px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            margin: 10px auto;
+            max-width: 160px;
         }
-        .btn-route:active { transform: scale(0.97); }
-        .btn-route.show { display: flex; }
+        .gift-card .qr-code img { width:100%; height:auto; display:block; }
+        .gift-card .btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:8px;
+            padding:10px 20px; border-radius:var(--radius-sm); border:none; font-size:13px; font-weight:600;
+            cursor:pointer; font-family:var(--font-family); transition:0.2s; width:100%;
+        }
+        .gift-card .btn:active { transform:scale(0.97); }
+        .gift-card .btn-success { background:linear-gradient(135deg,#22C55E,#16A34A); color:#fff; }
+        .gift-card .btn-outline { background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:#fff; margin-top:6px; }
 
+        /* ===== MAP ===== */
         .map-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             border-radius: var(--radius);
             overflow: hidden;
             border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow);
+            margin-bottom: 12px;
         }
         .map-card .map-container {
             width: 100%;
-            height: 420px;
+            height: 380px;
             position: relative;
             background: #0A0A1A;
         }
         .map-card .map-container #treasureMap {
             width: 100%;
             height: 100%;
-        }
-        .map-card .map-container .map-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--text-muted);
-            font-size: 13px;
-            gap: 8px;
-        }
-        .map-card .map-container .map-placeholder i {
-            font-size: 40px;
-            color: var(--primary);
-            opacity: 0.5;
         }
         .map-card .map-actions {
             display: flex;
@@ -317,166 +164,16 @@
         .map-btn:active { transform: scale(0.97); }
         .map-btn.location-btn {
             background: rgba(108,92,231,0.15);
-            border-color: rgba(108,92,231,0.3);
+            border-color: rgba(108,92,231,0.25);
             color: var(--primary-light);
         }
         .map-btn.kiosk-btn {
-            background: rgba(74,222,128,0.12);
-            border-color: rgba(74,222,128,0.25);
+            background: rgba(34,197,94,0.12);
+            border-color: rgba(34,197,94,0.2);
             color: #4ADE80;
         }
 
-        /* ===== AR CONTAINER ===== */
-        .ar-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #000;
-            z-index: 3000;
-            flex-direction: column;
-        }
-        .ar-container.active {
-            display: flex;
-        }
-        .ar-container .ar-video-wrap {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            background: #000;
-        }
-        .ar-container .ar-video-wrap video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .ar-container .ar-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-
-        .ar-target {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 52px;
-            text-align: center;
-            filter: drop-shadow(0 0 30px rgba(108,92,231,0.8));
-            animation: pulseTarget 1.5s ease-in-out infinite;
-        }
-        @keyframes pulseTarget {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
-        }
-        .ar-target .ar-distance {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            padding: 4px 14px;
-            border-radius: 100px;
-            margin-top: 4px;
-            display: inline-block;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* ===== СТРЕЛКА ===== */
-        .ar-compass {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            margin-top: -90px;
-            pointer-events: none;
-            z-index: 10;
-            transition: transform 0.1s ease;
-        }
-        .ar-compass img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 30px rgba(255,215,0,0.5)) drop-shadow(0 4px 15px rgba(0,0,0,0.3));
-        }
-
-        .ar-info {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(20px);
-            padding: 8px 20px;
-            border-radius: 100px;
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 5;
-        }
-        .ar-info .ar-distance-text {
-            color: #FFD700;
-            font-weight: 700;
-        }
-
-        .ar-back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: var(--font-family);
-            transition: var(--transition);
-            z-index: 10;
-            pointer-events: auto;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .ar-back-btn:active { transform: scale(0.95); }
-
-        .ar-permission {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-            z-index: 5;
-            pointer-events: none;
-        }
-        .ar-permission i {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-        .ar-permission span {
-            font-size: 14px;
-            opacity: 0.7;
-        }
-
+        /* ===== MENU ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -565,7 +262,8 @@
             .menu-grid { grid-template-columns: 1fr; }
         }
 
-        .onboarding-overlay, .winner-overlay, .congrats-overlay {
+        /* ===== MODAL ===== */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -580,10 +278,10 @@
             padding: 16px;
             animation: fadeIn 0.4s ease;
         }
-        .onboarding-overlay.open, .winner-overlay.open, .congrats-overlay.open { display: flex; }
+        .modal-overlay.open { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .onboarding-modal, .winner-modal, .congrats-modal {
+        .modal {
             background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
             border-radius: var(--radius);
             max-width: 400px;
@@ -593,7 +291,7 @@
             position: relative;
             animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
             overflow-y: auto;
             text-align: center;
         }
@@ -601,170 +299,27 @@
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        .modal .icon { font-size: 56px; display:block; margin-bottom:4px; }
+        .modal h2 { font-size: 20px; font-weight:800; background:linear-gradient(135deg,#FFD700,#FF6B00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2px; }
+        .modal p { color:var(--text-secondary); font-size:13px; line-height:1.6; }
+        .modal .btn {
+            width:100%; padding:12px; border-radius:var(--radius-sm); border:none; font-size:15px; font-weight:600;
+            cursor:pointer; font-family:var(--font-family); transition:0.2s; margin-top:8px;
+        }
+        .modal .btn:active { transform:scale(0.97); }
+        .modal .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; }
 
-        .onboarding-modal .onboarding-icon,
-        .winner-modal .winner-icon,
-        .congrats-modal .congrats-icon-wrap .main-icon {
-            font-size: 56px;
-            display: block;
-            animation: float 3s ease-in-out infinite;
-        }
-        .onboarding-modal .onboarding-title,
-        .winner-modal .winner-title,
-        .congrats-modal .congrats-title {
-            font-size: 20px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FFFFFF, var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 4px 0 2px;
-        }
-        .onboarding-modal .onboarding-text,
-        .congrats-modal .congrats-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 12px;
-            text-align: left;
-            background: rgba(255,255,255,0.04);
-            padding: 12px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-        }
-        .onboarding-modal .onboarding-text strong,
-        .congrats-modal .congrats-text strong { color: var(--primary-light); }
-        .onboarding-modal .onboarding-times {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        .onboarding-modal .onboarding-times .time-box {
-            background: rgba(255,255,255,0.06);
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-            text-align: center;
-        }
-        .onboarding-modal .onboarding-times .time-box .time {
-            font-size: 18px;
-            font-weight: 700;
-            color: #FFD700;
-        }
-        .onboarding-modal .onboarding-times .time-box .label {
-            font-size: 9px;
-            color: var(--text-muted);
-        }
-        .onboarding-modal .onboarding-gift-hint {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin: 8px 0 12px;
-            padding: 8px 12px;
-            background: rgba(253,121,168,0.08);
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(253,121,168,0.15);
-        }
-        .onboarding-modal .onboarding-gift-hint strong { color: var(--accent); }
-        .onboarding-modal .onboarding-btn,
-        .congrats-modal .congrats-btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            transition: var(--transition);
-        }
-        .onboarding-modal .onboarding-btn:active,
-        .congrats-modal .congrats-btn-primary:active { transform: scale(0.97); }
-
-        .winner-modal .winner-prize {
-            background: rgba(255,215,0,0.1);
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(255,215,0,0.15);
-            color: #FFD700;
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .winner-modal .winner-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #4ADE80, #22C55E);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            transition: var(--transition);
-            margin-top: 6px;
-        }
-        .winner-modal .winner-btn:active { transform: scale(0.97); }
-        .winner-modal .winner-btn-purple {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        }
-        .winner-modal .winner-secondary-btn,
-        .congrats-modal .congrats-btn-secondary {
-            width: 100%;
-            padding: 8px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 12px;
-            cursor: pointer;
-            font-family: var(--font-family);
-            margin-top: 4px;
-        }
-        .congrats-modal .congrats-close {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--glass-border);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 12px;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .congrats-modal .congrats-close:active { transform: scale(0.9); }
-        .congrats-modal .congrats-badge {
-            display: inline-block;
-            background: rgba(255,215,0,0.15);
-            color: #FFD700;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 12px;
-            border-radius: 100px;
-            border: 1px solid rgba(255,215,0,0.1);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .custom-notification {
+        /* ===== NOTIFICATION ===== */
+        .notification {
             position: fixed;
             top: 70px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(20px);
             color: #fff;
             padding: 10px 20px;
             border-radius: 100px;
-            box-shadow: var(--shadow);
             z-index: 9999;
             max-width: 90%;
             text-align: center;
@@ -782,791 +337,299 @@
 </head>
 <body>
 
-    <div class="menu-container">
+<div class="menu-container">
 
-        <header class="header">
-            <span class="logo-icon">🍓</span>
-            <div class="header-badge"><i class="fas fa-map-marked-alt"></i> AR-поиск клада!</div>
-            <h1>Strawberry in Chocolate</h1>
-            <p class="subtitle">Найди клад и получи МЕГА-СТАКАН бесплатно! 🍓</p>
-        </header>
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <span class="logo-icon">🍓</span>
+        <div class="header-badge"><i class="fas fa-gift"></i> Получи подарок!</div>
+        <h1>Strawberry in Chocolate</h1>
+        <p class="subtitle">Найди киоск и получи бесплатный стаканчик! 🍓</p>
+    </header>
 
-        <div class="hero-selector">
-            <span class="hero-label">🎮 Герой</span>
-            <div class="hero-dropdown">
-                <select id="heroSelect" onchange="selectHero(this.value)">
-                    <option value="🍓">🍓 Клубничка</option>
-                    <option value="🚗">🚗 Машина</option>
-                    <option value="✈️">✈️ Самолёт</option>
-                    <option value="🚀">🚀 Ракета</option>
-                    <option value="🎖️">🎖️ Танк</option>
-                    <option value="🤖">🤖 Робот</option>
-                    <option value="🐱">🐱 Кошка</option>
-                    <option value="🐶">🐶 Собака</option>
-                </select>
-            </div>
-            <span class="hero-preview" id="heroPreview">🍓</span>
+    <!-- ===== GIFT CARD ===== -->
+    <div class="gift-card" id="giftCard">
+        <span class="gift-icon">🎁</span>
+        <h2>Поздравляем!</h2>
+        <p>Ты получил <strong>бесплатный стаканчик</strong> клубники в шоколаде! 🍓</p>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:2px;">Покажи QR-код в киоске</p>
+        <div class="qr-code">
+            <img id="giftQR" src="" alt="QR-код подарка">
         </div>
-
-        <div class="treasure-timer">
-            <div>
-                <div class="timer-label">⏱️ Следующий клад</div>
-                <div class="timer-time" id="treasureTimeLabel">15:00 МСК</div>
-            </div>
-            <div class="timer-value next" id="treasureTimerDisplay">--:--:--</div>
-        </div>
-
-        <div class="treasure-status-bar" id="treasureStatusBar">
-            <div class="top-row">
-                <span class="status-label">
-                    <span class="dot inactive" id="statusDot"></span>
-                    <span id="statusLabelText">Клад не активен</span>
-                </span>
-                <span class="status-distance" id="treasureDistance">—</span>
-            </div>
-            <div class="status-detail">
-                <span id="treasureStatusText">Ожидайте активации</span>
-                <span class="emoji-status" id="treasureEmoji">⏳</span>
-            </div>
-        </div>
-
-        <button class="btn-route" id="routeToTreasureBtn" onclick="startARMode()">
-            <i class="fas fa-location-arrow"></i> Маршрут до клада
+        <button class="btn btn-success" onclick="routeToKiosk()">
+            <i class="fas fa-route"></i> Проложить маршрут
         </button>
-
-        <div class="map-card" id="mapCard">
-            <div class="map-container" id="mapContainer">
-                <div id="treasureMap"></div>
-                <div class="map-placeholder" id="mapPlaceholder">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Загрузка карты...</span>
-                    <span style="font-size:11px;color:var(--text-muted);">Разрешите доступ к геолокации</span>
-                </div>
-            </div>
-            <div class="map-actions">
-                <button class="map-btn location-btn" onclick="centerOnUser()">
-                    <i class="fas fa-location-dot"></i> Где я?
-                </button>
-                <button class="map-btn kiosk-btn" onclick="routeToKiosk()">
-                    <i class="fas fa-route"></i> Киоск
-                </button>
-            </div>
-        </div>
-
-        <div class="menu-section active">
-            <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
-            <div class="menu-grid" id="strawberryGrid"></div>
-        </div>
-
-        <div class="footer">
-            <i class="fas fa-heart" style="color: var(--accent);"></i> С любовью, Strawberry in Chocolate
-            <br><a href="tel:+79628557263" class="footer-phone"><i class="fas fa-phone"></i> +7 962 855-72-63</a>
-        </div>
-
+        <button class="btn btn-outline" onclick="centerOnKiosk()">
+            <i class="fas fa-location-dot"></i> Показать киоск
+        </button>
     </div>
 
-    <!-- ===== AR CONTAINER ===== -->
-    <div class="ar-container" id="arContainer">
-        <div class="ar-video-wrap">
-            <video id="arVideo" autoplay playsinline></video>
-            <div class="ar-overlay">
-                <div class="ar-target" id="arTarget">
-                    🎯
-                    <div class="ar-distance" id="arDistance">0 м</div>
-                </div>
-                <div class="ar-compass" id="arCompass">
-                    <img src="images/arrow-3d.jpg" alt="стрелка">
-                </div>
-                <div class="ar-info">
-                    <span class="ar-distance-text" id="arDistanceText">0 м</span>
-                </div>
-            </div>
-            <button class="ar-back-btn" onclick="stopARMode()">
-                <i class="fas fa-times"></i> На карту
+    <!-- ===== MAP ===== -->
+    <div class="map-card">
+        <div class="map-container">
+            <div id="treasureMap"></div>
+        </div>
+        <div class="map-actions">
+            <button class="map-btn location-btn" onclick="centerOnUser()">
+                <i class="fas fa-location-dot"></i> Где я?
             </button>
-            <div class="ar-permission" id="arPermission">
-                <i class="fas fa-camera"></i>
-                <span>Разрешите доступ к камере</span>
-            </div>
+            <button class="map-btn kiosk-btn" onclick="routeToKiosk()">
+                <i class="fas fa-route"></i> Киоск
+            </button>
         </div>
     </div>
 
-    <!-- ===== MODALS ===== -->
-    <div class="onboarding-overlay" id="onboardingModal">
-        <div class="onboarding-modal">
-            <span class="onboarding-icon">🍓</span>
-            <div class="onboarding-title">Привет, искатель!</div>
-            <div class="onboarding-text">
-                Ты попал в <strong>клубничные соревнования</strong>! 🎉<br><br>
-                Заглядывай к нам в <strong>15:00</strong> и <strong>19:00</strong>.<br><br>
-                На карте появится <strong>пульсирующий круг</strong> — будь первым, кто в него зайдёт!<br><br>
-                <strong>🏆 Победитель получает МЕГА-СТАКАН бесплатно!</strong>
-            </div>
-            <div class="onboarding-times">
-                <div class="time-box"><div class="time">15:00</div><div class="label">МСК</div></div>
-                <div class="time-box"><div class="time">19:00</div><div class="label">МСК</div></div>
-            </div>
-            <div class="onboarding-gift-hint">
-                🎁 А пока — <strong>мини-порция шоколадной клубнички</strong> в подарок!<br>
-                Покажи QR-код кассиру в киоске 🍓
-            </div>
-            <button class="onboarding-btn" onclick="closeOnboarding()"><i class="fas fa-gift"></i> Забрать подарок</button>
-        </div>
+    <!-- ===== MENU ===== -->
+    <div class="menu-section active">
+        <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+        <div class="menu-grid" id="strawberryGrid"></div>
     </div>
 
-    <div class="winner-overlay" id="winnerModal">
-        <div class="winner-modal">
-            <span class="winner-icon">🏆</span>
-            <div class="winner-title">ТЫ ПОБЕДИЛ!</div>
-            <div class="winner-subtitle">Ты первый нашёл клад! 🎉</div>
-            <div class="winner-prize">🎁 МЕГА-СТАКАН клубники в шоколаде <strong>БЕСПЛАТНО!</strong></div>
-            <button class="winner-btn" onclick="routeToKiosk()"><i class="fas fa-route"></i> Проложить маршрут</button>
-            <button class="winner-btn winner-btn-purple" onclick="routeToKiosk()"><i class="fas fa-walking"></i> Пешком до киоска</button>
-            <button class="winner-secondary-btn" onclick="closeWinnerModal()">Хорошо, иду! 🏃‍♂️</button>
-        </div>
+    <div class="footer">
+        <i class="fas fa-heart" style="color: var(--accent);"></i> С любовью, Strawberry in Chocolate
+        <br><a href="tel:+79628557263" class="footer-phone"><i class="fas fa-phone"></i> +7 962 855-72-63</a>
     </div>
 
-    <div class="congrats-overlay" id="giftModal">
-        <div class="congrats-modal">
-            <button class="congrats-close" onclick="closeGiftModal()"><i class="fas fa-times"></i></button>
-            <div class="congrats-icon-wrap"><span class="main-icon">🍓</span></div>
-            <span class="congrats-badge">🎁 БЕСПЛАТНО</span>
-            <div class="congrats-title">Поздравляем!</div>
-            <div class="congrats-subtitle">Вы наш гость! 🥳</div>
-            <div class="congrats-text">Вас ждёт <strong>бесплатная мини-порция</strong> клубники в шоколаде! 🍫</div>
-            <button class="congrats-btn-primary" onclick="routeToKiosk()"><i class="fas fa-route"></i> Проложить маршрут</button>
-            <button class="congrats-btn-secondary" onclick="closeGiftModal()">Хорошо, спасибо!</button>
-        </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="welcomeModal">
+    <div class="modal">
+        <span class="icon">🍓</span>
+        <h2>Ты нашёл киоск!</h2>
+        <p>Ты можешь получить <strong>бесплатный стаканчик</strong> клубники в шоколаде! 🎉</p>
+        <p style="font-size:12px;color:var(--text-muted);">Покажи QR-код в киоске и забери свой приз</p>
+        <button class="btn btn-primary" onclick="closeWelcome()">
+            <i class="fas fa-gift"></i> Забрать подарок
+        </button>
     </div>
+</div>
 
-    <script>
-        // ================================================================
-        // ===== КОНСТАНТЫ =====
-        // ================================================================
-        const MY_LOCATION = { lat: 44.358193, lng: 38.528773 };
-        const TREASURE_TIMES = [{ hours: 15, minutes: 0 }, { hours: 19, minutes: 0 }];
+<script>
+    // ================================================================
+    // ===== КОНСТАНТЫ =====
+    // ================================================================
+    const MY_LOCATION = { lat: 44.358193, lng: 38.528773 };
+    const STORAGE_KEY = 'strawberry_gift_claimed';
 
-        let userLocation = null;
-        let mapInstance = null;
-        let userPlacemark = null;
-        let treasureCircle = null;
-        let kioskPlacemark = null;
-        let watchId = null;
-        let treasureActive = false;
-        let treasureData = null;
-        let giftId = null;
-        let statusCheckInterval = null;
-        let timerInterval = null;
-        let userId = localStorage.getItem('userId') || 'user_' + Date.now();
-        localStorage.setItem('userId', userId);
-        let socket = null;
-        let selectedHero = localStorage.getItem('selectedHero') || '🍓';
-        let isFirstLocation = true;
-        let isWinner = false;
+    let userLocation = null;
+    let mapInstance = null;
+    let userPlacemark = null;
+    let kioskPlacemark = null;
+    let watchId = null;
+    let giftId = null;
 
-        // AR
-        let arActive = false;
-        let arStream = null;
-        let arAnimationId = null;
-        let arDistance = 0;
+    // ================================================================
+    // ===== DOM REFS =====
+    // ================================================================
+    const $ = id => document.getElementById(id);
 
-        // ================================================================
-        // ===== DOM REFS =====
-        // ================================================================
-        const $ = id => document.getElementById(id);
-        const heroSelect = $('heroSelect');
-        const heroPreview = $('heroPreview');
-        const treasureTimerDisplay = $('treasureTimerDisplay');
-        const treasureTimeLabel = $('treasureTimeLabel');
-        const treasureStatusBar = $('treasureStatusBar');
-        const statusDot = $('statusDot');
-        const statusLabelText = $('statusLabelText');
-        const treasureDistance = $('treasureDistance');
-        const treasureStatusText = $('treasureStatusText');
-        const treasureEmoji = $('treasureEmoji');
-        const routeBtn = $('routeToTreasureBtn');
-        const arContainer = $('arContainer');
-        const arVideo = $('arVideo');
-        const arDistanceEl = $('arDistance');
-        const arDistanceText = $('arDistanceText');
-        const arCompass = $('arCompass');
+    // ================================================================
+    // ===== MENU =====
+    // ================================================================
+    const MENU_ITEMS = [
+        { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg', badge: '🔥 Хит' },
+        { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+        { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+        { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, image: 'images/miks.jpg' },
+        { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, image: 'images/banan.jpg' },
+        { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, image: 'images/klubnika-bez-shokolada.jpg' }
+    ];
 
-        // ================================================================
-        // ===== INIT HERO =====
-        // ================================================================
-        heroSelect.value = selectedHero;
-        heroPreview.textContent = selectedHero;
-
-        function selectHero(hero) {
-            selectedHero = hero;
-            localStorage.setItem('selectedHero', hero);
-            heroPreview.textContent = hero;
-            if (userLocation && mapInstance) updateUserMarker(userLocation.lat, userLocation.lng);
-            showNotification(`🎮 Ты теперь ${hero}!`);
-        }
-
-        // ================================================================
-        // ===== ONBOARDING =====
-        // ================================================================
-        function showOnboarding() {
-            if (localStorage.getItem('onboarding_seen')) return;
-            $('onboardingModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeOnboarding() {
-            $('onboardingModal').classList.remove('open');
-            document.body.style.overflow = '';
-            localStorage.setItem('onboarding_seen', 'true');
-            setTimeout(checkGift, 500);
-        }
-
-        // ================================================================
-        // ===== TIMER =====
-        // ================================================================
-        function getNextTreasureTime() {
-            const now = new Date();
-            const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-            for (const t of TREASURE_TIMES) {
-                const target = new Date(msk);
-                target.setHours(t.hours, t.minutes, 0, 0);
-                if (target > msk) return target;
-            }
-            const target = new Date(msk);
-            target.setDate(target.getDate() + 1);
-            target.setHours(TREASURE_TIMES[0].hours, TREASURE_TIMES[0].minutes, 0, 0);
-            return target;
-        }
-
-        function updateTimer() {
-            const next = getNextTreasureTime();
-            const now = new Date();
-            const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-            const diff = Math.max(0, Math.floor((next - msk) / 1000));
-            const h = String(Math.floor(diff / 3600)).padStart(2, '0');
-            const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
-            const s = String(diff % 60).padStart(2, '0');
-            treasureTimerDisplay.textContent = `${h}:${m}:${s}`;
-            treasureTimeLabel.textContent = `${next.getHours()}:${String(next.getMinutes()).padStart(2, '0')} МСК`;
-        }
-
-        // ================================================================
-        // ===== MENU =====
-        // ================================================================
-        const MENU_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg', badge: '🔥 Хит' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, image: 'images/klubnika-bez-shokolada.jpg' }
-        ];
-
-        function renderMenu() {
-            const grid = $('strawberryGrid');
-            grid.innerHTML = MENU_ITEMS.map(item => `
-                <div class="menu-item" style="position:relative;">
-                    ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
-                    <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
-                    <div class="item-content">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-desc">${item.desc}</div>
-                        <div class="item-price">${item.price} ₽</div>
-                    </div>
+    function renderMenu() {
+        const grid = $('strawberryGrid');
+        grid.innerHTML = MENU_ITEMS.map(item => `
+            <div class="menu-item" style="position:relative;">
+                ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+                <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                <div class="item-content">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-desc">${item.desc}</div>
+                    <div class="item-price">${item.price} ₽</div>
                 </div>
-            `).join('');
-        }
+            </div>
+        `).join('');
+    }
 
-        // ================================================================
-        // ===== WEBSOCKET =====
-        // ================================================================
-        function connectSocket() {
-            try {
-                if (typeof io === 'undefined') {
-                    console.warn('⚠️ Socket.IO не загружен, повторная попытка...');
-                    setTimeout(connectSocket, 2000);
-                    return;
-                }
-                socket = io();
-                console.log('📡 WebSocket подключён');
+    // ================================================================
+    // ===== QR-КОД ПОДАРКА =====
+    // ================================================================
+    function generateGiftQR(id) {
+        const img = $('giftQR');
+        if (!id) { img.src = ''; return; }
+        const qrData = `gift-${id}`;
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&color=6C5CE7&bgcolor=FFFFFF`;
+    }
 
-                socket.on('treasure-activated', (data) => {
-                    if (isWinner) return;
-                    treasureActive = true;
-                    treasureData = data;
-                    updateTreasureUI();
-                    routeBtn.classList.add('show');
-                    if (mapInstance) {
-                        mapInstance.setCenter([data.lat, data.lng], 17);
-                        showTreasureCircle(data.lat, data.lng, data.radius || 15);
-                    }
-                    showNotification('🎯 КЛАД ПОЯВИЛСЯ! Нажми "Маршрут до клада"');
-                });
-                socket.on('treasure-claimed', () => { resetTreasure(); });
-                socket.on('treasure-end', () => { resetTreasure(); });
-                socket.on('you-won', () => {
-                    isWinner = true;
-                    resetTreasure();
-                    showWinnerModal();
-                });
-            } catch (e) {
-                console.error('WS error:', e);
-                setTimeout(connectSocket, 5000);
-            }
-        }
+    // ================================================================
+    // ===== IP И ПОДАРКИ =====
+    // ================================================================
+    async function getUserIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch { return null; }
+    }
 
-        function resetTreasure() {
-            treasureActive = false;
-            treasureData = null;
-            updateTreasureUI();
-            routeBtn.classList.remove('show');
-            removeTreasureCircle();
-            if (arActive) stopARMode();
-        }
-
-        // ================================================================
-        // ===== MAP =====
-        // ================================================================
-        function initMap() {
-            if (typeof ymaps === 'undefined') {
-                console.warn('⚠️ Яндекс.Карты не загружены, повторная попытка...');
-                setTimeout(initMap, 2000);
-                return;
-            }
-            ymaps.ready(() => {
-                try {
-                    mapInstance = new ymaps.Map('treasureMap', {
-                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                        zoom: 17,
-                        controls: ['zoomControl', 'typeSelector']
-                    });
-                    mapInstance.events.add('load', function() {
-                        try {
-                            mapInstance.setType('satellite');
-                            console.log('🛰️ Спутниковый режим включён');
-                        } catch (e) {
-                            console.warn('⚠️ Ошибка включения спутника:', e);
-                        }
-                    });
-                    $('mapPlaceholder').style.display = 'none';
-
-                    kioskPlacemark = new ymaps.Placemark(
-                        [MY_LOCATION.lat, MY_LOCATION.lng], 
-                        { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
-                        { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
-                    );
-                    mapInstance.geoObjects.add(kioskPlacemark);
-
-                    getMyLocation();
-                    checkTreasureStatus();
-                    if (statusCheckInterval) clearInterval(statusCheckInterval);
-                    statusCheckInterval = setInterval(() => {
-                        checkTreasureStatus();
-                        if (userLocation && treasureActive) {
-                            sendUserLocation();
-                            checkDistanceToTreasure();
-                        }
-                    }, 3000);
-                    updateTimer();
-                    if (timerInterval) clearInterval(timerInterval);
-                    timerInterval = setInterval(updateTimer, 1000);
-                    console.log('🗺️ Карта загружена!');
-                } catch (e) {
-                    console.error('Map error:', e);
-                    setTimeout(initMap, 3000);
-                }
+    async function checkGift() {
+        const ip = await getUserIP();
+        if (!ip) return;
+        try {
+            const res = await fetch('/api/gift/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip })
             });
-        }
-
-        // ================================================================
-        // ===== GPS =====
-        // ================================================================
-        function getMyLocation() {
-            if (!navigator.geolocation) { showNotification('❌ Браузер не поддерживает геолокацию'); return; }
-            const btn = document.querySelector('.location-btn');
-            if (btn) { btn.classList.add('loading');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
-            if (watchId) navigator.geolocation.clearWatch(watchId);
-            watchId = navigator.geolocation.watchPosition(
-                (pos) => {
-                    userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                    if (btn) { btn.classList.remove('loading');
-                        btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?'; }
-                    updateUserMarker(userLocation.lat, userLocation.lng);
-                    if (isFirstLocation && mapInstance) {
-                        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
-                        isFirstLocation = false;
-                    }
-                    sendUserLocation();
-                    if (treasureActive && treasureData) checkDistanceToTreasure();
-                },
-                () => {
-                    if (btn) { btn.classList.remove('loading');
-                        btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?'; }
-                    showNotification('❌ Ошибка GPS');
-                }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
-            );
-        }
-
-        function centerOnUser() {
-            if (!userLocation || !mapInstance) { showNotification('📍 Не могу определить местоположение'); return; }
-            mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
-            showNotification('📍 Ты здесь!');
-        }
-
-        function updateUserMarker(lat, lng) {
-            if (!mapInstance) return;
-            if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
-            userPlacemark = new ymaps.Placemark(
-                [lat, lng], { balloonContent: '🎮 Это ты!' }, {
-                    iconLayout: 'default#image',
-                    iconImageHref: `https://emojicdn.elk.sh/${selectedHero}`,
-                    iconImageSize: [36, 36],
-                    iconImageOffset: [-18, -18]
-                }
-            );
-            mapInstance.geoObjects.add(userPlacemark);
-        }
-
-        // ================================================================
-        // ===== TREASURE CIRCLE =====
-        // ================================================================
-        function showTreasureCircle(lat, lng, radius = 15) {
-            if (!mapInstance) return;
-            removeTreasureCircle();
-            treasureCircle = new ymaps.Circle(
-                [[lat, lng], radius], { balloonContent: '🎯 Зона клада (15м)' }, {
-                    fillColor: 'rgba(108,92,231,0.15)',
-                    strokeColor: '#6C5CE7',
-                    strokeWidth: 3,
-                    strokeOpacity: 0.8
-                }
-            );
-            mapInstance.geoObjects.add(treasureCircle);
-            let pulse = 0;
-            treasureCircle._pulseInterval = setInterval(() => {
-                if (!treasureCircle) { clearInterval(treasureCircle._pulseInterval); return; }
-                pulse = (pulse + 1) % 20;
-                const op = 0.5 + 0.4 * Math.sin(pulse / 20 * Math.PI * 2);
-                treasureCircle.options.set('strokeOpacity', op);
-                treasureCircle.options.set('fillOpacity', 0.08 + 0.12 * Math.sin(pulse / 20 * Math.PI * 2));
-            }, 100);
-            updateTreasureUI();
-        }
-
-        function removeTreasureCircle() {
-            if (treasureCircle) {
-                if (treasureCircle._pulseInterval) clearInterval(treasureCircle._pulseInterval);
-                mapInstance.geoObjects.remove(treasureCircle);
-                treasureCircle = null;
+            const data = await res.json();
+            if (data.hasGift) {
+                giftId = data.giftId;
+                generateGiftQR(giftId);
+                showWelcome();
+            } else if (data.canActivate) {
+                await activateGift(ip);
             }
-        }
+        } catch(e) { console.error('Gift check error:', e); }
+    }
 
-        // ================================================================
-        // ===== DISTANCE =====
-        // ================================================================
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1000;
-        }
-
-        function checkDistanceToTreasure() {
-            if (!userLocation || !treasureData || isWinner) return;
-            const dist = getDistance(userLocation.lat, userLocation.lng, treasureData.lat, treasureData.lng);
-            treasureDistance.textContent = Math.round(dist) + ' м';
-            if (dist <= 15) {
-                treasureDistance.textContent = '0 м';
-                treasureStatusText.textContent = '🎯 ТЫ В ЗОНЕ!';
-                treasureEmoji.textContent = '🎯';
-                if (treasureActive && !isWinner) {
-                    isWinner = true;
-                    treasureActive = false;
-                    treasureData = null;
-                    updateTreasureUI();
-                    removeTreasureCircle();
-                    routeBtn.classList.remove('show');
-                    if (arActive) stopARMode();
-                    sendWinToServer();
-                    showWinnerModal();
-                }
-            } else if (dist <= 30) {
-                treasureStatusText.textContent = '🔥 ГОРЯЧО!';
-                treasureEmoji.textContent = '🔥';
-            } else if (dist <= 60) {
-                treasureStatusText.textContent = '🌤️ ТЕПЛО';
-                treasureEmoji.textContent = '🌤️';
-            } else if (dist <= 120) {
-                treasureStatusText.textContent = '🌥️ ПРОХЛАДНО';
-                treasureEmoji.textContent = '🌥️';
-            } else {
-                treasureStatusText.textContent = '❄️ ХОЛОДНО';
-                treasureEmoji.textContent = '❄️';
+    async function activateGift(ip) {
+        try {
+            const res = await fetch('/api/gift/activate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip })
+            });
+            const data = await res.json();
+            if (data.success) {
+                giftId = data.giftId;
+                generateGiftQR(giftId);
+                showWelcome();
             }
-            arDistance = dist;
-            if (arActive) {
-                arDistanceEl.textContent = Math.round(dist) + ' м';
-                arDistanceText.textContent = Math.round(dist) + ' м';
-                updateArrow();
-            }
-        }
+        } catch(e) { console.error('Gift activate error:', e); }
+    }
 
-        // ================================================================
-        // ===== UI =====
-        // ================================================================
-        function updateTreasureUI() {
-            if (treasureActive && treasureData) {
-                treasureStatusBar.classList.add('active');
-                statusDot.className = 'dot active';
-                statusLabelText.textContent = 'КЛАД АКТИВЕН!';
-            } else if (isWinner) {
-                treasureStatusBar.classList.add('active');
-                statusDot.className = 'dot winner';
-                statusLabelText.textContent = '🏆 ПОБЕДА!';
-            } else {
-                treasureStatusBar.classList.remove('active');
-                statusDot.className = 'dot inactive';
-                statusLabelText.textContent = 'Клад не активен';
-                treasureDistance.textContent = '—';
-                treasureStatusText.textContent = 'Ожидайте активации';
-                treasureEmoji.textContent = '⏳';
-            }
-        }
+    // ================================================================
+    // ===== МОДАЛКА =====
+    // ================================================================
+    function showWelcome() {
+        $('welcomeModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
 
-        // ================================================================
-        // ===== STATUS CHECK =====
-        // ================================================================
-        async function checkTreasureStatus() {
-            if (isWinner) return;
+    function closeWelcome() {
+        $('welcomeModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ================================================================
+    // ===== КАРТА =====
+    // ================================================================
+    function initMap() {
+        if (typeof ymaps === 'undefined') { setTimeout(initMap, 1000); return; }
+        ymaps.ready(() => {
             try {
-                const res = await fetch('/api/treasure/status');
-                const data = await res.json();
-                if (data.active) {
-                    if (!treasureActive) {
-                        treasureActive = true;
-                        treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
-                        routeBtn.classList.add('show');
-                        if (mapInstance) {
-                            mapInstance.setCenter([data.lat, data.lng], 17);
-                            showTreasureCircle(data.lat, data.lng, data.radius || 15);
-                        }
-                        showNotification('🎯 КЛАД ПОЯВИЛСЯ! Нажми "Маршрут до клада"');
-                    } else {
-                        treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
-                    }
-                    updateTreasureUI();
-                } else {
-                    if (treasureActive) {
-                        treasureActive = false;
-                        treasureData = null;
-                        updateTreasureUI();
-                        routeBtn.classList.remove('show');
-                        removeTreasureCircle();
-                    }
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        function sendUserLocation() {
-            if (!userLocation || !socket) return;
-            socket.emit('user-location', { userId, lat: userLocation.lat, lng: userLocation.lng, hero: selectedHero });
-        }
-
-        function sendWinToServer() {
-            if (!socket) return;
-            socket.emit('treasure-win', { userId, lat: userLocation.lat, lng: userLocation.lng });
-        }
-
-        // ================================================================
-        // ===== AR MODE =====
-        // ================================================================
-        async function startARMode() {
-            if (!treasureData) { showNotification('❌ Клад не активен!'); return; }
-            if (!userLocation) { showNotification('❌ Не могу определить местоположение'); return; }
-
-            try {
-                arStream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+                mapInstance = new ymaps.Map('treasureMap', {
+                    center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                    zoom: 17,
+                    controls: ['zoomControl', 'typeSelector']
                 });
-                arVideo.srcObject = arStream;
-                await arVideo.play();
-                $('arPermission').style.display = 'none';
+                mapInstance.setType('satellite');
 
-                arActive = true;
-                arContainer.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                // Киоск с подписью
+                kioskPlacemark = new ymaps.Placemark(
+                    [MY_LOCATION.lat, MY_LOCATION.lng],
+                    { balloonContent: '🍓 <strong>Strawberry in Chocolate</strong><br>Забирай свой подарок!', iconCaption: '🍓 КИОСК' },
+                    { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
+                );
+                mapInstance.geoObjects.add(kioskPlacemark);
 
-                updateArrow();
-                arAnimationId = requestAnimationFrame(updateARLoop);
-
-                showNotification('🧭 Стрелка показывает направление к кладу');
-
-            } catch (err) {
-                console.error('AR error:', err);
-                showNotification('❌ Ошибка доступа к камере');
-                $('arPermission').style.display = 'flex';
-            }
-        }
-
-        function stopARMode() {
-            arActive = false;
-            arContainer.classList.remove('active');
-            document.body.style.overflow = '';
-            if (arStream) {
-                arStream.getTracks().forEach(t => t.stop());
-                arStream = null;
-            }
-            if (arAnimationId) { cancelAnimationFrame(arAnimationId);
-                arAnimationId = null; }
-            arVideo.srcObject = null;
-            showNotification('🗺️ Возврат на карту');
-        }
-
-        // ================================================================
-        // ===== СТРЕЛКА =====
-        // ================================================================
-        function getBearingToTreasure() {
-            if (!userLocation || !treasureData) return 0;
-            const lat1 = userLocation.lat * Math.PI / 180;
-            const lat2 = treasureData.lat * Math.PI / 180;
-            const dLng = (treasureData.lng - userLocation.lng) * Math.PI / 180;
-            const y = Math.sin(dLng) * Math.cos(lat2);
-            const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
-            let bearing = Math.atan2(y, x) * 180 / Math.PI;
-            return (bearing + 360) % 360;
-        }
-
-        function updateArrow() {
-            if (!arActive || !treasureData) return;
-            const bearing = getBearingToTreasure();
-            arCompass.style.transform = `rotate(${bearing}deg)`;
-        }
-
-        function updateARLoop() {
-            if (!arActive) return;
-            updateArrow();
-            if (arDistance < 15 && treasureActive && !isWinner) {
-                isWinner = true;
-                treasureActive = false;
-                treasureData = null;
-                updateTreasureUI();
-                removeTreasureCircle();
-                routeBtn.classList.remove('show');
-                stopARMode();
-                sendWinToServer();
-                showWinnerModal();
-            }
-            arAnimationId = requestAnimationFrame(updateARLoop);
-        }
-
-        // ================================================================
-        // ===== ROUTE TO KIOSK =====
-        // ================================================================
-        function routeToKiosk() {
-            if (!userLocation) { showNotification('❌ Не могу определить местоположение'); return; }
-            closeWinnerModal();
-            closeGiftModal();
-            if (mapInstance) {
-                mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
-                if (kioskPlacemark) kioskPlacemark.balloon.open();
-            }
-            const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
-            const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
-            try { window.open(appUrl, '_blank');
-                setTimeout(() => window.open(url, '_blank'), 1500); } catch (e) { window.open(url, '_blank'); }
-            showNotification('🚶 Маршрут к киоску построен!');
-        }
-
-        // ================================================================
-        // ===== MODALS =====
-        // ================================================================
-        function showWinnerModal() {
-            $('winnerModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
-        }
-
-        function closeWinnerModal() {
-            $('winnerModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        function closeGiftModal() {
-            $('giftModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        // ================================================================
-        // ===== GIFTS =====
-        // ================================================================
-        async function getUserIP() {
-            try { const res = await fetch('https://api.ipify.org?format=json'); return (await res.json()).ip; } catch { return null; }
-        }
-
-        async function checkGift() {
-            const ip = await getUserIP();
-            if (!ip) return;
-            try {
-                const res = await fetch('/api/gift/check', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ip })
-                });
-                const data = await res.json();
-                if (data.hasGift) { giftId = data.giftId;
-                    showGiftModal(); } else if (data.canActivate) { await activateGift(ip); }
-            } catch (e) { console.error(e); }
-        }
-
-        async function activateGift(ip) {
-            try {
-                const res = await fetch('/api/gift/activate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ip })
-                });
-                const data = await res.json();
-                if (data.success) { giftId = data.giftId;
-                    showGiftModal(); }
-            } catch (e) { console.error(e); }
-        }
-
-        function showGiftModal() {
-            $('giftModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // ================================================================
-        // ===== NOTIFICATION =====
-        // ================================================================
-        function showNotification(msg) {
-            const existing = document.querySelector('.custom-notification');
-            if (existing) existing.remove();
-            const n = document.createElement('div');
-            n.className = 'custom-notification';
-            n.textContent = msg;
-            document.body.appendChild(n);
-            setTimeout(() => {
-                n.style.opacity = '0';
-                n.style.transform = 'translateX(-50%) translateY(-20px)';
-                n.style.transition = 'all 0.3s ease';
-                setTimeout(() => n.remove(), 400);
-            }, 3500);
-        }
-
-        // ================================================================
-        // ===== INIT =====
-        // ================================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            renderMenu();
-            setTimeout(connectSocket, 500);
-            setTimeout(initMap, 800);
-            setTimeout(showOnboarding, 1000);
-            console.log('🍓 AR-квест загружен!');
+                getMyLocation();
+                console.log('🗺️ Карта загружена!');
+            } catch(e) { console.error('Map error:', e); }
         });
-    </script>
+    }
+
+    // ================================================================
+    // ===== GPS =====
+    // ================================================================
+    function getMyLocation() {
+        if (!navigator.geolocation) { showNotification('❌ Браузер не поддерживает геолокацию'); return; }
+        if (watchId) navigator.geolocation.clearWatch(watchId);
+        watchId = navigator.geolocation.watchPosition(
+            (pos) => {
+                userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                updateUserMarker(userLocation.lat, userLocation.lng);
+            },
+            () => { showNotification('❌ Ошибка GPS'); },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
+        );
+    }
+
+    function updateUserMarker(lat, lng) {
+        if (!mapInstance) return;
+        if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
+        userPlacemark = new ymaps.Placemark(
+            [lat, lng],
+            { balloonContent: '🍓 <strong>Ты здесь!</strong>' },
+            { iconLayout: 'default#image', iconImageHref: 'https://emojicdn.elk.sh/🍓', iconImageSize: [36,36], iconImageOffset: [-18,-18] }
+        );
+        mapInstance.geoObjects.add(userPlacemark);
+        if (!document.querySelector('.ymaps-2-1-79-map')) {
+            mapInstance.setCenter([lat, lng], 17);
+        }
+    }
+
+    function centerOnUser() {
+        if (!userLocation || !mapInstance) { showNotification('📍 Не могу определить местоположение'); return; }
+        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
+        if (userPlacemark) userPlacemark.balloon.open();
+    }
+
+    function centerOnKiosk() {
+        if (!mapInstance) return;
+        mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 17);
+        if (kioskPlacemark) kioskPlacemark.balloon.open();
+    }
+
+    // ================================================================
+    // ===== МАРШРУТ =====
+    // ================================================================
+    function routeToKiosk() {
+        if (!userLocation) { showNotification('📍 Не могу определить местоположение'); return; }
+        const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+        const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
+        try { window.open(appUrl, '_blank'); setTimeout(() => window.open(url, '_blank'), 1500); } catch(e) { window.open(url, '_blank'); }
+        showNotification('🚶 Маршрут к киоску построен!');
+    }
+
+    // ================================================================
+    // ===== УВЕДОМЛЕНИЯ =====
+    // ================================================================
+    function showNotification(msg) {
+        const existing = document.querySelector('.notification');
+        if (existing) existing.remove();
+        const n = document.createElement('div');
+        n.className = 'notification';
+        n.textContent = msg;
+        document.body.appendChild(n);
+        setTimeout(() => {
+            n.style.opacity = '0';
+            n.style.transform = 'translateX(-50%) translateY(-20px)';
+            n.style.transition = 'all 0.3s ease';
+            setTimeout(() => n.remove(), 400);
+        }, 3500);
+    }
+
+    // ================================================================
+    // ===== INIT =====
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        renderMenu();
+        setTimeout(initMap, 500);
+        setTimeout(checkGift, 800);
+        console.log('🍓 Страница загружена!');
+    });
+</script>
 
 </body>
 </html>
