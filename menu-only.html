@@ -1652,7 +1652,12 @@
                 setTimeout(() => n.remove(), 400);
             }, 3500);
         }
-
+// Добавь это в консоль или в код
+let testAngle = 0;
+setInterval(() => {
+    testAngle = (testAngle + 5) % 360;
+    document.getElementById('arCompass').style.transform = `rotate(${testAngle}deg)`;
+}, 50);
         // ================================================================
         // ===== INIT =====
         // ================================================================
