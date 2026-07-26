@@ -608,45 +608,45 @@
     // ================================================================
     // ===== КАРТА =====
     // ================================================================
-    function initMap() {
-        if (typeof ymaps === 'undefined') { 
-            setTimeout(initMap, 1000); 
-            return; 
-        }
-        ymaps.ready(() => {
-            ymapsReady = true;
-            try {
-                mapInstance = new ymaps.Map('treasureMap', {
-                    center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                    zoom: 17,
-                    controls: ['zoomControl', 'typeSelector']
-                });
-                mapReady = true;
-
-                // Киоск
-                kioskPlacemark = new ymaps.Placemark(
-                    [MY_LOCATION.lat, MY_LOCATION.lng],
-                    { 
-                        balloonContent: '🍓 Strawberry in Chocolate', 
-                        iconCaption: '🍓 КИОСК',
-                        hintContent: '🍓 Strawberry in Chocolate'
-                    },
-                    { 
-                        preset: 'islands#blueStretchyIcon', 
-                        iconContent: '🍓'
-                    }
-                );
-                mapInstance.geoObjects.add(kioskPlacemark);
-
-                getMyLocation();
-                console.log('🗺️ Карта загружена!');
-            } catch(e) { 
-                console.error('Map error:', e);
-                setTimeout(initMap, 2000);
-            }
-        });
+function initMap() {
+    if (typeof ymaps === 'undefined') { 
+        setTimeout(initMap, 1000); 
+        return; 
     }
+    ymaps.ready(() => {
+        ymapsReady = true;
+        try {
+            mapInstance = new ymaps.Map('treasureMap', {
+                center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                zoom: 17,
+                controls: ['zoomControl', 'typeSelector']
+            });
+            mapReady = true;
 
+            // КИОСК С КАРТИНКОЙ
+            kioskPlacemark = new ymaps.Placemark(
+                [MY_LOCATION.lat, MY_LOCATION.lng],
+                { 
+                    balloonContent: '🍓 Strawberry in Chocolate',
+                    hintContent: '🍓 Strawberry in Chocolate'
+                },
+                { 
+                    iconLayout: 'default#image',
+                    iconImageHref: 'images/kiosk-icon.png',
+                    iconImageSize: [50, 50],
+                    iconImageOffset: [-25, -50]
+                }
+            );
+            mapInstance.geoObjects.add(kioskPlacemark);
+
+            getMyLocation();
+            console.log('🗺️ Карта загружена!');
+        } catch(e) { 
+            console.error('Map error:', e);
+            setTimeout(initMap, 2000);
+        }
+    });
+}
     // ================================================================
     // ===== GPS =====
     // ================================================================
