@@ -398,26 +398,47 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* AR Compass - ТОЛЬКО СТРЕЛКА */
+        /* AR Compass - ЖИВАЯ СТРЕЛКА */
         .ar-compass {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 56px;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.5));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            filter: drop-shadow(0 0 40px rgba(255,215,0,0.8));
             transition: transform 0.1s ease;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-            padding: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
-            width: 76px;
-            height: 76px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: #FFD700;
             font-weight: 900;
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+            pointer-events: none;
+            z-index: 10;
+            margin-top: -80px;
+        }
+
+        /* AR Info - расстояние */
+        .ar-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            padding: 8px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .ar-info .ar-distance-text {
+            color: #FFD700;
+            font-weight: 700;
         }
 
         /* AR Buttons */
@@ -882,6 +903,9 @@
                     <div class="ar-distance" id="arDistance">0 м</div>
                 </div>
                 <div class="ar-compass" id="arCompass">⬆️</div>
+                <div class="ar-info">
+                    <span class="ar-distance-text" id="arDistanceText">0 м</span>
+                </div>
             </div>
             <button class="ar-back-btn" onclick="stopARMode()">
                 <i class="fas fa-times"></i> На карту
@@ -971,6 +995,7 @@
         let arStream = null;
         let arAnimationId = null;
         let arDistance = 0;
+        let currentHeading = 0;
 
         // ================================================================
         // ===== DOM REFS =====
@@ -990,6 +1015,7 @@
         const arContainer = $('arContainer');
         const arVideo = $('arVideo');
         const arDistanceEl = $('arDistance');
+        const arDistanceText = $('arDistanceText');
         const arCompass = $('arCompass');
 
         // ================================================================
@@ -1325,6 +1351,7 @@
             arDistance = dist;
             if (arActive) {
                 arDistanceEl.textContent = Math.round(dist) + ' м';
+                arDistanceText.textContent = Math.round(dist) + ' м';
                 updateArrow();
             }
         }
@@ -1414,10 +1441,15 @@
                 arContainer.classList.add('active');
                 document.body.style.overflow = 'hidden';
 
+                // Запускаем компас
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+
                 updateArrow();
                 arAnimationId = requestAnimationFrame(updateARLoop);
 
-                showNotification('🧭 Идите к метке! Стрелка покажет направление');
+                showNotification('🧭 Стрелка показывает направление к кладу!');
 
             } catch (err) {
                 console.error('AR error:', err);
@@ -1436,12 +1468,32 @@
             }
             if (arAnimationId) { cancelAnimationFrame(arAnimationId);
                 arAnimationId = null; }
+            window.removeEventListener('deviceorientation', handleOrientation);
             arVideo.srcObject = null;
             showNotification('🗺️ Возврат на карту');
         }
 
         // ================================================================
-        // ===== СТРЕЛКА (БЕЗ ТЕКСТА) =====
+        // ===== КОМПАС =====
+        // ================================================================
+        function handleOrientation(event) {
+            let heading = 0;
+            if (event.webkitCompassHeading !== undefined) {
+                heading = event.webkitCompassHeading;
+            } else if (event.alpha !== null) {
+                heading = 360 - event.alpha;
+            }
+            if (window.orientation === 90 || window.orientation === -90) {
+                heading = (heading + 90) % 360;
+            }
+            if (heading > 0) {
+                currentHeading = heading;
+                if (arActive) updateArrow();
+            }
+        }
+
+        // ================================================================
+        // ===== СТРЕЛКА (ЖИВАЯ, ВРАЩАЕТСЯ) =====
         // ================================================================
         function getBearingToTreasure() {
             if (!userLocation || !treasureData) return 0;
@@ -1455,10 +1507,18 @@
         }
 
         function updateArrow() {
-            if (!arActive) return;
+            if (!arActive || !treasureData) return;
+            
             const bearing = getBearingToTreasure();
-            arCompass.style.transform = `rotate(${bearing}deg)`;
-            arDistanceEl.textContent = Math.round(arDistance) + ' м';
+            let rotation = bearing;
+            
+            // Если компас работает — учитываем поворот телефона
+            if (currentHeading > 0) {
+                rotation = (bearing - currentHeading + 360) % 360;
+            }
+            
+            // Поворачиваем стрелку
+            arCompass.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
         }
 
         function updateARLoop() {
