@@ -1652,12 +1652,39 @@
                 setTimeout(() => n.remove(), 400);
             }, 3500);
         }
-// Добавь это в консоль или в код
-let testAngle = 0;
-setInterval(() => {
-    testAngle = (testAngle + 5) % 360;
-    document.getElementById('arCompass').style.transform = `rotate(${testAngle}deg)`;
-}, 50);
+// ================================================================
+// ===== ГИРОСКОП ДЛЯ СТРЕЛКИ =====
+// ================================================================
+
+// Сохраняем последний угол поворота телефона
+let lastAlpha = null;
+
+// Слушаем гироскоп
+window.addEventListener('deviceorientation', function(e) {
+    if (e.alpha !== null && e.alpha !== undefined) {
+        // alpha — угол поворота вокруг вертикальной оси (0-360)
+        // Инвертируем, чтобы стрелка вращалась правильно
+        lastAlpha = 360 - e.alpha;
+        if (arActive) {
+            updateArrow();
+        }
+    }
+});
+
+// Обновлённая функция стрелки
+function updateArrow() {
+    if (!arActive || !treasureData) return;
+    
+    const bearing = getBearingToTreasure();
+    let rotation = bearing;
+    
+    // Если есть данные с гироскопа — учитываем их
+    if (lastAlpha !== null) {
+        rotation = (bearing - lastAlpha + 360) % 360;
+    }
+    
+    arCompass.style.transform = `rotate(${rotation}deg)`;
+}
         // ================================================================
         // ===== INIT =====
         // ================================================================
