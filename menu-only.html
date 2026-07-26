@@ -400,7 +400,7 @@
 
 </div>
 
-<!-- ===== МОДАЛКА ===== -->
+<!-- MODAL -->
 <div class="modal-overlay" id="giftModal">
     <div class="modal">
         <img src="images/gift-free.jpg" alt="Подарок" class="modal-image" 
@@ -418,7 +418,7 @@
     </div>
 </div>
 
-<!-- ===== ПЛАВАЮЩАЯ КНОПКА QR ===== -->
+<!-- FLOATING QR BUTTON -->
 <button class="float-qr-btn" id="floatQrBtn" onclick="openQrModal()">
     <i class="fas fa-qrcode"></i> Мой QR-код
 </button>
@@ -595,7 +595,6 @@
                 mapInstance.events.add('load', function() {
                     try {
                         mapInstance.setType('satellite');
-                        console.log('🛰️ Спутниковый режим');
                     } catch(e) {}
                 });
 
@@ -616,7 +615,7 @@
     }
 
     // ================================================================
-    // ===== GPS (БЕЗ ПОСТОЯННЫХ УВЕДОМЛЕНИЙ) =====
+    // ===== GPS =====
     // ================================================================
     function getMyLocation() {
         if (!navigator.geolocation) {
@@ -686,22 +685,33 @@
     }
 
     // ================================================================
-    // ===== МАРШРУТ (В ПРИЛОЖЕНИИ, НА КАРТЕ) =====
+    // ===== МАРШРУТ (С ЗАЩИТОЙ ОТ ОШИБОК) =====
     // ================================================================
     function routeToKiosk() {
         if (!userLocation) {
             showNotification('📍 Определяю местоположение...');
             getMyLocation();
             setTimeout(() => {
-                if (userLocation) buildRoute();
-            }, 1500);
+                if (userLocation && mapInstance && mapReady) {
+                    buildRoute();
+                } else {
+                    showNotification('❌ Не удалось построить маршрут');
+                }
+            }, 2000);
+            return;
+        }
+        if (!mapInstance || !mapReady) {
+            showNotification('⏳ Карта ещё не загружена');
             return;
         }
         buildRoute();
     }
 
     function buildRoute() {
-        if (!mapInstance || !mapReady || !userLocation) return;
+        if (!mapInstance || !mapReady || !userLocation) {
+            showNotification('❌ Недостаточно данных для маршрута');
+            return;
+        }
 
         // Удаляем старый маршрут
         if (routeLine) {
@@ -709,42 +719,67 @@
             routeLine = null;
         }
 
-        // Строим новый маршрут
-        const route = new ymaps.multiRouter.MultiRoute(
-            {
-                referencePoints: [
-                    [userLocation.lat, userLocation.lng],
-                    [MY_LOCATION.lat, MY_LOCATION.lng]
-                ],
-                params: {
-                    routingMode: 'pedestrian'
+        try {
+            // Строим новый маршрут
+            const route = new ymaps.multiRouter.MultiRoute(
+                {
+                    referencePoints: [
+                        [userLocation.lat, userLocation.lng],
+                        [MY_LOCATION.lat, MY_LOCATION.lng]
+                    ],
+                    params: {
+                        routingMode: 'pedestrian'
+                    }
+                },
+                {
+                    wayPointVisible: false,
+                    routeActiveStrokeWidth: 4,
+                    routeActiveStrokeColor: '#22C55E',
+                    routeActiveStrokeStyle: 'solid',
+                    routeActiveStrokeOpacity: 0.9
                 }
-            },
-            {
-                wayPointVisible: false,
-                routeActiveStrokeWidth: 4,
-                routeActiveStrokeColor: '#22C55E',
-                routeActiveStrokeStyle: 'solid',
-                routeActiveStrokeOpacity: 0.9
+            );
+
+            // Добавляем на карту
+            mapInstance.geoObjects.add(route);
+            routeLine = route;
+
+            // Показываем расстояние
+            route.model.events.add('requestsuccess', function() {
+                try {
+                    const activeRoute = route.getActiveRoute();
+                    if (activeRoute) {
+                        const length = activeRoute.getLength();
+                        const distance = (length / 1000).toFixed(1);
+                        showNotification(`🚶 Маршрут построен! ${distance} км`);
+                    }
+                } catch(e) {}
+            });
+
+            // Обработка ошибки маршрута
+            route.model.events.add('requestfail', function() {
+                showNotification('❌ Не удалось построить маршрут');
+            });
+
+            // Центрируем на маршруте
+            try {
+                const bounds = route.getBounds();
+                if (bounds) {
+                    mapInstance.setBounds(bounds, { checkZoomRange: true });
+                }
+            } catch(e) {
+                // Если не удалось получить границы — центрируем между точками
+                const center = [
+                    (userLocation.lat + MY_LOCATION.lat) / 2,
+                    (userLocation.lng + MY_LOCATION.lng) / 2
+                ];
+                mapInstance.setCenter(center, 15);
             }
-        );
 
-        // Добавляем на карту
-        mapInstance.geoObjects.add(route);
-        routeLine = route;
-
-        // Показываем расстояние
-        route.model.events.add('requestsuccess', function() {
-            const activeRoute = route.getActiveRoute();
-            if (activeRoute) {
-                const length = activeRoute.getLength();
-                const distance = (length / 1000).toFixed(1);
-                showNotification(`🚶 Маршрут построен! ${distance} км`);
-            }
-        });
-
-        // Центрируем на маршруте
-        mapInstance.setBounds(route.getBounds(), { checkZoomRange: true });
+        } catch(e) {
+            console.error('Route error:', e);
+            showNotification('❌ Ошибка построения маршрута');
+        }
     }
 
     // ================================================================
