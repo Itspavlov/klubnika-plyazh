@@ -136,23 +136,12 @@
             border-color: rgba(108,92,231,0.25);
             color: var(--primary-light);
         }
-        .map-btn.kiosk-btn {
-            background: rgba(34,197,94,0.12);
-            border-color: rgba(34,197,94,0.2);
-            color: #4ADE80;
-        }
-        .map-btn.clear-route-btn {
-            background: rgba(239,68,68,0.12);
-            border-color: rgba(239,68,68,0.2);
-            color: #EF4444;
-        }
-        .map-btn.clear-route-btn:active { transform: scale(0.97); }
 
-        .route-info {
+        .distance-info {
             display: none;
             padding: 10px 14px;
-            background: rgba(34,197,94,0.08);
-            border-top: 1px solid rgba(34,197,94,0.15);
+            background: rgba(108,92,231,0.08);
+            border-top: 1px solid rgba(108,92,231,0.15);
             font-size: 12px;
             color: var(--text-secondary);
             gap: 12px;
@@ -160,14 +149,15 @@
             align-items: center;
             justify-content: center;
         }
-        .route-info.show { display: flex; }
-        .route-info .stat {
+        .distance-info.show { display: flex; }
+        .distance-info .stat {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        .route-info .stat i { color: #4ADE80; font-size: 14px; }
-        .route-info .stat .value { color: #4ADE80; font-weight: 700; font-size: 14px; }
+        .distance-info .stat i { color: var(--primary-light); font-size: 14px; }
+        .distance-info .stat .value { color: #4ADE80; font-weight: 700; font-size: 16px; }
+        .distance-info .stat .label { color: var(--text-muted); font-size: 11px; }
 
         .menu-grid {
             display: grid;
@@ -412,17 +402,18 @@
             <button class="map-btn location-btn" onclick="centerOnUser()">
                 <i class="fas fa-location-dot"></i> Где я?
             </button>
-            <button class="map-btn kiosk-btn" onclick="routeToKiosk()">
-                <i class="fas fa-route"></i> Маршрут 🚶
-            </button>
-            <button class="map-btn clear-route-btn" onclick="clearRoute()" id="clearRouteBtn" style="display:none;">
-                <i class="fas fa-times"></i> Сбросить
-            </button>
         </div>
-        <div class="route-info" id="routeInfo">
-            <span class="stat"><i class="fas fa-walking"></i> <span class="value" id="routeDistance">0</span> км</span>
-            <span class="stat"><i class="fas fa-clock"></i> <span class="value" id="routeTime">0</span> мин</span>
-            <span class="stat"><i class="fas fa-shoe-prints"></i> <span class="value" id="routeSteps">0</span> шагов</span>
+        <div class="distance-info" id="distanceInfo">
+            <span class="stat">
+                <i class="fas fa-shoe-prints"></i>
+                <span class="value" id="stepsCount">0</span>
+                <span class="label">шагов до киоска 🍓</span>
+            </span>
+            <span class="stat">
+                <i class="fas fa-flag-checkered"></i>
+                <span class="value" id="distanceKm">0</span>
+                <span class="label">км</span>
+            </span>
         </div>
     </div>
 
@@ -472,13 +463,12 @@
     let mapInstance = null;
     let userPlacemark = null;
     let kioskPlacemark = null;
-    let routeObject = null;
     let watchId = null;
     let giftId = null;
     let mapReady = false;
     let gpsLocked = false;
     let ymapsReady = false;
-    let isRouteBuilt = false;
+    let distanceLine = null;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -634,6 +624,7 @@
                 });
                 mapReady = true;
 
+                // Киоск
                 kioskPlacemark = new ymaps.Placemark(
                     [MY_LOCATION.lat, MY_LOCATION.lng],
                     { 
@@ -683,10 +674,7 @@
                     showNotification('✅ Местоположение определено');
                 }
                 updateUserMarker(userLocation.lat, userLocation.lng);
-                
-                if (isRouteBuilt && routeObject) {
-                    buildWalkingRoute(userLocation.lat, userLocation.lng);
-                }
+                updateDistance();
             },
             (error) => {
                 console.error('GPS Error:', error);
@@ -730,187 +718,78 @@
             getMyLocation();
             return;
         }
-        mapInstance.setCenter([userLocation.lat, userLocation.lng], 17, { duration: 300 });
+        
+        // Плавно приближаем на максимум (зум 19)
+        mapInstance.setCenter([userLocation.lat, userLocation.lng], 19, { 
+            duration: 800,
+            checkZoomRange: true
+        });
+        
         if (userPlacemark) userPlacemark.balloon.open();
+        
+        // Обновляем расстояние
+        updateDistance();
+        
         showNotification('📍 Ты здесь!');
     }
 
     // ================================================================
-    // ===== ПЕШЕХОДНЫЙ МАРШРУТ =====
+    // ===== РАССТОЯНИЕ ДО КИОСКА =====
     // ================================================================
-
-    function routeToKiosk() {
-        if (!userLocation) {
-            showNotification('📍 Определяю местоположение...');
-            getMyLocation();
-            setTimeout(() => {
-                if (userLocation) {
-                    buildWalkingRoute(userLocation.lat, userLocation.lng);
-                } else {
-                    showNotification('❌ Не удалось определить местоположение');
-                }
-            }, 3000);
-            return;
-        }
-        buildWalkingRoute(userLocation.lat, userLocation.lng);
+    function updateDistance() {
+        if (!userLocation) return;
+        
+        const distance = getDistance(
+            userLocation.lat, userLocation.lng,
+            MY_LOCATION.lat, MY_LOCATION.lng
+        );
+        
+        // Шаги (1 шаг ≈ 0.75 метра)
+        const steps = Math.round(distance * 1000 / 0.75);
+        
+        // Показываем информацию
+        const info = $('distanceInfo');
+        info.classList.add('show');
+        $('stepsCount').textContent = steps;
+        $('distanceKm').textContent = distance.toFixed(2);
+        
+        // Рисуем линию до киоска
+        drawDistanceLine(userLocation.lat, userLocation.lng);
     }
 
-    function buildWalkingRoute(fromLat, fromLng) {
-        if (!mapInstance || !mapReady || !ymapsReady) {
-            showNotification('⏳ Карта ещё не загружена');
-            return;
+    function drawDistanceLine(fromLat, fromLng) {
+        if (!mapInstance || !mapReady) return;
+        
+        // Удаляем старую линию
+        if (distanceLine) {
+            mapInstance.geoObjects.remove(distanceLine);
+            distanceLine = null;
         }
 
-        clearRouteObjects();
-        showNotification('🚶 Строим пешеходный маршрут...');
-
         try {
-            const multiRoute = new ymaps.multiRouter.MultiRoute(
-                {
-                    referencePoints: [
-                        [fromLat, fromLng],
-                        [MY_LOCATION.lat, MY_LOCATION.lng]
-                    ],
-                    params: {
-                        routingMode: 'pedestrian',
-                        results: 1
-                    }
-                },
-                {
-                    wayPointVisible: false,
-                    routeStrokeColor: '#22C55E',
-                    routeStrokeWidth: 5,
-                    routeStrokeOpacity: 0.9,
-                    pinVisible: false,
-                    boundsAutoApply: true
-                }
-            );
-
-            mapInstance.geoObjects.add(multiRoute);
-            routeObject = multiRoute;
-            $('clearRouteBtn').style.display = 'flex';
-
-            multiRoute.events.add('load', function() {
-                try {
-                    const routes = multiRoute.getRoutes();
-                    if (routes && routes.length > 0) {
-                        const route = routes[0];
-                        const props = route.getProperties();
-                        
-                        let distance = props.distance || 0;
-                        let duration = props.duration || 0;
-                        
-                        let distanceKm = (distance / 1000).toFixed(1);
-                        let minutes = Math.round(duration / 60);
-                        let timeText = minutes < 60 ? minutes + ' мин' : Math.floor(minutes/60) + 'ч ' + (minutes%60) + 'м';
-                        let steps = Math.round(distance / 0.75);
-                        let stepsText = steps > 1000 ? (steps/1000).toFixed(1) + 'k' : steps;
-                        
-                        isRouteBuilt = true;
-                        
-                        const routeInfo = $('routeInfo');
-                        routeInfo.classList.add('show');
-                        $('routeDistance').textContent = distanceKm;
-                        $('routeTime').textContent = timeText;
-                        $('routeSteps').textContent = stepsText;
-                        
-                        showNotification(`🚶 ${distanceKm} км • ${timeText} пешком`);
-                        
-                        if (route.getWayPoints && route.getWayPoints().getLength() > 0) {
-                            const bounds = route.getWayPoints().getBounds();
-                            if (bounds) {
-                                mapInstance.setBounds(bounds, {
-                                    checkZoomRange: true,
-                                    zoomMargin: 50
-                                });
-                            }
-                        }
-                    } else {
-                        showNotification('❌ Маршрут не найден');
-                        drawSimpleRoute(fromLat, fromLng);
-                    }
-                } catch (e) {
-                    console.error('Route load error:', e);
-                    drawSimpleRoute(fromLat, fromLng);
-                }
-            });
-
-            multiRoute.events.add('error', function(err) {
-                console.error('Route error:', err);
-                showNotification('❌ Ошибка построения маршрута');
-                drawSimpleRoute(fromLat, fromLng);
-            });
-
-        } catch (e) {
-            console.error('Route creation error:', e);
-            showNotification('❌ Ошибка создания маршрута');
-            drawSimpleRoute(fromLat, fromLng);
-        }
-    }
-
-    function drawSimpleRoute(fromLat, fromLng) {
-        try {
-            clearRouteObjects();
-            
-            const line = new ymaps.Polyline(
+            // Рисуем пунктирную линию до киоска
+            distanceLine = new ymaps.Polyline(
                 [
                     [fromLat, fromLng],
                     [MY_LOCATION.lat, MY_LOCATION.lng]
                 ],
                 {
-                    balloonContent: '🚶 Прямая линия к киоску'
+                    balloonContent: '🍓 Расстояние до киоска'
                 },
                 {
-                    strokeColor: '#22C55E',
-                    strokeWidth: 4,
-                    strokeOpacity: 0.9,
-                    strokeStyle: 'solid'
+                    strokeColor: 'rgba(108, 92, 231, 0.4)',
+                    strokeWidth: 3,
+                    strokeOpacity: 0.6,
+                    strokeStyle: 'dashed'
                 }
             );
-            mapInstance.geoObjects.add(line);
-            routeObject = line;
-            $('clearRouteBtn').style.display = 'flex';
-            
-            const distance = getDistance(fromLat, fromLng, MY_LOCATION.lat, MY_LOCATION.lng);
-            const distanceKm = distance.toFixed(1);
-            const minutes = Math.round(distance * 15);
-            const timeText = minutes < 60 ? minutes + ' мин' : Math.floor(minutes/60) + 'ч ' + (minutes%60) + 'м';
-            const steps = Math.round(distance * 1333);
-            const stepsText = steps > 1000 ? (steps/1000).toFixed(1) + 'k' : steps;
-            
-            isRouteBuilt = true;
-            
-            const routeInfo = $('routeInfo');
-            routeInfo.classList.add('show');
-            $('routeDistance').textContent = distanceKm;
-            $('routeTime').textContent = timeText;
-            $('routeSteps').textContent = stepsText;
-            
-            const center = [(fromLat + MY_LOCATION.lat) / 2, (fromLng + MY_LOCATION.lng) / 2];
-            mapInstance.setCenter(center, 15, { duration: 300 });
-            
-            showNotification(`🚶 ${distanceKm} км • ${timeText} (прямая линия)`);
+            mapInstance.geoObjects.add(distanceLine);
         } catch(e) {
-            console.error('Fallback error:', e);
-            showNotification('❌ Ошибка построения маршрута');
+            console.error('Line error:', e);
         }
     }
 
-    function clearRouteObjects() {
-        if (routeObject) {
-            mapInstance.geoObjects.remove(routeObject);
-            routeObject = null;
-        }
-        isRouteBuilt = false;
-        $('routeInfo').classList.remove('show');
-        $('clearRouteBtn').style.display = 'none';
-    }
-
-    function clearRoute() {
-        clearRouteObjects();
-        showNotification('🗑️ Маршрут удалён');
-    }
-
+    // ===== РАСЧЁТ РАССТОЯНИЯ =====
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
