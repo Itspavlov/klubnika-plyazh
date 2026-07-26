@@ -229,7 +229,6 @@
             .menu-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== МОДАЛКА (МАЛЕНЬКАЯ) ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -313,9 +312,7 @@
         }
         .modal .btn:active { transform:scale(0.97); }
         .modal .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; }
-        .modal .btn-outline { background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:#fff; }
 
-        /* ===== ПЛАВАЮЩАЯ КНОПКА QR ===== */
         .float-qr-btn {
             position: fixed;
             bottom: 20px;
@@ -368,7 +365,6 @@
 
 <div class="menu-container">
 
-    <!-- HEADER -->
     <header class="header">
         <span class="logo-icon">🍓</span>
         <div class="header-badge"><i class="fas fa-gift"></i> Подарок для вас!</div>
@@ -437,9 +433,11 @@
     let mapInstance = null;
     let userPlacemark = null;
     let kioskPlacemark = null;
+    let routeLine = null;
     let watchId = null;
     let giftId = null;
     let mapReady = false;
+    let gpsLocked = false;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -578,7 +576,7 @@
     }
 
     // ================================================================
-    // ===== КАРТА (ИСПРАВЛЕННАЯ) =====
+    // ===== КАРТА =====
     // ================================================================
     function initMap() {
         if (typeof ymaps === 'undefined') { 
@@ -594,14 +592,11 @@
                 });
                 mapReady = true;
 
-                // Спутник включаем ПОСЛЕ загрузки карты
                 mapInstance.events.add('load', function() {
                     try {
                         mapInstance.setType('satellite');
-                        console.log('🛰️ Спутниковый режим включён');
-                    } catch(e) {
-                        console.warn('⚠️ Ошибка включения спутника:', e);
-                    }
+                        console.log('🛰️ Спутниковый режим');
+                    } catch(e) {}
                 });
 
                 kioskPlacemark = new ymaps.Placemark(
@@ -621,7 +616,7 @@
     }
 
     // ================================================================
-    // ===== GPS =====
+    // ===== GPS (БЕЗ ПОСТОЯННЫХ УВЕДОМЛЕНИЙ) =====
     // ================================================================
     function getMyLocation() {
         if (!navigator.geolocation) {
@@ -629,7 +624,9 @@
             return;
         }
 
-        showNotification('📍 Определение местоположения...');
+        if (!gpsLocked) {
+            showNotification('📍 Определение местоположения...');
+        }
 
         if (watchId) navigator.geolocation.clearWatch(watchId);
 
@@ -639,17 +636,23 @@
                     lat: pos.coords.latitude,
                     lng: pos.coords.longitude
                 };
-                console.log('📍 GPS:', userLocation.lat, userLocation.lng);
+                if (!gpsLocked) {
+                    gpsLocked = true;
+                    showNotification('✅ Местоположение определено');
+                }
                 updateUserMarker(userLocation.lat, userLocation.lng);
-                showNotification('✅ Местоположение определено!');
+                // Если есть маршрут — перестраиваем
+                if (routeLine) {
+                    buildRoute();
+                }
             },
             (error) => {
                 console.error('GPS Error:', error);
-                let msg = '❌ Не удалось определить местоположение';
-                if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
-                else if (error.code === 2) msg = '❌ Сигнал GPS слабый';
-                else if (error.code === 3) msg = '⏳ Превышено время ожидания';
-                showNotification(msg);
+                if (!gpsLocked) {
+                    let msg = '❌ Не удалось определить местоположение';
+                    if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
+                    showNotification(msg);
+                }
             },
             {
                 enableHighAccuracy: true,
@@ -683,23 +686,65 @@
     }
 
     // ================================================================
-    // ===== МАРШРУТ =====
+    // ===== МАРШРУТ (В ПРИЛОЖЕНИИ, НА КАРТЕ) =====
     // ================================================================
     function routeToKiosk() {
         if (!userLocation) {
-            showNotification('📍 Сначала определите местоположение');
+            showNotification('📍 Определяю местоположение...');
             getMyLocation();
+            setTimeout(() => {
+                if (userLocation) buildRoute();
+            }, 1500);
             return;
         }
-        const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
-        const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
-        try { 
-            window.open(appUrl, '_blank'); 
-            setTimeout(() => window.open(url, '_blank'), 1500); 
-        } catch(e) { 
-            window.open(url, '_blank'); 
+        buildRoute();
+    }
+
+    function buildRoute() {
+        if (!mapInstance || !mapReady || !userLocation) return;
+
+        // Удаляем старый маршрут
+        if (routeLine) {
+            mapInstance.geoObjects.remove(routeLine);
+            routeLine = null;
         }
-        showNotification('🚶 Маршрут к киоску построен!');
+
+        // Строим новый маршрут
+        const route = new ymaps.multiRouter.MultiRoute(
+            {
+                referencePoints: [
+                    [userLocation.lat, userLocation.lng],
+                    [MY_LOCATION.lat, MY_LOCATION.lng]
+                ],
+                params: {
+                    routingMode: 'pedestrian'
+                }
+            },
+            {
+                wayPointVisible: false,
+                routeActiveStrokeWidth: 4,
+                routeActiveStrokeColor: '#22C55E',
+                routeActiveStrokeStyle: 'solid',
+                routeActiveStrokeOpacity: 0.9
+            }
+        );
+
+        // Добавляем на карту
+        mapInstance.geoObjects.add(route);
+        routeLine = route;
+
+        // Показываем расстояние
+        route.model.events.add('requestsuccess', function() {
+            const activeRoute = route.getActiveRoute();
+            if (activeRoute) {
+                const length = activeRoute.getLength();
+                const distance = (length / 1000).toFixed(1);
+                showNotification(`🚶 Маршрут построен! ${distance} км`);
+            }
+        });
+
+        // Центрируем на маршруте
+        mapInstance.setBounds(route.getBounds(), { checkZoomRange: true });
     }
 
     // ================================================================
@@ -716,8 +761,8 @@
             n.style.opacity = '0';
             n.style.transform = 'translateX(-50%) translateY(-20px)';
             n.style.transition = 'all 0.3s ease';
-            setTimeout(() => n.remove(), 400);
-        }, 3500);
+            setTimeout(() => n.remove(), 3000);
+        }, 3000);
     }
 
     // ================================================================
