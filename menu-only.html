@@ -436,11 +436,38 @@
             align-items: center;
             gap: 12px;
             white-space: nowrap;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .ar-info .ar-status-text {
             color: var(--text-secondary);
             font-weight: 400;
             font-size: 12px;
+        }
+        .ar-info .ar-distance-text {
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* AR Compass Status */
+        .ar-compass-status {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 6px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 11px;
+            pointer-events: none;
+            z-index: 5;
+            text-align: center;
+            white-space: nowrap;
+            max-width: 90%;
         }
 
         /* AR Buttons */
@@ -905,9 +932,11 @@
                     <div class="ar-distance" id="arDistance">0 м</div>
                 </div>
                 <div class="ar-compass" id="arCompass">🧭</div>
+                <div class="ar-compass-status" id="compassStatus">🔄 Калибровка компаса...</div>
                 <div class="ar-info">
                     <span id="arStatusText">🚶 Идите к метке</span>
                     <span class="ar-status-text" id="arDirectionText">—</span>
+                    <span class="ar-distance-text" id="arDistanceText">0 м</span>
                 </div>
             </div>
             <button class="ar-back-btn" onclick="stopARMode()">
@@ -999,6 +1028,8 @@
         let arAnimationId = null;
         let arDistance = 0;
         let arBearing = 0;
+        let currentHeading = 0;
+        let headingHistory = [];
 
         // ================================================================
         // ===== DOM REFS =====
@@ -1022,6 +1053,8 @@
         const arCompass = $('arCompass');
         const arStatusText = $('arStatusText');
         const arDirectionText = $('arDirectionText');
+        const arDistanceText = $('arDistanceText');
+        const compassStatus = $('compassStatus');
 
         // ================================================================
         // ===== INIT HERO =====
@@ -1120,7 +1153,6 @@
         // ================================================================
         function connectSocket() {
             try {
-                // Проверяем, определён ли io
                 if (typeof io === 'undefined') {
                     console.warn('⚠️ Socket.IO не загружен, повторная попытка...');
                     setTimeout(connectSocket, 2000);
@@ -1166,64 +1198,67 @@
             if (arActive) stopARMode();
         }
 
-     function initMap() {
-    // Проверяем, загрузился ли ymaps
-    if (typeof ymaps === 'undefined') {
-        console.warn('⚠️ Яндекс.Карты не загружены, повторная попытка...');
-        setTimeout(initMap, 2000);
-        return;
-    }
-    
-    ymaps.ready(() => {
-        try {
-            mapInstance = new ymaps.Map('treasureMap', {
-                center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                zoom: 17,
-                controls: ['zoomControl', 'typeSelector']
-            });
+        // ================================================================
+        // ===== MAP =====
+        // ================================================================
+        function initMap() {
+            if (typeof ymaps === 'undefined') {
+                console.warn('⚠️ Яндекс.Карты не загружены, повторная попытка...');
+                setTimeout(initMap, 2000);
+                return;
+            }
             
-            // ✅ Спутник включаем ПОСЛЕ полной загрузки карты
-            mapInstance.events.add('load', function() {
+            ymaps.ready(() => {
                 try {
-                    mapInstance.setType('satellite');
-                    console.log('🛰️ Спутниковый режим включён');
+                    mapInstance = new ymaps.Map('treasureMap', {
+                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                        zoom: 17,
+                        controls: ['zoomControl', 'typeSelector']
+                    });
+                    
+                    // Спутник включаем ПОСЛЕ полной загрузки карты
+                    mapInstance.events.add('load', function() {
+                        try {
+                            mapInstance.setType('satellite');
+                            console.log('🛰️ Спутниковый режим включён');
+                        } catch (e) {
+                            console.warn('⚠️ Ошибка включения спутника:', e);
+                        }
+                    });
+                    
+                    $('mapPlaceholder').style.display = 'none';
+
+                    kioskPlacemark = new ymaps.Placemark(
+                        [MY_LOCATION.lat, MY_LOCATION.lng], 
+                        { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
+                        { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
+                    );
+                    mapInstance.geoObjects.add(kioskPlacemark);
+
+                    getMyLocation();
+                    checkTreasureStatus();
+                    
+                    if (statusCheckInterval) clearInterval(statusCheckInterval);
+                    statusCheckInterval = setInterval(() => {
+                        checkTreasureStatus();
+                        if (userLocation && treasureActive) {
+                            sendUserLocation();
+                            checkDistanceToTreasure();
+                        }
+                    }, 3000);
+                    
+                    updateTimer();
+                    if (timerInterval) clearInterval(timerInterval);
+                    timerInterval = setInterval(updateTimer, 1000);
+                    
+                    console.log('🗺️ Карта загружена!');
                 } catch (e) {
-                    console.warn('⚠️ Ошибка включения спутника:', e);
+                    console.error('Map error:', e);
+                    setTimeout(initMap, 3000);
                 }
             });
-            
-            $('mapPlaceholder').style.display = 'none';
-
-            kioskPlacemark = new ymaps.Placemark(
-                [MY_LOCATION.lat, MY_LOCATION.lng], 
-                { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
-                { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
-            );
-            mapInstance.geoObjects.add(kioskPlacemark);
-
-            getMyLocation();
-            checkTreasureStatus();
-            
-            if (statusCheckInterval) clearInterval(statusCheckInterval);
-            statusCheckInterval = setInterval(() => {
-                checkTreasureStatus();
-                if (userLocation && treasureActive) {
-                    sendUserLocation();
-                    checkDistanceToTreasure();
-                }
-            }, 3000);
-            
-            updateTimer();
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(updateTimer, 1000);
-            
-            console.log('🗺️ Карта загружена!');
-        } catch (e) {
-            console.error('Map error:', e);
-            setTimeout(initMap, 3000);
         }
-    });
-}
+
         // ================================================================
         // ===== GPS =====
         // ================================================================
@@ -1355,6 +1390,7 @@
             arDistance = dist;
             if (arActive) {
                 arDistanceEl.textContent = Math.round(dist) + ' м';
+                arDistanceText.textContent = Math.round(dist) + ' м';
                 updateARCompass();
             }
         }
@@ -1444,14 +1480,36 @@
                 arContainer.classList.add('active');
                 document.body.style.overflow = 'hidden';
 
-                // Запускаем компас
-                if (window.DeviceOrientationEvent) {
-                    window.addEventListener('deviceorientation', handleOrientation);
+                // ЗАПРАШИВАЕМ РАЗРЕШЕНИЕ НА ДАТЧИКИ (iOS 13+)
+                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    try {
+                        const permissionState = await DeviceOrientationEvent.requestPermission();
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation);
+                            console.log('✅ Разрешение на компас получено');
+                            compassStatus.textContent = '🧭 Компас активен';
+                        } else {
+                            console.warn('⚠️ Разрешение на компас отклонено');
+                            compassStatus.textContent = '⚠️ Разрешите доступ к движению';
+                        }
+                    } catch (e) {
+                        console.warn('⚠️ Ошибка запроса разрешения:', e);
+                        window.addEventListener('deviceorientation', handleOrientation);
+                        compassStatus.textContent = '🧭 Компас (без разрешения)';
+                    }
                 } else {
-                    arDirectionText.textContent = '⚠️ Компас не поддерживается';
+                    window.addEventListener('deviceorientation', handleOrientation);
+                    console.log('🧭 Компас подключён (без запроса разрешения)');
+                    compassStatus.textContent = '🧭 Калибровка...';
                 }
 
-                // Начинаем обновление
+                // Инструкция по калибровке
+                setTimeout(() => {
+                    if (currentHeading === 0 || headingHistory.length < 3) {
+                        compassStatus.textContent = '🔄 Поводите телефоном "восьмёркой" для калибровки';
+                    }
+                }, 3000);
+
                 updateARCompass();
                 arAnimationId = requestAnimationFrame(updateARLoop);
 
@@ -1476,25 +1534,42 @@
                 arAnimationId = null; }
             window.removeEventListener('deviceorientation', handleOrientation);
             arVideo.srcObject = null;
+            compassStatus.textContent = '🔄 Калибровка компаса...';
             showNotification('🗺️ Возврат на карту');
         }
 
         // ================================================================
         // ===== COMPASS =====
         // ================================================================
-        let currentHeading = 0;
-
         function handleOrientation(event) {
+            let heading = 0;
             if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
-                currentHeading = event.webkitCompassHeading;
+                heading = event.webkitCompassHeading;
             } else if (event.alpha !== null) {
-                currentHeading = 360 - event.alpha;
+                heading = 360 - event.alpha;
             }
+            
             // Исправляем для ландшафта
             if (window.orientation === 90 || window.orientation === -90) {
-                currentHeading = (currentHeading + 90) % 360;
+                heading = (heading + 90) % 360;
             }
-            if (arActive) updateARCompass();
+            
+            // Фильтруем шум — медианный фильтр (5 значений)
+            if (heading > 0) {
+                headingHistory.push(heading);
+                if (headingHistory.length > 5) headingHistory.shift();
+                
+                const sorted = [...headingHistory].sort((a, b) => a - b);
+                const filteredHeading = sorted[Math.floor(sorted.length / 2)];
+                
+                if (Math.abs(filteredHeading - currentHeading) > 3 && filteredHeading > 0) {
+                    currentHeading = filteredHeading;
+                    if (arActive) {
+                        updateARCompass();
+                        compassStatus.textContent = `🧭 ${Math.round(currentHeading)}°`;
+                    }
+                }
+            }
         }
 
         function getBearingToTreasure() {
@@ -1512,24 +1587,35 @@
             if (!arActive) return;
             const bearing = getBearingToTreasure();
             arBearing = bearing;
-            const diff = (bearing - currentHeading + 360) % 360;
-            // Поворачиваем стрелку
-            arCompass.style.transform = `rotate(${diff}deg)`;
-
-            // Обновляем текстовое направление
-            const dirs = ['⬆️ СЕВЕР', '↗️ СЕВЕРО-ВОСТОК', '➡️ ВОСТОК', '↘️ ЮГО-ВОСТОК', '⬇️ ЮГ', '↙️ ЮГО-ЗАПАД', '⬅️ ЗАПАД',
-                '↖️ СЕВЕРО-ЗАПАД'
-            ];
-            const idx = Math.round(((bearing - currentHeading + 360) % 360) / 45) % 8;
-            arDirectionText.textContent = dirs[idx] || '';
-            arStatusText.textContent = arDistance < 15 ? '🎯 ТЫ В ЗОНЕ!' : '🚶 Идите к метке';
+            
+            // Если компас есть — поворачиваем стрелку
+            if (currentHeading > 0) {
+                const diff = (bearing - currentHeading + 360) % 360;
+                arCompass.style.transform = `rotate(${diff}deg)`;
+                
+                const dirs = ['СЕВЕР', 'СЕВЕРО-ВОСТОК', 'ВОСТОК', 'ЮГО-ВОСТОК', 'ЮГ', 'ЮГО-ЗАПАД', 'ЗАПАД', 'СЕВЕРО-ЗАПАД'];
+                const idx = Math.round(((bearing - currentHeading + 360) % 360) / 45) % 8;
+                const emojis = ['⬆️', '↗️', '➡️', '↘️', '⬇️', '↙️', '⬅️', '↖️'];
+                arDirectionText.textContent = `${emojis[idx]} ${dirs[idx]}`;
+                arStatusText.textContent = arDistance < 15 ? '🎯 ТЫ В ЗОНЕ!' : `🚶 Идите к метке`;
+            } else {
+                // Если компаса нет — показываем азимут
+                const compassPoints = ['⬆️ СЕВЕР', '↗️ СЕВЕРО-ВОСТОК', '➡️ ВОСТОК', '↘️ ЮГО-ВОСТОК', '⬇️ ЮГ', '↙️ ЮГО-ЗАПАД', '⬅️ ЗАПАД', '↖️ СЕВЕРО-ЗАПАД'];
+                const idx = Math.round(bearing / 45) % 8;
+                arDirectionText.textContent = `🎯 ${compassPoints[idx]}`;
+                arStatusText.textContent = arDistance < 15 ? '🎯 ТЫ В ЗОНЕ!' : '🚶 Идите к метке';
+                // Стрелка всё равно вращается по азимуту
+                arCompass.style.transform = `rotate(${bearing}deg)`;
+            }
+            
+            arDistanceEl.textContent = Math.round(arDistance) + ' м';
+            arDistanceText.textContent = Math.round(arDistance) + ' м';
         }
 
         function updateARLoop() {
             if (!arActive) return;
             updateARCompass();
             if (arDistance < 15 && treasureActive && !isWinner) {
-                // Авто-победа в AR
                 isWinner = true;
                 treasureActive = false;
                 treasureData = null;
@@ -1645,7 +1731,6 @@
         // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
             renderMenu();
-            // Подключаем Socket.IO с проверкой
             setTimeout(connectSocket, 500);
             setTimeout(initMap, 800);
             setTimeout(showOnboarding, 1000);
