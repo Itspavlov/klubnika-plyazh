@@ -330,7 +330,6 @@
             color: #4ADE80;
         }
 
-        /* ===== AR CONTAINER ===== */
         .ar-container {
             display: none;
             position: fixed;
@@ -392,7 +391,6 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* ===== 3D СТРЕЛКА ===== */
         .ar-compass {
             position: absolute;
             top: 50%;
@@ -403,7 +401,7 @@
             margin-top: -90px;
             pointer-events: none;
             z-index: 10;
-            transition: transform 0.08s ease-out;
+            transition: transform 0.1s ease;
         }
         .ar-compass img {
             width: 100%;
@@ -981,7 +979,7 @@
         let arStream = null;
         let arAnimationId = null;
         let arDistance = 0;
-        let currentHeading = 0;
+        let lastAlpha = null;
 
         // ================================================================
         // ===== DOM REFS =====
@@ -1427,42 +1425,27 @@
                 arContainer.classList.add('active');
                 document.body.style.overflow = 'hidden';
 
-                // ✅ ЗАПУСКАЕМ ГИРОСКОП
-                if (window.DeviceOrientationEvent) {
-                    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                        try {
-                            const permission = await DeviceOrientationEvent.requestPermission();
-                            if (permission === 'granted') {
-                                window.addEventListener('deviceorientation', handleOrientation);
-                                console.log('✅ Гироскоп активен');
-                            }
-                        } catch (e) {
-                            console.warn('⚠️ Ошибка разрешения:', e);
-                            window.addEventListener('deviceorientation', handleOrientation);
-                        }
-                    } else {
-                        window.addEventListener('deviceorientation', handleOrientation);
-                        console.log('🔄 Гироскоп подключён');
+                // Слушаем гироскоп для вращения стрелки
+                window.addEventListener('deviceorientation', function(e) {
+                    if (e.alpha !== null && e.alpha !== undefined) {
+                        lastAlpha = 360 - e.alpha;
+                        if (arActive) updateArrow();
                     }
-                }
+                });
 
-                // Если через 2 секунды нет данных — виртуальный гироскоп
+                // Если через 2 секунды нет данных — стрелка показывает азимут
                 setTimeout(() => {
-                    if (currentHeading === 0) {
-                        console.log('🔄 Виртуальный гироскоп...');
-                        window.addEventListener('deviceorientation', function(e) {
-                            if (e.alpha !== null) {
-                                currentHeading = 360 - e.alpha;
-                                if (arActive) updateArrow();
-                            }
-                        });
+                    if (lastAlpha === null) {
+                        console.log('🔄 Гироскоп не активен, стрелка показывает азимут');
+                        // Стрелка всё равно будет показывать направление на клад
+                        if (arActive) updateArrow();
                     }
                 }, 2000);
 
                 updateArrow();
                 arAnimationId = requestAnimationFrame(updateARLoop);
 
-                showNotification('🧭 Поверните телефон — стрелка будет двигаться');
+                showNotification('🧭 Стрелка показывает направление к кладу');
 
             } catch (err) {
                 console.error('AR error:', err);
@@ -1487,33 +1470,7 @@
         }
 
         // ================================================================
-        // ===== КОМПАС / ГИРОСКОП =====
-        // ================================================================
-        function handleOrientation(event) {
-            let heading = 0;
-            
-            if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
-                heading = event.webkitCompassHeading;
-                console.log('🧭 Компас:', Math.round(heading));
-            } else if (event.alpha !== null && event.alpha !== undefined) {
-                heading = 360 - event.alpha;
-                console.log('🔄 Гироскоп:', Math.round(heading));
-            } else {
-                return;
-            }
-            
-            if (window.orientation === 90 || window.orientation === -90) {
-                heading = (heading + 90) % 360;
-            }
-            
-            if (heading > 0) {
-                currentHeading = heading;
-                if (arActive) updateArrow();
-            }
-        }
-
-        // ================================================================
-        // ===== СТРЕЛКА =====
+        // ===== СТРЕЛКА (ФИНАЛЬНАЯ ВЕРСИЯ) =====
         // ================================================================
         function getBearingToTreasure() {
             if (!userLocation || !treasureData) return 0;
@@ -1532,8 +1489,9 @@
             const bearing = getBearingToTreasure();
             let rotation = bearing;
             
-            if (currentHeading > 0) {
-                rotation = (bearing - currentHeading + 360) % 360;
+            // Если есть данные с гироскопа — учитываем их
+            if (lastAlpha !== null) {
+                rotation = (bearing - lastAlpha + 360) % 360;
             }
             
             arCompass.style.transform = `rotate(${rotation}deg)`;
@@ -1652,39 +1610,7 @@
                 setTimeout(() => n.remove(), 400);
             }, 3500);
         }
-// ================================================================
-// ===== ГИРОСКОП ДЛЯ СТРЕЛКИ =====
-// ================================================================
 
-// Сохраняем последний угол поворота телефона
-let lastAlpha = null;
-
-// Слушаем гироскоп
-window.addEventListener('deviceorientation', function(e) {
-    if (e.alpha !== null && e.alpha !== undefined) {
-        // alpha — угол поворота вокруг вертикальной оси (0-360)
-        // Инвертируем, чтобы стрелка вращалась правильно
-        lastAlpha = 360 - e.alpha;
-        if (arActive) {
-            updateArrow();
-        }
-    }
-});
-
-// Обновлённая функция стрелки
-function updateArrow() {
-    if (!arActive || !treasureData) return;
-    
-    const bearing = getBearingToTreasure();
-    let rotation = bearing;
-    
-    // Если есть данные с гироскопа — учитываем их
-    if (lastAlpha !== null) {
-        rotation = (bearing - lastAlpha + 360) % 360;
-    }
-    
-    arCompass.style.transform = `rotate(${rotation}deg)`;
-}
         // ================================================================
         // ===== INIT =====
         // ================================================================
