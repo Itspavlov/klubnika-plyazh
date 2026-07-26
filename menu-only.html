@@ -468,7 +468,6 @@
     let mapReady = false;
     let gpsLocked = false;
     let ymapsReady = false;
-    let distanceLine = null;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -726,10 +725,7 @@
         });
         
         if (userPlacemark) userPlacemark.balloon.open();
-        
-        // Обновляем расстояние
         updateDistance();
-        
         showNotification('📍 Ты здесь!');
     }
 
@@ -752,62 +748,7 @@
         info.classList.add('show');
         $('stepsCount').textContent = steps;
         $('distanceKm').textContent = distance.toFixed(2);
-        
-        // Рисуем линию до киоска
-        drawDistanceLine(userLocation.lat, userLocation.lng);
     }
-function drawDistanceLine(fromLat, fromLng) {
-    if (!mapInstance || !mapReady) return;
-    
-    if (distanceLine) {
-        mapInstance.geoObjects.remove(distanceLine);
-        distanceLine = null;
-    }
-
-    try {
-        distanceLine = new ymaps.Polyline(
-            [
-                [fromLat, fromLng],
-                [MY_LOCATION.lat, MY_LOCATION.lng]
-            ],
-            {
-                balloonContent: '🍓 Расстояние до киоска'
-            },
-            {
-                strokeColor: 'rgba(108, 92, 231, 0.5)',
-                strokeWidth: 3,
-                strokeOpacity: 0.7,
-                strokeStyle: {
-                    pattern: [8, 8],
-                    cap: 'round'
-                }
-            }
-        );
-        mapInstance.geoObjects.add(distanceLine);
-    } catch(e) {
-        console.error('Line error:', e);
-        // Fallback - обычная линия
-        try {
-            distanceLine = new ymaps.Polyline(
-                [
-                    [fromLat, fromLng],
-                    [MY_LOCATION.lat, MY_LOCATION.lng]
-                ],
-                {
-                    balloonContent: '🍓 Расстояние до киоска'
-                },
-                {
-                    strokeColor: 'rgba(108, 92, 231, 0.5)',
-                    strokeWidth: 3,
-                    strokeOpacity: 0.7
-                }
-            );
-            mapInstance.geoObjects.add(distanceLine);
-        } catch(e2) {
-            console.error('Fallback line error:', e2);
-        }
-    }
-}
 
     // ===== РАСЧЁТ РАССТОЯНИЯ =====
     function getDistance(lat1, lon1, lat2, lon2) {
