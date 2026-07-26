@@ -85,6 +85,7 @@
             50% { transform: translateY(-8px); }
         }
 
+        /* ===== MAP ===== */
         .map-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -141,6 +142,7 @@
             color: #4ADE80;
         }
 
+        /* ===== MENU ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -229,7 +231,7 @@
             .menu-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== MODAL ===== */
+        /* ===== МАЛЕНЬКАЯ МОДАЛКА ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -237,12 +239,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(24px);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(14px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 30px 16px;
             animation: fadeIn 0.4s ease;
         }
         .modal-overlay.open { display: flex; }
@@ -251,15 +253,13 @@
         .modal {
             background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
             border-radius: var(--radius);
-            max-width: 400px;
+            max-width: 320px;
             width: 100%;
-            max-height: 90vh;
-            padding: 24px 20px 20px;
+            padding: 18px 14px 16px;
             position: relative;
             animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid var(--glass-border);
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            overflow-y: auto;
             text-align: center;
         }
         @keyframes slideUp {
@@ -267,42 +267,79 @@
             to { transform: translateY(0); opacity: 1; }
         }
         .modal .modal-image {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border-radius: var(--radius-sm);
-            margin: 0 auto 8px;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 4px;
             display: block;
+            border: 2px solid rgba(255,215,0,0.15);
+        }
+        .modal .fallback-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 2px;
         }
         .modal h2 {
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+        .modal h2 span {
             background: linear-gradient(135deg, #FFD700, #FF6B00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 4px;
         }
         .modal p {
             color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 2px;
         }
-        .modal .qr-code {
-            background: #fff;
-            border-radius: var(--radius-sm);
-            padding: 12px;
-            margin: 10px auto;
-            max-width: 150px;
+        .modal p strong {
+            color: #FFD700;
         }
-        .modal .qr-code img { width:100%; height:auto; display:block; }
         .modal .btn {
-            width:100%; padding:12px; border-radius:var(--radius-sm); border:none; font-size:15px; font-weight:600;
-            cursor:pointer; font-family:var(--font-family); transition:0.2s; margin-top:8px;
+            width:100%;
+            padding:10px;
+            border-radius:var(--radius-sm);
+            border:none;
+            font-size:14px;
+            font-weight:600;
+            cursor:pointer;
+            font-family:var(--font-family);
+            transition:0.2s;
+            margin-top:6px;
         }
         .modal .btn:active { transform:scale(0.97); }
         .modal .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; }
-        .modal .btn-success { background:linear-gradient(135deg,#22C55E,#16A34A); color:#fff; }
+        .modal .btn-outline { background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:#fff; }
+
+        /* ===== ПЛАВАЮЩАЯ КНОПКА QR ===== */
+        .float-qr-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 16px;
+            z-index: 1500;
+            background: linear-gradient(135deg, #FFD700, #FF6B00);
+            color: #1A1A2E;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+            font-family: var(--font-family);
+            transition: var(--transition);
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        .float-qr-btn:active { transform: scale(0.95); }
+        .float-qr-btn i { font-size: 18px; }
 
         .notification {
             position: fixed;
@@ -351,7 +388,7 @@
                 <i class="fas fa-location-dot"></i> Где я?
             </button>
             <button class="map-btn kiosk-btn" onclick="routeToKiosk()">
-                <i class="fas fa-route"></i> Маршрут
+                <i class="fas fa-route"></i> Маршрут к киоску
             </button>
         </div>
     </div>
@@ -369,27 +406,28 @@
 
 </div>
 
-<!-- ===== МОДАЛКА С ПОДАРКОМ ===== -->
+<!-- ===== МАЛЕНЬКАЯ МОДАЛКА ===== -->
 <div class="modal-overlay" id="giftModal">
     <div class="modal">
         <img src="images/gift-free.jpg" alt="Подарок" class="modal-image" 
              onerror="this.style.display='none';this.parentElement.querySelector('.fallback-icon').style.display='block'">
-        <span class="fallback-icon" style="display:none;font-size:48px;">🍓</span>
-        <h2>Подарок для вас! 🎁</h2>
+        <span class="fallback-icon" style="display:none;">🍓</span>
+        <h2><span>Подарок!</span> 🎁</h2>
         <p>
-            Для <strong>первых посетителей</strong> у нас подарок!<br><br>
-            Приходите к нашему киоску и получите<br>
-            <strong>мини-порцию клубники в шоколаде</strong> 🍫<br><br>
-            Покажите этот QR-код кассиру
+            Для <strong>первых посетителей</strong> —<br>
+            <strong>мини-порция</strong> клубники в шоколаде 🍫
         </p>
-        <div class="qr-code">
-            <img id="giftQR" src="" alt="QR-код подарка">
-        </div>
+        <p style="font-size:11px;color:var(--text-muted);">Покажи QR-код кассиру</p>
         <button class="btn btn-primary" onclick="closeGiftModal()">
             Спасибо, понятно! 🙌
         </button>
     </div>
 </div>
+
+<!-- ===== ПЛАВАЮЩАЯ КНОПКА QR ===== -->
+<button class="float-qr-btn" id="floatQrBtn" onclick="openQrModal()">
+    <i class="fas fa-qrcode"></i> Мой QR-код
+</button>
 
 <script>
     // ================================================================
@@ -441,10 +479,44 @@
     // ===== QR-КОД =====
     // ================================================================
     function generateGiftQR(id) {
-        const img = $('giftQR');
-        if (!id) { img.src = ''; return; }
+        const img = document.createElement('img');
+        if (!id) { return; }
         const qrData = `gift-${id}`;
         img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&color=6C5CE7&bgcolor=FFFFFF`;
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        return img.outerHTML;
+    }
+
+    function openQrModal() {
+        if (!giftId) {
+            showNotification('❌ Подарок ещё не активирован');
+            return;
+        }
+        const qrHtml = generateGiftQR(giftId);
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay open';
+        modal.id = 'qrModal';
+        modal.innerHTML = `
+            <div class="modal" style="max-width:300px;padding:16px;">
+                <h2 style="font-size:16px;color:#fff;margin-bottom:4px;">🎫 Ваш QR-код</h2>
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Покажите кассиру</p>
+                <div style="background:#fff;border-radius:8px;padding:12px;max-width:160px;margin:0 auto;">
+                    ${qrHtml}
+                </div>
+                <button class="btn btn-primary" onclick="closeQrModal()" style="margin-top:10px;padding:8px;">
+                    Закрыть
+                </button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeQrModal() {
+        const modal = document.getElementById('qrModal');
+        if (modal) modal.remove();
+        document.body.style.overflow = '';
     }
 
     // ================================================================
@@ -470,8 +542,8 @@
             const data = await res.json();
             if (data.hasGift) {
                 giftId = data.giftId;
-                generateGiftQR(giftId);
                 showGiftModal();
+                $('floatQrBtn').style.display = 'flex';
             } else if (data.canActivate) {
                 await activateGift(ip);
             }
@@ -488,8 +560,8 @@
             const data = await res.json();
             if (data.success) {
                 giftId = data.giftId;
-                generateGiftQR(giftId);
                 showGiftModal();
+                $('floatQrBtn').style.display = 'flex';
             }
         } catch(e) { console.error('Gift activate error:', e); }
     }
@@ -525,10 +597,9 @@
                 mapInstance.setType('satellite');
                 mapReady = true;
 
-                // Киоск
                 kioskPlacemark = new ymaps.Placemark(
                     [MY_LOCATION.lat, MY_LOCATION.lng],
-                    { balloonContent: '🍓 <strong>Strawberry in Chocolate</strong><br>Забирай свой подарок!', iconCaption: '🍓 КИОСК' },
+                    { balloonContent: '🍓 Strawberry in Chocolate', iconCaption: '🍓 КИОСК' },
                     { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
                 );
                 mapInstance.geoObjects.add(kioskPlacemark);
@@ -586,7 +657,7 @@
         if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
         userPlacemark = new ymaps.Placemark(
             [lat, lng],
-            { balloonContent: '🍓 <strong>Ты здесь!</strong>' },
+            { balloonContent: '🍓 Ты здесь!' },
             { iconLayout: 'default#image', iconImageHref: 'https://emojicdn.elk.sh/🍓', iconImageSize: [36,36], iconImageOffset: [-18,-18] }
         );
         mapInstance.geoObjects.add(userPlacemark);
@@ -602,12 +673,6 @@
         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
         if (userPlacemark) userPlacemark.balloon.open();
         showNotification('📍 Ты здесь!');
-    }
-
-    function centerOnKiosk() {
-        if (!mapInstance) return;
-        mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 17);
-        if (kioskPlacemark) kioskPlacemark.balloon.open();
     }
 
     // ================================================================
