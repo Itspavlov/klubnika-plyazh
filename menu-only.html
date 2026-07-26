@@ -1166,60 +1166,64 @@
             if (arActive) stopARMode();
         }
 
-        // ================================================================
-        // ===== MAP =====
-        // ================================================================
-        function initMap() {
-            // Проверяем, загрузился ли ymaps
-            if (typeof ymaps === 'undefined') {
-                console.warn('⚠️ Яндекс.Карты не загружены, повторная попытка...');
-                setTimeout(initMap, 2000);
-                return;
-            }
+     function initMap() {
+    // Проверяем, загрузился ли ymaps
+    if (typeof ymaps === 'undefined') {
+        console.warn('⚠️ Яндекс.Карты не загружены, повторная попытка...');
+        setTimeout(initMap, 2000);
+        return;
+    }
+    
+    ymaps.ready(() => {
+        try {
+            mapInstance = new ymaps.Map('treasureMap', {
+                center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                zoom: 17,
+                controls: ['zoomControl', 'typeSelector']
+            });
             
-            ymaps.ready(() => {
+            // ✅ Спутник включаем ПОСЛЕ полной загрузки карты
+            mapInstance.events.add('load', function() {
                 try {
-                    mapInstance = new ymaps.Map('treasureMap', {
-                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                        zoom: 17,
-                        controls: ['zoomControl', 'typeSelector']
-                    });
-                    // Спутник по умолчанию!
                     mapInstance.setType('satellite');
-                    $('mapPlaceholder').style.display = 'none';
-
-                    kioskPlacemark = new ymaps.Placemark(
-                        [MY_LOCATION.lat, MY_LOCATION.lng], 
-                        { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
-                        { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
-                    );
-                    mapInstance.geoObjects.add(kioskPlacemark);
-
-                    getMyLocation();
-                    checkTreasureStatus();
-                    
-                    if (statusCheckInterval) clearInterval(statusCheckInterval);
-                    statusCheckInterval = setInterval(() => {
-                        checkTreasureStatus();
-                        if (userLocation && treasureActive) {
-                            sendUserLocation();
-                            checkDistanceToTreasure();
-                        }
-                    }, 3000);
-                    
-                    updateTimer();
-                    if (timerInterval) clearInterval(timerInterval);
-                    timerInterval = setInterval(updateTimer, 1000);
-                    
-                    console.log('🗺️ Карта загружена!');
+                    console.log('🛰️ Спутниковый режим включён');
                 } catch (e) {
-                    console.error('Map error:', e);
-                    // Повторная попытка через 3 секунды
-                    setTimeout(initMap, 3000);
+                    console.warn('⚠️ Ошибка включения спутника:', e);
                 }
             });
-        }
+            
+            $('mapPlaceholder').style.display = 'none';
 
+            kioskPlacemark = new ymaps.Placemark(
+                [MY_LOCATION.lat, MY_LOCATION.lng], 
+                { balloonContent: '🍓 Киоск', iconCaption: '🍓 КИОСК' },
+                { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
+            );
+            mapInstance.geoObjects.add(kioskPlacemark);
+
+            getMyLocation();
+            checkTreasureStatus();
+            
+            if (statusCheckInterval) clearInterval(statusCheckInterval);
+            statusCheckInterval = setInterval(() => {
+                checkTreasureStatus();
+                if (userLocation && treasureActive) {
+                    sendUserLocation();
+                    checkDistanceToTreasure();
+                }
+            }, 3000);
+            
+            updateTimer();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            console.log('🗺️ Карта загружена!');
+        } catch (e) {
+            console.error('Map error:', e);
+            setTimeout(initMap, 3000);
+        }
+    });
+}
         // ================================================================
         // ===== GPS =====
         // ================================================================
