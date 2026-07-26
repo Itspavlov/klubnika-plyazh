@@ -9,26 +9,20 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
     <style>
         :root {
-            --primary: #FF4757;
-            --primary-dark: #E63946;
-            --primary-light: #FF6B81;
-            --accent: #FF8A80;
-            --gold: #FFB74D;
-            --gold-light: #FFE0B2;
-            --bg: #FFF5F5;
-            --card-bg: #FFFFFF;
-            --text-dark: #1A1A2E;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow: 0 4px 6px rgba(0,0,0,0.07);
-            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
-            --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
-            --radius-2xl: 24px;
-            --radius-xl: 20px;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
+            --primary: #6C5CE7;
+            --primary-dark: #5A4BD1;
+            --primary-light: #A29BFE;
+            --accent: #FD79A8;
+            --bg-start: #0F0E17;
+            --bg-end: #1A1A2E;
+            --card-bg: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.1);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255,255,255,0.7);
+            --text-muted: rgba(255,255,255,0.4);
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --radius: 16px;
+            --radius-sm: 10px;
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
@@ -42,13 +36,13 @@
 
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
+            background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
             min-height: 100vh;
             padding: 0 0 40px 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             background-attachment: fixed;
-            overflow-x: hidden;
+            color: var(--text-primary);
         }
 
         .menu-container {
@@ -58,49 +52,44 @@
             min-height: 100vh;
         }
 
+        /* ===== HEADER ===== */
         .header {
             text-align: center;
-            padding: 8px 0 16px;
+            padding: 12px 0 16px;
             position: relative;
         }
 
         .header .logo-icon {
-            font-size: 52px;
+            font-size: 48px;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 12px rgba(255,71,87,0.25));
+            filter: drop-shadow(0 4px 20px rgba(108,92,231,0.3));
         }
 
         .header-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255,255,255,0.92);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            color: var(--primary);
-            font-size: 11px;
+            color: var(--primary-light);
+            font-size: 10px;
             font-weight: 600;
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 100px;
             letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255,71,87,0.15);
-            box-shadow: var(--shadow-sm);
+            margin-bottom: 6px;
+            border: 1px solid var(--glass-border);
         }
 
         .header h1 {
-            font-size: 28px;
-            color: var(--text-dark);
-            font-weight: 900;
+            font-size: 24px;
+            font-weight: 800;
             letter-spacing: -0.5px;
             line-height: 1.2;
-            margin-bottom: 4px;
-        }
-
-        .header h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -108,121 +97,159 @@
 
         .header .subtitle {
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 400;
             line-height: 1.5;
-            max-width: 320px;
+            max-width: 300px;
             margin: 0 auto;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
+        /* ===== HERO SELECTOR (COMPACT) ===== */
         .hero-selector {
-            background: rgba(255,255,255,0.92);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: 12px 14px;
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--glass-border);
         }
 
-        .hero-selector .hero-title {
-            font-size: 12px;
-            font-weight: 600;
+        .hero-selector .hero-label {
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
-        .hero-selector .hero-title i {
-            color: var(--primary);
+        .hero-selector .hero-dropdown {
+            flex: 1;
+            position: relative;
         }
 
-        .hero-grid {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .hero-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid #F1F5F9;
-            background: #FFFFFF;
-            font-size: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .hero-selector .hero-dropdown select {
+            width: 100%;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
             font-family: var(--font-family);
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            outline: none;
+            transition: var(--transition);
         }
 
-        .hero-btn:active {
-            transform: scale(0.92);
-        }
-
-        .hero-btn.active {
+        .hero-selector .hero-dropdown select:focus {
             border-color: var(--primary);
-            background: #FFF5F5;
-            box-shadow: 0 0 0 3px rgba(255,71,87,0.15);
+            box-shadow: 0 0 0 3px rgba(108,92,231,0.2);
         }
 
-        .treasure-timer {
-            background: linear-gradient(135deg, #1A1A2E, #2D3436);
-            border-radius: var(--radius-xl);
-            padding: 12px 16px;
-            margin-bottom: 12px;
+        .hero-selector .hero-dropdown select option {
+            background: #1A1A2E;
             color: #fff;
+        }
+
+        .hero-selector .hero-dropdown::after {
+            content: '▾';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 10px;
+            pointer-events: none;
+        }
+
+        .hero-selector .hero-preview {
+            font-size: 24px;
+            line-height: 1;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        /* ===== TREASURE TIMER ===== */
+        .treasure-timer {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
 
         .treasure-timer .timer-label {
-            font-size: 11px;
-            color: #9CA3AF;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .treasure-timer .timer-value {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             color: #4ADE80;
             font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
         }
 
         .treasure-timer .timer-value.next {
             color: #FFD700;
         }
 
+        .treasure-timer .timer-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== TREASURE STATUS BAR ===== */
         .treasure-status-bar {
-            background: linear-gradient(135deg, #1A1A2E, #2D3436);
-            border-radius: var(--radius-xl);
-            padding: 14px 18px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
             margin-bottom: 12px;
-            color: #fff;
-            border: 2px solid #4A4A5A;
+            border: 1px solid var(--glass-border);
             transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .treasure-status-bar.active {
-            border-color: #FFD700;
-            box-shadow: 0 0 30px rgba(255,215,0,0.2);
-            animation: pulseGold 2s ease-in-out infinite;
+        .treasure-status-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(108,92,231,0.05), rgba(253,121,168,0.05));
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
         }
 
-        @keyframes pulseGold {
-            0%, 100% { border-color: #FFD700; box-shadow: 0 0 20px rgba(255,215,0,0.15); }
-            50% { border-color: #FF6B00; box-shadow: 0 0 40px rgba(255,215,0,0.3); }
+        .treasure-status-bar.active::before {
+            opacity: 1;
         }
 
         .treasure-status-bar .top-row {
@@ -230,104 +257,73 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
+            position: relative;
+            z-index: 1;
         }
 
         .treasure-status-bar .status-label {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .treasure-status-bar .status-label.active {
-            color: #4ADE80;
-        }
-
-        .treasure-status-bar .status-label.inactive {
-            color: #F87171;
-        }
-
-        .treasure-status-bar .status-distance {
-            font-size: 20px;
-            font-weight: 900;
-            color: #FFD700;
-        }
-
-        .treasure-status-bar .status-detail {
-            font-size: 13px;
-            color: #9CA3AF;
-            margin-top: 4px;
+            font-size: 14px;
+            font-weight: 600;
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 4px;
+            align-items: center;
+            gap: 6px;
         }
 
-        .treasure-status-bar .status-detail .emoji-status {
-            font-size: 18px;
-        }
-
-        .treasure-map-wrapper {
-            border: 4px solid #FF4757;
-            border-radius: var(--radius-xl);
-            padding: 8px;
-            background: linear-gradient(135deg, #FFF5F5, #FFE8EC);
-            position: relative;
-            margin-bottom: 12px;
-            box-shadow: 0 0 30px rgba(255,71,87,0.1);
-        }
-
-        .treasure-map-wrapper::before {
-            content: '🍓';
-            position: absolute;
-            top: -14px;
-            left: -10px;
-            font-size: 28px;
-            filter: drop-shadow(0 2px 8px rgba(255,71,87,0.3));
-            z-index: 5;
-        }
-
-        .treasure-map-wrapper::after {
-            content: '🍓';
-            position: absolute;
-            bottom: -14px;
-            right: -10px;
-            font-size: 28px;
-            filter: drop-shadow(0 2px 8px rgba(255,71,87,0.3));
-            z-index: 5;
-        }
-
-        .treasure-map-wrapper .map-label {
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            padding: 4px 0 8px 0;
-            letter-spacing: 0.5px;
-        }
-
-        .treasure-map-wrapper .map-label i {
-            margin-right: 6px;
-        }
-
-        .treasure-map-wrapper .map-label .pulse-dot {
-            display: inline-block;
+        .treasure-status-bar .status-label .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
+            display: inline-block;
+        }
+
+        .treasure-status-bar .status-label .dot.inactive {
+            background: #F87171;
+        }
+
+        .treasure-status-bar .status-label .dot.active {
             background: #4ADE80;
-            margin-right: 6px;
             animation: pulseDot 1.5s ease-in-out infinite;
         }
 
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.7); }
+        .treasure-status-bar .status-label .dot.winner {
+            background: #FFD700;
+            animation: pulseDot 0.8s ease-in-out infinite;
         }
 
+        .treasure-status-bar .status-distance {
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFD700;
+            font-feature-settings: "tnum";
+        }
+
+        .treasure-status-bar .status-detail {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .treasure-status-bar .status-detail .emoji-status {
+            font-size: 16px;
+        }
+
+        /* ===== MAP ===== */
         .map-card {
-            background: #FFFFFF;
-            border-radius: var(--radius-lg);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
             overflow: hidden;
+            margin-bottom: 12px;
+            border: 1px solid var(--glass-border);
             box-shadow: var(--shadow);
         }
 
@@ -335,7 +331,7 @@
             width: 100%;
             height: 420px;
             position: relative;
-            background: #F1F5F9;
+            background: #0A0A1A;
         }
 
         .map-card .map-container #treasureMap {
@@ -350,21 +346,22 @@
             justify-content: center;
             height: 100%;
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             gap: 8px;
         }
 
         .map-card .map-container .map-placeholder i {
-            font-size: 48px;
+            font-size: 40px;
             color: var(--primary);
+            opacity: 0.5;
         }
 
         .map-card .map-actions {
             display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            background: #F8FAFC;
-            border-top: 1px solid #F1F5F9;
+            gap: 6px;
+            padding: 10px 14px;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid var(--glass-border);
             flex-wrap: wrap;
         }
 
@@ -375,12 +372,14 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 10px 12px;
-            border-radius: var(--radius-lg);
-            border: none;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
             font-family: var(--font-family);
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
             text-decoration: none;
@@ -390,50 +389,56 @@
             transform: scale(0.97);
         }
 
-        .map-btn.location-btn {
-            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+        .map-btn i {
+            font-size: 13px;
         }
 
-        .map-btn.location-btn i {
-            font-size: 14px;
+        .map-btn.location-btn {
+            background: rgba(108,92,231,0.15);
+            border-color: rgba(108,92,231,0.3);
+            color: var(--primary-light);
+        }
+
+        .map-btn.location-btn:active {
+            background: rgba(108,92,231,0.25);
         }
 
         .map-btn.location-btn.loading {
-            opacity: 0.7;
+            opacity: 0.6;
             pointer-events: none;
         }
 
         .map-btn.kiosk-btn {
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+            background: rgba(74,222,128,0.12);
+            border-color: rgba(74,222,128,0.25);
+            color: #4ADE80;
         }
 
-        .map-btn.kiosk-btn i {
-            font-size: 14px;
+        .map-btn.kiosk-btn:active {
+            background: rgba(74,222,128,0.2);
         }
 
         .map-btn.kiosk-btn.loading {
-            opacity: 0.7;
+            opacity: 0.6;
             pointer-events: none;
         }
 
+        /* ===== MENU ===== */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .menu-item {
-            background: #FFFFFF;
-            border-radius: var(--radius-xl);
-            border: none;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
         }
@@ -446,44 +451,42 @@
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
-            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
+            background: rgba(255,255,255,0.03);
         }
 
         .menu-item .item-content {
-            padding: 12px;
+            padding: 10px 12px 12px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
         .menu-item .item-name {
-            font-size: 15px;
-            color: var(--text-dark);
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 4px;
+            color: var(--text-primary);
             letter-spacing: -0.2px;
             line-height: 1.3;
         }
 
         .menu-item .item-desc {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 400;
             line-height: 1.4;
             flex: 1;
         }
 
         .menu-item .item-price {
-            color: var(--primary);
+            color: var(--accent);
             font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 4px;
+            font-size: 16px;
         }
 
         .menu-item .item-old-price {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 12px;
             text-decoration: line-through;
             margin-left: 6px;
             font-weight: 400;
@@ -491,60 +494,55 @@
 
         .menu-item .badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255,255,255,0.95);
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            color: var(--primary);
-            font-size: 10px;
+            color: var(--accent);
+            font-size: 9px;
             font-weight: 600;
-            padding: 4px 10px;
+            padding: 2px 10px;
             border-radius: 100px;
             z-index: 2;
-            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--glass-border);
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            color: var(--text-dark);
-            margin: 0 0 16px 0;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             letter-spacing: -0.3px;
         }
 
         .section-title i {
-            font-size: 20px;
-            color: var(--primary);
+            font-size: 18px;
+            color: var(--primary-light);
         }
 
         .footer {
             text-align: center;
-            padding: 24px 0 12px;
+            padding: 20px 0 8px;
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .footer .footer-phone {
             display: inline-block;
             margin-top: 4px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--primary);
+            color: var(--primary-light);
             text-decoration: none;
         }
 
         @media (max-width: 340px) {
             .menu-grid {
                 grid-template-columns: 1fr;
-            }
-            .hero-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 16px;
             }
         }
 
@@ -555,7 +553,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(16px);
             }
             to {
                 opacity: 1;
@@ -563,6 +561,7 @@
             }
         }
 
+        /* ===== MODALS ===== */
         .onboarding-overlay {
             display: none;
             position: fixed;
@@ -570,14 +569,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            animation: fadeInOverlay 0.6s ease;
+            animation: fadeInOverlay 0.5s ease;
         }
 
         .onboarding-overlay.open {
@@ -590,30 +589,41 @@
         }
 
         .onboarding-modal {
-            background: linear-gradient(160deg, #FFFFFF 0%, #FFF5F5 100%);
-            border-radius: var(--radius-2xl);
-            max-width: 420px;
+            background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
+            border-radius: var(--radius);
+            max-width: 400px;
             width: 100%;
             max-height: 90vh;
-            padding: 28px 20px 24px;
+            padding: 24px 20px 20px;
             position: relative;
-            animation: congratsPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
             overflow-y: auto;
             text-align: center;
-            border: 3px solid #FF4757;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .onboarding-modal .onboarding-icon {
-            font-size: 64px;
+            font-size: 56px;
             display: block;
-            animation: congratsFloat 3s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite;
         }
 
         .onboarding-modal .onboarding-title {
-            font-size: 22px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -621,59 +631,72 @@
         }
 
         .onboarding-modal .onboarding-text {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.7;
             margin-bottom: 12px;
             text-align: left;
-            background: #F8FAFC;
+            background: rgba(255,255,255,0.04);
             padding: 12px 14px;
-            border-radius: var(--radius-md);
-            border: 1px solid #F1F5F9;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
         }
 
         .onboarding-modal .onboarding-text strong {
-            color: var(--primary);
+            color: var(--primary-light);
         }
 
         .onboarding-modal .onboarding-times {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             justify-content: center;
             margin-bottom: 12px;
         }
 
         .onboarding-modal .onboarding-times .time-box {
-            background: linear-gradient(135deg, #1A1A2E, #2D3436);
-            padding: 8px 16px;
-            border-radius: var(--radius-md);
-            color: #fff;
+            background: rgba(255,255,255,0.06);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
             text-align: center;
         }
 
         .onboarding-modal .onboarding-times .time-box .time {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #FFD700;
         }
 
         .onboarding-modal .onboarding-times .time-box .label {
-            font-size: 10px;
-            color: #9CA3AF;
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        .onboarding-modal .onboarding-gift-hint {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin: 8px 0 12px;
+            padding: 8px 12px;
+            background: rgba(253,121,168,0.08);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(253,121,168,0.15);
+        }
+
+        .onboarding-modal .onboarding-gift-hint strong {
+            color: var(--accent);
         }
 
         .onboarding-modal .onboarding-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            border-radius: var(--radius-lg);
-            font-size: 16px;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(255,71,87,0.3);
             font-family: var(--font-family);
         }
 
@@ -681,20 +704,110 @@
             transform: scale(0.97);
         }
 
-        .onboarding-modal .onboarding-gift-hint {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin: 8px 0 12px;
+        /* ===== WINNER MODAL ===== */
+        .winner-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            animation: fadeInOverlay 0.5s ease;
+        }
+
+        .winner-overlay.open {
+            display: flex;
+        }
+
+        .winner-modal {
+            background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
+            border-radius: var(--radius);
+            max-width: 400px;
+            width: 100%;
+            padding: 28px 20px 24px;
+            position: relative;
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,215,0,0.2);
+            box-shadow: 0 0 60px rgba(255,215,0,0.05);
+            text-align: center;
+        }
+
+        .winner-modal .winner-icon {
+            font-size: 64px;
+            display: block;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .winner-modal .winner-title {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFD700, #FF6B00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 4px 0;
+        }
+
+        .winner-modal .winner-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .winner-modal .winner-prize {
+            background: rgba(255,215,0,0.1);
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255,215,0,0.15);
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .winner-modal .winner-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4ADE80, #22C55E);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-family);
+            margin-top: 6px;
+        }
+
+        .winner-modal .winner-btn:active {
+            transform: scale(0.97);
+        }
+
+        .winner-modal .winner-btn-purple {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .winner-modal .winner-secondary-btn {
+            width: 100%;
             padding: 8px;
-            background: #FFF8E1;
-            border-radius: var(--radius-md);
-            border: 1px solid #FFE0B2;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            margin-top: 4px;
         }
 
-        .onboarding-modal .onboarding-gift-hint strong {
-            color: var(--primary);
-        }
-
+        /* ===== GIFT MODAL ===== */
         .congrats-overlay {
             display: none;
             position: fixed;
@@ -702,13 +815,13 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 900;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
             animation: fadeInOverlay 0.5s ease;
         }
 
@@ -717,40 +830,30 @@
         }
 
         .congrats-modal {
-            background: #FFFFFF;
-            border-radius: var(--radius-2xl);
-            max-width: 420px;
+            background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
+            border-radius: var(--radius);
+            max-width: 400px;
             width: 100%;
             max-height: 82vh;
             padding: 24px 20px 20px;
             position: relative;
-            animation: congratsPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
             overflow-y: auto;
             text-align: center;
         }
 
-        @keyframes congratsPop {
-            from {
-                transform: scale(0.85) translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-
         .congrats-modal .congrats-close {
             position: absolute;
-            top: 12px;
-            right: 14px;
-            background: #F8FAFC;
-            border: none;
-            width: 32px;
-            height: 32px;
+            top: 10px;
+            right: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--glass-border);
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
@@ -761,71 +864,58 @@
 
         .congrats-modal .congrats-close:active {
             transform: scale(0.9);
-            background: #F1F5F9;
-        }
-
-        .congrats-modal .congrats-icon-wrap {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 4px;
         }
 
         .congrats-modal .congrats-icon-wrap .main-icon {
-            font-size: 64px;
+            font-size: 52px;
             display: block;
-            animation: congratsFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes congratsFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.05); }
+            animation: float 3s ease-in-out infinite;
         }
 
         .congrats-modal .congrats-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #FFD700, #FF6B00);
-            color: #1A1A2E;
-            font-size: 10px;
+            background: rgba(255,215,0,0.15);
+            color: #FFD700;
+            font-size: 9px;
             font-weight: 700;
-            padding: 4px 14px;
+            padding: 2px 12px;
             border-radius: 100px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
-            box-shadow: 0 2px 12px rgba(255,215,0,0.3);
+            border: 1px solid rgba(255,215,0,0.1);
         }
 
         .congrats-modal .congrats-title {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 2px;
-            letter-spacing: -0.5px;
         }
 
         .congrats-modal .congrats-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
             font-weight: 400;
             margin-bottom: 6px;
         }
 
         .congrats-modal .congrats-text {
-            font-size: 15px;
-            color: var(--text-dark);
+            font-size: 14px;
+            color: var(--text-secondary);
             line-height: 1.6;
             margin-bottom: 6px;
-            background: #FFF8E1;
+            background: rgba(255,255,255,0.04);
             padding: 10px 14px;
-            border-radius: var(--radius-md);
-            border: 1px solid #FFE0B2;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
         }
 
         .congrats-modal .congrats-text strong {
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .congrats-modal .congrats-btn-primary {
@@ -834,12 +924,11 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #FFFFFF;
             border: none;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-sm);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(255,71,87,0.3);
             font-family: var(--font-family);
             margin-bottom: 4px;
         }
@@ -859,160 +948,51 @@
             font-family: var(--font-family);
         }
 
-        .congrats-modal .congrats-btn-secondary:active {
-            opacity: 0.6;
-        }
-
-        .congrats-modal .congrats-code {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px solid #F1F5F9;
-        }
-
-        .congrats-modal .congrats-code span {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 12px;
-        }
-
-        .winner-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            animation: fadeInOverlay 0.5s ease;
-        }
-
-        .winner-overlay.open {
-            display: flex;
-        }
-
-        .winner-modal {
-            background: linear-gradient(160deg, #FFFFFF 0%, #FFF5F5 100%);
-            border-radius: var(--radius-2xl);
-            max-width: 420px;
-            width: 100%;
-            padding: 32px 24px 28px;
-            position: relative;
-            animation: congratsPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--shadow-xl);
-            text-align: center;
-            border: 3px solid #FFD700;
-        }
-
-        .winner-modal .winner-icon {
-            font-size: 72px;
-            display: block;
-            animation: congratsFloat 2s ease-in-out infinite;
-        }
-
-        .winner-modal .winner-title {
-            font-size: 28px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #FFD700, #FF6B00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 4px 0;
-        }
-
-        .winner-modal .winner-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .winner-modal .winner-prize {
-            background: linear-gradient(135deg, #FFD700, #FF6B00);
-            padding: 12px;
-            border-radius: var(--radius-lg);
-            color: #1A1A2E;
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
-
-        .winner-modal .winner-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            color: #FFFFFF;
-            border: none;
-            border-radius: var(--radius-lg);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(34,197,94,0.3);
-            font-family: var(--font-family);
-            margin-top: 8px;
-        }
-
-        .winner-modal .winner-btn:active {
-            transform: scale(0.97);
-        }
-
-        .winner-modal .winner-btn-purple {
-            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
-            box-shadow: 0 4px 16px rgba(139,92,246,0.3);
-        }
-
-        .winner-modal .winner-secondary-btn {
-            width: 100%;
-            padding: 10px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 13px;
-            cursor: pointer;
-            font-family: var(--font-family);
-            margin-top: 4px;
-        }
-
-        .winner-modal .winner-secondary-btn:active {
-            opacity: 0.6;
-        }
-
+        /* ===== NOTIFICATION ===== */
         .custom-notification {
             position: fixed;
-            top: 80px;
+            top: 70px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1A1A2E;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             color: #fff;
-            padding: 14px 24px;
+            padding: 10px 20px;
             border-radius: 100px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow);
             z-index: 2000;
             max-width: 90%;
             text-align: center;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-family: var(--font-family);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
         }
 
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-30px);
+                transform: translateX(-50%) translateY(-20px);
             }
             to {
                 opacity: 1;
                 transform: translateX(-50%) translateY(0);
             }
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        /* ===== YANDEX MAPS OVERRIDE ===== */
+        .ymaps-2-1-79-gotoymaps {
+            display: none !important;
+        }
+        .ymaps-2-1-79-gotoymaps__container {
+            display: none !important;
         }
     </style>
 </head>
@@ -1020,98 +1000,81 @@
 
     <div class="menu-container">
 
+        <!-- ===== HEADER ===== -->
         <header class="header">
             <span class="logo-icon">🍓</span>
             <div class="header-badge">
                 <i class="fas fa-map-marked-alt"></i> Найди клад!
             </div>
-            <h1>
-                <span class="highlight">Strawberry</span>
-                <span style="color: var(--text-dark);"> in </span>
-                <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
-            </h1>
+            <h1>Strawberry in Chocolate</h1>
             <p class="subtitle">
-                <i class="fas fa-strawberry" style="color: var(--primary);"></i>
                 Найди клад и получи МЕГА-СТАКАН бесплатно! 🍓
             </p>
         </header>
 
+        <!-- ===== HERO SELECTOR (COMPACT) ===== -->
         <div class="hero-selector">
-            <div class="hero-title">
-                <i class="fas fa-gamepad"></i> Кто ты сегодня?
+            <span class="hero-label">🎮 Герой</span>
+            <div class="hero-dropdown">
+                <select id="heroSelect" onchange="selectHero(this.value)">
+                    <option value="🍓">🍓 Клубничка</option>
+                    <option value="🚗">🚗 Машина</option>
+                    <option value="✈️">✈️ Самолёт</option>
+                    <option value="🚀">🚀 Ракета</option>
+                    <option value="🎖️">🎖️ Танк</option>
+                    <option value="🤖">🤖 Робот</option>
+                    <option value="🐱">🐱 Кошка</option>
+                    <option value="🐶">🐶 Собака</option>
+                </select>
             </div>
-            <div class="hero-grid" id="heroGrid">
-                <button class="hero-btn active" data-hero="🍓" onclick="selectHero('🍓')" title="Клубничка">
-                    <span>🍓</span>
-                </button>
-                <button class="hero-btn" data-hero="🚗" onclick="selectHero('🚗')" title="Машина">
-                    <span>🚗</span>
-                </button>
-                <button class="hero-btn" data-hero="✈️" onclick="selectHero('✈️')" title="Самолёт">
-                    <span>✈️</span>
-                </button>
-                <button class="hero-btn" data-hero="🚀" onclick="selectHero('🚀')" title="Ракета">
-                    <span>🚀</span>
-                </button>
-                <button class="hero-btn" data-hero="🎖️" onclick="selectHero('🎖️')" title="Танк">
-                    <span>🎖️</span>
-                </button>
-                <button class="hero-btn" data-hero="🤖" onclick="selectHero('🤖')" title="Робот">
-                    <span>🤖</span>
-                </button>
-                <button class="hero-btn" data-hero="🐱" onclick="selectHero('🐱')" title="Кошка">
-                    <span>🐱</span>
-                </button>
-                <button class="hero-btn" data-hero="🐶" onclick="selectHero('🐶')" title="Собака">
-                    <span>🐶</span>
-                </button>
-            </div>
+            <span class="hero-preview" id="heroPreview">🍓</span>
         </div>
 
+        <!-- ===== TREASURE TIMER ===== -->
         <div class="treasure-timer">
             <div>
                 <div class="timer-label">⏱️ Следующий клад</div>
-                <div style="font-size:12px;color:#9CA3AF;" id="treasureTimeLabel">15:00 МСК</div>
+                <div class="timer-time" id="treasureTimeLabel">15:00 МСК</div>
             </div>
             <div class="timer-value next" id="treasureTimerDisplay">--:--:--</div>
         </div>
 
+        <!-- ===== TREASURE STATUS BAR ===== -->
         <div class="treasure-status-bar" id="treasureStatusBar">
             <div class="top-row">
-                <span class="status-label inactive" id="treasureStatusLabel">🔴 Клад не активен</span>
+                <span class="status-label" id="treasureStatusLabel">
+                    <span class="dot inactive" id="statusDot"></span>
+                    <span id="statusLabelText">Клад не активен</span>
+                </span>
                 <span class="status-distance" id="treasureDistance">—</span>
             </div>
             <div class="status-detail">
-                <span id="treasureStatusText">Ожидайте активации клада администратором</span>
+                <span id="treasureStatusText">Ожидайте активации</span>
                 <span class="emoji-status" id="treasureEmoji">⏳</span>
             </div>
         </div>
 
-        <div class="treasure-map-wrapper">
-            <div class="map-label" id="mapLabel">
-                <span class="pulse-dot" id="mapPulseDot" style="display:none;"></span>
-                <span id="mapLabelText">📍 Найди клад на карте!</span>
+        <!-- ===== MAP ===== -->
+        <div class="map-card">
+            <div class="map-container" id="mapContainer">
+                <div id="treasureMap"></div>
+                <div class="map-placeholder" id="mapPlaceholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Загрузка карты...</span>
+                    <span style="font-size:11px;color:var(--text-muted);">Разрешите доступ к геолокации</span>
+                </div>
             </div>
-            <div class="map-card">
-                <div class="map-container" id="mapContainer">
-                    <div id="treasureMap"></div>
-                    <div class="map-placeholder" id="mapPlaceholder">
-                        <i class="fas fa-map-marked-alt"></i>
-                        <span>Карта загружается...</span>
-                        <span style="font-size:11px;color:#9CA3AF;">Разрешите доступ к геолокации</span>
-                    </div>
-                </div>
-                <div class="map-actions">
-                    <button class="map-btn location-btn" id="locationBtn" onclick="centerOnUser()">
-                        <i class="fas fa-location-dot"></i> Где я?
-                    </button>
-                    <button class="map-btn kiosk-btn" id="kioskBtn" onclick="routeToKiosk()">
-                        <i class="fas fa-route"></i> Киоск
-                    </button>
-                </div>
+            <div class="map-actions">
+                <button class="map-btn location-btn" id="locationBtn" onclick="centerOnUser()">
+                    <i class="fas fa-location-dot"></i> Где я?
+                </button>
+                <button class="map-btn kiosk-btn" id="kioskBtn" onclick="routeToKiosk()">
+                    <i class="fas fa-route"></i> Киоск
+                </button>
             </div>
         </div>
 
+        <!-- ===== MENU ===== -->
         <div class="menu-section active">
             <div class="section-title">
                 <i class="fas fa-strawberry"></i> Клубника в шоколаде
@@ -1120,7 +1083,7 @@
         </div>
 
         <div class="footer">
-            <i class="fas fa-heart" style="color: var(--primary);"></i>
+            <i class="fas fa-heart" style="color: var(--accent);"></i>
             С любовью, Strawberry in Chocolate
             <br>
             <a href="tel:+79628557263" class="footer-phone">
@@ -1130,15 +1093,16 @@
 
     </div>
 
+    <!-- ===== ONBOARDING MODAL ===== -->
     <div class="onboarding-overlay" id="onboardingModal">
         <div class="onboarding-modal">
             <span class="onboarding-icon">🍓</span>
-            <div class="onboarding-title">Привет, мой друг!</div>
+            <div class="onboarding-title">Привет, искатель!</div>
             <div class="onboarding-text">
                 Ты попал в <strong>клубничные соревнования</strong>! 🎉<br><br>
-                Заглядывай к нам в <strong>15:00</strong> и <strong>19:00</strong> и участвуй в поиске клада.<br><br>
-                На карте будет отмечен <strong>круг</strong> — тебе надо быть самым быстрым и <strong>первым в него зайти</strong>!<br><br>
-                <strong>🏆 Первый, кто зайдёт — получит МЕГА-СТАКАН клубники в шоколаде БЕСПЛАТНО!</strong> 🍓
+                Заглядывай к нам в <strong>15:00</strong> и <strong>19:00</strong>.<br><br>
+                На карте появится <strong>пульсирующий круг</strong> — будь первым, кто в него зайдёт!<br><br>
+                <strong>🏆 Победитель получает МЕГА-СТАКАН бесплатно!</strong>
             </div>
             <div class="onboarding-times">
                 <div class="time-box">
@@ -1151,20 +1115,20 @@
                 </div>
             </div>
             <div class="onboarding-gift-hint">
-                🎁 А пока для тебя <strong>подарок — мини-порция шоколадной клубнички!</strong><br>
-                Покажи <strong>QR-код</strong> кассиру в киоске 🍓
+                🎁 А пока — <strong>мини-порция шоколадной клубнички</strong> в подарок!<br>
+                Покажи QR-код кассиру в киоске 🍓
             </div>
             <button class="onboarding-btn" onclick="closeOnboarding()">
-                <i class="fas fa-gift"></i> Забрать подарок!
+                <i class="fas fa-gift"></i> Забрать подарок
             </button>
         </div>
     </div>
 
-    <!-- ===== WINNER MODAL (ОБНОВЛЁННЫЙ) ===== -->
+    <!-- ===== WINNER MODAL ===== -->
     <div class="winner-overlay" id="winnerModal">
         <div class="winner-modal">
-            <span class="winner-icon">🍓</span>
-            <div class="winner-title">🏆 ТЫ ПОБЕДИЛ!</div>
+            <span class="winner-icon">🏆</span>
+            <div class="winner-title">ТЫ ПОБЕДИЛ!</div>
             <div class="winner-subtitle">Ты первый нашёл клад! 🎉</div>
             <div class="winner-prize">
                 🎁 МЕГА-СТАКАН клубники в шоколаде <strong>БЕСПЛАТНО!</strong>
@@ -1181,6 +1145,7 @@
         </div>
     </div>
 
+    <!-- ===== GIFT MODAL ===== -->
     <div class="congrats-overlay" id="giftModal">
         <div class="congrats-modal">
             <button class="congrats-close" onclick="closeGiftModal()">
@@ -1235,9 +1200,30 @@
         localStorage.setItem('userId', userId);
         let socket = null;
         let selectedHero = localStorage.getItem('selectedHero') || '🍓';
-        let isRouteBuilt = false;
         let isFirstLocation = true;
         let isWinner = false;
+
+        // ================================================================
+        // ===== INIT HERO SELECTOR =====
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('heroSelect');
+            const preview = document.getElementById('heroPreview');
+            const saved = localStorage.getItem('selectedHero') || '🍓';
+            select.value = saved;
+            preview.textContent = saved;
+            selectedHero = saved;
+        });
+
+        function selectHero(hero) {
+            selectedHero = hero;
+            localStorage.setItem('selectedHero', hero);
+            document.getElementById('heroPreview').textContent = hero;
+            if (userLocation && mapInstance) {
+                updateUserMarker(userLocation.lat, userLocation.lng);
+            }
+            showNotification(`🎮 Ты теперь ${hero}!`);
+        }
 
         // ================================================================
         // ===== ONBOARDING =====
@@ -1245,36 +1231,15 @@
         function showOnboarding() {
             const hasSeen = localStorage.getItem('onboarding_seen');
             if (hasSeen) return;
-
-            const modal = document.getElementById('onboardingModal');
-            modal.classList.add('open');
+            document.getElementById('onboardingModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
         function closeOnboarding() {
-            const modal = document.getElementById('onboardingModal');
-            modal.classList.remove('open');
+            document.getElementById('onboardingModal').classList.remove('open');
             document.body.style.overflow = '';
             localStorage.setItem('onboarding_seen', 'true');
-
-            setTimeout(() => {
-                checkGift();
-            }, 500);
-        }
-
-        // ================================================================
-        // ===== ВЫБОР ГЕРОЯ =====
-        // ================================================================
-        function selectHero(hero) {
-            selectedHero = hero;
-            localStorage.setItem('selectedHero', hero);
-            document.querySelectorAll('.hero-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.hero === hero);
-            });
-            if (userLocation && mapInstance) {
-                updateUserMarker(userLocation.lat, userLocation.lng);
-            }
-            showNotification(`🎮 Ты теперь ${hero}!`);
+            setTimeout(() => { checkGift(); }, 500);
         }
 
         // ================================================================
@@ -1283,13 +1248,10 @@
         function getNextTreasureTime() {
             const now = new Date();
             let mskTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-
             for (const time of TREASURE_TIMES) {
                 const target = new Date(mskTime);
                 target.setHours(time.hours, time.minutes, 0, 0);
-                if (target > mskTime) {
-                    return target;
-                }
+                if (target > mskTime) return target;
             }
             const target = new Date(mskTime);
             target.setDate(target.getDate() + 1);
@@ -1302,38 +1264,25 @@
             const now = new Date();
             let mskNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
             const diff = Math.max(0, Math.floor((next - mskNow) / 1000));
-
             const hours = Math.floor(diff / 3600);
             const minutes = Math.floor((diff % 3600) / 60);
             const seconds = diff % 60;
-
-            const display = document.getElementById('treasureTimerDisplay');
-            display.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-            const timeLabel = document.getElementById('treasureTimeLabel');
-            const nextHour = next.getHours();
-            const nextMin = String(next.getMinutes()).padStart(2, '0');
-            timeLabel.textContent = `${nextHour}:${nextMin} МСК`;
-
-            if (diff < 3600 && diff > 0) {
-                display.style.color = '#FF6B00';
-                display.style.animation = 'pulseGold 1s ease-in-out infinite';
-            } else {
-                display.style.color = '#4ADE80';
-                display.style.animation = 'none';
-            }
+            document.getElementById('treasureTimerDisplay').textContent =
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('treasureTimeLabel').textContent =
+                `${next.getHours()}:${String(next.getMinutes()).padStart(2, '0')} МСК`;
         }
 
         // ================================================================
         // ===== MENU =====
         // ================================================================
         const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, oldPrice: null, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, oldPrice: null, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, oldPrice: null, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, oldPrice: null, volume: '300 мл', image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, oldPrice: null, volume: '300 мл', image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, oldPrice: null, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, oldPrice: null, image: 'images/klassika.jpg', badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, oldPrice: null, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, oldPrice: null, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, oldPrice: null, image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, oldPrice: null, image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, oldPrice: null, image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         function renderMenu() {
@@ -1342,15 +1291,12 @@
             STRAWBERRY_ITEMS.forEach(item => {
                 html += `
                     <div class="menu-item">
-                        ${item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${item.badge}</span>` : ''}
-                        <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23fce4ec%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                        ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+                        <img src="${item.image}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
                         <div class="item-content">
                             <div class="item-name">${item.name}</div>
                             <div class="item-desc">${item.desc}</div>
-                            <div class="item-price">
-                                ${item.price} ₽
-                                ${item.oldPrice ? `<span class="item-old-price">${item.oldPrice} ₽</span>` : ''}
-                            </div>
+                            <div class="item-price">${item.price} ₽</div>
                         </div>
                     </div>
                 `;
@@ -1367,55 +1313,38 @@
                 console.log('📡 WebSocket подключён');
 
                 socket.on('treasure-activated', (data) => {
-                    // Если уже есть победитель — игнорируем новый клад
-                    if (isWinner) {
-                        console.log('⏭️ Победитель уже есть, игнорируем новый клад');
-                        return;
-                    }
-
-                    console.log('🎯 Клад активирован!', data);
+                    if (isWinner) return;
                     treasureActive = true;
                     treasureData = data;
                     updateTreasureUI();
                     if (mapInstance) {
                         mapInstance.setCenter([data.lat, data.lng], 17);
                         showTreasureCircle(data.lat, data.lng, data.radius || 15);
-                        document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
-                        document.getElementById('mapPulseDot').style.display = 'inline-block';
                     }
-                    showNotification('🎯 КЛАД ПОЯВИЛСЯ! Беги в отмеченный круг!');
+                    showNotification('🎯 КЛАД ПОЯВИЛСЯ! Беги в круг!');
                 });
 
                 socket.on('treasure-claimed', (data) => {
-                    console.log('😢 Клад найден:', data);
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
                     removeTreasureCircle();
-                    document.getElementById('mapLabelText').innerHTML = '📍 Клад уже нашли! Следующий в 15:00';
-                    document.getElementById('mapPulseDot').style.display = 'none';
-                    showNotification('😢 Клад уже нашли! Попробуй в 15:00!');
+                    showNotification('😢 Клад уже нашли! Следующий в 15:00');
                 });
 
-                socket.on('treasure-end', (data) => {
-                    console.log('⏹️ Клад деактивирован');
+                socket.on('treasure-end', () => {
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
                     removeTreasureCircle();
-                    document.getElementById('mapLabelText').innerHTML = '📍 Клад отменён. Жди следующий!';
-                    document.getElementById('mapPulseDot').style.display = 'none';
                 });
 
-                socket.on('you-won', (data) => {
-                    console.log('🏆 ПОБЕДА!', data);
+                socket.on('you-won', () => {
                     isWinner = true;
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
                     removeTreasureCircle();
-                    document.getElementById('mapLabelText').innerHTML = '🎉 ТЫ ПОБЕДИЛ! Иди в киоск!';
-                    document.getElementById('mapPulseDot').style.display = 'none';
                     showWinnerModal();
                 });
 
@@ -1425,14 +1354,9 @@
             }
         }
 
-        // ================================================================
-        // ===== УДАЛЕНИЕ КРУГА КЛАДА =====
-        // ================================================================
         function removeTreasureCircle() {
             if (treasureCircle) {
-                if (treasureCircle._pulseInterval) {
-                    clearInterval(treasureCircle._pulseInterval);
-                }
+                if (treasureCircle._pulseInterval) clearInterval(treasureCircle._pulseInterval);
                 mapInstance.geoObjects.remove(treasureCircle);
                 treasureCircle = null;
             }
@@ -1449,39 +1373,23 @@
 
             ymaps.ready(() => {
                 try {
-                    const container = document.getElementById('treasureMap');
-                    const placeholder = document.getElementById('mapPlaceholder');
-
                     mapInstance = new ymaps.Map('treasureMap', {
                         center: [MY_LOCATION.lat, MY_LOCATION.lng],
                         zoom: 17,
-                        controls: ['zoomControl', 'typeSelector', 'geolocationControl']
+                        controls: ['zoomControl', 'typeSelector']
                     });
 
-                    if (placeholder) placeholder.style.display = 'none';
+                    document.getElementById('mapPlaceholder').style.display = 'none';
 
-                    // Киоск с подписью
+                    // Киоск
                     kioskPlacemark = new ymaps.Placemark(
                         [MY_LOCATION.lat, MY_LOCATION.lng],
-                        {
-                            balloonContent: '🍓 <strong>Strawberry in Chocolate</strong><br>📍 Наш киоск — забирай приз!',
-                            iconCaption: '🍓 КИОСК'
-                        },
-                        {
-                            preset: 'islands#blueStretchyIcon',
-                            iconContent: '🏠'
-                        }
+                        { balloonContent: '🍓 Киоск — забирай приз!', iconCaption: '🍓 КИОСК' },
+                        { preset: 'islands#blueStretchyIcon', iconContent: '🏠' }
                     );
                     mapInstance.geoObjects.add(kioskPlacemark);
 
-                    const savedHero = localStorage.getItem('selectedHero') || '🍓';
-                    document.querySelectorAll('.hero-btn').forEach(btn => {
-                        btn.classList.toggle('active', btn.dataset.hero === savedHero);
-                    });
-                    selectedHero = savedHero;
-
                     getMyLocation();
-
                     checkTreasureStatus();
 
                     if (statusCheckInterval) clearInterval(statusCheckInterval);
@@ -1489,8 +1397,6 @@
                         checkTreasureStatus();
                         if (userLocation && treasureActive) {
                             sendUserLocation();
-                        }
-                        if (userLocation && treasureActive && treasureData) {
                             checkDistanceToTreasure();
                         }
                     }, 3000);
@@ -1503,17 +1409,6 @@
 
                 } catch (e) {
                     console.error('❌ Ошибка карты:', e);
-                    const placeholder = document.getElementById('mapPlaceholder');
-                    if (placeholder) {
-                        placeholder.innerHTML = `
-                            <i class="fas fa-exclamation-triangle" style="color:#F59E0B;"></i>
-                            <span>Ошибка загрузки карты</span>
-                            <button class="btn btn-primary btn-sm" onclick="initMap()" style="margin-top:8px;">
-                                <i class="fas fa-sync-alt"></i> Повторить
-                            </button>
-                        `;
-                        placeholder.style.display = 'flex';
-                    }
                 }
             });
         }
@@ -1523,18 +1418,15 @@
         // ================================================================
         function getMyLocation() {
             if (!navigator.geolocation) {
-                showNotification('❌ Ваш браузер не поддерживает геолокацию');
+                showNotification('❌ Браузер не поддерживает геолокацию');
                 return;
             }
 
             const btn = document.getElementById('locationBtn');
             btn.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Определение...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = null;
-            }
+            if (watchId) navigator.geolocation.clearWatch(watchId);
 
             watchId = navigator.geolocation.watchPosition(
                 (position) => {
@@ -1545,236 +1437,158 @@
                     btn.classList.remove('loading');
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
                     updateUserMarker(userLocation.lat, userLocation.lng);
-
                     if (isFirstLocation && mapInstance) {
                         mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
                         isFirstLocation = false;
-                        console.log('📍 Первое центрирование на пользователе');
                     }
-
                     sendUserLocation();
-
-                    if (treasureActive && treasureData) {
-                        checkDistanceToTreasure();
-                    }
-
+                    if (treasureActive && treasureData) checkDistanceToTreasure();
                 },
                 (error) => {
                     btn.classList.remove('loading');
                     btn.innerHTML = '<i class="fas fa-location-dot"></i> Где я?';
-                    let msg = '❌ Не удалось определить местоположение';
+                    let msg = '❌ Ошибка GPS';
                     if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
-                    else if (error.code === 2) msg = '❌ Сигнал GPS слабый';
                     showNotification(msg);
-                    console.error('GPS Error:', error);
                 },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 15000,
-                    maximumAge: 5000
-                }
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 }
             );
         }
 
-        // ================================================================
-        // ===== ЦЕНТРИРОВАНИЕ ПО КНОПКЕ "ГДЕ Я?" =====
-        // ================================================================
         function centerOnUser() {
             if (!userLocation || !mapInstance) {
-                showNotification('📍 Не могу определить ваше местоположение');
+                showNotification('📍 Не могу определить местоположение');
                 return;
             }
             mapInstance.setCenter([userLocation.lat, userLocation.lng], 17);
             showNotification('📍 Ты здесь!');
         }
 
-        // ================================================================
-        // ===== ПОЛЬЗОВАТЕЛЬ НА КАРТЕ =====
-        // ================================================================
         function updateUserMarker(lat, lng) {
             if (!mapInstance) return;
-
-            if (userPlacemark) {
-                mapInstance.geoObjects.remove(userPlacemark);
-                userPlacemark = null;
-            }
-
-            const heroEmoji = selectedHero || '🍓';
-
+            if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
             userPlacemark = new ymaps.Placemark(
                 [lat, lng],
-                {
-                    balloonContent: `🎮 <strong>Это ты!</strong><br>Ты сегодня — ${heroEmoji}`
-                },
+                { balloonContent: '🎮 Это ты!' },
                 {
                     iconLayout: 'default#image',
-                    iconImageHref: `https://emojicdn.elk.sh/${heroEmoji}`,
-                    iconImageSize: [40, 40],
-                    iconImageOffset: [-20, -20]
+                    iconImageHref: `https://emojicdn.elk.sh/${selectedHero}`,
+                    iconImageSize: [36, 36],
+                    iconImageOffset: [-18, -18]
                 }
             );
-
             mapInstance.geoObjects.add(userPlacemark);
         }
 
         // ================================================================
-        // ===== ТОЛЬКО ПУЛЬСИРУЮЩИЙ КРУГ =====
+        // ===== КРУГ КЛАДА =====
         // ================================================================
         function showTreasureCircle(lat, lng, radius = 15) {
             if (!mapInstance) return;
-
             removeTreasureCircle();
-
-            // ⭕ ПУЛЬСИРУЮЩИЙ КРУГ
             treasureCircle = new ymaps.Circle(
                 [[lat, lng], radius],
+                { balloonContent: '🎯 Зона клада (15м)' },
                 {
-                    balloonContent: '🎯 Зона клада (15 метров)'
-                },
-                {
-                    fillColor: 'rgba(255, 71, 87, 0.15)',
-                    strokeColor: '#FF4757',
-                    strokeWidth: 4,
-                    strokeOpacity: 0.9
+                    fillColor: 'rgba(108,92,231,0.15)',
+                    strokeColor: '#6C5CE7',
+                    strokeWidth: 3,
+                    strokeOpacity: 0.8
                 }
             );
             mapInstance.geoObjects.add(treasureCircle);
 
-            // Анимация пульсации
             let pulse = 0;
-            let pulseInterval = setInterval(() => {
-                if (!treasureCircle) {
-                    clearInterval(pulseInterval);
-                    return;
-                }
+            treasureCircle._pulseInterval = setInterval(() => {
+                if (!treasureCircle) { clearInterval(treasureCircle._pulseInterval); return; }
                 pulse = (pulse + 1) % 20;
                 const opacity = 0.5 + 0.4 * Math.sin(pulse / 20 * Math.PI * 2);
                 treasureCircle.options.set('strokeOpacity', opacity);
-                treasureCircle.options.set('fillOpacity', 0.1 + 0.15 * Math.sin(pulse / 20 * Math.PI * 2));
+                treasureCircle.options.set('fillOpacity', 0.08 + 0.12 * Math.sin(pulse / 20 * Math.PI * 2));
             }, 100);
-
-            treasureCircle._pulseInterval = pulseInterval;
 
             updateTreasureUI();
         }
 
         // ================================================================
-        // ===== РАССТОЯНИЕ ДО КЛАДА =====
+        // ===== РАССТОЯНИЕ =====
         // ================================================================
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c * 1000;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1000;
         }
 
         function checkDistanceToTreasure() {
             if (!userLocation || !treasureData || isWinner) return;
-
-            const distance = getDistance(
-                userLocation.lat, userLocation.lng,
-                treasureData.lat, treasureData.lng
-            );
-
-            const distanceEl = document.getElementById('treasureDistance');
-            const statusText = document.getElementById('treasureStatusText');
-            const emojiEl = document.getElementById('treasureEmoji');
-
-            let status = '';
-            let emoji = '';
-            let color = '';
+            const distance = getDistance(userLocation.lat, userLocation.lng, treasureData.lat, treasureData.lng);
+            const el = document.getElementById('treasureDistance');
+            const text = document.getElementById('treasureStatusText');
+            const emoji = document.getElementById('treasureEmoji');
 
             if (distance <= 15) {
-                status = '🎯 ТЫ В ЗОНЕ! Иди в киоск!';
-                emoji = '🎯';
-                color = '#4ADE80';
-                distanceEl.textContent = '0 м';
-                // ✅ ПОБЕДА! Останавливаем всё
+                el.textContent = '0 м';
+                text.textContent = '🎯 ТЫ В ЗОНЕ!';
+                emoji.textContent = '🎯';
                 if (treasureActive && !isWinner) {
                     isWinner = true;
                     treasureActive = false;
                     treasureData = null;
                     updateTreasureUI();
                     removeTreasureCircle();
-                    document.getElementById('mapLabelText').innerHTML = '🎉 ТЫ ПОБЕДИЛ! Иди в киоск!';
-                    document.getElementById('mapPulseDot').style.display = 'none';
-                    // Отправляем на сервер
                     sendWinToServer();
                     showWinnerModal();
                 }
             } else if (distance <= 30) {
-                status = '🔥 ГОРЯЧО! Ты рядом!';
-                emoji = '🔥';
-                color = '#FF6B00';
-                distanceEl.textContent = Math.round(distance) + ' м';
+                el.textContent = Math.round(distance) + ' м';
+                text.textContent = '🔥 ГОРЯЧО!';
+                emoji.textContent = '🔥';
+                el.style.color = '#FF6B00';
             } else if (distance <= 60) {
-                status = '🌤️ ТЕПЛО! Продолжай искать';
-                emoji = '🌤️';
-                color = '#FFB74D';
-                distanceEl.textContent = Math.round(distance) + ' м';
+                el.textContent = Math.round(distance) + ' м';
+                text.textContent = '🌤️ ТЕПЛО';
+                emoji.textContent = '🌤️';
+                el.style.color = '#FFB74D';
             } else if (distance <= 120) {
-                status = '🌥️ ПРОХЛАДНО... Иди в ту сторону';
-                emoji = '🌥️';
-                color = '#90CAF9';
-                distanceEl.textContent = Math.round(distance) + ' м';
+                el.textContent = Math.round(distance) + ' м';
+                text.textContent = '🌥️ ПРОХЛАДНО';
+                emoji.textContent = '🌥️';
+                el.style.color = '#90CAF9';
             } else {
-                status = '❄️ ХОЛОДНО! Ты далеко от клада';
-                emoji = '❄️';
-                color = '#4FC3F7';
-                distanceEl.textContent = Math.round(distance) + ' м';
+                el.textContent = Math.round(distance) + ' м';
+                text.textContent = '❄️ ХОЛОДНО';
+                emoji.textContent = '❄️';
+                el.style.color = '#4FC3F7';
             }
-
-            statusText.textContent = status;
-            emojiEl.textContent = emoji;
-            distanceEl.style.color = color;
         }
 
-        // ================================================================
-        // ===== ОТПРАВКА ПОБЕДЫ НА СЕРВЕР =====
-        // ================================================================
         function sendWinToServer() {
             if (!socket) return;
-            socket.emit('treasure-win', {
-                userId: userId,
-                lat: userLocation.lat,
-                lng: userLocation.lng
-            });
+            socket.emit('treasure-win', { userId, lat: userLocation.lat, lng: userLocation.lng });
         }
 
         // ================================================================
-        // ===== ОБНОВЛЕНИЕ UI =====
+        // ===== UI =====
         // ================================================================
         function updateTreasureUI() {
             const bar = document.getElementById('treasureStatusBar');
-            const label = document.getElementById('treasureStatusLabel');
-            const distance = document.getElementById('treasureDistance');
-            const statusText = document.getElementById('treasureStatusText');
-            const emoji = document.getElementById('treasureEmoji');
+            const label = document.getElementById('statusLabelText');
+            const dot = document.getElementById('statusDot');
 
             if (treasureActive && treasureData) {
                 bar.classList.add('active');
-                label.textContent = '🎯 КЛАД АКТИВЕН!';
-                label.className = 'status-label active';
-                statusText.textContent = '🏃 Беги в отмеченный круг!';
-                emoji.textContent = '🏃';
-                distance.textContent = '? м';
-                document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
-                document.getElementById('mapPulseDot').style.display = 'inline-block';
+                label.textContent = 'КЛАД АКТИВЕН!';
+                dot.className = 'dot active';
+            } else if (isWinner) {
+                bar.classList.add('active');
+                label.textContent = '🏆 ПОБЕДА!';
+                dot.className = 'dot winner';
             } else {
                 bar.classList.remove('active');
-                label.textContent = isWinner ? '🏆 ПОБЕДА!' : '🔴 Клад не активен';
-                label.className = isWinner ? 'status-label active' : 'status-label inactive';
-                statusText.textContent = isWinner ? '🎉 Ты победил! Иди в киоск!' : 'Ожидайте активации клада администратором';
-                emoji.textContent = isWinner ? '🏆' : '⏳';
-                distance.textContent = isWinner ? '🏆' : '—';
-                if (!document.getElementById('winnerModal').classList.contains('open')) {
-                    document.getElementById('mapLabelText').innerHTML = isWinner ? '🎉 ТЫ ПОБЕДИЛ! Иди в киоск!' : '📍 Найди клад на карте!';
-                    document.getElementById('mapPulseDot').style.display = 'none';
-                }
+                label.textContent = 'Клад не активен';
+                dot.className = 'dot inactive';
             }
         }
 
@@ -1782,15 +1596,10 @@
         // ===== ПРОВЕРКА СТАТУСА =====
         // ================================================================
         async function checkTreasureStatus() {
+            if (isWinner) return;
             try {
                 const res = await fetch('/api/treasure/status');
                 const data = await res.json();
-
-                // Если уже есть победитель — игнорируем
-                if (isWinner) {
-                    return;
-                }
-
                 if (data.active) {
                     if (!treasureActive) {
                         treasureActive = true;
@@ -1798,186 +1607,95 @@
                         if (mapInstance) {
                             mapInstance.setCenter([data.lat, data.lng], 17);
                             showTreasureCircle(data.lat, data.lng, data.radius || 15);
-                            document.getElementById('mapLabelText').innerHTML = '🎯 <strong>КЛАД В ЭТОМ КРУГУ!</strong> Беги туда!';
-                            document.getElementById('mapPulseDot').style.display = 'inline-block';
                         }
-                        showNotification('🎯 КЛАД ПОЯВИЛСЯ! Беги в отмеченный круг!');
+                        showNotification('🎯 КЛАД ПОЯВИЛСЯ!');
                     } else {
                         treasureData = { lat: data.lat, lng: data.lng, radius: data.radius || 15 };
                     }
                     updateTreasureUI();
                 } else {
-                    if (treasureActive && !isWinner) {
+                    if (treasureActive) {
                         treasureActive = false;
                         treasureData = null;
                         updateTreasureUI();
                         removeTreasureCircle();
-                        document.getElementById('mapLabelText').innerHTML = '📍 Найди клад на карте!';
-                        document.getElementById('mapPulseDot').style.display = 'none';
                     }
                 }
-            } catch (e) {
-                console.error('❌ Ошибка проверки статуса:', e);
-            }
+            } catch (e) { console.error(e); }
         }
 
-        // ================================================================
-        // ===== ОТПРАВКА КООРДИНАТ =====
-        // ================================================================
         function sendUserLocation() {
             if (!userLocation || !socket) return;
-
-            const name = localStorage.getItem('userName') || 'Клиент';
-            const phone = localStorage.getItem('userPhone') || '';
-
             socket.emit('user-location', {
-                userId: userId,
+                userId,
                 lat: userLocation.lat,
                 lng: userLocation.lng,
-                name: name,
-                phone: phone,
                 hero: selectedHero
             });
         }
 
         // ================================================================
-        // ===== МАРШРУТ К КИОСКУ (ПЕШИЙ, В ПРИЛОЖЕНИИ) =====
+        // ===== МАРШРУТ К КИОСКУ =====
         // ================================================================
         function routeToKiosk() {
             if (!userLocation) {
-                showNotification('❌ Не могу определить ваше местоположение');
+                showNotification('❌ Не могу определить местоположение');
                 return;
             }
 
-            const btn = document.getElementById('kioskBtn');
-            if (btn) {
-                btn.classList.add('loading');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Строим маршрут...';
-            }
-
-            // Закрываем все модалки
             closeWinnerModal();
             closeGiftModal();
 
-            // Центрируем на киоске
             if (mapInstance) {
                 mapInstance.setCenter([MY_LOCATION.lat, MY_LOCATION.lng], 16);
-                if (kioskPlacemark) {
-                    kioskPlacemark.balloon.open();
-                }
+                if (kioskPlacemark) kioskPlacemark.balloon.open();
             }
 
-            // Строим пеший маршрут через Яндекс.Карты (открывается в приложении)
-            const yandexMapsUrl = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+            const url = `https://yandex.ru/maps/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd&z=16`;
+            const appUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
 
-            // Открываем Яндекс.Карты в приложении (если установлено) или в браузере
             try {
-                // Пробуем открыть в приложении Яндекс.Карты
-                const yandexAppUrl = `yandexmaps://maps.yandex.ru/?rtext=${userLocation.lat},${userLocation.lng}~${MY_LOCATION.lat},${MY_LOCATION.lng}&rtt=pd`;
-                window.open(yandexAppUrl, '_blank');
-                // Если приложение не открылось, через 1.5 секунды открываем веб-версию
-                setTimeout(() => {
-                    window.open(yandexMapsUrl, '_blank');
-                }, 1500);
+                window.open(appUrl, '_blank');
+                setTimeout(() => window.open(url, '_blank'), 1500);
             } catch (e) {
-                // Если приложение не установлено, открываем веб-версию
-                window.open(yandexMapsUrl, '_blank');
+                window.open(url, '_blank');
             }
-
-            setTimeout(() => {
-                if (btn) {
-                    btn.classList.remove('loading');
-                    btn.innerHTML = '<i class="fas fa-route"></i> Киоск';
-                }
-            }, 1000);
 
             showNotification('🚶 Маршрут к киоску построен!');
-        }
-
-        // ================================================================
-        // ===== КИОСК =====
-        // ================================================================
-        function showKioskOnMap() {
-            closeWinnerModal();
-            routeToKiosk();
-        }
-
-        // ================================================================
-        // ===== УВЕДОМЛЕНИЯ =====
-        // ================================================================
-        function showNotification(message) {
-            const existing = document.querySelector('.custom-notification');
-            if (existing) existing.remove();
-
-            const notification = document.createElement('div');
-            notification.className = 'custom-notification';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(-50%) translateY(-20px)';
-                notification.style.transition = 'all 0.3s ease';
-                setTimeout(() => notification.remove(), 400);
-            }, 4000);
         }
 
         // ================================================================
         // ===== МОДАЛКИ =====
         // ================================================================
         function showWinnerModal() {
-            const modal = document.getElementById('winnerModal');
-            modal.classList.add('open');
+            document.getElementById('winnerModal').classList.add('open');
             document.body.style.overflow = 'hidden';
-
             if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
-
-            try {
-                const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
-                audio.play().catch(() => {});
-            } catch (e) {}
         }
 
         function closeWinnerModal() {
-            const modal = document.getElementById('winnerModal');
-            modal.classList.remove('open');
+            document.getElementById('winnerModal').classList.remove('open');
             document.body.style.overflow = '';
         }
 
-        function openGiftMap() {
-            closeGiftModal();
-            routeToKiosk();
-        }
-
         function closeGiftModal() {
-            const modal = document.getElementById('giftModal');
-            modal.classList.remove('open');
+            document.getElementById('giftModal').classList.remove('open');
             document.body.style.overflow = '';
         }
 
         // ================================================================
-        // ===== СИСТЕМА ПОДАРКОВ =====
+        // ===== ПОДАРКИ =====
         // ================================================================
         async function getUserIP() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                return data.ip;
-            } catch (e) {
-                try {
-                    const res2 = await fetch('/api/my-ip');
-                    const data2 = await res2.json();
-                    return data2.ip;
-                } catch (e2) {
-                    return null;
-                }
-            }
+                return (await res.json()).ip;
+            } catch { return null; }
         }
 
         async function checkGift() {
             const ip = await getUserIP();
             if (!ip) return;
-
             try {
                 const res = await fetch('/api/gift/check', {
                     method: 'POST',
@@ -1985,16 +1703,9 @@
                     body: JSON.stringify({ ip })
                 });
                 const data = await res.json();
-
-                if (data.hasGift) {
-                    giftId = data.giftId;
-                    showGiftModal();
-                } else if (data.canActivate) {
-                    await activateGift(ip);
-                }
-            } catch (e) {
-                console.error('Ошибка проверки подарка:', e);
-            }
+                if (data.hasGift) { giftId = data.giftId;
+                    showGiftModal(); } else if (data.canActivate) { await activateGift(ip); }
+            } catch (e) { console.error(e); }
         }
 
         async function activateGift(ip) {
@@ -2005,19 +1716,29 @@
                     body: JSON.stringify({ ip })
                 });
                 const data = await res.json();
-                if (data.success) {
-                    giftId = data.giftId;
-                    showGiftModal();
-                }
-            } catch (e) {
-                console.error('Ошибка активации подарка:', e);
-            }
+                if (data.success) { giftId = data.giftId;
+                    showGiftModal(); }
+            } catch (e) { console.error(e); }
         }
 
         function showGiftModal() {
-            const modal = document.getElementById('giftModal');
-            modal.classList.add('open');
+            document.getElementById('giftModal').classList.add('open');
             document.body.style.overflow = 'hidden';
+        }
+
+        function showNotification(message) {
+            const existing = document.querySelector('.custom-notification');
+            if (existing) existing.remove();
+            const n = document.createElement('div');
+            n.className = 'custom-notification';
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => {
+                n.style.opacity = '0';
+                n.style.transform = 'translateX(-50%) translateY(-20px)';
+                n.style.transition = 'all 0.3s ease';
+                setTimeout(() => n.remove(), 400);
+            }, 3500);
         }
 
         // ================================================================
@@ -2026,19 +1747,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderMenu();
             connectSocket();
-
-            setTimeout(() => {
-                initMap();
-            }, 500);
-
-            setTimeout(() => {
-                showOnboarding();
-            }, 800);
-
+            setTimeout(() => { initMap(); }, 500);
+            setTimeout(() => { showOnboarding(); }, 800);
             console.log('🍓 Квест-страница с GPS-кладом загружена!');
-            console.log(`📍 Киоск: ${MY_LOCATION.lat}, ${MY_LOCATION.lng}`);
-            console.log(`🆔 User ID: ${userId}`);
-            console.log(`🎮 Твой герой: ${selectedHero}`);
         });
     </script>
 
