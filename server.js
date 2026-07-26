@@ -5,9 +5,6 @@ const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
 
-// ===== ПОДКЛЮЧАЕМ МЕХАНИКУ КЛАДА =====
-const treasure = require('./server/treasure');
-
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -66,16 +63,6 @@ async function initDB() {
                 claimed BOOLEAN DEFAULT false,
                 claimed_at TIMESTAMPTZ,
                 created_at TIMESTAMPTZ DEFAULT NOW()
-            );
-            CREATE TABLE IF NOT EXISTS treasure (
-                id SERIAL PRIMARY KEY,
-                user_id TEXT,
-                name TEXT,
-                phone TEXT,
-                lat FLOAT,
-                lng FLOAT,
-                prize TEXT DEFAULT 'МЕГА-СТАКАН клубники в шоколаде',
-                claimed_at TIMESTAMPTZ DEFAULT NOW()
             );
         `);
         console.log('📦 Таблицы созданы');
@@ -207,7 +194,7 @@ app.post('/api/order', async (req, res) => {
     if (order.location) {
         order.lat = order.location.lat;
         order.lng = order.location.lng;
-        console.log(`📍 Геолокация заказа #: ${order.lat}, ${order.lng}`);
+        console.log(`📍 Геолокация заказа: ${order.lat}, ${order.lng}`);
     } else {
         console.log('⚠️ Заказ без геолокации');
     }
@@ -235,8 +222,20 @@ app.post('/api/order', async (req, res) => {
         if (order.location) {
             console.log(`📍 Координаты: ${order.location.lat}, ${order.location.lng}`);
         }
+        
+        // ===== УВЕДОМЛЕНИЕ В АДМИНКУ ЧЕРЕЗ WEBSOCKET =====
+        io.to('admin-room').emit('new-order', {
+            id: r.rows[0].id,
+            customerName: order.customerName,
+            total: order.total,
+            bungalow: order.bungalow,
+            location: order.location || null,
+            timestamp: new Date().toISOString()
+        });
+        
         res.json({ success: true, orderId: r.rows[0].id, confirmCode: code });
     } catch (e) {
+        console.error('Ошибка создания заказа:', e);
         res.json({ success: false, error: 'Ошибка сервера' });
     }
 });
@@ -281,13 +280,75 @@ app.post('/api/cancel', async (req, res) => {
 });
 
 app.get('/api/orders', async (req, res) => {
-    const r = await pool.query('SELECT id, data, status, created_at FROM orders ORDER BY created_at DESC');
-    res.json(r.rows.map(row => ({ id: row.id, ...row.data, status: row.status, createdAt: row.created_at })));
+    try {
+        const r = await pool.query('SELECT id, data, status, created_at FROM orders ORDER BY created_at DESC');
+        res.json(r.rows.map(row => ({ id: row.id, ...row.data, status: row.status, createdAt: row.created_at })));
+    } catch (e) {
+        console.error('Ошибка загрузки заказов:', e);
+        res.json([]);
+    }
 });
 
 app.post('/api/clear-orders', async (req, res) => {
     await pool.query('DELETE FROM orders');
     res.json({ success: true });
+});
+
+// ===== СТАТИСТИКА =====
+app.get('/api/stats', async (req, res) => {
+    const { period } = req.query;
+    let interval = '1 day';
+    switch(period) {
+        case 'week': interval = '7 days'; break;
+        case 'month': interval = '30 days'; break;
+        default: interval = '1 day';
+    }
+    
+    try {
+        const r = await pool.query(`
+            SELECT 
+                COUNT(*) as total,
+                COALESCE(SUM((data->>'total')::int), 0) as revenue,
+                COUNT(CASE WHEN status = 'ожидает' THEN 1 END) as active,
+                COUNT(CASE WHEN status = 'выполнен' THEN 1 END) as done,
+                COUNT(CASE WHEN status = 'отменен' THEN 1 END) as cancelled
+            FROM orders 
+            WHERE created_at > NOW() - INTERVAL '${interval}'
+        `);
+        res.json(r.rows[0]);
+    } catch (e) {
+        res.json({ total: 0, revenue: 0, active: 0, done: 0, cancelled: 0 });
+    }
+});
+
+// ===== ЭКСПОРТ ЗАКАЗОВ =====
+app.get('/api/export-orders', async (req, res) => {
+    try {
+        const r = await pool.query('SELECT * FROM orders ORDER BY created_at DESC');
+        const rows = r.rows.map(row => ({
+            id: row.id,
+            name: row.data.customerName || '',
+            phone: row.data.customerPhone || '',
+            bungalow: row.data.bungalow || '',
+            total: row.data.total || 0,
+            items: row.data.items?.map(i => `${i.name}×${i.quantity}`).join(', ') || '',
+            status: row.status,
+            created_at: row.created_at,
+            lat: row.data.lat || '',
+            lng: row.data.lng || ''
+        }));
+        
+        const csv = [
+            ['ID','Клиент','Телефон','Бунгало','Сумма','Товары','Статус','Дата','lat','lng'],
+            ...rows.map(r => Object.values(r))
+        ].map(row => row.join(';')).join('\n');
+        
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename=orders.csv');
+        res.send('\uFEFF' + csv);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
 });
 
 // ================================================================
@@ -345,7 +406,6 @@ setInterval(async () => {
 // ===== API: ПОДАРКИ (GIFTS) =====
 // ================================================================
 
-// Проверка подарка
 app.post('/api/gift/check', async (req, res) => {
     const { ip } = req.body;
     if (!ip) return res.json({ hasGift: false, error: 'Нет IP' });
@@ -373,7 +433,6 @@ app.post('/api/gift/check', async (req, res) => {
     }
 });
 
-// Активация подарка
 app.post('/api/gift/activate', async (req, res) => {
     const { ip, bungalow } = req.body;
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
@@ -405,7 +464,6 @@ app.post('/api/gift/activate', async (req, res) => {
     }
 });
 
-// Выдача подарка
 app.post('/api/gift/claim', async (req, res) => {
     const { giftId } = req.body;
     if (!giftId) return res.json({ success: false, error: 'Нет ID' });
@@ -421,7 +479,6 @@ app.post('/api/gift/claim', async (req, res) => {
     }
 });
 
-// Получение подарка по ID (для QR)
 app.get('/api/gift/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) return res.json({ success: false, error: 'Неверный ID' });
@@ -437,7 +494,6 @@ app.get('/api/gift/:id', async (req, res) => {
     }
 });
 
-// Список подарков
 app.get('/api/gifts', async (req, res) => {
     try {
         const result = await pool.query(
@@ -449,7 +505,6 @@ app.get('/api/gifts', async (req, res) => {
     }
 });
 
-// Статистика подарков
 app.get('/api/gifts/stats', async (req, res) => {
     try {
         const total = await pool.query(`SELECT COUNT(*) FROM gifts`);
@@ -465,7 +520,6 @@ app.get('/api/gifts/stats', async (req, res) => {
     }
 });
 
-// Ручное добавление подарка
 app.post('/api/gift/manual', async (req, res) => {
     const { ip, bungalow } = req.body;
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
@@ -481,11 +535,6 @@ app.post('/api/gift/manual', async (req, res) => {
     }
 });
 
-// ================================================================
-// ===== API: СБРОС ПОДАРКОВ (ДЛЯ ТЕСТИРОВАНИЯ) =====
-// ================================================================
-
-// Сброс всех подарков
 app.post('/api/gift/reset-all', async (req, res) => {
     try {
         await pool.query('DELETE FROM gifts');
@@ -496,7 +545,6 @@ app.post('/api/gift/reset-all', async (req, res) => {
     }
 });
 
-// Сброс подарка по IP
 app.post('/api/gift/reset-ip', async (req, res) => {
     const { ip } = req.body;
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
@@ -512,25 +560,42 @@ app.post('/api/gift/reset-ip', async (req, res) => {
 
 // ===== API: ЧАТЫ =====
 app.get('/api/chats', async (req, res) => {
-    const r = await pool.query('SELECT phone, data FROM chats');
-    res.json({ chats: r.rows.map(row => ({ phone: row.phone, name: row.data?.name, lastMessage: row.data?.messages?.slice(-1)[0], unread: row.data?.unread || 0 })) });
+    try {
+        const r = await pool.query('SELECT phone, data FROM chats');
+        res.json({ chats: r.rows.map(row => ({ 
+            phone: row.phone, 
+            name: row.data?.name, 
+            lastMessage: row.data?.messages?.slice(-1)[0], 
+            unread: row.data?.unread || 0 
+        })) });
+    } catch (e) {
+        res.json({ chats: [] });
+    }
 });
 
 app.get('/api/chat-messages', async (req, res) => {
-    const r = await pool.query('SELECT data FROM chats WHERE phone = $1', [req.query.phone]);
-    res.json({ success: true, messages: r.rows[0]?.data?.messages || [] });
+    try {
+        const r = await pool.query('SELECT data FROM chats WHERE phone = $1', [req.query.phone]);
+        res.json({ success: true, messages: r.rows[0]?.data?.messages || [] });
+    } catch (e) {
+        res.json({ success: true, messages: [] });
+    }
 });
 
 app.post('/api/chat-send', async (req, res) => {
     const { phone, text, from, name } = req.body;
     if (!phone || !text) return res.json({ success: false });
-    const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
-    let data = exist.rows[0]?.data || { name: name || 'Клиент', messages: [], unread: 0 };
-    data.messages.push({ text, from: from || 'client', time: new Date().toISOString() });
-    data.unread = from === 'client' ? (data.unread || 0) + 1 : 0;
-    if (name) data.name = name;
-    await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
-    res.json({ success: true });
+    try {
+        const exist = await pool.query('SELECT data FROM chats WHERE phone = $1', [phone]);
+        let data = exist.rows[0]?.data || { name: name || 'Клиент', messages: [], unread: 0 };
+        data.messages.push({ text, from: from || 'client', time: new Date().toISOString() });
+        data.unread = from === 'client' ? (data.unread || 0) + 1 : 0;
+        if (name) data.name = name;
+        await pool.query('INSERT INTO chats (phone, data) VALUES ($1, $2) ON CONFLICT (phone) DO UPDATE SET data = $2', [phone, JSON.stringify(data)]);
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
 });
 
 app.post('/api/chat-read', async (req, res) => {
@@ -549,7 +614,6 @@ app.post('/api/chat-read', async (req, res) => {
     }
 });
 
-// ===== УДАЛЕНИЕ ЧАТА =====
 app.post('/api/delete-chat', async (req, res) => {
     const { phone } = req.body;
     if (!phone) return res.json({ success: false });
@@ -563,63 +627,49 @@ app.post('/api/delete-chat', async (req, res) => {
 
 // ===== API: ОТЗЫВЫ =====
 app.get('/api/reviews', async (req, res) => {
-    const r = await pool.query('SELECT data FROM reviews ORDER BY created_at DESC');
-    res.json({ success: true, reviews: r.rows.map(r => r.data) });
+    try {
+        const r = await pool.query('SELECT data FROM reviews ORDER BY created_at DESC');
+        res.json({ success: true, reviews: r.rows.map(r => r.data) });
+    } catch (e) {
+        res.json({ success: true, reviews: [] });
+    }
 });
 
 app.post('/api/review', async (req, res) => {
     const { orderId, name, phone, rating, text } = req.body;
     if (!orderId || !rating || !text) return res.json({ success: false, error: 'Нет данных' });
-    const review = { id: Date.now(), orderId, name, phone, rating: Math.min(5, Math.max(1, rating)), text: text.trim(), createdAt: new Date().toISOString() };
-    await pool.query('INSERT INTO reviews (data) VALUES ($1)', [JSON.stringify(review)]);
-    await pool.query("UPDATE orders SET data = jsonb_set(data, '{reviewed}', 'true') WHERE id = $1", [orderId]);
-    res.json({ success: true, review });
+    try {
+        const review = { 
+            id: Date.now(), 
+            orderId, 
+            name, 
+            phone, 
+            rating: Math.min(5, Math.max(1, rating)), 
+            text: text.trim(), 
+            createdAt: new Date().toISOString() 
+        };
+        await pool.query('INSERT INTO reviews (data) VALUES ($1)', [JSON.stringify(review)]);
+        await pool.query("UPDATE orders SET data = jsonb_set(data, '{reviewed}', 'true') WHERE id = $1", [orderId]);
+        res.json({ success: true, review });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
 });
 
 app.delete('/api/review/:id', async (req, res) => {
-    await pool.query("DELETE FROM reviews WHERE data->>'id' = $1", [req.params.id]);
-    res.json({ success: true });
+    try {
+        await pool.query("DELETE FROM reviews WHERE data->>'id' = $1", [req.params.id]);
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
 });
 
-// ===== IP ДЛЯ КЛИЕНТА (FALLBACK) =====
+// ===== IP ДЛЯ КЛИЕНТА =====
 app.get('/api/my-ip', (req, res) => {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const cleanIp = ip ? ip.split(',')[0].trim() : 'unknown';
     res.json({ ip: cleanIp });
-});
-
-// ================================================================
-// ===== API: КЛАД (GPS-ОХОТА) =====
-// ================================================================
-
-app.post('/api/treasure/activate', (req, res) => {
-    const { lat, lng, radius } = req.body;
-    if (!lat || !lng) {
-        return res.status(400).json({ success: false, error: '❌ Нужны координаты' });
-    }
-    const result = treasure.activateTreasure(lat, lng, radius || 15);
-    res.json(result);
-});
-
-app.post('/api/treasure/deactivate', (req, res) => {
-    const result = treasure.deactivateTreasure();
-    res.json(result);
-});
-
-app.get('/api/treasure/status', (req, res) => {
-    const status = treasure.getTreasureStatus();
-    res.json(status);
-});
-
-app.get('/api/treasure/winners', async (req, res) => {
-    const limit = parseInt(req.query.limit) || 20;
-    const winners = await treasure.getWinnersHistory(limit);
-    res.json({ success: true, winners });
-});
-
-app.delete('/api/treasure/winners', async (req, res) => {
-    const result = await treasure.clearWinnersHistory();
-    res.json(result);
 });
 
 // ===== QR-КОД =====
@@ -658,49 +708,19 @@ const io = socketIo(server, {
     cors: { origin: '*' }
 });
 
-// ===== WEBSOCKET: GPS-ТРЕКИНГ =====
+// ===== WEBSOCKET: ПОДКЛЮЧЕНИЯ =====
 io.on('connection', (socket) => {
-    console.log('📡 Новый пользователь подключён:', socket.id);
+    console.log('📡 Новое подключение:', socket.id);
 
-    socket.on('user-location', async (data) => {
-        const { userId, lat, lng, name, phone } = data;
-        if (!userId || !lat || !lng) return;
-
-        const result = treasure.updateUserLocation(userId, lat, lng, socket.id, name, phone);
-
-        if (result.winner) {
-            const winnerResult = await treasure.declareWinner(userId, io);
-            if (winnerResult.success) {
-                socket.emit('you-won', {
-                    message: '🎉🏆 ТЫ ПОБЕДИЛ!',
-                    prize: 'МЕГА-СТАКАН клубники в шоколаде',
-                    name: name || 'Клиент'
-                });
-                socket.broadcast.emit('treasure-claimed', {
-                    winner: name || 'Кто-то',
-                    message: '😢 Клад уже нашли! Попробуй завтра!'
-                });
-            }
-        } else {
-            const status = treasure.getTreasureStatus();
-            if (status.active) {
-                const distance = treasure.getDistance(lat, lng, status.lat, status.lng);
-                socket.emit('distance-update', {
-                    distance: Math.round(distance),
-                    inZone: distance <= status.radius
-                });
-            }
-        }
+    // Админ подключается
+    socket.on('admin-join', () => {
+        socket.join('admin-room');
+        console.log('👨‍💼 Админ подключен к уведомлениям');
+        socket.emit('admin-connected', { status: 'ok' });
     });
 
     socket.on('disconnect', () => {
-        for (const [userId, user] of treasure.activeUsers) {
-            if (user.socketId === socket.id) {
-                treasure.activeUsers.delete(userId);
-                console.log(`🗑️ Пользователь ${userId} удалён из активных`);
-                break;
-            }
-        }
+        console.log('🔌 Отключение:', socket.id);
     });
 });
 
@@ -715,7 +735,9 @@ io.on('connection', (socket) => {
         console.log('📨 Авто-уведомления о задержке включены (15 минут)');
         console.log('📍 Геолокация клиентов сохраняется в заказах');
         console.log('🎁 Система подарков (gifts) активирована!');
-        console.log('🎯 Механика GPS-клада (treasure) активирована!');
         console.log('📷 QR-сканер подарков доступен в админке');
+        console.log('👨‍💼 WebSocket уведомления для админа активны');
+        console.log('📊 Статистика доступна по /api/stats');
+        console.log('📤 Экспорт заказов: /api/export-orders');
     });
 })();
