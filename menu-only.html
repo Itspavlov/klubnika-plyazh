@@ -578,19 +578,16 @@
             console.log('🎁 Статус подарка:', data);
             
             if (data.alreadyClaimed) {
-                // Подарок УЖЕ выдан — НЕ ПОКАЗЫВАЕМ ОКНО
                 console.log('✅ Подарок уже выдан');
                 return;
             }
             
             if (data.hasGift) {
-                // Есть активный подарок — ПОКАЗЫВАЕМ ОКНО
                 giftId = data.giftId;
                 showGiftModal();
                 $('floatQrBtn').style.display = 'flex';
                 console.log(`🎁 Подарок #${giftId} активен`);
             } else if (data.canActivate) {
-                // Нет подарка — создаём
                 await activateGift(ip);
             }
             
@@ -627,7 +624,6 @@
     function startGiftCheck() {
         if (giftCheckInterval) clearInterval(giftCheckInterval);
         giftCheckInterval = setInterval(async () => {
-            // Проверяем только если окно открыто (подарок ещё не выдан)
             if (document.getElementById('giftModal').classList.contains('open')) {
                 const ip = await getUserIP();
                 if (!ip) return;
@@ -640,7 +636,6 @@
                     });
                     const data = await res.json();
                     
-                    // Если подарок уже выдан (отсканирован) — закрываем окно
                     if (data.alreadyClaimed) {
                         console.log('✅ Подарок выдан, закрываем окно');
                         closeGiftModal();
@@ -653,7 +648,7 @@
                     console.error('❌ Ошибка проверки:', e);
                 }
             }
-        }, 10000); // Проверяем каждые 10 секунд
+        }, 10000);
     }
 
     // ================================================================
@@ -667,6 +662,80 @@
     function closeGiftModal() {
         $('giftModal').classList.remove('open');
         document.body.style.overflow = '';
+    }
+
+    // ================================================================
+    // ===== ГЕОЛОКАЦИЯ ДЛЯ iOS =====
+    // ================================================================
+    
+    // Функция запроса геолокации с обходным путем для iOS PWA
+    function requestLocation() {
+        // Вариант 1: Добавить небольшую задержку (решение для проблемы с PWA)
+        setTimeout(() => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('Позиция получена:', position);
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    if (!gpsLocked) {
+                        gpsLocked = true;
+                        showNotification('✅ Местоположение определено');
+                    }
+                    updateUserMarker(userLocation.lat, userLocation.lng);
+                    updateDistance();
+                },
+                (error) => {
+                    console.error('Ошибка геолокации:', error.message);
+                    if (!gpsLocked) {
+                        let msg = '❌ Не удалось определить местоположение';
+                        if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
+                        if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
+                        showNotification(msg);
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }, 500);
+    }
+
+    // Вариант 2: Проверить, что приложение активно
+    function requestLocationWhenActive() {
+        if (document.visibilityState === 'visible') {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('Позиция получена:', position);
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    if (!gpsLocked) {
+                        gpsLocked = true;
+                        showNotification('✅ Местоположение определено');
+                    }
+                    updateUserMarker(userLocation.lat, userLocation.lng);
+                    updateDistance();
+                },
+                (error) => {
+                    console.error('Ошибка геолокации:', error.message);
+                    if (!gpsLocked) {
+                        let msg = '❌ Не удалось определить местоположение';
+                        if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
+                        if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
+                        showNotification(msg);
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        } else {
+            document.addEventListener('visibilitychange', function handler() {
+                if (document.visibilityState === 'visible') {
+                    requestLocationWhenActive();
+                    document.removeEventListener('visibilitychange', handler);
+                }
+            });
+        }
     }
 
     // ================================================================
@@ -710,7 +779,10 @@
                 );
                 mapInstance.geoObjects.add(kioskPlacemark);
 
-                getMyLocation();
+                // ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ С ОБХОДНЫМ ПУТЕМ ДЛЯ iOS
+                requestLocation();
+                // или requestLocationWhenActive();
+
                 console.log('🗺️ Карта загружена!');
             } catch(e) { 
                 console.error('Map error:', e);
@@ -786,11 +858,10 @@
     function centerOnUser() {
         if (!userLocation || !mapInstance) {
             showNotification('📍 Не могу определить местоположение');
-            getMyLocation();
+            requestLocation();
             return;
         }
         
-        // Плавно приближаем на максимум (зум 19)
         mapInstance.setCenter([userLocation.lat, userLocation.lng], 19, { 
             duration: 800,
             checkZoomRange: true
