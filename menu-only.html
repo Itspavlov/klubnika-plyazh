@@ -468,6 +468,7 @@
     let mapReady = false;
     let gpsLocked = false;
     let ymapsReady = false;
+    let giftCheckInterval = null;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -546,7 +547,7 @@
     }
 
     // ================================================================
-    // ===== IP И ПОДАРКИ =====
+    // ===== IP =====
     // ================================================================
     async function getUserIP() {
         try {
@@ -556,26 +557,51 @@
         } catch { return null; }
     }
 
-    async function checkGift() {
+    // ================================================================
+    // ===== ПРОВЕРКА СТАТУСА ПОДАРКА =====
+    // ================================================================
+    async function checkGiftStatus() {
         const ip = await getUserIP();
-        if (!ip) return;
+        if (!ip) {
+            console.log('❌ Не удалось определить IP');
+            return;
+        }
+        
         try {
-            const res = await fetch('/api/gift/check', {
+            const res = await fetch('/api/gift/status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ip })
             });
             const data = await res.json();
+            
+            console.log('🎁 Статус подарка:', data);
+            
+            if (data.alreadyClaimed) {
+                // Подарок УЖЕ выдан — НЕ ПОКАЗЫВАЕМ ОКНО
+                console.log('✅ Подарок уже выдан');
+                return;
+            }
+            
             if (data.hasGift) {
+                // Есть активный подарок — ПОКАЗЫВАЕМ ОКНО
                 giftId = data.giftId;
                 showGiftModal();
                 $('floatQrBtn').style.display = 'flex';
+                console.log(`🎁 Подарок #${giftId} активен`);
             } else if (data.canActivate) {
+                // Нет подарка — создаём
                 await activateGift(ip);
             }
-        } catch(e) { console.error('Gift check error:', e); }
+            
+        } catch(e) {
+            console.error('❌ Ошибка проверки подарка:', e);
+        }
     }
 
+    // ================================================================
+    // ===== АКТИВАЦИЯ ПОДАРКА =====
+    // ================================================================
     async function activateGift(ip) {
         try {
             const res = await fetch('/api/gift/activate', {
@@ -588,8 +614,46 @@
                 giftId = data.giftId;
                 showGiftModal();
                 $('floatQrBtn').style.display = 'flex';
+                console.log(`🎁 Создан новый подарок #${giftId}`);
             }
-        } catch(e) { console.error('Gift activate error:', e); }
+        } catch(e) { 
+            console.error('Gift activate error:', e); 
+        }
+    }
+
+    // ================================================================
+    // ===== ПЕРИОДИЧЕСКАЯ ПРОВЕРКА СТАТУСА ПОДАРКА =====
+    // ================================================================
+    function startGiftCheck() {
+        if (giftCheckInterval) clearInterval(giftCheckInterval);
+        giftCheckInterval = setInterval(async () => {
+            // Проверяем только если окно открыто (подарок ещё не выдан)
+            if (document.getElementById('giftModal').classList.contains('open')) {
+                const ip = await getUserIP();
+                if (!ip) return;
+                
+                try {
+                    const res = await fetch('/api/gift/status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ip })
+                    });
+                    const data = await res.json();
+                    
+                    // Если подарок уже выдан (отсканирован) — закрываем окно
+                    if (data.alreadyClaimed) {
+                        console.log('✅ Подарок выдан, закрываем окно');
+                        closeGiftModal();
+                        $('floatQrBtn').style.display = 'none';
+                        showNotification('🎉 Поздравляем! Подарок получен! 🍓');
+                        clearInterval(giftCheckInterval);
+                        giftCheckInterval = null;
+                    }
+                } catch(e) {
+                    console.error('❌ Ошибка проверки:', e);
+                }
+            }
+        }, 10000); // Проверяем каждые 10 секунд
     }
 
     // ================================================================
@@ -608,45 +672,53 @@
     // ================================================================
     // ===== КАРТА =====
     // ================================================================
-function initMap() {
-    if (typeof ymaps === 'undefined') { 
-        setTimeout(initMap, 1000); 
-        return; 
-    }
-    ymaps.ready(() => {
-        ymapsReady = true;
-        try {
-            mapInstance = new ymaps.Map('treasureMap', {
-                center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                zoom: 17,
-                controls: ['zoomControl', 'typeSelector']
-            });
-            mapReady = true;
-
-            // КИОСК С КАРТИНКОЙ
-            kioskPlacemark = new ymaps.Placemark(
-                [MY_LOCATION.lat, MY_LOCATION.lng],
-                { 
-                    balloonContent: '🍓 Strawberry in Chocolate',
-                    hintContent: '🍓 Strawberry in Chocolate'
-                },
-                { 
-                    iconLayout: 'default#image',
-                    iconImageHref: 'images/kiosk-icon.png',
-                    iconImageSize: [50, 50],
-                    iconImageOffset: [-25, -50]
-                }
-            );
-            mapInstance.geoObjects.add(kioskPlacemark);
-
-            getMyLocation();
-            console.log('🗺️ Карта загружена!');
-        } catch(e) { 
-            console.error('Map error:', e);
-            setTimeout(initMap, 2000);
+    function initMap() {
+        if (typeof ymaps === 'undefined') { 
+            setTimeout(initMap, 1000); 
+            return; 
         }
-    });
-}
+        ymaps.ready(() => {
+            ymapsReady = true;
+            try {
+                mapInstance = new ymaps.Map('treasureMap', {
+                    center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                    zoom: 17,
+                    controls: ['zoomControl', 'typeSelector']
+                });
+                mapReady = true;
+
+                // КИОСК С КАРТИНКОЙ
+                kioskPlacemark = new ymaps.Placemark(
+                    [MY_LOCATION.lat, MY_LOCATION.lng],
+                    { 
+                        balloonContent: '🍓 Strawberry in Chocolate',
+                        hintContent: '🍓 Strawberry in Chocolate',
+                        iconCaption: '🍓 Клубника в шоколаде'
+                    },
+                    { 
+                        iconLayout: 'default#image',
+                        iconImageHref: 'images/kiosk-icon.png',
+                        iconImageSize: [50, 50],
+                        iconImageOffset: [-25, -50],
+                        iconCaptionMaxWidth: 150,
+                        iconCaptionFontSize: 12,
+                        iconCaptionFontWeight: 'bold',
+                        iconCaptionColor: '#FFFFFF',
+                        iconCaptionStrokeColor: 'rgba(0,0,0,0.8)',
+                        iconCaptionStrokeWidth: 3
+                    }
+                );
+                mapInstance.geoObjects.add(kioskPlacemark);
+
+                getMyLocation();
+                console.log('🗺️ Карта загружена!');
+            } catch(e) { 
+                console.error('Map error:', e);
+                setTimeout(initMap, 2000);
+            }
+        });
+    }
+
     // ================================================================
     // ===== GPS =====
     // ================================================================
@@ -740,17 +812,14 @@ function initMap() {
             MY_LOCATION.lat, MY_LOCATION.lng
         );
         
-        // Шаги (1 шаг ≈ 0.75 метра)
         const steps = Math.round(distance * 1000 / 0.75);
         
-        // Показываем информацию
         const info = $('distanceInfo');
         info.classList.add('show');
         $('stepsCount').textContent = steps;
         $('distanceKm').textContent = distance.toFixed(2);
     }
 
-    // ===== РАСЧЁТ РАССТОЯНИЯ =====
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -786,7 +855,8 @@ function initMap() {
     document.addEventListener('DOMContentLoaded', function() {
         renderMenu();
         setTimeout(initMap, 500);
-        setTimeout(checkGift, 1000);
+        setTimeout(checkGiftStatus, 1000);
+        setTimeout(startGiftCheck, 2000);
         console.log('🍓 Страница загружена!');
     });
 </script>
