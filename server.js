@@ -433,6 +433,55 @@ app.post('/api/gift/check', async (req, res) => {
     }
 });
 
+// ===== ПРОВЕРКА СТАТУСА ПОДАРКА ПО IP =====
+app.post('/api/gift/status', async (req, res) => {
+    const { ip } = req.body;
+    if (!ip) return res.json({ success: false, error: 'Нет IP' });
+    
+    try {
+        // Проверяем, получал ли уже подарок
+        const claimed = await pool.query(
+            `SELECT * FROM gifts WHERE ip = $1 AND claimed = true`,
+            [ip]
+        );
+        
+        if (claimed.rows.length > 0) {
+            return res.json({ 
+                success: true, 
+                hasGift: false, 
+                alreadyClaimed: true,
+                message: 'Вы уже получали подарок 🎁'
+            });
+        }
+        
+        // Проверяем, есть ли ожидающий подарок
+        const pending = await pool.query(
+            `SELECT * FROM gifts WHERE ip = $1 AND claimed = false`,
+            [ip]
+        );
+        
+        if (pending.rows.length > 0) {
+            return res.json({ 
+                success: true, 
+                hasGift: true, 
+                giftId: pending.rows[0].id,
+                alreadyClaimed: false
+            });
+        }
+        
+        // Нет подарка — можно активировать
+        res.json({ 
+            success: true, 
+            hasGift: false, 
+            alreadyClaimed: false,
+            canActivate: true 
+        });
+        
+    } catch (e) {
+        res.json({ success: false, error: e.message });
+    }
+});
+
 app.post('/api/gift/activate', async (req, res) => {
     const { ip, bungalow } = req.body;
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
