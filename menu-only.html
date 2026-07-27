@@ -399,7 +399,7 @@
             <div id="treasureMap"></div>
         </div>
         <div class="map-actions">
-            <button class="map-btn location-btn" onclick="centerOnUser()">
+            <button class="map-btn location-btn" onclick="requestLocationOnClick()">
                 <i class="fas fa-location-dot"></i> Где я?
             </button>
         </div>
@@ -463,7 +463,6 @@
     let mapInstance = null;
     let userPlacemark = null;
     let kioskPlacemark = null;
-    let watchId = null;
     let giftId = null;
     let mapReady = false;
     let gpsLocked = false;
@@ -665,77 +664,49 @@
     }
 
     // ================================================================
-    // ===== ГЕОЛОКАЦИЯ ДЛЯ iOS =====
+    // ===== ГЕОЛОКАЦИЯ ПО КЛИКУ (ДЛЯ iOS) =====
     // ================================================================
-    
-    // Функция запроса геолокации с обходным путем для iOS PWA
-    function requestLocation() {
-        // Вариант 1: Добавить небольшую задержку (решение для проблемы с PWA)
-        setTimeout(() => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log('Позиция получена:', position);
-                    userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    if (!gpsLocked) {
-                        gpsLocked = true;
-                        showNotification('✅ Местоположение определено');
-                    }
-                    updateUserMarker(userLocation.lat, userLocation.lng);
-                    updateDistance();
-                },
-                (error) => {
-                    console.error('Ошибка геолокации:', error.message);
-                    if (!gpsLocked) {
-                        let msg = '❌ Не удалось определить местоположение';
-                        if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
-                        if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
-                        showNotification(msg);
-                    }
-                },
-                { enableHighAccuracy: true, timeout: 10000 }
-            );
-        }, 500);
-    }
-
-    // Вариант 2: Проверить, что приложение активно
-    function requestLocationWhenActive() {
-        if (document.visibilityState === 'visible') {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log('Позиция получена:', position);
-                    userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    if (!gpsLocked) {
-                        gpsLocked = true;
-                        showNotification('✅ Местоположение определено');
-                    }
-                    updateUserMarker(userLocation.lat, userLocation.lng);
-                    updateDistance();
-                },
-                (error) => {
-                    console.error('Ошибка геолокации:', error.message);
-                    if (!gpsLocked) {
-                        let msg = '❌ Не удалось определить местоположение';
-                        if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
-                        if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
-                        showNotification(msg);
-                    }
-                },
-                { enableHighAccuracy: true, timeout: 10000 }
-            );
-        } else {
-            document.addEventListener('visibilitychange', function handler() {
-                if (document.visibilityState === 'visible') {
-                    requestLocationWhenActive();
-                    document.removeEventListener('visibilitychange', handler);
-                }
-            });
+    function requestLocationOnClick() {
+        if (!navigator.geolocation) {
+            showNotification('❌ Браузер не поддерживает геолокацию');
+            return;
         }
+
+        showNotification('📍 Определение местоположения...');
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log('📍 Позиция получена:', position);
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                gpsLocked = true;
+                showNotification('✅ Местоположение определено');
+                updateUserMarker(userLocation.lat, userLocation.lng);
+                updateDistance();
+                
+                if (mapInstance) {
+                    mapInstance.setCenter([userLocation.lat, userLocation.lng], 19, { 
+                        duration: 800,
+                        checkZoomRange: true
+                    });
+                }
+                if (userPlacemark) userPlacemark.balloon.open();
+            },
+            (error) => {
+                console.error('❌ Ошибка геолокации:', error.message);
+                let msg = '❌ Не удалось определить местоположение';
+                if (error.code === 1) msg = '❌ Разрешите доступ к геолокации в настройках Safari';
+                if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
+                showNotification(msg);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 5000
+            }
+        );
     }
 
     // ================================================================
@@ -779,9 +750,8 @@
                 );
                 mapInstance.geoObjects.add(kioskPlacemark);
 
-                // ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ С ОБХОДНЫМ ПУТЕМ ДЛЯ iOS
-                requestLocation();
-                // или requestLocationWhenActive();
+                // НЕ ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ АВТОМАТИЧЕСКИ!
+                // Пользователь нажмёт кнопку "Где я?" и тогда запросим
 
                 console.log('🗺️ Карта загружена!');
             } catch(e) { 
@@ -792,50 +762,8 @@
     }
 
     // ================================================================
-    // ===== GPS =====
+    // ===== GPS (ОБНОВЛЕНИЕ МАРКЕРА) =====
     // ================================================================
-    function getMyLocation() {
-        if (!navigator.geolocation) {
-            showNotification('❌ Браузер не поддерживает геолокацию');
-            return;
-        }
-
-        if (!gpsLocked) {
-            showNotification('📍 Определение местоположения...');
-        }
-
-        if (watchId) navigator.geolocation.clearWatch(watchId);
-
-        watchId = navigator.geolocation.watchPosition(
-            (pos) => {
-                userLocation = {
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude
-                };
-                if (!gpsLocked) {
-                    gpsLocked = true;
-                    showNotification('✅ Местоположение определено');
-                }
-                updateUserMarker(userLocation.lat, userLocation.lng);
-                updateDistance();
-            },
-            (error) => {
-                console.error('GPS Error:', error);
-                if (!gpsLocked) {
-                    let msg = '❌ Не удалось определить местоположение';
-                    if (error.code === 1) msg = '❌ Разрешите доступ к геолокации';
-                    if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
-                    showNotification(msg);
-                }
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 5000
-            }
-        );
-    }
-
     function updateUserMarker(lat, lng) {
         if (!mapInstance || !mapReady) return;
         if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
@@ -853,23 +781,6 @@
             }
         );
         mapInstance.geoObjects.add(userPlacemark);
-    }
-
-    function centerOnUser() {
-        if (!userLocation || !mapInstance) {
-            showNotification('📍 Не могу определить местоположение');
-            requestLocation();
-            return;
-        }
-        
-        mapInstance.setCenter([userLocation.lat, userLocation.lng], 19, { 
-            duration: 800,
-            checkZoomRange: true
-        });
-        
-        if (userPlacemark) userPlacemark.balloon.open();
-        updateDistance();
-        showNotification('📍 Ты здесь!');
     }
 
     // ================================================================
