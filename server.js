@@ -439,6 +439,7 @@ app.post('/api/gift/status', async (req, res) => {
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
     
     try {
+        // Проверяем, получал ли уже подарок
         const claimed = await pool.query(
             `SELECT * FROM gifts WHERE ip = $1 AND claimed = true`,
             [ip]
@@ -453,6 +454,7 @@ app.post('/api/gift/status', async (req, res) => {
             });
         }
         
+        // Проверяем, есть ли ожидающий подарок
         const pending = await pool.query(
             `SELECT * FROM gifts WHERE ip = $1 AND claimed = false`,
             [ip]
@@ -467,6 +469,7 @@ app.post('/api/gift/status', async (req, res) => {
             });
         }
         
+        // Нет подарка — можно активировать
         res.json({ 
             success: true, 
             hasGift: false, 
@@ -749,27 +752,26 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 ТВОЯ РОЛЬ:
 1. Ты работаешь в кафе, общаешься с гостями
 2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты дружелюбный и весёлый помощник
-4. Ты ВСЕГДА предлагаешь что-то дополнительное (up-sell)
-5. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
+3. Ты УМЕЕШЬ ИСКАТЬ БЛИЖАЙШИЕ МАГАЗИНЫ, КАФЕ, АПТЕКИ, ГОСТИНИЦЫ и строить МАРШРУТЫ
+4. Ты дружелюбный и весёлый помощник
+5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
 
 ПРАВИЛА:
 - Отвечай ТОЛЬКО на русском
 - Будь коротким и полезным (2-4 предложения)
-- Используй эмодзи 🍓🍫😊
-- ВСЕГДА предлагай добавить ещё стаканчик или попробовать что-то новое
-- Когда называешь цену — выделяй её
+- Используй эмодзи 🍓🍫😊🌊
 - НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
+- ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
 
-ПРИМЕРЫ ОТВЕТОВ НА РАЗНЫЕ ВОПРОСЫ:
-- "Как дела?" → "Отлично! У нас сегодня много вкусной клубники 🍓 А у вас как?"
-- "Что посоветуешь?" → "Однозначно Классику — это хит! 🍫 Или попробуйте клубнику в сливках 🤍"
-- "Какая погода?" → "На пляже сегодня солнечно ☀️ Самое время для клубники!"
-- "Сколько ждать?" → "Обычно 5-10 минут. А пока ждёте, можете попробовать нашу новинку — микс клубника-банан! 🍌"
-- "Можно ли заказать на вынос?" → "Конечно! Всё упаковываем в красивые стаканчики 🍓"
-- "Где вы находитесь?" → "Мы на набережной, прямо у пляжа. Ищите яркий киоск с клубникой! 🍓"
+КАК ИСКАТЬ ТОЧКИ:
+Если гость спрашивает "где купить воду", "ближайший магазин", "аптека", "кафе", "гостиница" — ты можешь найти это через карту.
 
-ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и создать хорошее настроение!`;
+ОТВЕЧАЙ ТАК:
+1. Сначала подтверди, что ищешь: "Сейчас посмотрю на карте! 🔍"
+2. Затем напиши, что нашёл: "Ближайший магазин — 50 метров налево 🏪"
+3. Предложи показать на карте: "Хотите, покажу на карте? Нажмите на маркер!"
+
+ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
 
 app.post('/api/barista', async (req, res) => {
     const { message, history } = req.body;
@@ -812,6 +814,73 @@ app.post('/api/barista', async (req, res) => {
     }
 });
 
+// ================================================================
+// ===== API: ПОИСК БЛИЖАЙШИХ ТОЧЕК ЧЕРЕЗ ЯНДЕКС КАРТЫ =====
+// ================================================================
+
+app.post('/api/nearby-places', async (req, res) => {
+    const { lat, lng, query } = req.body;
+    
+    if (!lat || !lng) {
+        return res.status(400).json({ error: 'Нет координат' });
+    }
+    
+    const YANDEX_API_KEY = process.env.YANDEX_MAPS_API_KEY || '7aafdf73-bf1e-4ec7-8d18-07b14be93c80';
+    
+    try {
+        // Определяем категорию поиска
+        let searchQuery = 'магазин';
+        const lowerQuery = (query || '').toLowerCase();
+        if (lowerQuery.includes('аптек')) searchQuery = 'аптека';
+        else if (lowerQuery.includes('кафе') || lowerQuery.includes('еда') || lowerQuery.includes('ресторан')) searchQuery = 'кафе';
+        else if (lowerQuery.includes('гостиниц') || lowerQuery.includes('отель')) searchQuery = 'гостиница';
+        else if (lowerQuery.includes('туалет')) searchQuery = 'туалет';
+        else if (lowerQuery.includes('парк')) searchQuery = 'парк';
+        else if (lowerQuery.includes('пляж')) searchQuery = 'пляж';
+        else if (lowerQuery.includes('вод') || lowerQuery.includes('пить')) searchQuery = 'магазин';
+        
+        // Ищем через Geocoder API Яндекс.Карт
+        const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${searchQuery}&ll=${lng},${lat}&spn=0.005,0.005&rspn=1&format=json&results=5`;
+        
+        console.log(`🔍 Поиск "${searchQuery}" по координатам: ${lat}, ${lng}`);
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        const featureMember = data.response.GeoObjectCollection.featureMember || [];
+        
+        const places = featureMember.map(item => {
+            const geo = item.GeoObject;
+            const coords = geo.Point.pos.split(' ').map(Number);
+            const name = geo.name || searchQuery;
+            const address = geo.description || geo.name || 'Адрес не указан';
+            return {
+                name: name,
+                address: address,
+                lat: coords[1],
+                lng: coords[0],
+                distance: getDistance(lat, lng, coords[1], coords[0])
+            };
+        }).filter(p => p.distance < 2).sort((a, b) => a.distance - b.distance);
+        
+        res.json({ success: true, places: places.slice(0, 5) });
+    } catch (error) {
+        console.error('Ошибка поиска:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
 // ===== QR-КОД =====
 app.get('/generate-qr', (req, res) => {
     const bungalow = req.query.b || 1;
@@ -852,6 +921,7 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
     console.log('📡 Новое подключение:', socket.id);
 
+    // Админ подключается
     socket.on('admin-join', () => {
         socket.join('admin-room');
         console.log('👨‍💼 Админ подключен к уведомлениям');
@@ -879,5 +949,6 @@ io.on('connection', (socket) => {
         console.log('📊 Статистика доступна по /api/stats');
         console.log('📤 Экспорт заказов: /api/export-orders');
         console.log('🍓 Клубничный Бариста (AI) активирован!');
+        console.log('🗺️ Поиск точек через Яндекс.Карты активирован!');
     });
 })();
