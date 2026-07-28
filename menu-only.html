@@ -453,6 +453,290 @@
     <i class="fas fa-qrcode"></i> Мой QR-код
 </button>
 
+<!-- ============================================================ -->
+<!-- ===== КЛУБНИЧНЫЙ БАРИСТА (AI-ПОМОЩНИК) ===== -->
+<!-- ============================================================ -->
+
+<style>
+.barista-widget {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    z-index: 9998;
+    font-family: 'Inter', sans-serif;
+}
+
+.barista-toggle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 30px;
+    box-shadow: 0 4px 25px rgba(108,92,231,0.5);
+    transition: all 0.3s ease;
+    position: relative;
+    animation: baristaPulse 2.5s infinite;
+    border: 2px solid rgba(255,255,255,0.15);
+}
+.barista-toggle:active { transform: scale(0.92); }
+.barista-toggle .badge-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FF4757;
+    border: 2px solid #1A1A2E;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    animation: blinkBadge 1.2s infinite;
+}
+
+@keyframes baristaPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 25px rgba(108,92,231,0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 4px 40px rgba(108,92,231,0.7); }
+}
+@keyframes blinkBadge {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.barista-window {
+    position: absolute;
+    bottom: 78px;
+    right: 0;
+    width: 400px;
+    height: 550px;
+    background: linear-gradient(160deg, #1A1A2E, #0F0E17);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.barista-window.open { display: flex; }
+
+@keyframes slideUpChat {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.barista-header {
+    padding: 14px 18px;
+    background: rgba(108,92,231,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    flex-shrink: 0;
+}
+.barista-header .info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.barista-header .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+.barista-header .name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+}
+.barista-header .status {
+    font-size: 11px;
+    color: #4ADE80;
+}
+.barista-header .close-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: 0.2s;
+}
+.barista-header .close-btn:hover { color: #fff; }
+
+.barista-messages {
+    flex: 1;
+    padding: 16px 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.barista-messages .msg {
+    padding: 12px 16px;
+    border-radius: 14px;
+    max-width: 90%;
+    font-size: 14px;
+    line-height: 1.6;
+    animation: msgIn 0.3s ease;
+}
+@keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.barista-messages .msg.user {
+    background: rgba(108,92,231,0.3);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.barista-messages .msg.barista {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.barista-messages .msg.barista .highlight {
+    color: #FD79A8;
+    font-weight: 600;
+}
+.barista-messages .msg.barista .price {
+    color: #4ADE80;
+    font-weight: 700;
+}
+.barista-messages .msg.barista .location-link {
+    display: inline-block;
+    background: rgba(108,92,231,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 6px;
+    font-size: 12px;
+    border: 1px solid rgba(108,92,231,0.3);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.barista-messages .msg.barista .location-link:hover {
+    background: rgba(108,92,231,0.3);
+}
+.barista-messages .msg.barista .location-link i { color: #A29BFE; }
+
+.barista-input {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.2);
+}
+.barista-input input {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: 0.2s;
+}
+.barista-input input::placeholder { color: rgba(255,255,255,0.3); }
+.barista-input input:focus { border-color: rgba(108,92,231,0.4); }
+.barista-input button {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+.barista-input button:active { transform: scale(0.92); }
+
+.barista-quick {
+    display: flex;
+    gap: 6px;
+    padding: 8px 16px 12px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.15);
+}
+.barista-quick button {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: 0.2s;
+}
+.barista-quick button:hover {
+    background: rgba(108,92,231,0.15);
+    color: #fff;
+    border-color: rgba(108,92,231,0.2);
+}
+.barista-quick button:active { transform: scale(0.95); }
+
+@media (max-width: 480px) {
+    .barista-window { width: 330px; right: -10px; height: 480px; }
+    .barista-widget { bottom: 80px; right: 14px; }
+    .barista-toggle { width: 56px; height: 56px; font-size: 26px; }
+}
+</style>
+
+<div class="barista-widget">
+    <div class="barista-toggle" onclick="toggleBarista()">
+        🍓
+        <span class="badge-dot">1</span>
+    </div>
+    <div class="barista-window" id="baristaWindow">
+        <div class="barista-header">
+            <div class="info">
+                <div class="avatar">🍓</div>
+                <div>
+                    <div class="name">Клубничный Бариста</div>
+                    <div class="status">🟢 Готов помочь</div>
+                </div>
+            </div>
+            <button class="close-btn" onclick="toggleBarista()">✕</button>
+        </div>
+        <div class="barista-messages" id="baristaMessages">
+            <div class="msg barista">
+                🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
+                Я знаю всё о нашем меню, ценах и акциях.<br>
+                Спроси меня о чём угодно!
+            </div>
+        </div>
+        <div class="barista-quick">
+            <button onclick="quickQuestion('Что посоветуешь?')">🍫 Что посоветуешь?</button>
+            <button onclick="quickQuestion('Какие акции есть?')">🎁 Акции</button>
+            <button onclick="quickQuestion('Сколько стоит классика?')">💰 Цены</button>
+            <button onclick="quickQuestion('Что самое вкусное?')">⭐ Хит</button>
+        </div>
+        <div class="barista-input">
+            <input type="text" id="baristaInput" placeholder="Спросите меня..." onkeydown="if(event.key==='Enter') sendBaristaMessage()">
+            <button onclick="sendBaristaMessage()">➤</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // ================================================================
     // ===== КОНСТАНТЫ =====
@@ -841,299 +1125,28 @@
         setTimeout(startGiftCheck, 2000);
         console.log('🍓 Страница загружена!');
     });
-</script>
 
-<!-- ============================================================ -->
-<!-- ===== КЛУБНИЧНЫЙ БАРИСТА (AI-ПОМОЩНИК) ===== -->
-<!-- ============================================================ -->
+    // ================================================================
+    // ===== КЛУБНИЧНЫЙ БАРИСТА — AI-АССИСТЕНТ =====
+    // ================================================================
 
-<style>
-.barista-widget {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    z-index: 9998;
-    font-family: 'Inter', sans-serif;
-}
+    // Ключ НЕ ХРАНИТСЯ в клиенте — запросы идут через сервер
+    const BARISTA_MENU = [
+        { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, badge: '🔥 Хит' },
+        { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, badge: '⭐' },
+        { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, badge: '🔥 Хит' },
+        { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450 },
+        { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450 },
+        { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350 }
+    ];
 
-.barista-toggle {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 30px;
-    box-shadow: 0 4px 25px rgba(108,92,231,0.5);
-    transition: all 0.3s ease;
-    position: relative;
-    animation: baristaPulse 2.5s infinite;
-    border: 2px solid rgba(255,255,255,0.15);
-}
-.barista-toggle:active { transform: scale(0.92); }
-.barista-toggle .badge-dot {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: #FF4757;
-    border: 2px solid #1A1A2E;
-    font-size: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    animation: blinkBadge 1.2s infinite;
-}
+    const BARISTA_PROMO = [
+        '🍓 При заказе 2+ стаканчиков — скидка 10%',
+        '🎁 Бесплатная мини-порция для первых посетителей',
+        '❤️ Для постоянных клиентов — подарок'
+    ];
 
-@keyframes baristaPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 4px 25px rgba(108,92,231,0.5); }
-    50% { transform: scale(1.05); box-shadow: 0 4px 40px rgba(108,92,231,0.7); }
-}
-@keyframes blinkBadge {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-
-.barista-window {
-    position: absolute;
-    bottom: 78px;
-    right: 0;
-    width: 370px;
-    height: 500px;
-    background: linear-gradient(160deg, #1A1A2E, #0F0E17);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.barista-window.open { display: flex; }
-
-@keyframes slideUpChat {
-    from { opacity: 0; transform: translateY(20px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.barista-header {
-    padding: 14px 18px;
-    background: rgba(108,92,231,0.15);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    flex-shrink: 0;
-}
-.barista-header .info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.barista-header .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-}
-.barista-header .name {
-    color: #fff;
-    font-weight: 700;
-    font-size: 15px;
-}
-.barista-header .status {
-    font-size: 11px;
-    color: #4ADE80;
-}
-.barista-header .close-btn {
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.4);
-    font-size: 20px;
-    cursor: pointer;
-    padding: 4px 8px;
-    transition: 0.2s;
-}
-.barista-header .close-btn:hover { color: #fff; }
-
-.barista-messages {
-    flex: 1;
-    padding: 14px 16px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.barista-messages .msg {
-    padding: 10px 14px;
-    border-radius: 14px;
-    max-width: 88%;
-    font-size: 13.5px;
-    line-height: 1.6;
-    animation: msgIn 0.3s ease;
-}
-@keyframes msgIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.barista-messages .msg.user {
-    background: rgba(108,92,231,0.3);
-    color: #fff;
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-}
-.barista-messages .msg.barista {
-    background: rgba(255,255,255,0.06);
-    color: #fff;
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-}
-.barista-messages .msg.barista .highlight {
-    color: #FD79A8;
-    font-weight: 600;
-}
-.barista-messages .msg.barista .price {
-    color: #4ADE80;
-    font-weight: 700;
-}
-
-.barista-input {
-    padding: 10px 14px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-    background: rgba(0,0,0,0.2);
-}
-.barista-input input {
-    flex: 1;
-    padding: 10px 16px;
-    border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.04);
-    color: #fff;
-    outline: none;
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    transition: 0.2s;
-}
-.barista-input input::placeholder { color: rgba(255,255,255,0.3); }
-.barista-input input:focus { border-color: rgba(108,92,231,0.4); }
-.barista-input button {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
-    color: #fff;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
-    flex-shrink: 0;
-}
-.barista-input button:active { transform: scale(0.92); }
-
-.barista-quick {
-    display: flex;
-    gap: 6px;
-    padding: 6px 14px 10px;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-    background: rgba(0,0,0,0.15);
-}
-.barista-quick button {
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.04);
-    color: rgba(255,255,255,0.5);
-    font-size: 11px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: 0.2s;
-}
-.barista-quick button:hover {
-    background: rgba(108,92,231,0.15);
-    color: #fff;
-    border-color: rgba(108,92,231,0.2);
-}
-.barista-quick button:active { transform: scale(0.95); }
-
-@media (max-width: 480px) {
-    .barista-window { width: 310px; right: -10px; height: 440px; }
-    .barista-widget { bottom: 80px; right: 14px; }
-    .barista-toggle { width: 56px; height: 56px; font-size: 26px; }
-}
-</style>
-
-<div class="barista-widget">
-    <div class="barista-toggle" onclick="toggleBarista()">
-        🍓
-        <span class="badge-dot">1</span>
-    </div>
-    <div class="barista-window" id="baristaWindow">
-        <div class="barista-header">
-            <div class="info">
-                <div class="avatar">🍓</div>
-                <div>
-                    <div class="name">Клубничный Бариста</div>
-                    <div class="status">🟢 Готов помочь</div>
-                </div>
-            </div>
-            <button class="close-btn" onclick="toggleBarista()">✕</button>
-        </div>
-        <div class="barista-messages" id="baristaMessages">
-            <div class="msg barista">
-                🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
-                Я знаю всё о нашем меню, ценах и акциях.<br>
-                Спроси меня о чём угодно!
-            </div>
-        </div>
-        <div class="barista-quick">
-            <button onclick="quickQuestion('Что посоветуешь?')">🍫 Что посоветуешь?</button>
-            <button onclick="quickQuestion('Какие акции есть?')">🎁 Акции</button>
-            <button onclick="quickQuestion('Сколько стоит классика?')">💰 Цены</button>
-            <button onclick="quickQuestion('Что самое вкусное?')">⭐ Хит</button>
-        </div>
-        <div class="barista-input">
-            <input type="text" id="baristaInput" placeholder="Спросите меня..." onkeydown="if(event.key==='Enter') sendBaristaMessage()">
-            <button onclick="sendBaristaMessage()">➤</button>
-        </div>
-    </div>
-</div>
-
-<script>
-// ================================================================
-// ===== КЛУБНИЧНЫЙ БАРИСТА — AI-АССИСТЕНТ =====
-// ================================================================
-
-// Ключ НЕ ХРАНИТСЯ в клиенте — запросы идут через сервер
-const BARISTA_MENU = [
-    { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, badge: '🔥 Хит' },
-    { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, badge: '⭐' },
-    { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, badge: '🔥 Хит' },
-    { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450 },
-    { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450 },
-    { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350 }
-];
-
-const BARISTA_PROMO = [
-    '🍓 При заказе 2+ стаканчиков — скидка 10%',
-    '🎁 Бесплатная мини-порция для первых посетителей',
-    '❤️ Для постоянных клиентов — подарок'
-];
-
-const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
+    const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
 
 ТВОИ ДАННЫЕ:
 Меню:
@@ -1146,125 +1159,139 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 1. Ты работаешь в кафе, общаешься с гостями
 2. Ты знаешь ВСЁ о меню, ценах, акциях
 3. Ты дружелюбный и весёлый помощник
-4. Ты ВСЕГДА предлагаешь что-то дополнительное (up-sell)
+4. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
+5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
 
 ПРАВИЛА:
 - Отвечай ТОЛЬКО на русском
-- Будь коротким и полезным (1-3 предложения)
+- Будь коротким и полезным (2-4 предложения)
 - Используй эмодзи 🍓🍫😊
-- ВСЕГДА предлагай добавить ещё стаканчик или попробовать что-то новое
-- Когда называешь цену — выделяй её`;
+- Когда называешь цену — выделяй её
+- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
+- ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
 
-let baristaHistory = [];
-let baristaWelcomeShown = false;
+ПРИМЕРЫ ОТВЕТОВ НА РАЗНЫЕ ВОПРОСЫ:
+- "Как дела?" → "Отлично! Сегодня солнечно, море спокойное ☀️ Чем могу помочь?"
+- "Что посоветуешь из еды?" → "Однозначно Классику — это хит! 🍫 Или попробуйте клубнику в сливках 🤍"
+- "Какая погода?" → "На пляже сегодня солнечно ☀️ Самое время для прогулки!"
+- "Где здесь вода?" → "Ближайший магазин — через 50 метров налево 🏪"
+- "Можно ли заказать на вынос?" → "Конечно! Всё упаковываем в красивые стаканчики 🍓"
+- "Где вы находитесь?" → "Мы на набережной, прямо у пляжа. Ищите яркий киоск с клубникой! 🍓"
 
-function toggleBarista() {
-    const window = document.getElementById('baristaWindow');
-    const isOpen = window.classList.contains('open');
-    window.classList.toggle('open');
-    if (!isOpen) {
-        setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-    }
-}
+ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и создать хорошее настроение! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
 
-function quickQuestion(text) {
-    document.getElementById('baristaInput').value = text;
-    sendBaristaMessage();
-}
+    let baristaHistory = [];
+    let baristaWelcomeShown = false;
 
-async function sendBaristaMessage() {
-    const input = document.getElementById('baristaInput');
-    const messages = document.getElementById('baristaMessages');
-    const userText = input.value.trim();
-    
-    if (!userText) return;
-    
-    messages.innerHTML += `<div class="msg user">${escapeHtmlBarista(userText)}</div>`;
-    baristaHistory.push({ role: 'user', content: userText });
-    input.value = '';
-    messages.scrollTop = messages.scrollHeight;
-    
-    const loadingId = 'bloading-' + Date.now();
-    messages.innerHTML += `<div class="msg barista" id="${loadingId}">🤔 Думаю...</div>`;
-    messages.scrollTop = messages.scrollHeight;
-    
-    try {
-        const response = await getBaristaResponse(userText);
-        document.getElementById(loadingId)?.remove();
-        
-        const formatted = formatBaristaResponse(response);
-        messages.innerHTML += `<div class="msg barista">${formatted}</div>`;
-        baristaHistory.push({ role: 'assistant', content: response });
-        messages.scrollTop = messages.scrollHeight;
-    } catch (error) {
-        document.getElementById(loadingId)?.remove();
-        messages.innerHTML += `<div class="msg barista">🍓 Ой, что-то пошло не так! Попробуйте ещё раз.</div>`;
-        messages.scrollTop = messages.scrollHeight;
-        console.error('Barista Error:', error);
-    }
-}
-
-async function getBaristaResponse(userMessage) {
-    try {
-        const response = await fetch('/api/barista', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: userMessage,
-                history: baristaHistory.slice(-10)
-            })
-        });
-        const data = await response.json();
-        
-        if (data.error) {
-            console.error('API Error:', data.error);
-            return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
+    function toggleBarista() {
+        const window = document.getElementById('baristaWindow');
+        const isOpen = window.classList.contains('open');
+        window.classList.toggle('open');
+        if (!isOpen) {
+            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
         }
-        
-        return data.choices[0].message.content;
-    } catch (error) {
-        console.error('Network Error:', error);
-        return '🍓 Не удалось соединиться. Проверьте интернет.';
     }
-}
 
-function formatBaristaResponse(text) {
-    text = text.replace(/(\d+)\s*₽/g, '<span class="price">$1 ₽</span>');
-    text = text.replace(/(скидка|бесплатн|подарок|акци|хит)/gi, match => 
-        `<span class="highlight">${match}</span>`
-    );
-    text = text.replace(/\n/g, '<br>');
-    return text;
-}
+    function quickQuestion(text) {
+        document.getElementById('baristaInput').value = text;
+        sendBaristaMessage();
+    }
 
-function escapeHtmlBarista(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function showBaristaWelcome() {
-    if (baristaWelcomeShown) return;
-    baristaWelcomeShown = true;
-    
-    setTimeout(() => {
+    async function sendBaristaMessage() {
+        const input = document.getElementById('baristaInput');
         const messages = document.getElementById('baristaMessages');
-        messages.innerHTML += `
-            <div class="msg barista">
-                🍓 Кстати! Пока вы здесь — у нас действует акция: 
-                <span class="highlight">2+ стаканчика = скидка 10%</span> 😊<br>
-                Хотите добавить ещё один? Я подберу идеальную пару!
-            </div>
-        `;
+        const userText = input.value.trim();
+        
+        if (!userText) return;
+        
+        messages.innerHTML += `<div class="msg user">${escapeHtmlBarista(userText)}</div>`;
+        baristaHistory.push({ role: 'user', content: userText });
+        input.value = '';
         messages.scrollTop = messages.scrollHeight;
-    }, 8000);
-}
+        
+        const loadingId = 'bloading-' + Date.now();
+        messages.innerHTML += `<div class="msg barista" id="${loadingId}">🤔 Думаю...</div>`;
+        messages.scrollTop = messages.scrollHeight;
+        
+        try {
+            const response = await getBaristaResponse(userText);
+            document.getElementById(loadingId)?.remove();
+            
+            const formatted = formatBaristaResponse(response);
+            messages.innerHTML += `<div class="msg barista">${formatted}</div>`;
+            baristaHistory.push({ role: 'assistant', content: response });
+            messages.scrollTop = messages.scrollHeight;
+        } catch (error) {
+            document.getElementById(loadingId)?.remove();
+            messages.innerHTML += `<div class="msg barista">🍓 Ой, что-то пошло не так! Попробуйте ещё раз.</div>`;
+            messages.scrollTop = messages.scrollHeight;
+            console.error('Barista Error:', error);
+        }
+    }
 
-// Запускаем Баристу
-setTimeout(() => {
-    showBaristaWelcome();
-    console.log('🍓 Клубничный Бариста активирован!');
-}, 2000);
+    async function getBaristaResponse(userMessage) {
+        try {
+            const response = await fetch('/api/barista', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: userMessage,
+                    history: baristaHistory.slice(-10)
+                })
+            });
+            const data = await response.json();
+            
+            if (data.error) {
+                console.error('API Error:', data.error);
+                return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
+            }
+            
+            return data.choices[0].message.content;
+        } catch (error) {
+            console.error('Network Error:', error);
+            return '🍓 Не удалось соединиться. Проверьте интернет.';
+        }
+    }
+
+    function formatBaristaResponse(text) {
+        text = text.replace(/(\d+)\s*₽/g, '<span class="price">$1 ₽</span>');
+        text = text.replace(/(скидка|бесплатн|подарок|акци|хит)/gi, match => 
+            `<span class="highlight">${match}</span>`
+        );
+        text = text.replace(/\n/g, '<br>');
+        return text;
+    }
+
+    function escapeHtmlBarista(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showBaristaWelcome() {
+        if (baristaWelcomeShown) return;
+        baristaWelcomeShown = true;
+        
+        setTimeout(() => {
+            const messages = document.getElementById('baristaMessages');
+            messages.innerHTML += `
+                <div class="msg barista">
+                    🍓 Привет! Я тут, чтобы помочь 😊<br>
+                    Можешь спросить меня о чём угодно — о погоде, магазинах, развлечениях...<br>
+                    Или просто поболтать! Я всегда рад компании 🤗
+                </div>
+            `;
+            messages.scrollTop = messages.scrollHeight;
+        }, 8000);
+    }
+
+    function startBarista() {
+        setTimeout(showBaristaWelcome, 2000);
+        console.log('🍓 Клубничный Бариста активирован!');
+    }
+
+    // Запускаем Баристу
+    setTimeout(startBarista, 2500);
 </script>
 
 </body>
