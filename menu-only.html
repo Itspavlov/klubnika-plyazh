@@ -1416,22 +1416,17 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                         })
                     });
                     const searchData = await searchResponse.json();
-                    
                     if (searchData.success && searchData.places && searchData.places.length > 0) {
-                        showPlacesOnMap(searchData.places);
-                        
-                        const place = searchData.places[0];
-                        const distance = (place.distance * 1000).toFixed(0);
-                        return `🔍 Нашёл! Ближайший ${place.name || 'объект'} — ${place.address || 'рядом'} (${distance} метров) 🏪
+    showPlacesOnMap(searchData.places);
+    const place = searchData.places[0];
+    const distance = (place.distance * 1000).toFixed(0);
+    return `🔍 Нашёл! Ближайший ${place.name || 'объект'} — ${place.address || 'рядом'} (${distance} метров) 🏪
 
 📍 Я отметил его на карте маркером! Посмотрите на карту выше. 😊`;
-                    } else {
-                        return '🔍 Ничего не найдено поблизости. Попробуйте уточнить запрос! 😊';
-                    }
-                } catch (e) {
-                    console.log('Поиск через API не удался, используем AI');
-                }
-            }
+} else {
+    // Если ничего не найдено — честно говорим об этом
+    return '🔍 К сожалению, ничего не найдено поблизости. Попробуйте уточнить запрос или поискать на карте вручную! 😊';
+}
             
             const response = await fetch('/api/barista', {
                 method: 'POST',
