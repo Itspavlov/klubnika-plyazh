@@ -136,6 +136,12 @@
             border-color: rgba(108,92,231,0.25);
             color: var(--primary-light);
         }
+        .map-btn.clear-markers-btn {
+            background: rgba(239,68,68,0.12);
+            border-color: rgba(239,68,68,0.2);
+            color: #EF4444;
+        }
+        .map-btn.clear-markers-btn:active { transform: scale(0.97); }
 
         .distance-info {
             display: none;
@@ -380,6 +386,25 @@
             from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
+
+        .location-btn-in-chat {
+            display: inline-block;
+            background: rgba(108,92,231,0.25);
+            color: #A29BFE;
+            border: 1px solid rgba(108,92,231,0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-top: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .location-btn-in-chat:hover {
+            background: rgba(108,92,231,0.4);
+        }
+        .location-btn-in-chat i { margin-right: 6px; }
     </style>
 </head>
 <body>
@@ -401,6 +426,9 @@
         <div class="map-actions">
             <button class="map-btn location-btn" onclick="requestLocationOnClick()">
                 <i class="fas fa-location-dot"></i> Где я?
+            </button>
+            <button class="map-btn clear-markers-btn" onclick="clearSearchMarkers()" id="clearMarkersBtn" style="display:none;">
+                <i class="fas fa-eraser"></i> Очистить маркеры
             </button>
         </div>
         <div class="distance-info" id="distanceInfo">
@@ -616,21 +644,24 @@
     color: #4ADE80;
     font-weight: 700;
 }
-.barista-messages .msg.barista .location-link {
+.barista-messages .msg.barista .location-btn-in-chat {
     display: inline-block;
-    background: rgba(108,92,231,0.2);
-    padding: 4px 12px;
+    background: rgba(108,92,231,0.25);
+    color: #A29BFE;
+    border: 1px solid rgba(108,92,231,0.3);
+    padding: 6px 16px;
     border-radius: 20px;
     margin-top: 6px;
-    font-size: 12px;
-    border: 1px solid rgba(108,92,231,0.3);
     cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
     transition: 0.2s;
+    font-family: 'Inter', sans-serif;
 }
-.barista-messages .msg.barista .location-link:hover {
-    background: rgba(108,92,231,0.3);
+.barista-messages .msg.barista .location-btn-in-chat:hover {
+    background: rgba(108,92,231,0.4);
 }
-.barista-messages .msg.barista .location-link i { color: #A29BFE; }
+.barista-messages .msg.barista .location-btn-in-chat i { margin-right: 6px; }
 
 .barista-input {
     padding: 12px 16px;
@@ -752,6 +783,7 @@
     let gpsLocked = false;
     let ymapsReady = false;
     let giftCheckInterval = null;
+    let searchPlacemarks = [];
 
     // ================================================================
     // ===== DOM REFS =====
@@ -948,7 +980,7 @@
     }
 
     // ================================================================
-    // ===== ГЕОЛОКАЦИЯ ПО КЛИКУ (ДЛЯ iOS) =====
+    // ===== ГЕОЛОКАЦИЯ ПО КЛИКУ =====
     // ================================================================
     function requestLocationOnClick() {
         if (!navigator.geolocation) {
@@ -977,6 +1009,22 @@
                     });
                 }
                 if (userPlacemark) userPlacemark.balloon.open();
+                
+                // Сохраняем в localStorage
+                localStorage.setItem('userLat', userLocation.lat);
+                localStorage.setItem('userLng', userLocation.lng);
+                
+                // Отправляем сообщение в чат
+                const messages = document.getElementById('baristaMessages');
+                messages.innerHTML += `
+                    <div class="msg barista">
+                        🎯 Отлично! Я тебя нашёл!<br>
+                        📍 Твои координаты: <strong>${userLocation.lat.toFixed(6)}, ${userLocation.lng.toFixed(6)}</strong><br>
+                        🍓 До нашего киоска <strong>${getDistance(userLocation.lat, userLocation.lng, MY_LOCATION.lat, MY_LOCATION.lng).toFixed(2)} км</strong><br>
+                        😊 Теперь я могу помочь тебе найти всё, что нужно!
+                    </div>
+                `;
+                messages.scrollTop = messages.scrollHeight;
             },
             (error) => {
                 console.error('❌ Ошибка геолокации:', error.message);
@@ -984,6 +1032,17 @@
                 if (error.code === 1) msg = '❌ Разрешите доступ к геолокации в настройках Safari';
                 if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
                 showNotification(msg);
+                
+                // Сообщение в чат об ошибке
+                const messages = document.getElementById('baristaMessages');
+                messages.innerHTML += `
+                    <div class="msg barista">
+                        😔 К сожалению, не удалось определить ваше местоположение.<br>
+                        Пожалуйста, проверьте настройки геолокации в вашем браузере и попробуйте снова!<br>
+                        📱 Нажмите кнопку <strong>"Где я?"</strong> на карте выше.
+                    </div>
+                `;
+                messages.scrollTop = messages.scrollHeight;
             },
             {
                 enableHighAccuracy: true,
@@ -1011,7 +1070,6 @@
                 });
                 mapReady = true;
 
-                // КИОСК С КАРТИНКОЙ
                 kioskPlacemark = new ymaps.Placemark(
                     [MY_LOCATION.lat, MY_LOCATION.lng],
                     { 
@@ -1033,9 +1091,6 @@
                     }
                 );
                 mapInstance.geoObjects.add(kioskPlacemark);
-
-                // НЕ ЗАПРАШИВАЕМ ГЕОЛОКАЦИЮ АВТОМАТИЧЕСКИ!
-                // Пользователь нажмёт кнопку "Где я?" и тогда запросим
 
                 console.log('🗺️ Карта загружена!');
             } catch(e) { 
@@ -1098,6 +1153,82 @@
     }
 
     // ================================================================
+    // ===== МАРКЕРЫ НА КАРТЕ =====
+    // ================================================================
+    function clearSearchMarkers() {
+        if (searchPlacemarks.length > 0) {
+            searchPlacemarks.forEach(m => {
+                try { mapInstance.geoObjects.remove(m); } catch(e) {}
+            });
+            searchPlacemarks = [];
+        }
+        $('clearMarkersBtn').style.display = 'none';
+        showNotification('🗑️ Маркеры удалены');
+    }
+
+    function showPlacesOnMap(places) {
+        if (!mapInstance || !mapReady) {
+            showNotification('⏳ Карта ещё не загружена');
+            return;
+        }
+        
+        clearSearchMarkers();
+        
+        if (!places || places.length === 0) {
+            showNotification('📍 Ничего не найдено поблизости');
+            return;
+        }
+        
+        const first = places[0];
+        mapInstance.setCenter([first.lat, first.lng], 16, { duration: 500 });
+        $('clearMarkersBtn').style.display = 'flex';
+        
+        places.forEach((place, index) => {
+            let color = 'islands#blueIcon';
+            let icon = '🏪';
+            const name = (place.name || '').toLowerCase();
+            
+            if (name.includes('аптек')) { color = 'islands#redIcon'; icon = '💊'; }
+            else if (name.includes('кафе') || name.includes('ресторан')) { color = 'islands#orangeIcon'; icon = '🍽️'; }
+            else if (name.includes('гостиниц') || name.includes('отель')) { color = 'islands#purpleIcon'; icon = '🏨'; }
+            else if (name.includes('парк')) { color = 'islands#greenIcon'; icon = '🌳'; }
+            else if (name.includes('пляж')) { color = 'islands#yellowIcon'; icon = '🏖️'; }
+            
+            const placemark = new ymaps.Placemark(
+                [place.lat, place.lng],
+                {
+                    balloonContent: `
+                        <div style="font-family: 'Inter', sans-serif; color: #1A1A2E;">
+                            <strong>${icon} ${place.name || 'Объект'}</strong><br>
+                            📍 ${place.address || 'Адрес не указан'}<br>
+                            📏 ${(place.distance * 1000).toFixed(0)} метров
+                        </div>
+                    `,
+                    iconCaption: `${icon} ${place.name || 'Объект'}`
+                },
+                {
+                    preset: color,
+                    iconCaptionMaxWidth: 150,
+                    iconCaptionFontSize: 11,
+                    iconCaptionFontWeight: 'bold',
+                    iconCaptionColor: '#FFFFFF',
+                    iconCaptionStrokeColor: 'rgba(0,0,0,0.8)',
+                    iconCaptionStrokeWidth: 3
+                }
+            );
+            
+            mapInstance.geoObjects.add(placemark);
+            searchPlacemarks.push(placemark);
+            
+            if (index === 0) {
+                setTimeout(() => placemark.balloon.open(), 500);
+            }
+        });
+        
+        showNotification(`📍 Найдено ${places.length} мест, показаны на карте!`);
+    }
+
+    // ================================================================
     // ===== УВЕДОМЛЕНИЯ =====
     // ================================================================
     function showNotification(msg) {
@@ -1127,10 +1258,9 @@
     });
 
     // ================================================================
-    // ===== КЛУБНИЧНЫЙ БАРИСТА — AI-АССИСТЕНТ =====
+    // ===== КЛУБНИЧНЫЙ БАРИСТА =====
     // ================================================================
 
-    // Ключ НЕ ХРАНИТСЯ в клиенте — запросы идут через сервер
     const BARISTA_MENU = [
         { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, badge: '🔥 Хит' },
         { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, badge: '⭐' },
@@ -1158,7 +1288,7 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 ТВОЯ РОЛЬ:
 1. Ты работаешь в кафе, общаешься с гостями
 2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты УМЕЕШЬ ИСКАТЬ БЛИЖАЙШИЕ МАГАЗИНЫ, КАФЕ, АПТЕКИ, ГОСТИНИЦЫ и строить МАРШРУТЫ
+3. Ты УМЕЕШЬ ИСКАТЬ БЛИЖАЙШИЕ МАГАЗИНЫ, КАФЕ, АПТЕКИ, ГОСТИНИЦЫ
 4. Ты дружелюбный и весёлый помощник
 5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
 
@@ -1168,14 +1298,7 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 - Используй эмодзи 🍓🍫😊🌊
 - НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
 - ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
-
-КАК ИСКАТЬ ТОЧКИ:
-Если гость спрашивает "где купить воду", "ближайший магазин", "аптека", "кафе", "гостиница" — ты можешь найти это через карту.
-
-ОТВЕЧАЙ ТАК:
-1. Сначала подтверди, что ищешь: "Сейчас посмотрю на карте! 🔍"
-2. Затем напиши, что нашёл: "Ближайший магазин — 50 метров налево 🏪"
-3. Предложи показать на карте: "Хотите, покажу на карте? Нажмите на маркер!"
+- ЕСЛИ НЕТ КООРДИНАТ — ПОПРОСИ НАЖАТЬ "ГДЕ Я?"
 
 ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
 
@@ -1230,38 +1353,69 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
     async function getBaristaResponse(userMessage) {
         try {
-            // Проверяем, идёт ли речь о поиске мест
             const searchKeywords = ['магазин', 'купить', 'вода', 'аптека', 'кафе', 'гостиница', 'отель', 'еда', 'ресторан', 'туалет', 'парк', 'пляж', 'где', 'найти', 'рядом', 'ближайш'];
             const isSearching = searchKeywords.some(word => userMessage.toLowerCase().includes(word));
             
-            if (isSearching && userLocation) {
-                // Пытаемся найти место через Яндекс.Карты
+            if (isSearching) {
+                // Проверяем координаты
+                let lat = userLocation?.lat;
+                let lng = userLocation?.lng;
+                
+                // Пробуем восстановить из localStorage
+                if (!lat || !lng) {
+                    const savedLat = localStorage.getItem('userLat');
+                    const savedLng = localStorage.getItem('userLng');
+                    if (savedLat && savedLng) {
+                        lat = parseFloat(savedLat);
+                        lng = parseFloat(savedLng);
+                        userLocation = { lat, lng };
+                        console.log('📍 Координаты восстановлены из localStorage');
+                    }
+                }
+                
+                // Если всё ещё нет координат — просим нажать "Где я?"
+                if (!lat || !lng) {
+                    return `
+                        📍 Чтобы я мог найти ближайшие места, мне нужно знать, где вы находитесь! 😊
+
+                        <button class="location-btn-in-chat" onclick="requestLocationOnClick()">
+                            <i class="fas fa-location-dot"></i> Нажмите "Где я?" на карте
+                        </button>
+
+                        Или просто нажмите на кнопку выше, и я определю ваше местоположение! 🍓
+                    `;
+                }
+                
+                // Есть координаты — ищем
                 try {
                     const searchResponse = await fetch('/api/nearby-places', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            lat: userLocation.lat,
-                            lng: userLocation.lng,
+                            lat: lat,
+                            lng: lng,
                             query: userMessage
                         })
                     });
                     const searchData = await searchResponse.json();
                     
                     if (searchData.success && searchData.places && searchData.places.length > 0) {
+                        showPlacesOnMap(searchData.places);
+                        
                         const place = searchData.places[0];
                         const distance = (place.distance * 1000).toFixed(0);
-                        const response = `🔍 Нашёл! Ближайший ${place.name || 'объект'} — ${place.address || 'рядом'} (${distance} метров) 🏪
+                        return `🔍 Нашёл! Ближайший ${place.name || 'объект'} — ${place.address || 'рядом'} (${distance} метров) 🏪
 
-Хотите, покажу на карте? Нажмите "Где я?" и я укажу направление! 😊`;
-                        return response;
+📍 Я отметил его на карте маркером! Посмотрите на карту выше. 😊`;
+                    } else {
+                        return '🔍 Ничего не найдено поблизости. Попробуйте уточнить запрос! 😊';
                     }
                 } catch (e) {
                     console.log('Поиск через API не удался, используем AI');
                 }
             }
             
-            // Если не поиск или не нашли — используем AI
+            // Обычный ответ через AI
             const response = await fetch('/api/barista', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1309,7 +1463,8 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                 <div class="msg barista">
                     🍓 Привет! Я тут, чтобы помочь 😊<br>
                     Можешь спросить меня о чём угодно — о погоде, магазинах, развлечениях...<br>
-                    Или просто поболтать! Я всегда рад компании 🤗
+                    Или просто поболтать! Я всегда рад компании 🤗<br><br>
+                    📍 Чтобы я мог найти для вас ближайшие места — нажмите кнопку <strong>"Где я?"</strong> на карте выше!
                 </div>
             `;
             messages.scrollTop = messages.scrollHeight;
@@ -1321,7 +1476,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
         console.log('🍓 Клубничный Бариста активирован!');
     }
 
-    // Запускаем Баристу
     setTimeout(startBarista, 2500);
 </script>
 
