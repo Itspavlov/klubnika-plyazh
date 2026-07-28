@@ -817,11 +817,19 @@ app.post('/api/barista', async (req, res) => {
 // ===== API: ПОИСК БЛИЖАЙШИХ ТОЧЕК ЧЕРЕЗ ЯНДЕКС КАРТЫ =====
 // ================================================================
 
+// ================================================================
+// ===== API: ПОИСК БЛИЖАЙШИХ ТОЧЕК ЧЕРЕЗ ЯНДЕКС КАРТЫ =====
+// ================================================================
+
+// ================================================================
+// ===== API: ПОИСК БЛИЖАЙШИХ ТОЧЕК ЧЕРЕЗ ЯНДЕКС КАРТЫ =====
+// ================================================================
+
 app.post('/api/nearby-places', async (req, res) => {
     const { lat, lng, query } = req.body;
     
     if (!lat || !lng) {
-        return res.status(400).json({ error: 'Нет координат' });
+        return res.status(400).json({ success: false, error: 'Нет координат', places: [] });
     }
     
     const YANDEX_API_KEY = process.env.YANDEX_MAPS_API_KEY || '7aafdf73-bf1e-4ec7-8d18-07b14be93c80';
@@ -836,54 +844,35 @@ app.post('/api/nearby-places', async (req, res) => {
         else if (lowerQuery.includes('парк')) searchQuery = 'парк';
         else if (lowerQuery.includes('пляж')) searchQuery = 'пляж';
         
-        const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${searchQuery}&ll=${lng},${lat}&spn=0.005,0.005&rspn=1&format=json&results=5`;
+        const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${searchQuery}&ll=${lng},${lat}&spn=0.015,0.015&rspn=1&format=json&results=10`;
         
         console.log(`🔍 Поиск "${searchQuery}" по координатам: ${lat}, ${lng}`);
         
         const response = await fetch(url);
         const data = await response.json();
         
-        // ПРОВЕРКА: есть ли данные
+        // Проверяем ответ
         if (!data || !data.response || !data.response.GeoObjectCollection) {
-            console.log('⚠️ Яндекс вернул пустой ответ, возвращаем заглушку');
-            return res.json({ 
-                success: true, 
-                places: [
-                    {
-                        name: 'Ближайший магазин',
-                        address: 'Рядом с вами',
-                        lat: lat + 0.0003,
-                        lng: lng + 0.0003,
-                        distance: 0.03
-                    }
-                ] 
-            });
+            console.log('⚠️ Яндекс вернул пустой ответ');
+            return res.json({ success: false, places: [], error: 'Ничего не найдено' });
         }
         
         const featureMember = data.response.GeoObjectCollection.featureMember || [];
         
         if (featureMember.length === 0) {
-            return res.json({ 
-                success: true, 
-                places: [
-                    {
-                        name: 'Ничего не найдено',
-                        address: 'Попробуйте уточнить запрос',
-                        lat: lat,
-                        lng: lng,
-                        distance: 0
-                    }
-                ] 
-            });
+            console.log('⚠️ Нет объектов поблизости');
+            return res.json({ success: false, places: [], error: 'Ничего не найдено поблизости' });
         }
         
         const places = featureMember.map(item => {
             try {
                 const geo = item.GeoObject;
                 const coords = geo.Point.pos.split(' ').map(Number);
+                const name = geo.name || searchQuery;
+                const address = geo.description || geo.name || 'Адрес не указан';
                 return {
-                    name: geo.name || searchQuery,
-                    address: geo.description || geo.name || 'Адрес не указан',
+                    name: name,
+                    address: address,
                     lat: coords[1],
                     lng: coords[0],
                     distance: getDistance(lat, lng, coords[1], coords[0])
@@ -891,23 +880,20 @@ app.post('/api/nearby-places', async (req, res) => {
             } catch (e) {
                 return null;
             }
-        }).filter(p => p !== null && p.distance < 2).sort((a, b) => a.distance - b.distance);
+        }).filter(p => p !== null).sort((a, b) => a.distance - b.distance);
         
-        res.json({ success: true, places: places.slice(0, 5) });
+        if (places.length === 0) {
+            return res.json({ success: false, places: [], error: 'Ничего не найдено' });
+        }
+        
+        // Ограничиваем до 5 мест
+        const result = places.slice(0, 5);
+        console.log(`✅ Найдено ${result.length} мест`);
+        
+        res.json({ success: true, places: result });
     } catch (error) {
         console.error('❌ Ошибка поиска:', error);
-        res.json({ 
-            success: true, 
-            places: [
-                {
-                    name: 'Магазин рядом',
-                    address: 'Попробуйте поискать на карте вручную',
-                    lat: lat + 0.0003,
-                    lng: lng + 0.0003,
-                    distance: 0.03
-                }
-            ] 
-        });
+        res.json({ success: false, places: [], error: error.message });
     }
 });
 
