@@ -439,7 +439,6 @@ app.post('/api/gift/status', async (req, res) => {
     if (!ip) return res.json({ success: false, error: 'Нет IP' });
     
     try {
-        // Проверяем, получал ли уже подарок
         const claimed = await pool.query(
             `SELECT * FROM gifts WHERE ip = $1 AND claimed = true`,
             [ip]
@@ -454,7 +453,6 @@ app.post('/api/gift/status', async (req, res) => {
             });
         }
         
-        // Проверяем, есть ли ожидающий подарок
         const pending = await pool.query(
             `SELECT * FROM gifts WHERE ip = $1 AND claimed = false`,
             [ip]
@@ -469,7 +467,6 @@ app.post('/api/gift/status', async (req, res) => {
             });
         }
         
-        // Нет подарка — можно активировать
         res.json({ 
             success: true, 
             hasGift: false, 
@@ -721,6 +718,88 @@ app.get('/api/my-ip', (req, res) => {
     res.json({ ip: cleanIp });
 });
 
+// ================================================================
+// ===== API: BARISTA (AI-ПОМОЩНИК) =====
+// ================================================================
+
+const BARISTA_MENU = [
+    { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, badge: '🔥 Хит' },
+    { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, badge: '⭐' },
+    { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, badge: '🔥 Хит' },
+    { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450 },
+    { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450 },
+    { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350 }
+];
+
+const BARISTA_PROMO = [
+    '🍓 При заказе 2+ стаканчиков — скидка 10%',
+    '🎁 Бесплатная мини-порция для первых посетителей',
+    '❤️ Для постоянных клиентов — подарок'
+];
+
+const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
+
+ТВОИ ДАННЫЕ:
+Меню:
+${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
+
+Акции:
+${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
+
+ТВОЯ РОЛЬ:
+1. Ты работаешь в кафе, общаешься с гостями
+2. Ты знаешь ВСЁ о меню, ценах, акциях
+3. Ты дружелюбный и весёлый помощник
+4. Ты ВСЕГДА предлагаешь что-то дополнительное (up-sell)
+
+ПРАВИЛА:
+- Отвечай ТОЛЬКО на русском
+- Будь коротким и полезным (1-3 предложения)
+- Используй эмодзи 🍓🍫😊
+- ВСЕГДА предлагай добавить ещё стаканчик или попробовать что-то новое
+- Когда называешь цену — выделяй её`;
+
+app.post('/api/barista', async (req, res) => {
+    const { message, history } = req.body;
+    
+    const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+    if (!DEEPSEEK_API_KEY) {
+        return res.status(500).json({ error: 'API ключ не настроен на сервере' });
+    }
+    
+    try {
+        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: 'deepseek-chat',
+                messages: [
+                    { role: 'system', content: BARISTA_SYSTEM_PROMPT },
+                    ...(history || []).slice(-10),
+                    { role: 'user', content: message }
+                ],
+                temperature: 0.85,
+                max_tokens: 300
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            console.error('DeepSeek API Error:', data.error);
+            return res.status(500).json({ error: data.error.message });
+        }
+        
+        res.json(data);
+    } catch (error) {
+        console.error('Barista Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ===== QR-КОД =====
 app.get('/generate-qr', (req, res) => {
     const bungalow = req.query.b || 1;
@@ -761,7 +840,6 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
     console.log('📡 Новое подключение:', socket.id);
 
-    // Админ подключается
     socket.on('admin-join', () => {
         socket.join('admin-room');
         console.log('👨‍💼 Админ подключен к уведомлениям');
@@ -788,5 +866,6 @@ io.on('connection', (socket) => {
         console.log('👨‍💼 WebSocket уведомления для админа активны');
         console.log('📊 Статистика доступна по /api/stats');
         console.log('📤 Экспорт заказов: /api/export-orders');
+        console.log('🍓 Клубничный Бариста (AI) активирован!');
     });
 })();
