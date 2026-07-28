@@ -644,24 +644,6 @@
     color: #4ADE80;
     font-weight: 700;
 }
-.barista-messages .msg.barista .location-btn-in-chat {
-    display: inline-block;
-    background: rgba(108,92,231,0.25);
-    color: #A29BFE;
-    border: 1px solid rgba(108,92,231,0.3);
-    padding: 6px 16px;
-    border-radius: 20px;
-    margin-top: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    transition: 0.2s;
-    font-family: 'Inter', sans-serif;
-}
-.barista-messages .msg.barista .location-btn-in-chat:hover {
-    background: rgba(108,92,231,0.4);
-}
-.barista-messages .msg.barista .location-btn-in-chat i { margin-right: 6px; }
 
 .barista-input {
     padding: 12px 16px;
@@ -759,7 +741,7 @@
             <button onclick="quickQuestion('Что посоветуешь?')">🍫 Что посоветуешь?</button>
             <button onclick="quickQuestion('Какие акции есть?')">🎁 Акции</button>
             <button onclick="quickQuestion('Сколько стоит классика?')">💰 Цены</button>
-            <button onclick="quickQuestion('Где здесь вода?')">📍 Магазин</button>
+            <button onclick="quickQuestion('Где ближайший магазин?')">📍 Магазин</button>
         </div>
         <div class="barista-input">
             <input type="text" id="baristaInput" placeholder="Спросите меня..." onkeydown="if(event.key==='Enter') sendBaristaMessage()">
@@ -784,6 +766,7 @@
     let ymapsReady = false;
     let giftCheckInterval = null;
     let searchPlacemarks = [];
+    let locationRequested = false;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -980,7 +963,7 @@
     }
 
     // ================================================================
-    // ===== ГЕОЛОКАЦИЯ ПО КЛИКУ =====
+    // ===== ГЕОЛОКАЦИЯ =====
     // ================================================================
     function requestLocationOnClick() {
         if (!navigator.geolocation) {
@@ -998,6 +981,7 @@
                     lng: position.coords.longitude
                 };
                 gpsLocked = true;
+                locationRequested = true;
                 showNotification('✅ Местоположение определено');
                 updateUserMarker(userLocation.lat, userLocation.lng);
                 updateDistance();
@@ -1010,18 +994,15 @@
                 }
                 if (userPlacemark) userPlacemark.balloon.open();
                 
-                // Сохраняем в localStorage
                 localStorage.setItem('userLat', userLocation.lat);
                 localStorage.setItem('userLng', userLocation.lng);
                 
-                // Отправляем сообщение в чат
+                // Тихое сообщение в чат (без координат)
                 const messages = document.getElementById('baristaMessages');
                 messages.innerHTML += `
                     <div class="msg barista">
                         🎯 Отлично! Я тебя нашёл!<br>
-                        📍 Твои координаты: <strong>${userLocation.lat.toFixed(6)}, ${userLocation.lng.toFixed(6)}</strong><br>
-                        🍓 До нашего киоска <strong>${getDistance(userLocation.lat, userLocation.lng, MY_LOCATION.lat, MY_LOCATION.lng).toFixed(2)} км</strong><br>
-                        😊 Теперь я могу помочь тебе найти всё, что нужно!
+                        Теперь я могу помочь тебе найти всё, что нужно! 😊
                     </div>
                 `;
                 messages.scrollTop = messages.scrollHeight;
@@ -1032,22 +1013,50 @@
                 if (error.code === 1) msg = '❌ Разрешите доступ к геолокации в настройках Safari';
                 if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
                 showNotification(msg);
-                
-                // Сообщение в чат об ошибке
-                const messages = document.getElementById('baristaMessages');
-                messages.innerHTML += `
-                    <div class="msg barista">
-                        😔 К сожалению, не удалось определить ваше местоположение.<br>
-                        Пожалуйста, проверьте настройки геолокации в вашем браузере и попробуйте снова!<br>
-                        📱 Нажмите кнопку <strong>"Где я?"</strong> на карте выше.
-                    </div>
-                `;
-                messages.scrollTop = messages.scrollHeight;
             },
             {
                 enableHighAccuracy: true,
                 timeout: 15000,
                 maximumAge: 5000
+            }
+        );
+    }
+
+    // ================================================================
+    // ===== АВТОМАТИЧЕСКИЙ ЗАПРОС ГЕОЛОКАЦИИ =====
+    // ================================================================
+    function autoRequestLocation() {
+        if (!navigator.geolocation) {
+            console.log('❌ Браузер не поддерживает геолокацию');
+            return;
+        }
+
+        console.log('📍 Авто-запрос геолокации...');
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log('📍 Позиция получена автоматически:', position);
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                gpsLocked = true;
+                locationRequested = true;
+                updateUserMarker(userLocation.lat, userLocation.lng);
+                updateDistance();
+                
+                localStorage.setItem('userLat', userLocation.lat);
+                localStorage.setItem('userLng', userLocation.lng);
+                
+                console.log('✅ Местоположение автоматически определено');
+            },
+            (error) => {
+                console.log('⏳ Авто-запрос не удался, ждём ручного нажатия');
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 10000
             }
         );
     }
@@ -1091,6 +1100,20 @@
                     }
                 );
                 mapInstance.geoObjects.add(kioskPlacemark);
+
+                // Пытаемся восстановить координаты
+                const savedLat = localStorage.getItem('userLat');
+                const savedLng = localStorage.getItem('userLng');
+                if (savedLat && savedLng) {
+                    userLocation = {
+                        lat: parseFloat(savedLat),
+                        lng: parseFloat(savedLng)
+                    };
+                    gpsLocked = true;
+                    updateUserMarker(userLocation.lat, userLocation.lng);
+                    updateDistance();
+                    console.log('📍 Координаты восстановлены из localStorage');
+                }
 
                 console.log('🗺️ Карта загружена!');
             } catch(e) { 
@@ -1254,6 +1277,7 @@
         setTimeout(initMap, 500);
         setTimeout(checkGiftStatus, 1000);
         setTimeout(startGiftCheck, 2000);
+        setTimeout(autoRequestLocation, 3000);
         console.log('🍓 Страница загружена!');
     });
 
@@ -1288,7 +1312,7 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 ТВОЯ РОЛЬ:
 1. Ты работаешь в кафе, общаешься с гостями
 2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты УМЕЕШЬ ИСКАТЬ БЛИЖАЙШИЕ МАГАЗИНЫ, КАФЕ, АПТЕКИ, ГОСТИНИЦЫ
+3. Ты умеешь находить ближайшие магазины, кафе, аптеки
 4. Ты дружелюбный и весёлый помощник
 5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
 
@@ -1296,11 +1320,10 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 - Отвечай ТОЛЬКО на русском
 - Будь коротким и полезным (2-4 предложения)
 - Используй эмодзи 🍓🍫😊🌊
-- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
+- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО
 - ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
-- ЕСЛИ НЕТ КООРДИНАТ — ПОПРОСИ НАЖАТЬ "ГДЕ Я?"
 
-ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
+ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом!`;
 
     let baristaHistory = [];
     let baristaWelcomeShown = false;
@@ -1357,11 +1380,9 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             const isSearching = searchKeywords.some(word => userMessage.toLowerCase().includes(word));
             
             if (isSearching) {
-                // Проверяем координаты
                 let lat = userLocation?.lat;
                 let lng = userLocation?.lng;
                 
-                // Пробуем восстановить из localStorage
                 if (!lat || !lng) {
                     const savedLat = localStorage.getItem('userLat');
                     const savedLng = localStorage.getItem('userLng');
@@ -1369,11 +1390,9 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                         lat = parseFloat(savedLat);
                         lng = parseFloat(savedLng);
                         userLocation = { lat, lng };
-                        console.log('📍 Координаты восстановлены из localStorage');
                     }
                 }
                 
-                // Если всё ещё нет координат — просим нажать "Где я?"
                 if (!lat || !lng) {
                     return `
                         📍 Чтобы я мог найти ближайшие места, мне нужно знать, где вы находитесь! 😊
@@ -1386,7 +1405,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                     `;
                 }
                 
-                // Есть координаты — ищем
                 try {
                     const searchResponse = await fetch('/api/nearby-places', {
                         method: 'POST',
@@ -1415,7 +1433,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                 }
             }
             
-            // Обычный ответ через AI
             const response = await fetch('/api/barista', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
