@@ -813,18 +813,7 @@ app.post('/api/barista', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
 // ================================================================
-// ===== API: ПОИСК БЛИЖАЙШИХ ТОЧЕК ЧЕРЕЗ ЯНДЕКС КАРТЫ =====
-// ================================================================
-
-app.post('/api/nearby-places', async (req, res) => {
-    const { lat, lng, query } = req.body;
-    
-    if (!lat || !lng) {
-        return res.status(400).json({ error: 'Нет координат' });
-    }
-    // ================================================================
 // ===== API: ПОИСК БЛИЖАЙШИХ ТОЧЕК ЧЕРЕЗ ЯНДЕКС КАРТЫ =====
 // ================================================================
 
@@ -846,20 +835,17 @@ app.post('/api/nearby-places', async (req, res) => {
         else if (lowerQuery.includes('туалет')) searchQuery = 'туалет';
         else if (lowerQuery.includes('парк')) searchQuery = 'парк';
         else if (lowerQuery.includes('пляж')) searchQuery = 'пляж';
-        else if (lowerQuery.includes('вод') || lowerQuery.includes('пить')) searchQuery = 'магазин';
         
         const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${searchQuery}&ll=${lng},${lat}&spn=0.005,0.005&rspn=1&format=json&results=5`;
         
         console.log(`🔍 Поиск "${searchQuery}" по координатам: ${lat}, ${lng}`);
-        console.log(`📡 URL: ${url}`);
         
         const response = await fetch(url);
         const data = await response.json();
         
-        // Проверяем структуру ответа
-        if (!data.response || !data.response.GeoObjectCollection) {
-            console.log('⚠️ Яндекс вернул неожиданный ответ:', JSON.stringify(data).slice(0, 200));
-            // Возвращаем заглушку, чтобы не падало
+        // ПРОВЕРКА: есть ли данные
+        if (!data || !data.response || !data.response.GeoObjectCollection) {
+            console.log('⚠️ Яндекс вернул пустой ответ, возвращаем заглушку');
             return res.json({ 
                 success: true, 
                 places: [
@@ -910,7 +896,6 @@ app.post('/api/nearby-places', async (req, res) => {
         res.json({ success: true, places: places.slice(0, 5) });
     } catch (error) {
         console.error('❌ Ошибка поиска:', error);
-        // Возвращаем заглушку при любой ошибке
         res.json({ 
             success: true, 
             places: [
