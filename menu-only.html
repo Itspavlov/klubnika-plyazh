@@ -13,13 +13,13 @@
             --primary-dark: #5A4BD1;
             --primary-light: #A29BFE;
             --accent: #FD79A8;
-            --bg-start: #0F0E17;
-            --bg-end: #1A1A2E;
-            --card-bg: rgba(255,255,255,0.06);
-            --glass-border: rgba(255,255,255,0.08);
-            --text-primary: #FFFFFF;
-            --text-secondary: rgba(255,255,255,0.7);
-            --text-muted: rgba(255,255,255,0.4);
+            --bg-start: #FFF5F5;
+            --bg-end: #FFE8EC;
+            --card-bg: rgba(255,255,255,0.9);
+            --glass-border: rgba(0,0,0,0.08);
+            --text-primary: #1A1A2E;
+            --text-secondary: rgba(0,0,0,0.7);
+            --text-muted: rgba(0,0,0,0.4);
             --radius: 16px;
             --radius-sm: 10px;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -53,7 +53,7 @@
             font-size: 48px;
             display: block;
             animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 20px rgba(108,92,231,0.3));
+            filter: drop-shadow(0 4px 20px rgba(108,92,231,0.2));
         }
         .header-badge {
             display: inline-flex;
@@ -61,7 +61,7 @@
             gap: 6px;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            color: var(--primary-light);
+            color: var(--primary);
             font-size: 10px;
             font-weight: 600;
             padding: 4px 14px;
@@ -72,7 +72,7 @@
         .header h1 {
             font-size: 24px;
             font-weight: 800;
-            background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-light) 100%);
+            background: linear-gradient(135deg, #6C5CE7 0%, #FD79A8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -98,7 +98,7 @@
             width: 100%;
             height: 380px;
             position: relative;
-            background: #0A0A1A;
+            background: #f0f0f5;
         }
         .map-card .map-container #treasureMap {
             width: 100%;
@@ -108,7 +108,7 @@
             display: flex;
             gap: 6px;
             padding: 10px 14px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.5);
             border-top: 1px solid var(--glass-border);
             flex-wrap: wrap;
         }
@@ -122,7 +122,7 @@
             padding: 8px 12px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--glass-border);
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.7);
             color: var(--text-secondary);
             font-size: 11px;
             font-weight: 500;
@@ -132,22 +132,16 @@
         }
         .map-btn:active { transform: scale(0.97); }
         .map-btn.location-btn {
-            background: rgba(108,92,231,0.15);
-            border-color: rgba(108,92,231,0.25);
-            color: var(--primary-light);
+            background: rgba(108,92,231,0.1);
+            border-color: rgba(108,92,231,0.2);
+            color: var(--primary);
         }
-        .map-btn.clear-markers-btn {
-            background: rgba(239,68,68,0.12);
-            border-color: rgba(239,68,68,0.2);
-            color: #EF4444;
-        }
-        .map-btn.clear-markers-btn:active { transform: scale(0.97); }
 
         .distance-info {
             display: none;
             padding: 10px 14px;
-            background: rgba(108,92,231,0.08);
-            border-top: 1px solid rgba(108,92,231,0.15);
+            background: rgba(108,92,231,0.05);
+            border-top: 1px solid var(--glass-border);
             font-size: 12px;
             color: var(--text-secondary);
             gap: 12px;
@@ -161,8 +155,8 @@
             align-items: center;
             gap: 4px;
         }
-        .distance-info .stat i { color: var(--primary-light); font-size: 14px; }
-        .distance-info .stat .value { color: #4ADE80; font-weight: 700; font-size: 16px; }
+        .distance-info .stat i { color: var(--primary); font-size: 14px; }
+        .distance-info .stat .value { color: #22C55E; font-weight: 700; font-size: 16px; }
         .distance-info .stat .label { color: var(--text-muted); font-size: 11px; }
 
         .menu-grid {
@@ -186,7 +180,7 @@
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
-            background: rgba(255,255,255,0.03);
+            background: rgba(0,0,0,0.02);
         }
         .menu-item .item-content {
             padding: 10px 12px 12px;
@@ -214,7 +208,7 @@
             position: absolute;
             top: 8px;
             left: 8px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(10px);
             color: var(--accent);
             font-size: 9px;
@@ -235,7 +229,7 @@
         }
         .section-title i {
             font-size: 18px;
-            color: var(--primary-light);
+            color: var(--primary);
         }
         .footer {
             text-align: center;
@@ -248,7 +242,7 @@
             margin-top: 4px;
             font-size: 13px;
             font-weight: 600;
-            color: var(--primary-light);
+            color: var(--primary);
             text-decoration: none;
         }
 
@@ -263,7 +257,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.4);
             backdrop-filter: blur(14px);
             z-index: 2000;
             justify-content: center;
@@ -275,7 +269,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .modal {
-            background: linear-gradient(160deg, #1A1A2E 0%, #0F0E17 100%);
+            background: #FFFFFF;
             border-radius: var(--radius);
             max-width: 320px;
             width: 100%;
@@ -283,7 +277,7 @@
             position: relative;
             animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             text-align: center;
         }
         @keyframes slideUp {
@@ -307,7 +301,7 @@
         .modal h2 {
             font-size: 17px;
             font-weight: 700;
-            color: #fff;
+            color: #1A1A2E;
             margin-bottom: 2px;
         }
         .modal h2 span {
@@ -386,25 +380,6 @@
             from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-
-        .location-btn-in-chat {
-            display: inline-block;
-            background: rgba(108,92,231,0.25);
-            color: #A29BFE;
-            border: 1px solid rgba(108,92,231,0.3);
-            padding: 6px 16px;
-            border-radius: 20px;
-            margin-top: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .location-btn-in-chat:hover {
-            background: rgba(108,92,231,0.4);
-        }
-        .location-btn-in-chat i { margin-right: 6px; }
     </style>
 </head>
 <body>
@@ -426,9 +401,6 @@
         <div class="map-actions">
             <button class="map-btn location-btn" onclick="requestLocationOnClick()">
                 <i class="fas fa-location-dot"></i> Где я?
-            </button>
-            <button class="map-btn clear-markers-btn" onclick="clearSearchMarkers()" id="clearMarkersBtn" style="display:none;">
-                <i class="fas fa-eraser"></i> Очистить маркеры
             </button>
         </div>
         <div class="distance-info" id="distanceInfo">
@@ -505,11 +477,11 @@
     justify-content: center;
     cursor: pointer;
     font-size: 30px;
-    box-shadow: 0 4px 25px rgba(108,92,231,0.5);
+    box-shadow: 0 4px 25px rgba(108,92,231,0.4);
     transition: all 0.3s ease;
     position: relative;
     animation: baristaPulse 2.5s infinite;
-    border: 2px solid rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
 }
 .barista-toggle:active { transform: scale(0.92); }
 .barista-toggle .badge-dot {
@@ -520,7 +492,7 @@
     height: 18px;
     border-radius: 50%;
     background: #FF4757;
-    border: 2px solid #1A1A2E;
+    border: 2px solid #FFFFFF;
     font-size: 9px;
     display: flex;
     align-items: center;
@@ -530,8 +502,8 @@
 }
 
 @keyframes baristaPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 4px 25px rgba(108,92,231,0.5); }
-    50% { transform: scale(1.05); box-shadow: 0 4px 40px rgba(108,92,231,0.7); }
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 25px rgba(108,92,231,0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 4px 40px rgba(108,92,231,0.6); }
 }
 @keyframes blinkBadge {
     0%, 100% { opacity: 1; }
@@ -544,10 +516,10 @@
     right: 0;
     width: 400px;
     height: 550px;
-    background: linear-gradient(160deg, #1A1A2E, #0F0E17);
+    background: #FFFFFF;
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     display: none;
     flex-direction: column;
     overflow: hidden;
@@ -562,11 +534,11 @@
 
 .barista-header {
     padding: 14px 18px;
-    background: rgba(108,92,231,0.15);
+    background: rgba(108,92,231,0.08);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
     flex-shrink: 0;
 }
 .barista-header .info {
@@ -585,24 +557,24 @@
     font-size: 18px;
 }
 .barista-header .name {
-    color: #fff;
+    color: #1A1A2E;
     font-weight: 700;
     font-size: 15px;
 }
 .barista-header .status {
     font-size: 11px;
-    color: #4ADE80;
+    color: #22C55E;
 }
 .barista-header .close-btn {
     background: none;
     border: none;
-    color: rgba(255,255,255,0.4);
+    color: rgba(0,0,0,0.3);
     font-size: 20px;
     cursor: pointer;
     padding: 4px 8px;
     transition: 0.2s;
 }
-.barista-header .close-btn:hover { color: #fff; }
+.barista-header .close-btn:hover { color: #1A1A2E; }
 
 .barista-messages {
     flex: 1;
@@ -625,14 +597,14 @@
     to { opacity: 1; transform: translateY(0); }
 }
 .barista-messages .msg.user {
-    background: rgba(108,92,231,0.3);
-    color: #fff;
+    background: rgba(108,92,231,0.12);
+    color: #1A1A2E;
     align-self: flex-end;
     border-bottom-right-radius: 4px;
 }
 .barista-messages .msg.barista {
-    background: rgba(255,255,255,0.06);
-    color: #fff;
+    background: rgba(0,0,0,0.04);
+    color: #1A1A2E;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
 }
@@ -641,31 +613,40 @@
     font-weight: 600;
 }
 .barista-messages .msg.barista .price {
-    color: #4ADE80;
+    color: #22C55E;
     font-weight: 700;
+}
+.barista-messages .msg.barista .joke {
+    display: inline-block;
+    background: rgba(253,121,168,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 4px;
+    font-size: 13px;
+    border: 1px solid rgba(253,121,168,0.1);
 }
 
 .barista-input {
     padding: 12px 16px;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(0,0,0,0.05);
     display: flex;
     gap: 10px;
     flex-shrink: 0;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.02);
 }
 .barista-input input {
     flex: 1;
     padding: 12px 18px;
     border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.04);
-    color: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #F8FAFC;
+    color: #1A1A2E;
     outline: none;
     font-size: 14px;
     font-family: 'Inter', sans-serif;
     transition: 0.2s;
 }
-.barista-input input::placeholder { color: rgba(255,255,255,0.3); }
+.barista-input input::placeholder { color: rgba(0,0,0,0.3); }
 .barista-input input:focus { border-color: rgba(108,92,231,0.4); }
 .barista-input button {
     width: 46px;
@@ -687,23 +668,23 @@
     padding: 8px 16px 12px;
     flex-wrap: wrap;
     flex-shrink: 0;
-    background: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.02);
 }
 .barista-quick button {
     padding: 5px 14px;
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.04);
-    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.06);
+    background: rgba(0,0,0,0.02);
+    color: rgba(0,0,0,0.5);
     font-size: 11px;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
     transition: 0.2s;
 }
 .barista-quick button:hover {
-    background: rgba(108,92,231,0.15);
-    color: #fff;
-    border-color: rgba(108,92,231,0.2);
+    background: rgba(108,92,231,0.08);
+    color: #1A1A2E;
+    border-color: rgba(108,92,231,0.15);
 }
 .barista-quick button:active { transform: scale(0.95); }
 
@@ -734,14 +715,14 @@
             <div class="msg barista">
                 🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
                 Я знаю всё о нашем меню, ценах и акциях.<br>
-                Спроси меня о чём угодно!
+                Спроси меня о чём угодно! Я люблю шутить и общаться 🤗
             </div>
         </div>
         <div class="barista-quick">
-            <button onclick="quickQuestion('Что посоветуешь?')">🍫 Что посоветуешь?</button>
-            <button onclick="quickQuestion('Какие акции есть?')">🎁 Акции</button>
-            <button onclick="quickQuestion('Сколько стоит классика?')">💰 Цены</button>
-            <button onclick="quickQuestion('Где ближайший магазин?')">📍 Магазин</button>
+            <button onclick="quickQuestion('Что посоветуешь из еды?')">🍫 Что посоветуешь?</button>
+            <button onclick="quickQuestion('Расскажи шутку')">😂 Пошути</button>
+            <button onclick="quickQuestion('Как у тебя дела?')">👋 Как дела?</button>
+            <button onclick="quickQuestion('Где киоск?')">📍 Где киоск?</button>
         </div>
         <div class="barista-input">
             <input type="text" id="baristaInput" placeholder="Спросите меня..." onkeydown="if(event.key==='Enter') sendBaristaMessage()">
@@ -765,8 +746,6 @@
     let gpsLocked = false;
     let ymapsReady = false;
     let giftCheckInterval = null;
-    let searchPlacemarks = [];
-    let locationRequested = false;
 
     // ================================================================
     // ===== DOM REFS =====
@@ -790,7 +769,7 @@
         grid.innerHTML = MENU_ITEMS.map(item => `
             <div class="menu-item">
                 ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
-                <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%232d2d44%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23f0f0f5%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
                 <div class="item-content">
                     <div class="item-name">${item.name}</div>
                     <div class="item-desc">${item.desc}</div>
@@ -824,7 +803,7 @@
         modal.id = 'qrModal';
         modal.innerHTML = `
             <div class="modal" style="max-width:300px;padding:16px;">
-                <h2 style="font-size:16px;color:#fff;margin-bottom:4px;">🎫 Ваш QR-код</h2>
+                <h2 style="font-size:16px;color:#1A1A2E;margin-bottom:4px;">🎫 Ваш QR-код</h2>
                 <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Покажите кассиру</p>
                 <div style="background:#fff;border-radius:8px;padding:12px;max-width:160px;margin:0 auto;">
                     ${qrHtml}
@@ -981,7 +960,6 @@
                     lng: position.coords.longitude
                 };
                 gpsLocked = true;
-                locationRequested = true;
                 showNotification('✅ Местоположение определено');
                 updateUserMarker(userLocation.lat, userLocation.lng);
                 updateDistance();
@@ -997,7 +975,6 @@
                 localStorage.setItem('userLat', userLocation.lat);
                 localStorage.setItem('userLng', userLocation.lng);
                 
-                // Тихое сообщение в чат (без координат)
                 const messages = document.getElementById('baristaMessages');
                 messages.innerHTML += `
                     <div class="msg barista">
@@ -1041,7 +1018,6 @@
                     lng: position.coords.longitude
                 };
                 gpsLocked = true;
-                locationRequested = true;
                 updateUserMarker(userLocation.lat, userLocation.lng);
                 updateDistance();
                 
@@ -1094,14 +1070,13 @@
                         iconCaptionMaxWidth: 150,
                         iconCaptionFontSize: 12,
                         iconCaptionFontWeight: 'bold',
-                        iconCaptionColor: '#FFFFFF',
-                        iconCaptionStrokeColor: 'rgba(0,0,0,0.8)',
+                        iconCaptionColor: '#1A1A2E',
+                        iconCaptionStrokeColor: 'rgba(255,255,255,0.8)',
                         iconCaptionStrokeWidth: 3
                     }
                 );
                 mapInstance.geoObjects.add(kioskPlacemark);
 
-                // Пытаемся восстановить координаты
                 const savedLat = localStorage.getItem('userLat');
                 const savedLng = localStorage.getItem('userLng');
                 if (savedLat && savedLng) {
@@ -1176,82 +1151,6 @@
     }
 
     // ================================================================
-    // ===== МАРКЕРЫ НА КАРТЕ =====
-    // ================================================================
-    function clearSearchMarkers() {
-        if (searchPlacemarks.length > 0) {
-            searchPlacemarks.forEach(m => {
-                try { mapInstance.geoObjects.remove(m); } catch(e) {}
-            });
-            searchPlacemarks = [];
-        }
-        $('clearMarkersBtn').style.display = 'none';
-        showNotification('🗑️ Маркеры удалены');
-    }
-
-    function showPlacesOnMap(places) {
-        if (!mapInstance || !mapReady) {
-            showNotification('⏳ Карта ещё не загружена');
-            return;
-        }
-        
-        clearSearchMarkers();
-        
-        if (!places || places.length === 0) {
-            showNotification('📍 Ничего не найдено поблизости');
-            return;
-        }
-        
-        const first = places[0];
-        mapInstance.setCenter([first.lat, first.lng], 16, { duration: 500 });
-        $('clearMarkersBtn').style.display = 'flex';
-        
-        places.forEach((place, index) => {
-            let color = 'islands#blueIcon';
-            let icon = '🏪';
-            const name = (place.name || '').toLowerCase();
-            
-            if (name.includes('аптек')) { color = 'islands#redIcon'; icon = '💊'; }
-            else if (name.includes('кафе') || name.includes('ресторан')) { color = 'islands#orangeIcon'; icon = '🍽️'; }
-            else if (name.includes('гостиниц') || name.includes('отель')) { color = 'islands#purpleIcon'; icon = '🏨'; }
-            else if (name.includes('парк')) { color = 'islands#greenIcon'; icon = '🌳'; }
-            else if (name.includes('пляж')) { color = 'islands#yellowIcon'; icon = '🏖️'; }
-            
-            const placemark = new ymaps.Placemark(
-                [place.lat, place.lng],
-                {
-                    balloonContent: `
-                        <div style="font-family: 'Inter', sans-serif; color: #1A1A2E;">
-                            <strong>${icon} ${place.name || 'Объект'}</strong><br>
-                            📍 ${place.address || 'Адрес не указан'}<br>
-                            📏 ${(place.distance * 1000).toFixed(0)} метров
-                        </div>
-                    `,
-                    iconCaption: `${icon} ${place.name || 'Объект'}`
-                },
-                {
-                    preset: color,
-                    iconCaptionMaxWidth: 150,
-                    iconCaptionFontSize: 11,
-                    iconCaptionFontWeight: 'bold',
-                    iconCaptionColor: '#FFFFFF',
-                    iconCaptionStrokeColor: 'rgba(0,0,0,0.8)',
-                    iconCaptionStrokeWidth: 3
-                }
-            );
-            
-            mapInstance.geoObjects.add(placemark);
-            searchPlacemarks.push(placemark);
-            
-            if (index === 0) {
-                setTimeout(() => placemark.balloon.open(), 500);
-            }
-        });
-        
-        showNotification(`📍 Найдено ${places.length} мест, показаны на карте!`);
-    }
-
-    // ================================================================
     // ===== УВЕДОМЛЕНИЯ =====
     // ================================================================
     function showNotification(msg) {
@@ -1312,18 +1211,26 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 ТВОЯ РОЛЬ:
 1. Ты работаешь в кафе, общаешься с гостями
 2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты умеешь находить ближайшие магазины, кафе, аптеки
-4. Ты дружелюбный и весёлый помощник
+3. Ты дружелюбный и весёлый помощник
+4. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
 5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
+6. Ты умеешь ШУТИТЬ и поднимать настроение
 
 ПРАВИЛА:
 - Отвечай ТОЛЬКО на русском
 - Будь коротким и полезным (2-4 предложения)
 - Используй эмодзи 🍓🍫😊🌊
-- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО
+- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
 - ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
+- ВСЕГДА желай хорошего отдыха, если прощаешься
+- ШУТИ, если чувствуешь настроение
 
-ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом!`;
+ПРИМЕРЫ ОТВЕТОВ:
+- "Как дела?" → "Отлично! Сегодня солнечно, море спокойное ☀️ А у вас как? Чем могу помочь?"
+- "Что посоветуешь из еды?" → "Однозначно Классику — это хит! 🍫 Или попробуйте клубнику в сливках 🤍"
+- "Расскажи шутку" → "Почему клубника не ходит в школу? Потому что её и так все любят! 🍓😂"
+
+ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
 
     let baristaHistory = [];
     let baristaWelcomeShown = false;
@@ -1376,62 +1283,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
     async function getBaristaResponse(userMessage) {
         try {
-            const searchKeywords = ['магазин', 'купить', 'вода', 'аптека', 'кафе', 'гостиница', 'отель', 'еда', 'ресторан', 'туалет', 'парк', 'пляж', 'где', 'найти', 'рядом', 'ближайш'];
-            const isSearching = searchKeywords.some(word => userMessage.toLowerCase().includes(word));
-            
-            if (isSearching) {
-                let lat = userLocation?.lat;
-                let lng = userLocation?.lng;
-                
-                if (!lat || !lng) {
-                    const savedLat = localStorage.getItem('userLat');
-                    const savedLng = localStorage.getItem('userLng');
-                    if (savedLat && savedLng) {
-                        lat = parseFloat(savedLat);
-                        lng = parseFloat(savedLng);
-                        userLocation = { lat, lng };
-                    }
-                }
-                
-                if (!lat || !lng) {
-                    return `
-                        📍 Чтобы я мог найти ближайшие места, мне нужно знать, где вы находитесь! 😊
-
-                        <button class="location-btn-in-chat" onclick="requestLocationOnClick()">
-                            <i class="fas fa-location-dot"></i> Нажмите "Где я?" на карте
-                        </button>
-
-                        Или просто нажмите на кнопку выше, и я определю ваше местоположение! 🍓
-                    `;
-                }
-                
-                try {
-                    const searchResponse = await fetch('/api/nearby-places', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            lat: lat,
-                            lng: lng,
-                            query: userMessage
-                        })
-                    });
-                    const searchData = await searchResponse.json();
-                    
-                    if (searchData.success && searchData.places && searchData.places.length > 0) {
-                        showPlacesOnMap(searchData.places);
-                        const place = searchData.places[0];
-                        const distance = (place.distance * 1000).toFixed(0);
-                        return `🔍 Нашёл! Ближайший ${place.name || 'объект'} — ${place.address || 'рядом'} (${distance} метров) 🏪
-
-📍 Я отметил его на карте маркером! Посмотрите на карту выше. 😊`;
-                    } else {
-                        return '🔍 К сожалению, ничего не найдено поблизости. Попробуйте уточнить запрос или поискать на карте вручную! 😊';
-                    }
-                } catch (e) {
-                    console.log('Поиск через API не удался, используем AI');
-                }
-            }
-            
             const response = await fetch('/api/barista', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1456,7 +1307,7 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
     function formatBaristaResponse(text) {
         text = text.replace(/(\d+)\s*₽/g, '<span class="price">$1 ₽</span>');
-        text = text.replace(/(скидка|бесплатн|подарок|акци|хит)/gi, match => 
+        text = text.replace(/(скидка|бесплатн|подарок|акци|хит|улыб|смех)/gi, match => 
             `<span class="highlight">${match}</span>`
         );
         text = text.replace(/\n/g, '<br>');
@@ -1478,9 +1329,8 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             messages.innerHTML += `
                 <div class="msg barista">
                     🍓 Привет! Я тут, чтобы помочь 😊<br>
-                    Можешь спросить меня о чём угодно — о погоде, магазинах, развлечениях...<br>
-                    Или просто поболтать! Я всегда рад компании 🤗<br><br>
-                    📍 Чтобы я мог найти для вас ближайшие места — нажмите кнопку <strong>"Где я?"</strong> на карте выше!
+                    Можешь спросить меня о чём угодно — о погоде, о еде, о жизни...<br>
+                    Или просто поболтать! Я всегда рад компании 🤗
                 </div>
             `;
             messages.scrollTop = messages.scrollHeight;
