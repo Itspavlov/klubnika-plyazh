@@ -6,8 +6,6 @@
     <title>🍓 Админ-панель</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Yandex Maps API -->
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
     <style>
         :root {
             --primary: #FF4757;
@@ -437,71 +435,45 @@
         .img-upload:hover { border-color: var(--primary); background: #FFF5F5; }
         .img-upload img { max-width: 100%; max-height: 150px; border-radius: var(--radius-md); margin-top: 8px; }
 
-        /* ===== TREASURE PANEL ===== */
-        .treasure-status-card {
-            background: #F8FAFC;
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 2px solid #E5E7EB;
-            transition: all 0.3s ease;
-        }
-        .treasure-status-card.active {
-            border-color: #22C55E;
-            background: #F0FDF4;
-        }
-        .treasure-status-card .status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .treasure-status-card .status-label {
-            font-weight: 700;
-            font-size: 16px;
-        }
-        .treasure-status-card .status-label.active {
-            color: #22C55E;
-        }
-        .treasure-status-card .status-label.inactive {
-            color: #EF4444;
-        }
-        .treasure-status-card .status-detail {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .treasure-status-card .status-detail strong {
-            color: var(--text-dark);
-        }
-        .treasure-map-container {
+        /* ===== QR CODE STYLES ===== */
+        .qr-reader-wrapper {
             width: 100%;
-            height: 400px;
+            max-width: 400px;
+            margin: 0 auto;
             border-radius: var(--radius-lg);
             overflow: hidden;
-            background: #F1F5F9;
-            border: 1px solid #E5E7EB;
+            background: #000;
             position: relative;
         }
-        .treasure-map-container #treasureMap {
+        .qr-reader-wrapper video {
             width: 100%;
-            height: 100%;
+            height: auto;
+            display: block;
         }
-        .treasure-map-container .map-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--text-muted);
-            font-size: 14px;
-            gap: 8px;
+        .qr-reader-wrapper .qr-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            border: 3px solid rgba(255,255,255,0.5);
+            border-radius: 12px;
+            pointer-events: none;
+            box-shadow: 0 0 0 4000px rgba(0,0,0,0.3);
         }
-        .treasure-map-container .map-placeholder i {
-            font-size: 48px;
-            color: var(--primary);
+        .qr-reader-wrapper .qr-overlay .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #4ADE80;
+            border-style: solid;
+            border-width: 0;
         }
+        .qr-reader-wrapper .qr-overlay .corner.tl { top: -2px; left: -2px; border-top-width: 4px; border-left-width: 4px; border-radius: 4px 0 0 0; }
+        .qr-reader-wrapper .qr-overlay .corner.tr { top: -2px; right: -2px; border-top-width: 4px; border-right-width: 4px; border-radius: 0 4px 0 0; }
+        .qr-reader-wrapper .qr-overlay .corner.bl { bottom: -2px; left: -2px; border-bottom-width: 4px; border-left-width: 4px; border-radius: 0 0 0 4px; }
+        .qr-reader-wrapper .qr-overlay .corner.br { bottom: -2px; right: -2px; border-bottom-width: 4px; border-right-width: 4px; border-radius: 0 0 4px 0; }
 
         /* ===== GIFTS ===== */
         .gift-card {
@@ -565,22 +537,53 @@
         }
         .gift-card .gift-qr-btn:active { transform: scale(0.9); }
 
-        /* ===== QR SCANNER ===== */
-        .qr-scanner-modal .modal {
-            max-width: 420px;
+        /* ===== CHIPS (TABS) ===== */
+        .chips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
         }
-        .qr-scanner-modal .qr-reader {
-            width: 100%;
-            height: 300px;
-            background: #000;
+        .chip-tab {
+            background: #F8FAFC;
+            border: 2px solid #F1F5F9;
             border-radius: var(--radius-lg);
-            overflow: hidden;
-            position: relative;
+            padding: 12px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        .qr-scanner-modal .qr-reader video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .chip-tab:active { transform: scale(0.97); }
+        .chip-tab.active {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+            box-shadow: 0 4px 12px rgba(45,138,78,0.3);
+        }
+        .chip-tab .chip-badge {
+            background: rgba(255,255,255,0.3);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 100px;
+        }
+        .chip-tab:not(.active) .chip-badge {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ===== QR SCANNER MODAL ===== */
+        .qr-scanner-modal .modal {
+            max-width: 480px;
         }
         .qr-scanner-modal .qr-result {
             margin-top: 12px;
@@ -610,19 +613,6 @@
             font-size: 18px;
             color: var(--primary);
         }
-        .qr-scanner-modal .qr-result .found-gift .gift-ip {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .qr-scanner-modal .qr-result .found-gift .gift-status {
-            font-weight: 600;
-        }
-        .qr-scanner-modal .qr-result .found-gift .gift-status.claimed {
-            color: #2E7D32;
-        }
-        .qr-scanner-modal .qr-result .found-gift .gift-status.pending {
-            color: #F59E0B;
-        }
         .qr-scanner-modal .qr-actions {
             display: flex;
             gap: 8px;
@@ -631,6 +621,30 @@
         .qr-scanner-modal .qr-actions .btn {
             flex: 1;
             justify-content: center;
+        }
+        .qr-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            background: #F8FAFC;
+            border-radius: var(--radius-sm);
+            margin-top: 8px;
+        }
+        .qr-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: blink 1.2s infinite;
+        }
+        .qr-status .dot.green { background: #22C55E; }
+        .qr-status .dot.red { background: #EF4444; animation: none; }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
         }
 
         /* ===== RESPONSIVE ===== */
@@ -641,13 +655,14 @@
             .menu-item { flex-direction: column; align-items: flex-start; }
             .menu-item .actions { align-self: flex-end; }
             .form-row { flex-direction: column; gap: 0; }
-            .treasure-map-container { height: 280px; }
             .map-modal-content .map-container { height: 280px; }
-            .qr-scanner-modal .qr-reader { height: 250px; }
+            .chips-grid { gap: 6px; }
+            .chip-tab { font-size: 11px; padding: 10px 8px; }
         }
         @media (max-width: 400px) {
             .tabs button { font-size: 9px; padding: 4px 2px; min-width: 40px; }
             .tabs button i { font-size: 10px; }
+            .chip-tab { font-size: 10px; padding: 8px 6px; }
         }
     </style>
 </head>
@@ -695,13 +710,12 @@
                 </div>
             </div>
 
-            <div class="tabs">
-                <button class="active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
-                <button data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
-                <button data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="tab-badge" id="chatsBadge">0</span></button>
-                <button data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
-                <button data-tab="gifts"><i class="fas fa-gift"></i> Подарки <span class="tab-badge" id="giftsBadge">0</span></button>
-                <button data-tab="treasure"><i class="fas fa-map-marked-alt"></i> Клад</button>
+            <div class="chips-grid">
+                <button class="chip-tab active" data-tab="orders"><i class="fas fa-list-alt"></i> Заказы</button>
+                <button class="chip-tab" data-tab="menu"><i class="fas fa-utensils"></i> Меню</button>
+                <button class="chip-tab" data-tab="chats"><i class="fas fa-comments"></i> Чаты <span class="chip-badge" id="chatsBadge">0</span></button>
+                <button class="chip-tab" data-tab="reviews"><i class="fas fa-star"></i> Отзывы</button>
+                <button class="chip-tab" data-tab="gifts"><i class="fas fa-gift"></i> Подарки <span class="chip-badge" id="giftsBadge">0</span></button>
             </div>
 
             <!-- ===== PANEL: ORDERS ===== -->
@@ -782,79 +796,6 @@
                 </div>
                 <div id="giftsList"><div class="empty-state"><i class="fas fa-gift"></i>Подарков пока нет</div></div>
             </div>
-
-            <!-- ===== PANEL: TREASURE (GPS КЛАД) ===== -->
-            <div class="panel" id="panel-treasure">
-                <div class="row-btns">
-                    <button class="btn btn-primary btn-sm" onclick="loadTreasureStatus()">
-                        <i class="fas fa-sync-alt"></i> Обновить статус
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="deactivateTreasure()">
-                        <i class="fas fa-stop"></i> Деактивировать
-                    </button>
-                </div>
-
-                <!-- Статус -->
-                <div class="treasure-status-card" id="treasureStatusCard">
-                    <div class="status-row">
-                        <span class="status-label inactive" id="treasureStatusLabel">🔴 Не активен</span>
-                        <span style="font-size:12px;color:var(--text-muted);" id="treasureTimeLabel">—</span>
-                    </div>
-                    <div class="status-detail">
-                        📍 <span id="treasureCoords">Координаты не заданы</span>
-                    </div>
-                    <div class="status-detail">
-                        👤 Победитель: <span id="treasureWinner">—</span>
-                    </div>
-                    <div class="status-detail">
-                        📍 В зоне: <span id="treasureUsersInZone">0</span> человек
-                    </div>
-                    <div class="status-detail" id="treasureWinnerTime" style="display:none;">
-                        🏆 Победа в: <span id="treasureWinnerTimeValue">—</span>
-                    </div>
-                </div>
-
-                <!-- Карта -->
-                <div style="background:#fff;border-radius:var(--radius-xl);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow);">
-                    <div class="treasure-map-container" id="treasureMapContainer">
-                        <div id="treasureMap"></div>
-                        <div class="map-placeholder" id="treasureMapPlaceholder">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <span>Карта загружается...</span>
-                            <span style="font-size:11px;color:#9CA3AF;">Кликните на карту, чтобы выбрать место для клада</span>
-                        </div>
-                    </div>
-                    <div class="map-actions" style="display:flex;gap:8px;padding:12px 16px;background:#F8FAFC;border-top:1px solid #F1F5F9;flex-wrap:wrap;">
-                        <button class="btn btn-success" id="activateTreasureBtn" onclick="activateTreasure()" disabled>
-                            <i class="fas fa-flag-checkered"></i> Активировать клад
-                        </button>
-                        <button class="btn btn-outline" onclick="clearTreasureMarker()">
-                            <i class="fas fa-eraser"></i> Очистить метку
-                        </button>
-                    </div>
-                    <div style="padding:8px 16px 12px;font-size:11px;color:var(--text-muted);text-align:center;">
-                        💡 Кликните на карту, чтобы выбрать место. Радиус зоны: <strong>15 метров</strong>
-                    </div>
-                </div>
-
-                <!-- История победителей -->
-                <div style="background:#fff;border-radius:var(--radius-xl);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                        <div style="font-weight:700;font-size:15px;color:var(--text-dark);">
-                            <i class="fas fa-trophy" style="color:#FFD700;"></i> История победителей
-                        </div>
-                        <button class="btn btn-danger btn-xs" onclick="clearTreasureWinners()">
-                            <i class="fas fa-trash"></i> Очистить
-                        </button>
-                    </div>
-                    <div id="treasureWinnersList">
-                        <div class="empty-state" style="padding:20px;">
-                            <i class="fas fa-trophy" style="font-size:32px;color:#FFD700;opacity:0.3;"></i>
-                            <span style="font-size:13px;">Победителей пока нет</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -865,11 +806,23 @@
             <div style="font-weight:700;font-size:18px;margin-bottom:12px;text-align:center;color:var(--text-dark);">
                 <i class="fas fa-qrcode" style="color:var(--primary);"></i> Сканируйте QR-код
             </div>
-            <div class="qr-reader" id="qrReader">
-                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;font-size:14px;flex-direction:column;gap:12px;">
-                    <i class="fas fa-camera" style="font-size:48px;opacity:0.5;"></i>
-                    <span>Наведите камеру на QR-код</span>
+            <div class="qr-reader-wrapper" id="qrReaderWrapper">
+                <div id="qrReader" style="position:relative;background:#000;min-height:300px;display:flex;align-items:center;justify-content:center;">
+                    <div style="color:#fff;text-align:center;padding:20px;">
+                        <i class="fas fa-camera" style="font-size:48px;display:block;margin-bottom:12px;opacity:0.5;"></i>
+                        <span>Загрузка камеры...</span>
+                    </div>
                 </div>
+                <div class="qr-overlay" id="qrOverlay" style="display:none;">
+                    <span class="corner tl"></span>
+                    <span class="corner tr"></span>
+                    <span class="corner bl"></span>
+                    <span class="corner br"></span>
+                </div>
+            </div>
+            <div class="qr-status" id="qrStatus">
+                <span class="dot green"></span>
+                <span>Камера активна, наведите на QR-код</span>
             </div>
             <div class="qr-result" id="qrResult">
                 <i class="fas fa-info-circle"></i> Ожидание сканирования...
@@ -986,14 +939,6 @@
         let html5QrCode = null;
         let isScannerRunning = false;
 
-        // ===== ПЕРЕМЕННЫЕ ДЛЯ КАРТЫ И КЛАДА =====
-        let treasureMap = null;
-        let treasurePlacemark = null;
-        let treasureCircle = null;
-        let treasureSelectedCoords = null;
-        let treasureStatusInterval = null;
-        let treasureActive = false;
-
         // ================================================================
         // ===== LOGIN =====
         // ================================================================
@@ -1063,12 +1008,12 @@
         }
 
         // ================================================================
-        // ===== TABS =====
+        // ===== TABS (CHIPS) =====
         // ================================================================
-        document.querySelectorAll('.tabs button').forEach(b => {
+        document.querySelectorAll('.chip-tab').forEach(b => {
             b.addEventListener('click', function() {
                 const tab = this.dataset.tab;
-                document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('.chip-tab').forEach(x => x.classList.remove('active'));
                 this.classList.add('active');
                 document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
                 document.getElementById('panel-' + tab).classList.add('active');
@@ -1077,11 +1022,6 @@
                 if (tab === 'chats') loadChats();
                 if (tab === 'reviews') loadReviews();
                 if (tab === 'gifts') loadGifts();
-                if (tab === 'treasure') {
-                    loadTreasureStatus();
-                    loadTreasureWinners();
-                    setTimeout(initTreasureMap, 500);
-                }
             });
         });
 
@@ -1572,6 +1512,10 @@
             result.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Запуск камеры...';
             document.getElementById('qrActions').style.display = 'none';
             scannedGiftId = null;
+            
+            // Показываем оверлей
+            document.getElementById('qrOverlay').style.display = 'block';
+            
             if (typeof Html5Qrcode === 'undefined') {
                 const script = document.createElement('script');
                 script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
@@ -1579,6 +1523,7 @@
                 script.onerror = function() {
                     result.className = 'qr-result error';
                     result.innerHTML = '❌ Не удалось загрузить библиотеку сканера';
+                    document.getElementById('qrStatus').innerHTML = '<span class="dot red"></span> Ошибка загрузки сканера';
                 };
                 document.head.appendChild(script);
             } else {
@@ -1590,15 +1535,27 @@
             if (html5QrCode) {
                 html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(() => {});
             }
+            
+            const readerElement = document.getElementById('qrReader');
             html5QrCode = new Html5Qrcode("qrReader");
-            const config = { fps: 15, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+            const config = { 
+                fps: 15, 
+                qrbox: { width: 250, height: 250 }, 
+                aspectRatio: 1.0 
+            };
+            
             const result = document.getElementById('qrResult');
             result.className = 'qr-result';
             result.innerHTML = '<i class="fas fa-camera"></i> Наведите камеру на QR-код';
+            document.getElementById('qrStatus').innerHTML = '<span class="dot green"></span> Камера активна, наведите на QR-код';
+            document.getElementById('qrOverlay').style.display = 'block';
+            
             html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError)
                 .catch(function(err) {
                     result.className = 'qr-result error';
                     result.innerHTML = '❌ Ошибка доступа к камере: ' + err;
+                    document.getElementById('qrStatus').innerHTML = '<span class="dot red"></span> Ошибка доступа к камере';
+                    document.getElementById('qrOverlay').style.display = 'none';
                 });
         }
 
@@ -1619,6 +1576,8 @@
             if (html5QrCode) {
                 html5QrCode.stop().then(() => { html5QrCode.clear(); }).catch(() => {});
             }
+            document.getElementById('qrOverlay').style.display = 'none';
+            document.getElementById('qrStatus').innerHTML = '<span class="dot green"></span> QR-код распознан!';
             fetchGiftInfo(giftId);
         }
 
@@ -1686,8 +1645,10 @@
             document.getElementById('qrScannerModal').classList.remove('open');
             document.body.style.overflow = '';
             document.getElementById('qrActions').style.display = 'none';
+            document.getElementById('qrOverlay').style.display = 'none';
             scannedGiftId = null;
             isScannerRunning = false;
+            document.getElementById('qrStatus').innerHTML = '<span class="dot green"></span> Камера остановлена';
         }
 
         document.getElementById('qrScannerModal').addEventListener('click', function(e) {
@@ -1796,320 +1757,6 @@
         });
 
         // ================================================================
-        // ===== TREASURE (GPS КЛАД) =====
-        // ================================================================
-
-        // Загрузка статуса клада
-        async function loadTreasureStatus() {
-            try {
-                const res = await fetch('/api/treasure/status');
-                const data = await res.json();
-
-                treasureActive = data.active;
-
-                const label = document.getElementById('treasureStatusLabel');
-                const card = document.getElementById('treasureStatusCard');
-                const coords = document.getElementById('treasureCoords');
-                const winner = document.getElementById('treasureWinner');
-                const users = document.getElementById('treasureUsersInZone');
-                const timeLabel = document.getElementById('treasureTimeLabel');
-                const winnerTime = document.getElementById('treasureWinnerTime');
-                const winnerTimeValue = document.getElementById('treasureWinnerTimeValue');
-                const activateBtn = document.getElementById('activateTreasureBtn');
-
-                if (data.active) {
-                    label.textContent = '🟢 АКТИВЕН!';
-                    label.className = 'status-label active';
-                    card.classList.add('active');
-                    coords.textContent = `${data.lat.toFixed(6)}, ${data.lng.toFixed(6)}`;
-                    winner.textContent = data.winnerName || '—';
-                    users.textContent = data.usersInZone?.length || 0;
-
-                    const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
-                    const mins = Math.floor(elapsed / 60);
-                    const secs = elapsed % 60;
-                    timeLabel.textContent = `⏱️ Активен ${mins}м ${secs}с`;
-
-                    if (data.winnerName) {
-                        winnerTime.style.display = 'block';
-                        winnerTimeValue.textContent = new Date().toLocaleTimeString();
-                    } else {
-                        winnerTime.style.display = 'none';
-                    }
-
-                    activateBtn.disabled = true;
-                    activateBtn.textContent = '🔴 Клад активен';
-                } else {
-                    label.textContent = '🔴 Не активен';
-                    label.className = 'status-label inactive';
-                    card.classList.remove('active');
-                    coords.textContent = 'Координаты не заданы';
-                    winner.textContent = '—';
-                    users.textContent = '0';
-                    timeLabel.textContent = '—';
-                    winnerTime.style.display = 'none';
-
-                    if (treasureSelectedCoords) {
-                        activateBtn.disabled = false;
-                        activateBtn.textContent = '✅ Активировать клад';
-                    } else {
-                        activateBtn.disabled = true;
-                        activateBtn.textContent = '📍 Выберите место на карте';
-                    }
-                }
-
-                // Обновляем маркер на карте
-                if (data.active && data.lat && data.lng) {
-                    updateTreasureMarker(data.lat, data.lng);
-                } else if (treasureSelectedCoords) {
-                    updateTreasureMarker(treasureSelectedCoords.lat, treasureSelectedCoords.lng);
-                }
-
-            } catch (e) {
-                console.error('Ошибка загрузки статуса клада:', e);
-                toast('❌ Ошибка загрузки статуса клада');
-            }
-        }
-
-        // Загрузка победителей
-        async function loadTreasureWinners() {
-            try {
-                const res = await fetch('/api/treasure/winners');
-                const data = await res.json();
-                const list = document.getElementById('treasureWinnersList');
-
-                if (!data.success || !data.winners || data.winners.length === 0) {
-                    list.innerHTML = `
-                        <div class="empty-state" style="padding:20px;">
-                            <i class="fas fa-trophy" style="font-size:32px;color:#FFD700;opacity:0.3;"></i>
-                            <span style="font-size:13px;">Победителей пока нет</span>
-                        </div>
-                    `;
-                    return;
-                }
-
-                list.innerHTML = data.winners.map(w => `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #F1F5F9;">
-                        <div>
-                            <span style="font-weight:600;">🏆 ${w.name || 'Клиент'}</span>
-                            <span style="font-size:11px;color:var(--text-muted);margin-left:8px;">${w.phone || ''}</span>
-                        </div>
-                        <div style="text-align:right;">
-                            <div style="font-size:12px;font-weight:600;color:#FFD700;">${w.prize || 'МЕГА-СТАКАН'}</div>
-                            <div style="font-size:10px;color:var(--text-muted);">${new Date(w.claimed_at).toLocaleString('ru-RU')}</div>
-                        </div>
-                    </div>
-                `).join('');
-
-            } catch (e) {
-                console.error('Ошибка загрузки победителей:', e);
-            }
-        }
-
-        // Инициализация карты
-        function initTreasureMap() {
-            if (typeof ymaps === 'undefined') {
-                setTimeout(initTreasureMap, 1000);
-                return;
-            }
-
-            const container = document.getElementById('treasureMap');
-            const placeholder = document.getElementById('treasureMapPlaceholder');
-
-            ymaps.ready(() => {
-                try {
-                    treasureMap = new ymaps.Map('treasureMap', {
-                        center: [MY_LOCATION.lat, MY_LOCATION.lng],
-                        zoom: 16,
-                        controls: ['zoomControl', 'typeSelector']
-                    });
-
-                    // Убираем placeholder
-                    if (placeholder) placeholder.style.display = 'none';
-
-                    // Клик по карте для выбора места
-                    treasureMap.events.add('click', (e) => {
-                        const coords = e.get('coords');
-                        treasureSelectedCoords = { lat: coords[0], lng: coords[1] };
-                        updateTreasureMarker(coords[0], coords[1]);
-                        document.getElementById('activateTreasureBtn').disabled = false;
-                        document.getElementById('activateTreasureBtn').textContent = '✅ Активировать клад';
-                        toast(`📍 Место выбрано: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`);
-                    });
-
-                    // Проверяем, есть ли активный клад
-                    loadTreasureStatus();
-
-                    // Автообновление статуса каждые 5 секунд
-                    if (treasureStatusInterval) clearInterval(treasureStatusInterval);
-                    treasureStatusInterval = setInterval(() => {
-                        loadTreasureStatus();
-                    }, 5000);
-
-                } catch (e) {
-                    console.error('Ошибка инициализации карты:', e);
-                    if (placeholder) {
-                        placeholder.innerHTML = `
-                            <i class="fas fa-exclamation-triangle" style="color:#F59E0B;"></i>
-                            <span>Ошибка загрузки карты</span>
-                            <span style="font-size:11px;color:#9CA3AF;">Проверьте ключ API Яндекс.Карт</span>
-                            <button class="btn btn-primary btn-sm" onclick="initTreasureMap()" style="margin-top:8px;">
-                                <i class="fas fa-sync-alt"></i> Повторить
-                            </button>
-                        `;
-                        placeholder.style.display = 'flex';
-                    }
-                }
-            });
-        }
-
-        // Обновление маркера на карте
-        function updateTreasureMarker(lat, lng) {
-            if (!treasureMap) return;
-
-            // Удаляем старые объекты
-            if (treasurePlacemark) {
-                treasureMap.geoObjects.remove(treasurePlacemark);
-                treasurePlacemark = null;
-            }
-            if (treasureCircle) {
-                treasureMap.geoObjects.remove(treasureCircle);
-                treasureCircle = null;
-            }
-
-            // Создаём маркер
-            treasurePlacemark = new ymaps.Placemark([lat, lng], {
-                balloonContent: '🎯 <strong>КЛАД</strong><br>Радиус 15 метров'
-            }, {
-                preset: 'islands#redStretchyIcon',
-                draggable: true
-            });
-
-            // Создаём круг зоны
-            treasureCircle = new ymaps.Circle(
-                [[lat, lng], 15],
-                {
-                    balloonContent: 'Зона поиска клада (15 метров)',
-                },
-                {
-                    fillColor: "rgba(255, 71, 87, 0.15)",
-                    strokeColor: "#FF4757",
-                    strokeWidth: 2,
-                    strokeOpacity: 0.8
-                }
-            );
-
-            treasureMap.geoObjects.add(treasurePlacemark);
-            treasureMap.geoObjects.add(treasureCircle);
-
-            // Центрируем карту на маркере
-            treasureMap.setCenter([lat, lng], 17);
-
-            // Обновляем координаты в статусе
-            document.getElementById('treasureCoords').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-        }
-
-        // Очистка маркера
-        function clearTreasureMarker() {
-            if (treasurePlacemark) {
-                treasureMap.geoObjects.remove(treasurePlacemark);
-                treasurePlacemark = null;
-            }
-            if (treasureCircle) {
-                treasureMap.geoObjects.remove(treasureCircle);
-                treasureCircle = null;
-            }
-            treasureSelectedCoords = null;
-            document.getElementById('activateTreasureBtn').disabled = true;
-            document.getElementById('activateTreasureBtn').textContent = '📍 Выберите место на карте';
-            document.getElementById('treasureCoords').textContent = 'Координаты не заданы';
-            toast('🗑️ Метка очищена');
-        }
-
-        // Активация клада
-        async function activateTreasure() {
-            if (!treasureSelectedCoords) {
-                toast('❌ Сначала выберите место на карте');
-                return;
-            }
-
-            const btn = document.getElementById('activateTreasureBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Активация...';
-
-            try {
-                const res = await fetch('/api/treasure/activate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        lat: treasureSelectedCoords.lat,
-                        lng: treasureSelectedCoords.lng,
-                        radius: 15
-                    })
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    toast('🎯 Клад активирован!');
-                    loadTreasureStatus();
-                } else {
-                    toast('❌ ' + (data.message || 'Ошибка активации'));
-                    btn.disabled = false;
-                    btn.innerHTML = '✅ Активировать клад';
-                }
-            } catch (e) {
-                toast('❌ Ошибка соединения');
-                btn.disabled = false;
-                btn.innerHTML = '✅ Активировать клад';
-            }
-        }
-
-        // Деактивация клада
-        async function deactivateTreasure() {
-            if (!confirm('Деактивировать текущий клад?')) return;
-
-            try {
-                const res = await fetch('/api/treasure/deactivate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    toast('⏹️ Клад деактивирован');
-                    loadTreasureStatus();
-                    loadTreasureWinners();
-                } else {
-                    toast('❌ ' + (data.message || 'Ошибка'));
-                }
-            } catch (e) {
-                toast('❌ Ошибка соединения');
-            }
-        }
-
-        // Очистка истории победителей
-        async function clearTreasureWinners() {
-            if (!confirm('🗑️ Удалить всю историю победителей?')) return;
-            if (!confirm('❗ ТОЧНО? Это действие НЕЛЬЗЯ ОТМЕНИТЬ!')) return;
-
-            try {
-                const res = await fetch('/api/treasure/winners', {
-                    method: 'DELETE'
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    toast('🗑️ История очищена');
-                    loadTreasureWinners();
-                } else {
-                    toast('❌ Ошибка');
-                }
-            } catch (e) {
-                toast('❌ Ошибка соединения');
-            }
-        }
-
-        // ================================================================
         // ===== IP =====
         // ================================================================
         async function loadAdminIp() {
@@ -2151,9 +1798,6 @@
                     }
                     if (document.getElementById('panel-chats').classList.contains('active')) loadChats();
                     if (document.getElementById('panel-gifts').classList.contains('active')) loadGifts();
-                    if (document.getElementById('panel-treasure').classList.contains('active')) {
-                        loadTreasureStatus();
-                    }
                 } catch (e) {}
             }, 10000);
         }
@@ -2167,15 +1811,9 @@
             lastCount = S.orders.length;
             startAutoRefresh();
 
-            // Инициализируем карту, если вкладка "Клад" активна
-            if (document.getElementById('panel-treasure').classList.contains('active')) {
-                setTimeout(initTreasureMap, 1000);
-            }
-
             console.log('🍓 Админка готова');
             console.log('📍 Нажмите на заказ с меткой "На карте" для просмотра местоположения');
             console.log('🎁 Вкладка "Подарки" — сканируйте QR-коды для выдачи подарков');
-            console.log('🎯 Вкладка "Клад" — управление GPS-охотой за сокровищами');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
