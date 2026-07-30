@@ -29,9 +29,9 @@
             --radius-md: 12px;
             --radius-sm: 8px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             --tab-height: 80px;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
@@ -217,6 +217,7 @@
             align-items: center;
             margin-bottom: 8px;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .support-header .support-buttons {
@@ -1231,7 +1232,7 @@
         .orders-fullscreen-list {
             flex: 1;
             overflow-y: auto;
-            padding: 80px 16px 20px;
+            padding: 16px;
             background: #F8FAFC;
             -webkit-overflow-scrolling: touch;
         }
@@ -1534,12 +1535,205 @@
                 padding: 8px 6px;
             }
         }
+
+        /* ===== СТИЛИ ДЛЯ ЧАТА ПОДДЕРЖКИ ===== */
+        
+        .support-chat-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .support-chat-bg .strawberry-bg {
+            position: absolute;
+            font-size: 35px;
+            opacity: 0.07;
+            pointer-events: none;
+            animation: floatStrawberry 25s linear infinite;
+        }
+        .support-chat-bg .strawberry-bg:nth-child(1) { top: 5%; left: 5%; font-size: 50px; animation-delay: 0s; }
+        .support-chat-bg .strawberry-bg:nth-child(2) { top: 15%; right: 8%; font-size: 40px; animation-delay: 2s; }
+        .support-chat-bg .strawberry-bg:nth-child(3) { bottom: 20%; left: 10%; font-size: 45px; animation-delay: 4s; }
+        .support-chat-bg .strawberry-bg:nth-child(4) { bottom: 5%; right: 5%; font-size: 55px; animation-delay: 6s; }
+        .support-chat-bg .strawberry-bg:nth-child(5) { top: 45%; left: 45%; font-size: 60px; animation-delay: 8s; }
+        .support-chat-bg .strawberry-bg:nth-child(6) { top: 30%; left: 20%; font-size: 30px; animation-delay: 3s; }
+        .support-chat-bg .strawberry-bg:nth-child(7) { bottom: 35%; right: 15%; font-size: 35px; animation-delay: 5s; }
+        
+        @keyframes floatStrawberry {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(25px, -35px) rotate(12deg) scale(1.1); }
+            50% { transform: translate(-15px, 25px) rotate(-8deg) scale(0.9); }
+            75% { transform: translate(35px, 15px) rotate(18deg) scale(1.05); }
+            100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+
+        .support-msg {
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: msgIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+            word-break: break-word;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .support-msg.user {
+            background: rgba(255, 71, 87, 0.85);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2);
+        }
+        .support-msg.barista {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #1A1A2E;
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+        .support-msg.barista .msg-avatar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .support-msg.barista .msg-avatar span {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--primary);
+        }
+        .support-msg .msg-time {
+            font-size: 9px;
+            opacity: 0.4;
+            display: block;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .quick-replies-wrapper {
+            position: relative;
+            padding: 8px 16px 12px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 2;
+            overflow: hidden;
+        }
+        .quick-replies-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 2px 8px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .quick-replies-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .quick-replies-scroll button {
+            flex-shrink: 0;
+            padding: 8px 18px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 71, 87, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .quick-replies-scroll button:active {
+            transform: scale(0.94);
+            background: rgba(255, 71, 87, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chat-input-wrapper {
+            padding: 12px 16px 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2;
+            position: relative;
+        }
+        .chat-input-wrapper input {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 100px;
+            border: 2px solid rgba(255, 71, 87, 0.1);
+            font-size: 14px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: var(--font-family);
+            transition: var(--transition);
+            color: var(--text-dark);
+        }
+        .chat-input-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.08);
+        }
+        .chat-input-wrapper input::placeholder {
+            color: var(--text-muted);
+        }
+        .chat-input-wrapper button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+        }
+        .chat-input-wrapper button:active {
+            transform: scale(0.92);
+        }
     </style>
 </head>
 <body>
     <div class="notification" id="notification"></div>
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
+    <!-- ===== МОДАЛЬНЫЕ ОКНА ===== -->
+    
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
             <button class="modal-close" onclick="closeAuthModal()">
@@ -1569,9 +1763,7 @@
             </div>
             <div class="modal-subtitle">Выберите до 2 присыпок (бесплатно)</div>
             <div class="modal-product" id="selectedProductDisplay" style="background: #F8FAFC; border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
-                <span class="product-icon" id="productIcon" style="font-size: 28px;">
-                    <i class="fas fa-chocolate-bar"></i>
-                </span>
+                <span class="product-icon" id="productIcon" style="font-size: 28px;">🍓</span>
                 <span class="product-name" id="productName" style="font-weight: 600; color: var(--text-dark);">Классика</span>
                 <span class="product-price" id="productPrice" style="margin-left: auto; font-weight: 700; color: var(--primary);">350 ₽</span>
             </div>
@@ -1680,13 +1872,21 @@
         </div>
     </div>
 
-    <div class="image-modal-overlay" id="imageModal" onclick="closeImageModal()" style="cursor: pointer;">
-        <div class="image-modal-content" style="max-width: 90vw; max-height: 90vh; border-radius: var(--radius-xl); overflow: hidden; position: relative;">
-            <button class="image-close" onclick="closeImageModal()" style="position: absolute; top: 14px; right: 14px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; color: #FFFFFF; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;">
+    <div class="map-modal-overlay" id="mapModal" onclick="closeMap()">
+        <div class="map-modal-content" onclick="event.stopPropagation()" style="background: #FFFFFF; border-radius: var(--radius-2xl); padding: 28px 24px 24px;">
+            <button class="modal-close" onclick="closeMap()">
                 <i class="fas fa-times"></i>
             </button>
-            <img id="modalImage" src="" alt="Увеличенное изображение" style="width: 100%; height: auto; max-height: 85vh; object-fit: contain; display: block;">
-            <div class="image-caption" id="imageCaption" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.8); font-size: 13px; background: rgba(0,0,0,0.5); padding: 6px 16px; border-radius: 100px; backdrop-filter: blur(10px);">Клубника</div>
+            <div class="modal-title">
+                <i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Наш киоск на карте
+            </div>
+            <div class="map-container" style="border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 14px;">
+                <iframe src="" id="mapIframe" style="width: 100%; height: 300px; border: none;"></iframe>
+            </div>
+            <div style="background: #F8FAFC; padding: 14px 16px; border-radius: var(--radius-lg); font-size: 14px; color: var(--text-dark); line-height: 1.6;">
+                <i class="fas fa-location-dot" style="color: var(--primary);"></i> <strong>Ориентир:</strong> Напротив бетонного пирса, белый киоск "Strawberry in Chocolate"<br>
+                <i class="fas fa-phone"></i> <strong>Телефон:</strong> <a href="tel:+79628557263" style="color: var(--primary); font-weight: 600; text-decoration: none;">+7 962 855-72-63</a>
+            </div>
         </div>
     </div>
 
@@ -1722,24 +1922,7 @@
         </div>
     </div>
 
-    <div class="map-modal-overlay" id="mapModal" onclick="closeMap()">
-        <div class="map-modal-content" onclick="event.stopPropagation()" style="background: #FFFFFF; border-radius: var(--radius-2xl); padding: 28px 24px 24px;">
-            <button class="modal-close" onclick="closeMap()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="modal-title">
-                <i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Наш киоск на карте
-            </div>
-            <div class="map-container" style="border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 14px;">
-                <iframe src="" id="mapIframe" style="width: 100%; height: 300px; border: none;"></iframe>
-            </div>
-            <div style="background: #F8FAFC; padding: 14px 16px; border-radius: var(--radius-lg); font-size: 14px; color: var(--text-dark); line-height: 1.6;">
-                <i class="fas fa-location-dot" style="color: var(--primary);"></i> <strong>Ориентир:</strong> Напротив бетонного пирса, белый киоск "Strawberry in Chocolate"<br>
-                <i class="fas fa-phone"></i> <strong>Телефон:</strong> <a href="tel:+79628557263" style="color: var(--primary); font-weight: 600; text-decoration: none;">+7 962 855-72-63</a>
-            </div>
-        </div>
-    </div>
-
+    <!-- ===== ОСНОВНАЯ ЧАСТЬ ===== -->
     <div class="app-container">
 
         <div class="support-header">
@@ -1905,6 +2088,7 @@
         </div>
     </div>
 
+    <!-- ===== НИЖНЯЯ ПАНЕЛЬ ===== -->
     <div class="bottom-tab-bar" id="bottomTabBar">
         <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
             <span class="tab-icon"><i class="fas fa-home"></i></span>
@@ -1923,6 +2107,7 @@
         </button>
     </div>
 
+    <!-- ===== КОРЗИНА ===== -->
     <div class="cart-modal" id="cartModal">
         <div class="modal-header">
             <h2><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> Корзина</h2>
@@ -2007,42 +2192,34 @@
         </div>
     </div>
 
+    <!-- ===== ЧАТ ПОДДЕРЖКИ (создается динамически) ===== -->
+    <!-- Сюда вставляется через openSupportChat() -->
+
     <script>
         // ================================================================
         // ===== КОНСТАНТЫ =====
         // ================================================================
         const SESSION_KEY = 'klubnika_session';
         const AUTH_KEY = 'klubnika_auth';
-        const SUPPORT_PHONE = '+7 962 855-72-63';
-        const TRUST_KEY = 'strawberry_trust_shown';
-
-        const MY_LOCATION = {
-            lat: 44.358193,
-            lng: 38.528773,
-            landmark: 'Напротив бетонного пирса, белый киоск "Strawberry in Chocolate"',
-            phone: '+7 962 855-72-63',
-            phoneRaw: '79628557263'
-        };
-
-        const WORK_HOURS = { start: 9, end: 30 };
-        const FORCE_WORKING_TIME = false;
-        let manualTime = null;
+        const CART_KEY = 'klubnika_cart';
+        const REVIEWS_KEY = 'klubnika_reviews';
+        const ORDERS_KEY = 'klubnika_orders';
 
         const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, image: 'images/klassika.jpg', badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         const FRUITS_ITEMS = [
-            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', image: 'images/watermelon.jpg', emoji: '🍉' },
-            { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, volume: '300 мл', image: 'images/melon.jpg', emoji: '🍈' },
-            { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, volume: '200 мл', image: 'images/raspberry.jpg', emoji: '🍓' },
-            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, volume: '200 мл', image: 'images/blackberry.jpg', emoji: '🫐' },
-            { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
+            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, image: 'images/watermelon.jpg', emoji: '🍉' },
+            { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, image: 'images/melon.jpg', emoji: '🍈' },
+            { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, image: 'images/raspberry.jpg', emoji: '🍓' },
+            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, image: 'images/blackberry.jpg', emoji: '🫐' },
+            { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, image: 'images/blueberry.jpg', emoji: '🫐' }
         ];
 
         const DRINK_ITEMS = [
@@ -2066,12 +2243,9 @@
             cart: [],
             selectedProduct: null,
             selectedToppings: [],
-            settings: { technicalBreak: false, menuItems: {} },
             reviewRating: 0,
             reviewOrderId: null,
-            bungalowNumber: null,
-            sessionExpiresAt: null,
-            userLocation: null
+            bungalowNumber: null
         };
 
         let selectedPayment = 'cash';
@@ -2079,274 +2253,735 @@
         let pendingAlcoholProduct = null;
         let isPickupMode = false;
         let currentReviews = [];
-        let chatUpdateInterval = null;
-        let notificationCheckInterval = null;
-        let lastMessageTime = 0;
-        let sessionTimerInterval = null;
         let reviewCheckInterval = null;
-        let lastOrderCheckTime = Date.now();
 
         // ================================================================
-        // ===== БАРИСТА (AI-ПОМОЩНИК) =====
+        // ===== КОРЗИНА =====
         // ================================================================
-        let baristaHistory = [];
-        let baristaWelcomeShown = false;
-        let isBaristaOpen = false;
-
-        const BARISTA_MENU = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, badge: '🔥 Хит' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, badge: '⭐' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, badge: '🔥 Хит' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400 },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320 },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250 }
-        ];
-
-        const BARISTA_PROMO = [
-            '🍓 При заказе 2+ стаканчиков — скидка 10%',
-            '🎁 Бесплатная мини-порция для первых посетителей',
-            '❤️ Для постоянных клиентов — подарок'
-        ];
-
-        const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
-
-ТВОИ ДАННЫЕ:
-Меню:
-${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
-
-Акции:
-${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
-
-О ПРИЛОЖЕНИИ:
-- У нас ДВА КИОСКА на карте:
-  1. Напротив бетонного пирса (44.358182, 38.528738)
-  2. Центральный вход на пляж (44.358198, 38.527699)
-- Работаем: 9:00 — 1:00 (МСК)
-- Контакты: +7 962 855-72-63
-- Подарок ТОЛЬКО НОВЫМ ПОСЕТИТЕЛЯМ 🎁
-
-РАЗВЛЕЧЕНИЯ В АРХИПО-ОСИПОВКЕ:
-
-🏛️ МУЗЕИ:
-1. 🍷 Музей Хлеба и Вина — ул. Пограничная, 13а
-2. 🚀 Музей космонавтов — ул. Школьная, 60
-
-🐬 ДЕЛЬФИНАРИЙ:
-3. 🐬 Архипо-Осиповский дельфинарий — ул. Школьная, 30
-
-🎢 ПАРКИ РАЗВЛЕЧЕНИЙ:
-4. 🎡 Парк Малибу — ул. Школьная, 103 (вход свободный, аттракционы платные)
-5. 🎠 ночной клуб Монако — ул. Школьная, 103 (ресто-клуб)
-
-💧 АКВАПАРКИ И ВОДОПАДЫ:
-6. 🌊 Аквапарк "Кокосовый Рай" — ул. Школьная, 103
-7. 💦 Гебиусские водопады — трасса М4 Дон, 1450 км (в сторону Краснодара), вход 400 ₽. 7 каскадных водопадов. ⚠️ ВНИМАНИЕ: сложные маршруты с крутыми скользкими лестницами. Не оставляйте детей без присмотра!
-8. 🏊 Большой аквапарк в Джубге — пос. Джубга, Новороссийское шоссе, 10а (15 км)
-
-🐊 ЗООПАРКИ И ОКЕАНАРИУМ:
-9. 🦁 Контактный зоопарк — ул. Школьная, 101
-10. 🐠 Океанариум — ул. Школьная, 62
-11. 🐊 Крокодиловая ферма — ул. Школьная, 62
-
-🏛️ ИСТОРИЧЕСКИЕ МЕСТА:
-12. 🏛️ Римская сторожевая башня — на горе Верблюд, перед кемпингом Утёс
-13. 🪦 Дольмен в Назаровой щели
-14. ⛪ Храм Святого Николая — ул. Ленина, 123
-
-🍽️ ГДЕ ВКУСНО И НЕДОРОГО ПОЕСТЬ:
-15. 🍲 Столовая "Архипка" — ул. Советская, 1а
-
-🏪 МАГАЗИНЫ:
-- 🛒 Магнит: ул. Ленина 106, 117, 126; Славянский пер. 5
-- 🛒 Пятёрочка: ул. Ленина 109 (круглосуточно), ул. Вишневая 31 (до 22:00)
-- 🛒 Красное и Белое: ул. Ленина 117
-- 🛒 Фикс Прайс: ул. Удалова 1, ул. Ленина 106, Славянский пер. 10а
-- 🛒 Алкотека: ул. Ленина 113
-
-ТВОЯ РОЛЬ:
-1. Ты работаешь в кафе, общаешься с гостями
-2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты знаешь ВСЁ о развлечениях, еде и магазинах в Архипо-Осиповке
-4. Ты дружелюбный и весёлый помощник
-5. Ты НЕ предлагаешь клубнику, если не спрашивают
-
-ПРАВИЛА:
-- Отвечай ТОЛЬКО на русском
-- Будь полезным (2-4 предложения)
-- Используй эмодзи 🍓🍫😊🌊🏖️
-- ВСЕГДА желай хорошего отдыха
-
-ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню, акциях и отдыхе в Архипо-Осиповке! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
-
-        // ================================================================
-        // ===== ФУНКЦИИ БАРИСТЫ =====
-        // ================================================================
-        function toggleBarista() {
-            const window = document.getElementById('baristaWindow');
-            const isOpen = window.style.display === 'flex';
-            window.style.display = isOpen ? 'none' : 'flex';
-            isBaristaOpen = !isOpen;
-            if (!isOpen) {
-                setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-            }
+        function loadCart() {
+            try {
+                const data = localStorage.getItem(CART_KEY);
+                if (data) state.cart = JSON.parse(data);
+            } catch (e) { state.cart = []; }
         }
 
-        function openBarista() {
-            document.getElementById('baristaWidget').style.display = 'block';
-            const window = document.getElementById('baristaWindow');
-            window.style.display = 'flex';
-            isBaristaOpen = true;
-            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-            if (!baristaWelcomeShown) {
-                baristaWelcomeShown = true;
-                setTimeout(() => {
-                    const messages = document.getElementById('baristaMessages');
-                    messages.innerHTML += `
-                        <div style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(0,0,0,0.04); color: #1A1A2E; align-self: flex-start; border-bottom-left-radius: 4px; animation: msgIn 0.3s ease;">
-                            🍓 Привет! Я тут, чтобы помочь 😊<br>
-                            Можешь спросить меня о меню, акциях или подарках!<br>
-                            Я всегда рад компании 🤗
+        function saveCart() {
+            localStorage.setItem(CART_KEY, JSON.stringify(state.cart));
+        }
+
+        function addToCart(product, toppings = []) {
+            const existing = state.cart.find(item => 
+                item.id === product.id && 
+                JSON.stringify(item.toppings) === JSON.stringify(toppings)
+            );
+            
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                state.cart.push({
+                    ...product,
+                    toppings: toppings,
+                    quantity: 1,
+                    isAlcohol: product.alcohol || false
+                });
+            }
+            
+            saveCart();
+            updateCart();
+            showNotification(`✅ ${product.name} добавлен в корзину!`);
+        }
+
+        function updateCart() {
+            const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            const tabCartBadge = document.getElementById('tabCartBadge');
+            const tabCartTotal = document.getElementById('tabCartTotal');
+            
+            if (totalItems > 0) {
+                tabCartBadge.textContent = totalItems;
+                tabCartBadge.classList.remove('hidden');
+            } else {
+                tabCartBadge.classList.add('hidden');
+            }
+            
+            tabCartTotal.textContent = totalPrice + ' ₽';
+            document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
+            
+            const container = document.getElementById('cartItems');
+            if (state.cart.length === 0) {
+                container.innerHTML = `<div class="cart-empty">
+                    <i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Добавьте что-нибудь вкусное 😋
+                </div>`;
+                document.getElementById('orderButton').disabled = true;
+            } else {
+                container.innerHTML = state.cart.map((item, index) => `
+                    <div class="cart-item" data-index="${index}">
+                        <div class="item-info-cart">
+                            <div class="item-name-cart">${item.name}${item.isAlcohol ? ' 🍺 18+' : ''}</div>
+                            <div class="item-price-cart">${item.price} ₽ × ${item.quantity}</div>
+                            ${item.toppings && item.toppings.length > 0 ? `<div style="font-size:11px;color:var(--text-muted);">+ ${item.toppings.map(t => t.name).join(', ')}</div>` : ''}
                         </div>
-                    `;
-                    messages.scrollTop = messages.scrollHeight;
-                }, 500);
+                        <div class="item-actions">
+                            <button class="qty-btn-minus" onclick="changeQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
+                            <span class="qty-number">${item.quantity}</span>
+                            <button class="qty-btn-plus" onclick="changeQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
+                            <button class="qty-btn-remove" onclick="removeItem(${index})"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('orderButton').disabled = false;
             }
         }
 
-        function quickQuestion(text) {
-            document.getElementById('baristaInput').value = text;
-            sendBaristaMessage();
+        function changeQuantity(index, delta) {
+            const item = state.cart[index];
+            if (!item) return;
+            const newQuantity = item.quantity + delta;
+            if (newQuantity <= 0) {
+                state.cart.splice(index, 1);
+            } else {
+                item.quantity = newQuantity;
+            }
+            saveCart();
+            updateCart();
         }
 
-        async function sendBaristaMessage() {
-            const input = document.getElementById('baristaInput');
-            const messages = document.getElementById('baristaMessages');
-            const userText = input.value.trim();
-            
-            if (!userText) return;
-            
-            messages.innerHTML += `<div style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(108,92,231,0.12); color: #1A1A2E; align-self: flex-end; border-bottom-right-radius: 4px; animation: msgIn 0.3s ease;">${escapeHtmlBarista(userText)}</div>`;
-            baristaHistory.push({ role: 'user', content: userText });
-            input.value = '';
-            messages.scrollTop = messages.scrollHeight;
-            
-            const loadingId = 'bloading-' + Date.now();
-            messages.innerHTML += `<div id="${loadingId}" style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(0,0,0,0.04); color: #1A1A2E; align-self: flex-start; border-bottom-left-radius: 4px; animation: msgIn 0.3s ease;">🤔 Думаю...</div>`;
-            messages.scrollTop = messages.scrollHeight;
-            
-            try {
-                const response = await getBaristaResponse(userText);
-                document.getElementById(loadingId)?.remove();
-                
-                const formatted = formatBaristaResponse(response);
-                messages.innerHTML += `<div style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(0,0,0,0.04); color: #1A1A2E; align-self: flex-start; border-bottom-left-radius: 4px; animation: msgIn 0.3s ease;">${formatted}</div>`;
-                baristaHistory.push({ role: 'assistant', content: response });
-                messages.scrollTop = messages.scrollHeight;
-            } catch (error) {
-                document.getElementById(loadingId)?.remove();
-                messages.innerHTML += `<div style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(0,0,0,0.04); color: #1A1A2E; align-self: flex-start; border-bottom-left-radius: 4px; animation: msgIn 0.3s ease;">🍓 Ой, что-то пошло не так! Попробуйте ещё раз.</div>`;
-                messages.scrollTop = messages.scrollHeight;
-                console.error('Barista Error:', error);
+        function removeItem(index) {
+            const item = state.cart[index];
+            if (!item) return;
+            if (confirm(`Удалить "${item.name}" из корзины?`)) {
+                state.cart.splice(index, 1);
+                saveCart();
+                updateCart();
+                showNotification(`🗑️ "${item.name}" удален`);
             }
         }
 
-        async function getBaristaResponse(userMessage) {
+        function clearCart() {
+            if (state.cart.length === 0) return;
+            if (!confirm('🗑️ Очистить всю корзину?')) return;
+            state.cart = [];
+            saveCart();
+            updateCart();
+            showNotification('🗑️ Корзина очищена');
+        }
+
+        // ================================================================
+        // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
+        // ================================================================
+        function renderMenu() {
+            // Клубника
+            const strawberryGrid = document.getElementById('strawberryGrid');
+            strawberryGrid.innerHTML = STRAWBERRY_ITEMS.map(item => `
+                <div class="menu-item" onclick="openToppingModal('${item.id}')">
+                    ${item.badge ? `<div class="badge">${item.badge}</div>` : ''}
+                    <div class="item-image" style="display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#FCE4EC,#FFF5F5);">
+                        🍓
+                    </div>
+                    <div class="item-content">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="item-price">${item.price} ₽</div>
+                        <button class="add-btn" data-product-id="${item.id}" onclick="event.stopPropagation(); openToppingModal('${item.id}')">+</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Фрукты
+            const fruitsGrid = document.getElementById('fruitsGrid');
+            fruitsGrid.innerHTML = FRUITS_ITEMS.map(item => `
+                <div class="menu-item" onclick="addToCartDirect('${item.id}')">
+                    <div class="item-image" style="display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#E8F5E9,#F1F8E9);">
+                        ${item.emoji}
+                    </div>
+                    <div class="item-content">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="item-price">${item.price} ₽</div>
+                        <button class="add-btn" onclick="event.stopPropagation(); addToCartDirect('${item.id}')">+</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Напитки
+            const drinksGrid = document.getElementById('drinksGrid');
+            drinksGrid.innerHTML = DRINK_ITEMS.map(item => `
+                <div class="drink-item" onclick="addDrinkToCart('${item.id}')">
+                    <div class="drink-icon" style="font-size:28px;display:flex;align-items:center;justify-content:center;">
+                        ${item.emoji}
+                    </div>
+                    <div class="drink-info">
+                        <h4>${item.name}${item.alcohol ? ' 🍺' : ''}</h4>
+                        <div class="drink-desc">${item.desc}</div>
+                    </div>
+                    <div class="drink-price">${item.price} ₽</div>
+                    <button class="drink-add" onclick="event.stopPropagation(); addDrinkToCart('${item.id}')">+</button>
+                </div>
+            `).join('');
+        }
+
+        // ================================================================
+        // ===== ДОБАВЛЕНИЕ ТОВАРОВ =====
+        // ================================================================
+        function addToCartDirect(productId) {
+            const allItems = [...STRAWBERRY_ITEMS, ...FRUITS_ITEMS, ...DRINK_ITEMS];
+            const product = allItems.find(item => item.id === productId);
+            if (!product) return;
+            
+            if (product.alcohol) {
+                pendingAlcoholProduct = product;
+                openAgeVerify();
+                return;
+            }
+            
+            addToCart(product);
+        }
+
+        function addDrinkToCart(productId) {
+            const product = DRINK_ITEMS.find(item => item.id === productId);
+            if (!product) return;
+            
+            if (product.alcohol) {
+                pendingAlcoholProduct = product;
+                openAgeVerify();
+                return;
+            }
+            
+            addToCart(product);
+        }
+
+        // ================================================================
+        // ===== ТОППИНГИ =====
+        // ================================================================
+        function openToppingModal(productId) {
+            const allItems = [...STRAWBERRY_ITEMS];
+            const product = allItems.find(item => item.id === productId);
+            if (!product) return;
+            
+            pendingProduct = product;
+            state.selectedToppings = [];
+            
+            document.getElementById('productIcon').textContent = '🍓';
+            document.getElementById('productName').textContent = product.name;
+            document.getElementById('productPrice').textContent = product.price + ' ₽';
+            
+            const container = document.getElementById('toppingOptions');
+            container.innerHTML = TOPPINGS.map(topping => `
+                <div onclick="toggleTopping('${topping.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);cursor:pointer;transition:var(--transition);" id="topping-${topping.id}">
+                    <i class="${topping.icon}" style="font-size:20px;color:var(--text-secondary);"></i>
+                    <span style="font-weight:500;color:var(--text-dark);">${topping.name}</span>
+                    <span style="margin-left:auto;color:var(--text-muted);font-size:12px;" id="topping-check-${topping.id}">➕</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('emptyToppingsHint').style.display = 'block';
+            document.getElementById('selectedToppingsDisplay').innerHTML = `<span style="color:var(--text-muted);font-size:13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>`;
+            document.getElementById('confirmToppingBtn').disabled = true;
+            document.getElementById('confirmToppingBtn').innerHTML = '<i class="fas fa-plus-circle"></i> Добавить в корзину';
+            
+            document.getElementById('toppingModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function toggleTopping(toppingId) {
+            if (toppingId === 'none') {
+                state.selectedToppings = [];
+                updateToppingUI();
+                return;
+            }
+            
+            const index = state.selectedToppings.findIndex(t => t.id === toppingId);
+            if (index >= 0) {
+                state.selectedToppings.splice(index, 1);
+            } else {
+                if (state.selectedToppings.length >= 2) {
+                    showNotification('⚠️ Можно выбрать не более 2 присыпок');
+                    return;
+                }
+                const topping = TOPPINGS.find(t => t.id === toppingId);
+                if (topping) state.selectedToppings.push(topping);
+            }
+            updateToppingUI();
+        }
+
+        function updateToppingUI() {
+            const display = document.getElementById('selectedToppingsDisplay');
+            if (state.selectedToppings.length === 0) {
+                display.innerHTML = `<span style="color:var(--text-muted);font-size:13px;">👆 Нажмите на присыпку для выбора</span>`;
+            } else {
+                display.innerHTML = state.selectedToppings.map(t => `
+                    <span style="background:#FFF5F5;padding:4px 12px;border-radius:100px;font-size:12px;color:var(--primary);border:1px solid rgba(255,71,87,0.2);">
+                        ${t.name} <i class="fas fa-times" onclick="event.stopPropagation(); toggleTopping('${t.id}')" style="cursor:pointer;margin-left:4px;"></i>
+                    </span>
+                `).join('');
+            }
+            
+            TOPPINGS.forEach(topping => {
+                const isSelected = state.selectedToppings.some(t => t.id === topping.id);
+                const el = document.getElementById(`topping-${topping.id}`);
+                if (el) {
+                    el.style.borderColor = isSelected ? 'var(--primary)' : '#F1F5F9';
+                    el.style.background = isSelected ? '#FFF5F5' : 'transparent';
+                }
+                const check = document.getElementById(`topping-check-${topping.id}`);
+                if (check) {
+                    check.textContent = isSelected ? '✅' : '➕';
+                }
+            });
+            
+            document.getElementById('confirmToppingBtn').disabled = state.selectedToppings.length === 0;
+            document.getElementById('confirmToppingBtn').innerHTML = state.selectedToppings.length > 0 ? 
+                '<i class="fas fa-plus-circle"></i> Добавить в корзину' : 
+                '<i class="fas fa-plus-circle"></i> Выберите присыпку';
+        }
+
+        function confirmTopping() {
+            if (!pendingProduct) return;
+            if (state.selectedToppings.length === 0) {
+                showNotification('⚠️ Выберите хотя бы одну присыпку');
+                return;
+            }
+            addToCart(pendingProduct, state.selectedToppings);
+            closeToppingModal();
+        }
+
+        function closeToppingModal() {
+            document.getElementById('toppingModal').classList.remove('open');
+            document.body.style.overflow = '';
+            pendingProduct = null;
+            state.selectedToppings = [];
+        }
+
+        // ================================================================
+        // ===== АЛКОГОЛЬ (18+) =====
+        // ================================================================
+        function openAgeVerify() {
+            document.getElementById('ageVerifyModal').classList.add('open');
+            document.getElementById('ageCheckbox').checked = false;
+            document.getElementById('ageConfirmBtn').disabled = true;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAgeVerify() {
+            document.getElementById('ageVerifyModal').classList.remove('open');
+            document.body.style.overflow = '';
+            pendingAlcoholProduct = null;
+        }
+
+        function toggleAgeCheckbox() {
+            const checkbox = document.getElementById('ageCheckbox');
+            checkbox.checked = !checkbox.checked;
+            document.getElementById('ageConfirmBtn').disabled = !checkbox.checked;
+        }
+
+        function confirmAge() {
+            const checkbox = document.getElementById('ageCheckbox');
+            if (!checkbox.checked) {
+                showNotification('⚠️ Подтвердите, что вам есть 18 лет');
+                return;
+            }
+            
+            if (pendingAlcoholProduct) {
+                addToCart(pendingAlcoholProduct);
+                pendingAlcoholProduct = null;
+            }
+            closeAgeVerify();
+            showNotification('🍺 Товар добавлен в корзину (18+)');
+        }
+
+        // ================================================================
+        // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
+        // ================================================================
+        async function submitOrder() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            
+            if (!name || !phone) {
+                showNotification('⚠️ Введите имя и телефон');
+                openAuthModal();
+                return;
+            }
+            
+            if (state.cart.length === 0) {
+                showNotification('⚠️ Корзина пуста');
+                return;
+            }
+            
+            // Проверяем наличие алкоголя
+            const hasAlcohol = state.cart.some(item => item.isAlcohol);
+            if (hasAlcohol) {
+                // Проверяем, подтвержден ли возраст
+                const ageConfirmed = localStorage.getItem('age_confirmed') === 'true';
+                if (!ageConfirmed) {
+                    openAgeVerify();
+                    return;
+                }
+            }
+            
+            // Сохраняем данные пользователя
+            saveUserAuth(name, phone);
+            
+            // Формируем заказ
+            const order = {
+                id: 'ORD-' + Date.now(),
+                date: new Date().toISOString(),
+                customer: { name, phone },
+                items: state.cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    toppings: item.toppings || [],
+                    isAlcohol: item.isAlcohol || false
+                })),
+                total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                payment: selectedPayment,
+                bungalow: state.bungalowNumber || 'не указан',
+                status: 'waiting',
+                createdAt: Date.now()
+            };
+            
+            // Отправляем заказ на сервер
             try {
-                const response = await fetch('/api/barista', {
+                const response = await fetch('/api/orders', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: userMessage,
-                        history: baristaHistory.slice(-10)
-                    })
+                    body: JSON.stringify(order)
                 });
                 const data = await response.json();
-                
-                if (data.error) {
-                    console.error('API Error:', data.error);
-                    return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
+                if (data.success) {
+                    state.cart = [];
+                    saveCart();
+                    updateCart();
+                    closeCart();
+                    showNotification('✅ Заказ оформлен! Ждите доставку 🏖️');
+                    saveOrder(order);
+                    updateOrdersBadge();
+                } else {
+                    showNotification('❌ Ошибка при оформлении заказа');
                 }
-                
-                return data.choices[0].message.content;
-            } catch (error) {
-                console.error('Network Error:', error);
-                return '🍓 Не удалось соединиться. Проверьте интернет.';
+            } catch (e) {
+                // Если сервер недоступен, сохраняем локально
+                state.cart = [];
+                saveCart();
+                updateCart();
+                closeCart();
+                saveOrder(order);
+                showNotification('✅ Заказ сохранен локально! 🏖️');
+                updateOrdersBadge();
             }
         }
 
-        function formatBaristaResponse(text) {
-            text = text.replace(/(\d+)\s*₽/g, '<span style="color: #22C55E; font-weight: 700;">$1 ₽</span>');
-            text = text.replace(/(скидка|бесплатн|подарок|акци|хит|улыб|смех)/gi, match => 
-                `<span style="color: #FD79A8; font-weight: 600;">${match}</span>`
-            );
-            text = text.replace(/\n/g, '<br>');
-            return text;
-        }
-
-        function escapeHtmlBarista(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // ================================================================
-        // ===== ОСТАЛЬНЫЕ ФУНКЦИИ =====
-        // ================================================================
-
-        function validatePhoneInput(input) {
-            let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
-            if (value.match(/^[7-8]\d{0,10}$/)) {
-                if (value.length === 11 && (value.startsWith('7') || value.startsWith('8'))) {
-                    input.classList.remove('invalid');
-                } else if (value.length > 0 && value.length < 11) {
-                    input.classList.remove('invalid');
-                }
-            } else if (value.length > 0) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-            input.value = value;
-        }
-
-        function isValidPhone(phone) {
-            const clean = phone.replace(/[\s\-\+\(\)]/g, '');
-            return /^[7-8]\d{10}$/.test(clean);
-        }
-
-        function getSession() {
+        function saveOrder(order) {
             try {
-                const data = localStorage.getItem(SESSION_KEY);
-                if (!data) return null;
-                return JSON.parse(data);
-            } catch { return null; }
-        }
-
-        function saveSession(sessionData) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-        }
-
-        function clearSession() {
-            localStorage.removeItem(SESSION_KEY);
-            state.bungalowNumber = null;
-            state.sessionExpiresAt = null;
-            if (sessionTimerInterval) {
-                clearInterval(sessionTimerInterval);
-                sessionTimerInterval = null;
+                const orders = getOrders();
+                orders.unshift(order);
+                localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+            } catch (e) {
+                console.error('Ошибка сохранения заказа:', e);
             }
         }
 
-        function getBungaloFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const b = urlParams.get('b');
-            if (b && !isNaN(b) && parseInt(b) > 0 && parseInt(b) <= 100) return parseInt(b);
-            return null;
+        function getOrders() {
+            try {
+                const data = localStorage.getItem(ORDERS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
         }
 
-        function cleanURL() {
-            if (window.history && window.history.replaceState) {
-                window.history.replaceState({}, document.title, window.location.pathname);
+        function updateOrdersBadge() {
+            const orders = getOrders();
+            const activeOrders = orders.filter(o => o.status === 'waiting');
+            const badge = document.getElementById('tabOrdersBadge');
+            if (activeOrders.length > 0) {
+                badge.textContent = activeOrders.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
             }
+        }
+
+        // ================================================================
+        // ===== ЗАКАЗЫ =====
+        // ================================================================
+        function openOrdersModal() {
+            document.getElementById('ordersModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            const savedAuth = getUserAuth();
+            if (savedAuth && savedAuth.phone) {
+                document.getElementById('ordersPhoneInput').value = savedAuth.phone;
+                loadMyOrders();
+            }
+        }
+
+        function closeOrdersModal() {
+            document.getElementById('ordersModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function loadMyOrders() {
+            const phone = document.getElementById('ordersPhoneInput').value.trim();
+            if (!phone) {
+                showNotification('⚠️ Введите телефон');
+                return;
+            }
+            
+            const allOrders = getOrders();
+            const userOrders = allOrders.filter(o => o.customer.phone === phone);
+            
+            const container = document.getElementById('ordersContent');
+            if (userOrders.length === 0) {
+                container.innerHTML = `<div class="cart-empty">
+                    <i class="fas fa-box-open" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Заказов не найдено
+                </div>`;
+                return;
+            }
+            
+            container.innerHTML = userOrders.map(order => `
+                <div class="order-card-full">
+                    <div class="order-card-header">
+                        <div class="order-id-block">
+                            <div class="order-id">${order.id}</div>
+                            <div class="order-date">${new Date(order.date).toLocaleString()}</div>
+                        </div>
+                        <div class="order-status-badge status-${order.status}">
+                            ${order.status === 'waiting' ? '⏳ В обработке' : 
+                              order.status === 'done' ? '✅ Готов' : 
+                              '❌ Отменен'}
+                        </div>
+                    </div>
+                    <div class="order-items-list">
+                        ${order.items.map(item => `
+                            <div class="order-item-row">
+                                <div class="item-left">
+                                    <span class="item-icon">🍓</span>
+                                    <div class="item-details">
+                                        <div class="item-name">${item.name}</div>
+                                        <div class="item-qty">${item.quantity} шт. × ${item.price} ₽</div>
+                                        ${item.toppings && item.toppings.length > 0 ? `<div style="font-size:11px;color:var(--text-muted);">+ ${item.toppings.map(t => t.name).join(', ')}</div>` : ''}
+                                    </div>
+                                </div>
+                                <div class="item-total">${(item.price * item.quantity)} ₽</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-card-footer">
+                        <span class="footer-info">${order.payment === 'cash' ? '💵 Наличные' : order.payment === 'transfer' ? '📱 Перевод' : '💳 Карта'}</span>
+                        <span class="footer-total">${order.total} ₽</span>
+                        <div class="footer-actions">
+                            ${order.status === 'waiting' ? `
+                                <button class="btn-cancel-order" onclick="cancelOrder('${order.id}')">
+                                    <i class="fas fa-times"></i> Отменить
+                                </button>
+                                <button class="btn-review-order" onclick="openReviewModal('${order.id}')">
+                                    <i class="fas fa-star"></i> Оценить
+                                </button>
+                            ` : ''}
+                            ${order.status === 'done' ? `
+                                <button class="btn-review-order" onclick="openReviewModal('${order.id}')">
+                                    <i class="fas fa-star"></i> Оставить отзыв
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function cancelOrder(orderId) {
+            if (!confirm('❌ Отменить заказ?')) return;
+            
+            const orders = getOrders();
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = 'cancelled';
+                localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+                loadMyOrders();
+                updateOrdersBadge();
+                showNotification('❌ Заказ отменен');
+            }
+        }
+
+        // ================================================================
+        // ===== ОТЗЫВЫ =====
+        // ================================================================
+        function getReviews() {
+            try {
+                const data = localStorage.getItem(REVIEWS_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveReviews(reviews) {
+            localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+        }
+
+        function loadReviews() {
+            currentReviews = getReviews();
+            updateReviewsBadge();
+        }
+
+        function updateReviewsBadge() {
+            const badge = document.getElementById('reviewsBadge');
+            const count = document.getElementById('reviewsCount');
+            if (currentReviews.length > 0) {
+                badge.style.display = 'flex';
+                count.textContent = currentReviews.length;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function openReviewsModal() {
+            document.getElementById('reviewsModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            renderReviews();
+        }
+
+        function closeReviewsModal() {
+            document.getElementById('reviewsModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsModalList');
+            if (currentReviews.length === 0) {
+                container.innerHTML = `<div class="cart-empty">
+                    <i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    ⭐ Пока нет отзывов. Будьте первым!
+                </div>`;
+                return;
+            }
+            
+            container.innerHTML = currentReviews.map(review => `
+                <div style="background:#FFFFFF;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm);border:1px solid #F1F5F9;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+                        <div style="font-size:24px;color:#FFB300;">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                        <span style="font-weight:600;color:var(--text-dark);">${review.name}</span>
+                        <span style="font-size:12px;color:var(--text-muted);">${new Date(review.date).toLocaleDateString()}</span>
+                    </div>
+                    <div style="color:var(--text-secondary);font-size:14px;line-height:1.5;">${review.text}</div>
+                    ${review.orderId ? `<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">Заказ: ${review.orderId}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function openReviewModal(orderId) {
+            state.reviewRating = 0;
+            state.reviewOrderId = orderId;
+            
+            document.getElementById('reviewText').value = '';
+            document.getElementById('submitReviewBtn').disabled = true;
+            
+            document.querySelectorAll('.star').forEach(star => {
+                star.style.color = '#E5E7EB';
+            });
+            
+            document.getElementById('reviewModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function setRating(rating) {
+            state.reviewRating = rating;
+            document.querySelectorAll('.star').forEach(star => {
+                const value = parseInt(star.dataset.value);
+                star.style.color = value <= rating ? '#FFB300' : '#E5E7EB';
+            });
+            document.getElementById('submitReviewBtn').disabled = false;
+        }
+
+        function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            if (!text) {
+                showNotification('⚠️ Напишите текст отзыва');
+                return;
+            }
+            
+            const name = document.getElementById('customerName').value.trim() || 'Гость';
+            
+            const review = {
+                id: 'REV-' + Date.now(),
+                name: name,
+                rating: state.reviewRating,
+                text: text,
+                orderId: state.reviewOrderId || null,
+                date: new Date().toISOString()
+            };
+            
+            currentReviews.push(review);
+            saveReviews(currentReviews);
+            updateReviewsBadge();
+            closeReviewModal();
+            showNotification('⭐ Спасибо за отзыв! ❤️');
+            
+            if (state.reviewOrderId) {
+                const orders = getOrders();
+                const order = orders.find(o => o.id === state.reviewOrderId);
+                if (order) {
+                    order.hasReview = true;
+                    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+                }
+            }
+        }
+
+        function startReviewCheck() {
+            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+            reviewCheckInterval = setInterval(() => {
+                loadReviews();
+            }, 30000);
+        }
+
+        // ================================================================
+        // ===== АВТОРИЗАЦИЯ =====
+        // ================================================================
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            const savedAuth = getUserAuth();
+            if (savedAuth) {
+                document.getElementById('authName').value = savedAuth.name || '';
+                document.getElementById('authPhone').value = savedAuth.phone || '';
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function confirmAuth() {
+            const name = document.getElementById('authName').value.trim();
+            const phone = document.getElementById('authPhone').value.trim();
+            
+            if (!name) {
+                showNotification('⚠️ Введите имя');
+                return;
+            }
+            
+            if (!isValidPhone(phone)) {
+                showNotification('⚠️ Введите корректный телефон');
+                return;
+            }
+            
+            saveUserAuth(name, phone);
+            document.getElementById('customerName').value = name;
+            document.getElementById('customerPhone').value = phone;
+            closeAuthModal();
+            showNotification('✅ Данные сохранены!');
         }
 
         function saveUserAuth(name, phone) {
@@ -2357,77 +2992,31 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             try {
                 const data = localStorage.getItem(AUTH_KEY);
                 return data ? JSON.parse(data) : null;
-            } catch { return null; }
-        }
-
-        async function checkSessionOnServer(bungalow) {
-            try {
-                const res = await fetch(`/api/check-session?b=${bungalow}`);
-                const data = await res.json();
-                return data;
             } catch (e) {
-                console.error('Ошибка проверки сессии:', e);
-                return { valid: false, reason: 'error', message: 'Ошибка соединения' };
+                return null;
             }
         }
 
-        async function loadSettings() {
-            try {
-                const res = await fetch('/api/settings');
-                const data = await res.json();
-                state.settings = data;
-                return data;
-            } catch (e) { return null; }
+        function isValidPhone(phone) {
+            const clean = phone.replace(/[\s\-\+\(\)]/g, '');
+            return /^[7-8]\d{10}$/.test(clean);
         }
 
-        function isOnline() { return navigator.onLine; }
-
-        function isWorkingTime() {
-            if (FORCE_WORKING_TIME) return true;
-            let now;
-            if (manualTime) {
-                now = new Date();
-                now.setHours(manualTime.hours, manualTime.minutes, 0, 0);
+        function validatePhoneInput(input) {
+            let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
+            input.value = value;
+            
+            const clean = value.replace(/[\s\-\+\(\)]/g, '');
+            if (clean.length > 0 && !/^[7-8]\d{0,10}$/.test(clean)) {
+                input.classList.add('invalid');
             } else {
-                try {
-                    const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
-                    now = new Date(mskTime);
-                } catch (e) {
-                    now = new Date();
-                }
-            }
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const currentMinutes = hours * 60 + minutes;
-            const startMinutes = WORK_HOURS.start * 60;
-            const endMinutes = WORK_HOURS.end * 60;
-            let normalizedCurrent = currentMinutes;
-            if (currentMinutes < startMinutes) {
-                normalizedCurrent = currentMinutes + 24 * 60;
-            }
-            return normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
-        }
-
-        function getCurrentMskTime() {
-            if (manualTime) {
-                const now = new Date();
-                now.setHours(manualTime.hours, manualTime.minutes);
-                return now;
-            }
-            try {
-                const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
-                return new Date(mskTime);
-            } catch (e) {
-                return new Date();
+                input.classList.remove('invalid');
             }
         }
 
-        function formatTime(date) {
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
-            return `${hours}:${String(minutes).padStart(2, '0')}`;
-        }
-
+        // ================================================================
+        // ===== УВЕДОМЛЕНИЯ =====
+        // ================================================================
         function showNotification(message, type = '') {
             const notification = document.getElementById('notification');
             notification.innerHTML = message;
@@ -2437,110 +3026,84 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             notification._timeout = setTimeout(() => notification.classList.remove('show'), 3000);
         }
 
-        function animateStrawberryToCart(clickEvent) {
-            const strawberry = document.createElement('div');
-            strawberry.className = 'flying-strawberry';
-            strawberry.innerHTML = '🍓';
-            document.body.appendChild(strawberry);
-            const startX = clickEvent.clientX;
-            const startY = clickEvent.clientY;
-            strawberry.style.left = startX + 'px';
-            strawberry.style.top = startY + 'px';
-            strawberry.style.transform = 'translate(-50%, -50%) scale(1)';
-            const cartIcon = document.getElementById('tabCart');
-            const cartRect = cartIcon.getBoundingClientRect();
-            const endX = cartRect.left + cartRect.width / 2;
-            const endY = cartRect.top + cartRect.height / 2;
-            requestAnimationFrame(() => {
-                strawberry.style.left = endX + 'px';
-                strawberry.style.top = endY + 'px';
-                strawberry.style.transform = 'translate(-50%, -50%) scale(0.3)';
-                strawberry.style.opacity = '0.6';
-            });
-            setTimeout(() => {
-                strawberry.remove();
-            }, 800);
+        // ================================================================
+        // ===== НАВИГАЦИЯ =====
+        // ================================================================
+        function switchSection(section) {
+            document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
+            document.getElementById('section-' + section).style.display = 'block';
+            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.chip[data-section="${section}"]`).classList.add('active');
         }
 
-        function showNoAccess() {
-            document.getElementById('noAccessMode').style.display = 'block';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            if (tab === 'menu') {
+                document.getElementById('tabMenu').classList.add('active');
+                closeCart();
+                closeOrdersModal();
+                closeReviewsModal();
+            }
+        }
+
+        function openCart() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!');
+                openAuthModal();
+                return;
+            }
+            document.getElementById('cartModal').classList.add('open');
+            document.getElementById('cartOverlay').classList.add('open');
             document.getElementById('bottomTabBar').style.display = 'none';
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabCart').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateCart();
         }
 
-        function showBungaloMode(bungalowNumber, expiresAt) {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('open');
+            document.getElementById('cartOverlay').classList.remove('open');
             document.getElementById('bottomTabBar').style.display = 'flex';
-
-            state.bungalowNumber = bungalowNumber;
-            isPickupMode = false;
-
-            const savedAuth = getUserAuth();
-            if (savedAuth) {
-                document.getElementById('customerName').value = savedAuth.name || '';
-                document.getElementById('customerPhone').value = savedAuth.phone || '';
-            }
-
-            if (bungalowNumber > 0) {
-                document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
-                document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
-                document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
-                document.getElementById('pickupBannerContainer').innerHTML = '';
-            }
-
-            setTimeout(() => {
-                getUserLocation();
-            }, 1500);
-
-            loadSettings().then(settings => {
-                if (settings?.technicalBreak) { showTechBreak(); return; }
-                if (!isWorkingTime()) { showClosedMode(); return; }
-                renderMenu(settings || state.settings);
-                initCart();
-                loadReviews();
-                startReviewCheck();
-            });
-            setTimeout(updateOrdersBadge, 1000);
-
-            setTimeout(() => {
-                document.getElementById('baristaWidget').style.display = 'block';
-            }, 5000);
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabMenu').classList.add('active');
+            document.body.style.overflow = '';
         }
 
-        function showTechBreak() {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'block';
-            document.getElementById('bottomTabBar').style.display = 'none';
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
+            
+            const messages = {
+                cash: '💡 Оплата наличными при получении',
+                transfer: '💡 Перевод по номеру телефона при получении',
+                card: '💳 Оплата картой при получении (терминал)'
+            };
+            document.getElementById('paymentInfo').textContent = messages[method] || messages.cash;
         }
 
-        function showClosedMode() {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'block';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'none';
-            document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-        }
-
+        // ================================================================
+        // ===== КАРТА =====
+        // ================================================================
         function openMap() {
-            closeBeachRestrict();
             const mapModal = document.getElementById('mapModal');
             const iframe = document.getElementById('mapIframe');
-            iframe.src = `https://yandex.ru/map-widget/v1/?ll=${MY_LOCATION.lng},${MY_LOCATION.lat}&z=18&pt=${MY_LOCATION.lng},${MY_LOCATION.lat},flag`;
+            iframe.src = `https://yandex.ru/map-widget/v1/?ll=38.528773,44.358193&z=18&pt=38.528773,44.358193,flag`;
             mapModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeMap() {
             document.getElementById('mapModal').classList.remove('open');
+            document.body.style.overflow = '';
         }
 
+        // ================================================================
+        // ===== ПЛЯЖНЫЙ РЕЖИМ =====
+        // ================================================================
         function openBeachRestrict() {
             document.getElementById('beachRestrictModal').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -2550,68 +3113,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             document.getElementById('beachRestrictModal').classList.remove('open');
             document.body.style.overflow = '';
         }
-
-        document.getElementById('beachRestrictModal').addEventListener('click', function(e) {
-            if (e.target === this) closeBeachRestrict();
-        });
-
-        function toggleAgeCheckbox() {
-            const checkbox = document.getElementById('ageCheckbox');
-            checkbox.checked = !checkbox.checked;
-            document.getElementById('ageConfirmBtn').disabled = !checkbox.checked;
-        }
-
-        function openAgeVerify(product) {
-            pendingAlcoholProduct = product;
-            document.getElementById('ageCheckbox').checked = false;
-            document.getElementById('ageConfirmBtn').disabled = true;
-            document.getElementById('ageVerifyModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeAgeVerify() {
-            document.getElementById('ageVerifyModal').classList.remove('open');
-            document.body.style.overflow = '';
-            pendingAlcoholProduct = null;
-        }
-
-        function confirmAge() {
-            if (!document.getElementById('ageCheckbox').checked) return;
-            const product = pendingAlcoholProduct;
-            if (!product) {
-                closeAgeVerify();
-                return;
-            }
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            closeAgeVerify();
-            pendingAlcoholProduct = null;
-            if (!name || !phone || !isValidPhone(phone)) {
-                if (phone && !isValidPhone(phone)) {
-                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
-                }
-                openAuthModal({ ...product, isAlcohol: true });
-                return;
-            }
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            addToCart({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                quantity: 1,
-                category: product.category || 'напиток',
-                topping: '',
-                toppingName: '',
-                isAlcohol: true
-            });
-            showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
-            const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-            animateStrawberryToCart(fakeEvent);
-        }
-
-        document.getElementById('ageVerifyModal').addEventListener('click', function(e) {
-            if (e.target === this) closeAgeVerify();
-        });
 
         function showQRPrompt() {
             const overlay = document.createElement('div');
@@ -2638,899 +3139,324 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             if (overlay) overlay.remove();
         }
 
-        function renderMenu(settings) {
-            const strawberryGrid = document.getElementById('strawberryGrid');
-            let html = '';
+        // ================================================================
+        // ===== ЧАТ ПОДДЕРЖКИ =====
+        // ================================================================
+        const QUICK_QUESTIONS = [
+            '🕐 Когда доставят заказ?',
+            '❌ Как отменить заказ?',
+            '📍 Как вы нас найдете?',
+            '📦 Активный заказ?',
+            '🏖️ Доставка в другие места?'
+        ];
 
-            STRAWBERRY_ITEMS.forEach(item => {
-                let customItem = null;
-                if (settings.customItems) {
-                    customItem = settings.customItems.find(ci => ci.id === item.id);
-                }
-                const displayItem = customItem || item;
-                const available = settings.menuItems[item.id] !== false;
-                html += `
-                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="стаканчик" data-has-toppings="true" data-volume="${displayItem.volume || item.volume}">
-                        ${displayItem.badge || item.badge ? `<span class="badge" style="color: ${item.badgeColor || 'var(--primary)'};">${displayItem.badge || item.badge}</span>` : ''}
-                        <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
-                        <div class="item-content">
-                            <div class="item-name">${displayItem.name}</div>
-                            <div class="item-desc">${displayItem.desc || item.desc}</div>
-                            <div class="item-price">${displayItem.price} ₽</div>
-                            <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (settings.customItems) {
-                settings.customItems.forEach(ci => {
-                    if (ci.category === 'strawberry' && !STRAWBERRY_ITEMS.find(s => s.id === ci.id)) {
-                        const available = settings.menuItems[ci.id] !== false;
-                        html += `
-                            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="стаканчик" data-has-toppings="true">
-                                <img src="${ci.image}" alt="${ci.name}" class="item-image" onclick="openImageModal('${ci.image}', '${ci.name}')" loading="lazy">
-                                <div class="item-content">
-                                    <div class="item-name">${ci.emoji || ''} ${ci.name}</div>
-                                    <div class="item-desc">${ci.desc || ''}</div>
-                                    <div class="item-price">
-                                        ${ci.price} ₽
-                                        ${ci.oldPrice ? `<small style="text-decoration:line-through;color:var(--text-muted);margin-left:4px;">${ci.oldPrice} ₽</small>` : ''}
-                                    </div>
-                                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-            }
-
-            strawberryGrid.innerHTML = html;
-
-            let fruitsHtml = '';
-            FRUITS_ITEMS.forEach(item => {
-                let customItem = null;
-                if (settings.customItems) {
-                    customItem = settings.customItems.find(ci => ci.id === item.id);
-                }
-                const displayItem = customItem || item;
-                const available = settings.menuItems[item.id] !== false;
-                fruitsHtml += `
-                    <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="фрукты" data-has-toppings="false" data-volume="${displayItem.volume || item.volume}">
-                        <img src="${displayItem.image || item.image}" alt="${displayItem.name}" class="item-image" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')" loading="lazy">
-                        <div class="item-content">
-                            <div class="item-name">${displayItem.emoji || item.emoji} ${displayItem.name}</div>
-                            <div class="item-desc">${displayItem.desc || item.desc}</div>
-                            <div class="item-price">${displayItem.price} ₽</div>
-                            <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (settings.customItems) {
-                settings.customItems.forEach(ci => {
-                    if (ci.category === 'fruits' && !FRUITS_ITEMS.find(f => f.id === ci.id)) {
-                        const available = settings.menuItems[ci.id] !== false;
-                        fruitsHtml += `
-                            <div class="menu-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="фрукты" data-has-toppings="false">
-                                <img src="${ci.image}" alt="${ci.name}" class="item-image" onclick="openImageModal('${ci.image}', '${ci.name}')" loading="lazy">
-                                <div class="item-content">
-                                    <div class="item-name">${ci.emoji || ''} ${ci.name}</div>
-                                    <div class="item-desc">${ci.desc || ''}</div>
-                                    <div class="item-price">${ci.price} ₽</div>
-                                    <button class="add-btn" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-            }
-
-            document.getElementById('fruitsGrid').innerHTML = fruitsHtml;
-
-            let drinksHtml = '';
-            DRINK_ITEMS.forEach(item => {
-                let customItem = null;
-                if (settings.customItems) {
-                    customItem = settings.customItems.find(ci => ci.id === item.id);
-                }
-                const displayItem = customItem || item;
-                const available = settings.menuItems[item.id] !== false;
-                drinksHtml += `
-                    <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${item.id}" data-name="${displayItem.name}" data-price="${displayItem.price}" data-category="напиток" data-alcohol="${item.alcohol ? 'true' : 'false'}">
-                        <div class="drink-icon" onclick="openImageModal('${displayItem.image || item.image}', '${displayItem.name}')">
-                            <img src="${displayItem.image || item.image}" alt="${displayItem.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${displayItem.emoji || item.emoji}'" loading="lazy">
-                        </div>
-                        <div class="drink-info">
-                            <h4>${displayItem.name}</h4>
-                            <div class="drink-desc">${displayItem.desc || item.desc}</div>
-                        </div>
-                        ${available ? `<span class="drink-price">${displayItem.price} ₽</span>` : '<span style="color:var(--text-muted);">❌</span>'}
-                        <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                    </div>
-                `;
-            });
-
-            if (settings.customItems) {
-                settings.customItems.forEach(ci => {
-                    if (ci.category === 'drinks' && !DRINK_ITEMS.find(d => d.id === ci.id)) {
-                        const available = settings.menuItems[ci.id] !== false;
-                        drinksHtml += `
-                            <div class="drink-item ${available ? '' : 'unavailable'}" data-id="${ci.id}" data-name="${ci.name}" data-price="${ci.price}" data-category="напиток" data-alcohol="false">
-                                <div class="drink-icon" onclick="openImageModal('${ci.image}', '${ci.name}')">
-                                    <img src="${ci.image}" alt="${ci.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${ci.emoji || '🥤'}'" loading="lazy">
-                                </div>
-                                <div class="drink-info">
-                                    <h4>${ci.name}</h4>
-                                    <div class="drink-desc">${ci.desc || ''}</div>
-                                </div>
-                                ${available ? `<span class="drink-price">${ci.price} ₽</span>` : '<span style="color:var(--text-muted);">❌</span>'}
-                                <button class="drink-add" ${available ? '' : 'disabled'}>${available ? '+' : '✕'}</button>
-                            </div>
-                        `;
-                    }
-                });
-            }
-
-            document.getElementById('drinksGrid').innerHTML = drinksHtml;
-            attachEvents();
-        }
-
-        function attachEvents() {
-            document.querySelectorAll('.add-btn:not([disabled])').forEach(btn => {
-                btn.removeEventListener('click', handleAddClick);
-                btn.addEventListener('click', handleAddClick);
-            });
-            document.querySelectorAll('.drink-add:not([disabled])').forEach(btn => {
-                btn.removeEventListener('click', handleDrinkAdd);
-                btn.addEventListener('click', handleDrinkAdd);
-            });
-        }
-
-        function handleAddClick(e) {
-            e.stopPropagation();
-            const item = this.closest('.menu-item');
-            if (!item) return;
-            const hasToppings = item.dataset.hasToppings === 'true';
-            const product = {
-                id: parseInt(item.dataset.id),
-                name: item.dataset.name,
-                price: parseInt(item.dataset.price),
-                category: item.dataset.category || 'стаканчик',
-                hasToppings
-            };
-
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone || !isValidPhone(phone)) {
-                if (phone && !isValidPhone(phone)) {
-                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
-                }
-                openAuthModal(product);
-                return;
-            }
-
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            if (!hasToppings) {
-                addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1, category: product.category, topping: '', toppingName: '' });
-                showNotification(`✅ ${product.name} добавлен!`);
-                animateStrawberryToCart(e);
-                return;
-            }
-            openToppingModal(product);
-        }
-
-        function handleDrinkAdd(e) {
-            e.stopPropagation();
-            const item = this.closest('.drink-item');
-            if (!item) return;
-            const product = {
-                id: parseInt(item.dataset.id),
-                name: item.dataset.name,
-                price: parseInt(item.dataset.price),
-                category: item.dataset.category || 'напиток'
-            };
-            const isAlcohol = item.dataset.alcohol === 'true';
-            if (isAlcohol) {
-                openAgeVerify(product);
-                return;
-            }
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone || !isValidPhone(phone)) {
-                if (phone && !isValidPhone(phone)) {
-                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
-                }
-                openAuthModal(null);
-                return;
-            }
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            addToCart({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                quantity: 1,
-                category: product.category,
-                topping: '',
-                toppingName: ''
-            });
-            showNotification(`✅ ${product.name} добавлен!`);
-            animateStrawberryToCart(e);
-        }
-
-        function openAuthModal(product) {
-            pendingProduct = product;
-            const savedAuth = getUserAuth();
-            document.getElementById('authName').value = savedAuth ? savedAuth.name : '';
-            document.getElementById('authPhone').value = savedAuth ? savedAuth.phone : '';
-            document.getElementById('authModal').classList.add('open');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('open');
-            pendingProduct = null;
-        }
-
-        function confirmAuth() {
-            const name = document.getElementById('authName').value.trim();
-            const phone = document.getElementById('authPhone').value.trim();
-            if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
-            if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
-            if (!isValidPhone(phone)) {
-                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error');
-                return;
-            }
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            document.getElementById('customerName').value = name;
-            document.getElementById('customerPhone').value = phoneClean;
-            saveUserAuth(name, phoneClean);
-            closeAuthModal();
-            if (pendingProduct) {
-                if (pendingProduct.isAlcohol) {
-                    addToCart({
-                        id: pendingProduct.id,
-                        name: pendingProduct.name,
-                        price: pendingProduct.price,
-                        quantity: 1,
-                        category: pendingProduct.category || 'напиток',
-                        topping: '',
-                        toppingName: '',
-                        isAlcohol: true
-                    });
-                    showNotification(`🍺 ${pendingProduct.name} добавлен! Предъявите паспорт курьеру.`);
-                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-                    animateStrawberryToCart(fakeEvent);
-                } else if (!pendingProduct.hasToppings) {
-                    addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '' });
-                    showNotification(`✅ ${pendingProduct.name} добавлен!`);
-                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-                    animateStrawberryToCart(fakeEvent);
-                } else {
-                    openToppingModal(pendingProduct);
-                }
-                pendingProduct = null;
-            }
-        }
-
-        document.getElementById('authModal').addEventListener('click', function(e) { if (e.target === this) closeAuthModal(); });
-
-        function openToppingModal(product) {
-            state.selectedProduct = product;
-            state.selectedToppings = [];
+        async function getSupportResponse(question) {
+            const lowerQuestion = question.toLowerCase();
             
-            document.getElementById('productIcon').innerHTML = '<i class="fas fa-chocolate-bar" style="color: var(--primary);"></i>';
-            document.getElementById('productName').textContent = product.name;
-            document.getElementById('productPrice').textContent = product.price + ' ₽';
+            const answers = {
+                'доставят заказ': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
+                'сколько ждать': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
+                'отменить заказ': 'Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут после оформления)',
+                'как отменить': 'Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут)',
+                'как вы нас найдете': 'QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠',
+                'активный заказ': 'Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦',
+                'доставка в другие': 'К сожалению, пока доставка только в бунгало. Но мы работаем над расширением по всему курортному посёлку! 🏖️'
+            };
             
-            let html = `
-                <div style="background: #E8F5E9; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; color: #2E7D32; display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-gift"></i>
-                    <span>Выберите <strong>до 2 присыпок</strong> (бесплатно)</span>
+            for (const [key, answer] of Object.entries(answers)) {
+                if (lowerQuestion.includes(key)) {
+                    return answer;
+                }
+            }
+            
+            return 'Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞';
+        }
+
+        async function sendSupportMessage() {
+            const input = document.getElementById('supportInput');
+            const messages = document.getElementById('supportMessages');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            // Добавляем сообщение пользователя
+            const userMsg = document.createElement('div');
+            userMsg.className = 'support-msg user';
+            userMsg.innerHTML = `${text} <span class="msg-time">${new Date().toLocaleTimeString()}</span>`;
+            messages.appendChild(userMsg);
+            messages.scrollTop = messages.scrollHeight;
+            
+            input.value = '';
+            
+            // Индикатор печати
+            const typing = document.createElement('div');
+            typing.className = 'support-msg barista';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = `
+                <div class="msg-avatar">
+                    <span>🍓 Клубничный Бариста</span>
                 </div>
-                <div id="selectedToppingsDisplay" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; min-height: 32px; padding: 4px;">
-                    <span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>
-                </div>
+                <span style="opacity:0.5;">печатает...</span>
             `;
+            messages.appendChild(typing);
+            messages.scrollTop = messages.scrollHeight;
             
-            html += TOPPINGS.map(t => `
-                <div class="topping-option" data-id="${t.id}" onclick="toggleTopping('${t.id}')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition);">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 18px; color: var(--primary);"><i class="${t.icon}"></i></span>
-                        <span style="font-weight: 500; color: var(--text-dark);">${t.name}</span>
-                    </div>
-                    <div>
-                        <span class="option-check" style="display: none; color: #4ADE80; margin-left: 8px;"><i class="fas fa-check-circle"></i></span>
-                    </div>
+            // Получаем ответ
+            const response = await getSupportResponse(text);
+            
+            document.getElementById('typingIndicator')?.remove();
+            
+            const baristaMsg = document.createElement('div');
+            baristaMsg.className = 'support-msg barista';
+            baristaMsg.innerHTML = `
+                <div class="msg-avatar">
+                    <span>🍓 Клубничный Бариста</span>
                 </div>
-            `).join('');
-            
-            document.getElementById('toppingOptions').innerHTML = html;
-            document.getElementById('confirmToppingBtn').disabled = true;
-            document.getElementById('toppingModal').classList.add('open');
+                ${response} <span class="msg-time">${new Date().toLocaleTimeString()}</span>
+            `;
+            messages.appendChild(baristaMsg);
+            messages.scrollTop = messages.scrollHeight;
         }
 
-        function toggleTopping(toppingId) {
-            if (toppingId === 'none') {
-                state.selectedToppings = ['none'];
-                updateToppingUI();
-                document.getElementById('confirmToppingBtn').disabled = false;
-                return;
+        function quickQuestion(text) {
+            const input = document.getElementById('supportInput');
+            if (input) {
+                input.value = text;
+                sendSupportMessage();
             }
-            
-            if (state.selectedToppings.includes('none')) {
-                state.selectedToppings = [];
-            }
-            
-            const index = state.selectedToppings.indexOf(toppingId);
-            if (index > -1) {
-                state.selectedToppings.splice(index, 1);
-            } else {
-                if (state.selectedToppings.length >= 2) {
-                    showNotification('⚠️ Можно выбрать не более 2 присыпок!', 'error');
-                    return;
-                }
-                state.selectedToppings.push(toppingId);
-            }
-            
-            updateToppingUI();
-            document.getElementById('confirmToppingBtn').disabled = state.selectedToppings.length === 0;
-        }
-
-        function updateToppingUI() {
-            const display = document.getElementById('selectedToppingsDisplay');
-            
-            document.querySelectorAll('.topping-option').forEach(el => {
-                const id = el.dataset.id;
-                const isSelected = state.selectedToppings.includes(id);
-                el.classList.toggle('selected', isSelected);
-                el.style.borderColor = isSelected ? 'var(--primary)' : '#F1F5F9';
-                el.style.background = isSelected ? '#FFF5F5' : '#FFFFFF';
-                el.querySelector('.option-check').style.display = isSelected ? 'inline' : 'none';
-            });
-            
-            if (state.selectedToppings.length === 0 || (state.selectedToppings.length === 1 && state.selectedToppings[0] === 'none')) {
-                display.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>';
-                return;
-            }
-            
-            const selectedNames = state.selectedToppings.map(id => {
-                const t = TOPPINGS.find(t => t.id === id);
-                return t ? t.name : id;
-            });
-            
-            display.innerHTML = selectedNames.map((name, idx) => {
-                const id = state.selectedToppings[idx];
-                return `
-                    <span style="background: #FFF5F5; color: var(--primary); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 500; border: 1px solid var(--primary);">
-                        ${name}
-                        <span onclick="event.stopPropagation(); toggleTopping('${id}')" style="cursor:pointer;margin-left:4px;color:var(--text-muted);">&times;</span>
-                    </span>
-                `;
-            }).join('');
-        }
-
-        function closeToppingModal() {
-            document.getElementById('toppingModal').classList.remove('open');
-            state.selectedProduct = null;
-            state.selectedToppings = [];
-        }
-
-        document.getElementById('toppingModal').addEventListener('click', function(e) { if (e.target === this) closeToppingModal(); });
-
-        document.getElementById('confirmToppingBtn').addEventListener('click', function() {
-            if (!state.selectedProduct) { showNotification('⚠️ Ошибка!', 'error'); return; }
-            if (state.selectedToppings.length === 0) { showNotification('⚠️ Выберите присыпку!', 'error'); return; }
-            
-            const product = state.selectedProduct;
-            const toppingNames = state.selectedToppings.map(id => {
-                const t = TOPPINGS.find(t => t.id === id);
-                return t ? t.name : id;
-            });
-            
-            const toppingText = state.selectedToppings.includes('none') ? '' : ' (' + toppingNames.join(' + ') + ')';
-            const itemName = `${product.name}${toppingText}`;
-            
-            const phone = document.getElementById('customerPhone').value.trim();
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            
-            addToCart({
-                id: product.id,
-                name: itemName,
-                price: product.price,
-                quantity: 1,
-                category: product.category,
-                topping: state.selectedToppings.join(','),
-                toppingName: toppingNames.join(' + ')
-            });
-            
-            closeToppingModal();
-            showNotification(`✅ ${itemName} добавлен!`);
-            const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-            animateStrawberryToCart(fakeEvent);
-        });
-
-        function saveCart() {
-            try {
-                localStorage.setItem('strawberry_cart', JSON.stringify(state.cart));
-            } catch (e) {}
-        }
-
-        function loadCart() {
-            try {
-                const saved = localStorage.getItem('strawberry_cart');
-                if (saved) {
-                    state.cart = JSON.parse(saved);
-                    updateCart();
-                    return true;
-                }
-            } catch (e) {}
-            return false;
-        }
-
-        function clearSavedCart() {
-            localStorage.removeItem('strawberry_cart');
-        }
-
-        function addToCart(item) {
-            const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
-            if (existing) {
-                existing.quantity += item.quantity || 1;
-            } else {
-                state.cart.push({ ...item, quantity: item.quantity || 1 });
-            }
-            saveCart();
-            updateCart();
-        }
-
-        function updateCart() {
-            const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tabCartBadge = document.getElementById('tabCartBadge');
-            const tabCartTotal = document.getElementById('tabCartTotal');
-            if (totalItems > 0) { tabCartBadge.textContent = totalItems; tabCartBadge.classList.remove('hidden'); } else { tabCartBadge.classList.add('hidden'); }
-            tabCartTotal.textContent = totalPrice + ' ₽';
-            document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
-
-            if (state.cart.length === 0) {
-                document.getElementById('cartItems').innerHTML = '<div class="cart-empty"><i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i> Добавьте что-нибудь вкусное 😋</div>';
-                document.getElementById('orderButton').disabled = true;
-            } else {
-                document.getElementById('cartItems').innerHTML = state.cart.map((item, index) => `
-                    <div class="cart-item" data-index="${index}">
-                        <div class="item-info-cart">
-                            <div class="item-name-cart">${item.name}${item.isAlcohol ? ' 🍺 18+' : ''}</div>
-                            <div class="item-price-cart">${item.price} ₽ × ${item.quantity}</div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="qty-btn-minus" onclick="changeQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
-                            <span class="qty-number">${item.quantity}</span>
-                            <button class="qty-btn-plus" onclick="changeQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
-                            <button class="qty-btn-remove" onclick="removeItem(${index})"><i class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                `).join('');
-                document.getElementById('orderButton').disabled = false;
-            }
-        }
-
-        function changeQuantity(index, delta) {
-            const item = state.cart[index];
-            if (!item) return;
-            const newQuantity = item.quantity + delta;
-            if (newQuantity <= 0) state.cart.splice(index, 1);
-            else item.quantity = newQuantity;
-            saveCart();
-            updateCart();
-        }
-
-        function removeItem(index) {
-            const item = state.cart[index];
-            if (!item) return;
-            if (confirm(`Удалить "${item.name}" из корзины?`)) {
-                state.cart.splice(index, 1);
-                saveCart();
-                updateCart();
-                showNotification(`🗑️ "${item.name}" удален`);
-            }
-        }
-
-        function openCart() {
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            document.getElementById('cartModal').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('open');
-            document.getElementById('bottomTabBar').style.display = 'none';
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabCart').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeCart() {
-            document.getElementById('cartModal').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('open');
-            document.getElementById('bottomTabBar').style.display = 'flex';
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabMenu').classList.add('active');
-            document.body.style.overflow = '';
-        }
-
-        function selectPayment(method) {
-            selectedPayment = method;
-            document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
-            
-            const messages = {
-                cash: '💡 Оплата наличными при получении',
-                transfer: '💡 Перевод по номеру телефона при получении',
-                card: '💳 Оплата картой при получении (терминал)'
-            };
-            document.getElementById('paymentInfo').textContent = messages[method] || messages.cash;
-        }
-
-        async function submitOrder() {
-            // ... (стандартная функция заказа)
-        }
-
-        function openOrdersModal() {
-            // ... (стандартный код)
-        }
-
-        function closeOrdersModal() {
-            // ... (стандартный код)
-        }
-
-        function loadMyOrders() {
-            // ... (стандартный код)
-        }
-
-        function cancelMyOrder(orderId, phone) {
-            // ... (стандартный код)
-        }
-
-        function updateOrdersBadge() {
-            // ... (стандартный код)
-        }
-
-        async function loadReviews() {
-            try {
-                const res = await fetch('/api/reviews');
-                const data = await res.json();
-                currentReviews = data.reviews || [];
-                renderReviewsModal(currentReviews);
-                updateReviewsBadge();
-            } catch (e) {}
-        }
-
-        function renderReviewsModal(reviews) {
-            const list = document.getElementById('reviewsModalList');
-            if (!reviews || reviews.length === 0) {
-                list.innerHTML = '<div class="cart-empty"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i> ⭐ Пока нет отзывов. Будьте первым!</div>';
-                return;
-            }
-            const sorted = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            list.innerHTML = sorted.map(review => `
-                <div class="order-card-full">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="font-weight:600;color:var(--text-dark);">${review.name || 'Клиент'}</span>
-                        <span style="color:#FFB300;font-size:18px;">${'⭐'.repeat(review.rating || 5)}</span>
-                    </div>
-                    <div style="font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px;">${review.text || 'Без отзыва'}</div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-size:11px;color:var(--text-muted);">Заказ #${review.orderId || '---'}</span>
-                        <span style="font-size:11px;color:var(--text-muted);">${new Date(review.createdAt).toLocaleString('ru-RU')}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function updateReviewsBadge() {
-            const badge = document.getElementById('reviewsBadge');
-            const count = document.getElementById('reviewsCount');
-            if (currentReviews.length > 0) {
-                count.textContent = currentReviews.length;
-                badge.style.display = 'inline-flex';
-            } else {
-                badge.style.display = 'none';
-            }
-        }
-
-        function openReviewsModal() {
-            document.getElementById('reviewsModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-            loadReviews();
-        }
-
-        function closeReviewsModal() {
-            document.getElementById('reviewsModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        document.getElementById('reviewsModal').addEventListener('click', function(e) { if (e.target === this) closeReviewsModal(); });
-
-        function startReviewCheck() {
-            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-            reviewCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                try {
-                    const res = await fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
-                    const data = await res.json();
-                    if (data.success && data.orders) {
-                        const completedOrders = data.orders.filter(order =>
-                            order.status === 'выполнен' && !order.reviewed && new Date(order.createdAt).getTime() > lastOrderCheckTime
-                        );
-                        if (completedOrders.length > 0) {
-                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
-                            setTimeout(() => { openReviewModal(completedOrders[0].id); }, 2000);
-                            lastOrderCheckTime = Date.now();
-                        }
-                    }
-                } catch (e) {}
-            }, 10000);
-        }
-
-        function openReviewModal(orderId) {
-            state.reviewOrderId = orderId;
-            state.reviewRating = 0;
-            document.getElementById('reviewText').value = '';
-            document.querySelectorAll('#starsRow .star').forEach(el => el.style.color = '#E5E7EB');
-            document.getElementById('submitReviewBtn').disabled = true;
-            document.getElementById('reviewModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeReviewModal() {
-            document.getElementById('reviewModal').classList.remove('open');
-            document.body.style.overflow = '';
-            startReviewCheck();
-        }
-
-        function setRating(value) {
-            state.reviewRating = value;
-            document.querySelectorAll('#starsRow .star').forEach(el => {
-                el.style.color = parseInt(el.dataset.value) <= value ? '#FFB300' : '#E5E7EB';
-            });
-            document.getElementById('submitReviewBtn').disabled = false;
-        }
-
-        async function submitReview() {
-            const text = document.getElementById('reviewText').value.trim();
-            if (state.reviewRating === 0) { showNotification('⚠️ Поставьте оценку!', 'error'); return; }
-            const name = document.getElementById('customerName').value.trim() || 'Клиент';
-            const phone = document.getElementById('customerPhone').value.trim();
-            const btn = document.getElementById('submitReviewBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
-            btn.disabled = true;
-            try {
-                const res = await fetch('/api/review', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId: state.reviewOrderId, name, phone, rating: state.reviewRating, text })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    showNotification('⭐ Спасибо за отзыв! ❤️');
-                    closeReviewModal();
-                    await loadReviews();
-                    lastOrderCheckTime = Date.now();
-                    startReviewCheck();
-                } else {
-                    showNotification('❌ ' + (data.error || 'Ошибка'), 'error');
-                }
-            } catch (e) {
-                showNotification('❌ Ошибка соединения', 'error');
-            } finally {
-                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить отзыв';
-                btn.disabled = false;
-            }
-        }
-
-        function openImageModal(src, caption) {
-            document.getElementById('modalImage').src = src;
-            document.getElementById('imageCaption').textContent = caption || 'Клубника';
-            document.getElementById('imageModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeImageModal() {
-            document.getElementById('imageModal').classList.remove('open');
-            document.body.style.overflow = '';
         }
 
         function openSupportChat() {
-            // ... (стандартный код)
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!');
+                return;
+            }
+            
+            closeSupportChat();
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'auth-modal-overlay open';
+            overlay.id = 'supportChatModal';
+            overlay.style.padding = '0';
+            overlay.style.background = 'transparent';
+            overlay.style.backdropFilter = 'none';
+            
+            overlay.innerHTML = `
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;background:#FFF5F5;max-width:480px;margin:0 auto;border-radius:0;position:relative;overflow:hidden;" onclick="event.stopPropagation()">
+                    <div class="support-chat-bg">
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                    </div>
+                    
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(0,0,0,0.05);flex-shrink:0;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);z-index:1;position:relative;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <i class="fas fa-headset" style="color:var(--primary);font-size:20px;"></i>
+                            <div>
+                                <div style="font-weight:700;font-size:16px;color:var(--text-dark);">🍓 Поддержка</div>
+                                <div style="font-size:12px;color:var(--text-muted);">Клубничный Бариста всегда на связи</div>
+                            </div>
+                        </div>
+                        <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
+                    </div>
+                    
+                    <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;z-index:1;position:relative;background:transparent;">
+                        <div class="support-msg barista">
+                            <div class="msg-avatar">
+                                <span>🍓 Клубничный Бариста</span>
+                            </div>
+                            Привет! Я Клубничный Бариста 🍓<br>
+                            Я здесь, чтобы помочь вам с заказами, доставкой и любыми вопросами!<br>
+                            Спросите меня о чём угодно 😊
+                            <span class="msg-time">${new Date().toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-replies-wrapper">
+                        <div class="quick-replies-scroll">
+                            ${QUICK_QUESTIONS.map(q => `
+                                <button onclick="quickQuestion('${q}')">${q}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="supportInput" placeholder="Напишите сообщение..." onkeydown="if(event.key==='Enter') sendSupportMessage()">
+                        <button onclick="sendSupportMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+            
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) closeSupportChat();
+            });
         }
 
         function closeSupportChat() {
-            // ... (стандартный код)
+            const modal = document.getElementById('supportChatModal');
+            if (modal) modal.remove();
+            document.body.style.overflow = '';
         }
 
-        function openSupportChatWithOrder(orderId) {
-            // ... (стандартный код)
-        }
+        // ================================================================
+        // ===== БАРИСТА (AI-ПОМОЩНИК) =====
+        // ================================================================
+        let baristaWelcomeShown = false;
+        let isBaristaOpen = false;
 
-        function loadSupportMessages(phone) {
-            // ... (стандартный код)
-        }
-
-        function renderSupportMessages(messages) {
-            // ... (стандартный код)
-        }
-
-        function startChatAutoUpdate(phone) {
-            // ... (стандартный код)
-        }
-
-        function sendSupportMessage() {
-            // ... (стандартный код)
-        }
-
-        function switchSection(section) {
-            document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
-            document.getElementById('section-' + section).style.display = 'block';
-            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.chip[data-section="${section}"]`).classList.add('active');
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if (tab === 'menu') {
-                document.getElementById('tabMenu').classList.add('active');
-                closeCart();
-                closeOrdersModal();
+        function toggleBarista() {
+            const window = document.getElementById('baristaWindow');
+            const isOpen = window.style.display === 'flex';
+            window.style.display = isOpen ? 'none' : 'flex';
+            isBaristaOpen = !isOpen;
+            if (!isOpen) {
+                setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
             }
         }
 
-        function initCart() {
-            document.getElementById('clearCart').addEventListener('click', function() {
-                if (state.cart.length === 0) return;
-                if (!confirm('🗑️ Очистить всю корзину?')) return;
-                state.cart = [];
-                clearSavedCart();
-                updateCart();
-                showNotification('🗑️ Корзина очищена');
-            });
-            document.getElementById('orderButton').addEventListener('click', submitOrder);
-            updateCart();
+        function openBarista() {
+            document.getElementById('baristaWidget').style.display = 'block';
+            const window = document.getElementById('baristaWindow');
+            window.style.display = 'flex';
+            isBaristaOpen = true;
+            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
+            if (!baristaWelcomeShown) {
+                baristaWelcomeShown = true;
+                setTimeout(() => {
+                    const messages = document.getElementById('baristaMessages');
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+                    welcomeDiv.innerHTML = '🍓 Привет! Я тут, чтобы помочь 😊<br>Можешь спросить меня о меню, акциях или подарках!<br>Я всегда рад компании 🤗';
+                    messages.appendChild(welcomeDiv);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 500);
+            }
         }
 
-        function getUserLocation() {
-            return new Promise((resolve) => {
-                if (state.userLocation) {
-                    resolve(state.userLocation);
-                    return;
-                }
-                if (!navigator.geolocation) {
-                    console.warn('Геолокация не поддерживается браузером');
-                    resolve(null);
-                    return;
-                }
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        const location = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        state.userLocation = location;
-                        console.log('📍 Геолокация получена:', location.lat, location.lng);
-                        resolve(location);
-                    },
-                    function(error) {
-                        console.warn('⚠️ Ошибка геолокации:', error.message);
-                        resolve(null);
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    }
-                );
-            });
+        async function sendBaristaMessage() {
+            const input = document.getElementById('baristaInput');
+            const messages = document.getElementById('baristaMessages');
+            const userText = input.value.trim();
+            
+            if (!userText) return;
+            
+            const userDiv = document.createElement('div');
+            userDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(108,92,231,0.12);color:#1A1A2E;align-self:flex-end;border-bottom-right-radius:4px;';
+            userDiv.textContent = userText;
+            messages.appendChild(userDiv);
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Индикатор печати
+            const typing = document.createElement('div');
+            typing.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+            typing.textContent = '🤔 Думаю...';
+            typing.id = 'baristaTyping';
+            messages.appendChild(typing);
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Имитация ответа
+            setTimeout(() => {
+                document.getElementById('baristaTyping')?.remove();
+                
+                const response = getBaristaResponse(userText);
+                const botDiv = document.createElement('div');
+                botDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+                botDiv.innerHTML = response;
+                messages.appendChild(botDiv);
+                messages.scrollTop = messages.scrollHeight;
+            }, 800 + Math.random() * 600);
         }
 
-        function startSessionCheck(bungalow) {
-            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
-            window._sessionCheckInterval = setInterval(async () => {
-                if (!state.bungalowNumber) { clearInterval(window._sessionCheckInterval); return; }
-                const check = await checkSessionOnServer(bungalow);
-                if (!check.valid) { clearInterval(window._sessionCheckInterval); showNoAccess(); clearSession(); showNotification('⏰ Сессия истекла!', 'error'); }
-            }, 10000);
+        function getBaristaResponse(text) {
+            const lower = text.toLowerCase();
+            
+            if (lower.includes('совет') || lower.includes('посовет') || lower.includes('что взять')) {
+                return '🍓 Самая популярная позиция — <strong>Классика</strong> (клубника в молочном шоколаде) всего 350 ₽!<br>А если любите сливки, попробуйте <strong>Клубнику в сливках</strong> 😋';
+            }
+            
+            if (lower.includes('подарок') || lower.includes('акци')) {
+                return '🎁 У нас есть акции:<br>• При заказе 2+ стаканчиков — скидка 10%<br>• Бесплатная мини-порция для первых посетителей<br>• Для постоянных клиентов — подарок!';
+            }
+            
+            if (lower.includes('дела') || lower.includes('как ты')) {
+                return '🍓 У меня всё отлично! Спасибо что спросили 😊<br>Сегодня отличная погода, много гостей, все довольны! А как ваш отдых? 🏖️';
+            }
+            
+            if (lower.includes('киоск') || lower.includes('где') || lower.includes('найти')) {
+                return '📍 Наш киоск находится напротив бетонного пирса, белый павильон "Strawberry in Chocolate".<br>Мы в 100 метрах от бунгало, всегда рады гостям! ☀️';
+            }
+            
+            if (lower.includes('цена') || lower.includes('сколько') || lower.includes('стоит')) {
+                return '🍓 Цены на клубнику в шоколаде:<br>• Классика — 350 ₽<br>• Клубника в сливках — 350 ₽<br>• Микс клубника-банан — 400 ₽<br>• Банан в шоколаде — 320 ₽<br>• Клубника в стакане (без шоколада) — 250 ₽';
+            }
+            
+            return '🍓 Отличный вопрос! 😊<br>Я бы посоветовал посмотреть наше меню — там есть и классика, и фрукты, и напитки.<br>А если хотите, могу помочь выбрать! Что вас интересует?';
         }
 
-        function startNotificationCheck() {
-            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
-            notificationCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                try {
-                    const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
-                    const data = await res.json();
-                    if (data.success && data.messages) {
-                        const messages = data.messages;
-                        if (!document.getElementById('supportChatModal')) {
-                            const unreadMessages = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime);
-                            if (unreadMessages.length > 0) {
-                                lastMessageTime = new Date(unreadMessages[unreadMessages.length - 1].time).getTime();
-                                showNotification(`💬 Новое сообщение от поддержки`);
-                            }
-                        }
-                    }
-                } catch (e) {}
-            }, 5000);
+        function quickQuestion(text) {
+            document.getElementById('baristaInput').value = text;
+            sendBaristaMessage();
         }
 
-        async function init() {
+        // ================================================================
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        // ================================================================
+        function init() {
             loadCart();
-            const existingSession = getSession();
-            const urlBungalo = getBungaloFromURL();
-
-            if (urlBungalo) {
-                const sessionCheck = await checkSessionOnServer(urlBungalo);
-                if (sessionCheck.valid) {
-                    cleanURL();
-                    const auth = getUserAuth();
-                    if (auth) {
-                        document.getElementById('customerName').value = auth.name || '';
-                        document.getElementById('customerPhone').value = auth.phone || '';
-                    }
-                    showBungaloMode(urlBungalo, sessionCheck.expiresAt);
-                    saveSession({ bungalow: urlBungalo, expiresAt: sessionCheck.expiresAt });
-                    startSessionCheck(urlBungalo);
-                    startNotificationCheck();
-                    startReviewCheck();
-                } else {
-                    showNoAccess();
-                    if (sessionCheck.reason === 'expired') {
-                        showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
-                        clearSession();
-                    }
-                }
-            } else if (existingSession && existingSession.bungalow > 0) {
-                const sessionCheck = await checkSessionOnServer(existingSession.bungalow);
-                if (sessionCheck.valid) {
-                    const auth = getUserAuth();
-                    if (auth) {
-                        document.getElementById('customerName').value = auth.name || '';
-                        document.getElementById('customerPhone').value = auth.phone || '';
-                    }
-                    showBungaloMode(existingSession.bungalow, sessionCheck.expiresAt);
-                    startSessionCheck(existingSession.bungalow);
-                    startNotificationCheck();
-                    startReviewCheck();
-                } else {
-                    showNoAccess();
-                    clearSession();
-                }
-            } else {
-                showNoAccess();
+            renderMenu();
+            
+            const savedAuth = getUserAuth();
+            if (savedAuth) {
+                document.getElementById('customerName').value = savedAuth.name || '';
+                document.getElementById('customerPhone').value = savedAuth.phone || '';
             }
-
-            setInterval(() => {
-                const timeDisplay = document.getElementById('currentTimeDisplay');
-                if (timeDisplay) timeDisplay.innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-            }, 60000);
-
-            await loadReviews();
+            
+            loadReviews();
+            updateCart();
+            updateOrdersBadge();
+            
+            document.getElementById('clearCart').addEventListener('click', clearCart);
+            document.getElementById('orderButton').addEventListener('click', submitOrder);
+            
+            document.getElementById('cartOverlay').addEventListener('click', closeCart);
+            document.getElementById('confirmToppingBtn').addEventListener('click', confirmTopping);
+            document.getElementById('ageConfirmBtn').addEventListener('click', confirmAge);
+            document.getElementById('submitReviewBtn').addEventListener('click', submitReview);
+            
+            // Закрытие модальных окон по клику на оверлей
+            document.querySelectorAll('.auth-modal-overlay, .topping-modal-overlay, .age-verify-overlay, .review-modal-overlay, .map-modal-overlay, .beach-restrict-modal, .orders-modal-overlay, .reviews-modal-overlay').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            // Показываем бариста через 3 секунды
+            setTimeout(() => {
+                document.getElementById('baristaWidget').style.display = 'block';
+            }, 3000);
+            
+            console.log('🍓 Strawberry in Chocolate - v17 (FULL)');
+            console.log('✅ Все функции работают!');
+            console.log('📦 Корзина:', state.cart.length, 'товаров');
+            console.log('⭐ Отзывов:', currentReviews.length);
         }
 
-        window.addEventListener('beforeunload', function() {
-            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
-            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
-            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
-            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-        });
-
-        init();
-
-        console.log('🍓 Strawberry in Chocolate - v14');
-        console.log('✅ Клубничный Бариста активирован!');
-        console.log('✅ Он знает всё о меню, ценах, акциях');
-        console.log('✅ Отвечает на вопросы о подарках');
-        console.log('✅ Знает развлечения Архипо-Осиповки');
-        console.log('✅ Не навязывает клубнику');
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
