@@ -786,7 +786,8 @@
         const img = document.createElement('img');
         if (!id) { return ''; }
         const qrData = `gift-${id}`;
-        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}&color=6C5CE7&bgcolor=FFFFFF`;
+// Вместо api.qrserver.com
+img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
         img.style.width = '100%';
         img.style.height = 'auto';
         return img.outerHTML;
