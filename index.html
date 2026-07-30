@@ -1970,43 +1970,6 @@
         </div>
     </div>
 
-    <!-- ===== БАРИСТА (AI-ПОМОЩНИК) ===== -->
-    <div id="baristaWidget" style="position: fixed; bottom: 100px; right: 20px; z-index: 9999; display: none;">
-        <div id="baristaToggle" onclick="toggleBarista()" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #FD79A8, #6C5CE7); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 30px; box-shadow: 0 4px 25px rgba(108,92,231,0.4); transition: all 0.3s ease; position: relative; animation: baristaPulse 2.5s infinite; border: 2px solid rgba(255,255,255,0.3);">
-            🍓
-            <span style="position: absolute; top: 0; right: 0; width: 18px; height: 18px; border-radius: 50%; background: #FF4757; border: 2px solid #FFFFFF; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; animation: blinkBadge 1.2s infinite;">1</span>
-        </div>
-        <div id="baristaWindow" style="position: absolute; bottom: 78px; right: 0; width: 370px; height: 500px; background: #FFFFFF; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.15); display: none; flex-direction: column; overflow: hidden; animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);">
-            <div style="padding: 14px 18px; background: rgba(108,92,231,0.08); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FD79A8, #6C5CE7); display: flex; align-items: center; justify-content: center; font-size: 18px;">🍓</div>
-                    <div>
-                        <div style="color: #1A1A2E; font-weight: 700; font-size: 15px;">Клубничный Бариста</div>
-                        <div style="font-size: 11px; color: #22C55E;">🟢 Готов помочь</div>
-                    </div>
-                </div>
-                <button onclick="toggleBarista()" style="background: none; border: none; color: rgba(0,0,0,0.3); font-size: 20px; cursor: pointer; padding: 4px 8px;">✕</button>
-            </div>
-            <div id="baristaMessages" style="flex: 1; padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
-                <div style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(0,0,0,0.04); color: #1A1A2E; align-self: flex-start; border-bottom-left-radius: 4px;">
-                    🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
-                    Я знаю всё о нашем меню, ценах и акциях.<br>
-                    Спроси меня о чём угодно! 😊
-                </div>
-            </div>
-            <div style="display: flex; gap: 6px; padding: 8px 16px 12px; flex-wrap: wrap; flex-shrink: 0; background: rgba(0,0,0,0.02);">
-                <button onclick="quickQuestion('Что посоветуешь из еды?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">🍫 Что посоветуешь?</button>
-                <button onclick="quickQuestion('Как получить подарок?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">🎁 Как получить подарок?</button>
-                <button onclick="quickQuestion('Как у тебя дела?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">👋 Как дела?</button>
-                <button onclick="quickQuestion('Где киоск?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">📍 Где киоск?</button>
-            </div>
-            <div style="padding: 12px 16px; border-top: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; flex-shrink: 0; background: rgba(0,0,0,0.02);">
-                <input type="text" id="baristaInput" placeholder="Спросите меня..." style="flex: 1; padding: 12px 18px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.08); background: #F8FAFC; color: #1A1A2E; outline: none; font-size: 14px; font-family: 'Inter', sans-serif;" onkeydown="if(event.key==='Enter') sendBaristaMessage()">
-                <button onclick="sendBaristaMessage()" style="width: 46px; height: 46px; border-radius: 50%; border: none; background: linear-gradient(135deg, #FD79A8, #6C5CE7); color: #fff; cursor: pointer; font-size: 17px;">➤</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ================================================================
         // ===== КОНСТАНТЫ =====
@@ -2108,75 +2071,51 @@
             '❤️ Для постоянных клиентов — подарок'
         ];
 
-        const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
+        const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓, дружелюбный AI-помощник в приложении "Strawberry in Chocolate" на пляже.
 
-ТВОИ ДАННЫЕ:
-Меню:
-${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
+        ТВОИ ДАННЫЕ О ПРИЛОЖЕНИИ:
+        Меню и цены:
+        ${BARISTA_MENU.map(i => `  • ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
 
-Акции:
-${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
+        Акции:
+        ${BARISTA_PROMO.map(p => `  • ${p}`).join('\n')}
 
-О ПРИЛОЖЕНИИ:
-- У нас ДВА КИОСКА на карте:
-  1. Напротив бетонного пирса (44.358182, 38.528738)
-  2. Центральный вход на пляж (44.358198, 38.527699)
-- Работаем: 9:00 — 1:00 (МСК)
-- Контакты: +7 962 855-72-63
-- Подарок ТОЛЬКО НОВЫМ ПОСЕТИТЕЛЯМ 🎁
+        - Присыпки (бесплатно, до 2 видов): арахис, кокос, орео, вафля
+        - Алкоголь (пиво) — только 18+ (нужно подтверждение возраста)
 
-РАЗВЛЕЧЕНИЯ В АРХИПО-ОСИПОВКЕ:
+        КАК РАБОТАЕТ ПРИЛОЖЕНИЕ:
+        1. Гость выбирает товары и добавляет в корзину 🛒
+        2. В корзине можно изменить количество или удалить товар
+        3. Выбирает способ оплаты: наличные, перевод, карта
+        4. Нажимает "Заказать" — заказ отправляется
+        5. Доставка в бунгало за 15-20 минут 🏖️
+        6. Не нужно стоять в очереди — всё принесут!
+        7. Можно отслеживать заказы во вкладке "Заказы"
+        8. QR-код для подарка — золотая кнопка внизу экрана
 
-🏛️ МУЗЕИ:
-1. 🍷 Музей Хлеба и Вина — ул. Пограничная, 13а
-2. 🚀 Музей космонавтов — ул. Школьная, 60
+        ОТВЕТЫ НА ЧАСТЫЕ ВОПРОСЫ:
+        - "Когда доставят заказ?" → "Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!"
+        - "Сколько ждать?" → "Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!"
+        - "Как отменить заказ?" → "Зайдите в раздел 'Заказы' в нижней панели и нажмите 'Отменить заказ' (можно в первые 5 минут после оформления)"
+        - "Как вы нас найдете?" → "QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠"
+        - "Как сделать заказ, если есть активный?" → "Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе 'Заказы' 📦"
+        - "Доставляете ли в другие места?" → "К сожалению, пока доставка только в бунгало на территории пляжа. Но мы работаем над тем, чтобы доставка осуществлялась по всему курортному посёлку! 🏖️"
 
-🐬 ДЕЛЬФИНАРИЙ:
-3. 🐬 Архипо-Осиповский дельфинарий — ул. Школьная, 30
+        ТВОЯ РОЛЬ:
+        1. Ты знаешь ВСЁ о приложении, меню, ценах, акциях
+        2. Ты знаешь, как работает доставка, оплата, заказы
+        3. Ты помогаешь гостям с любыми вопросами
+        4. Ты ДРУЖЕЛЮБНЫЙ и ВЕСЁЛЫЙ помощник
+        5. Ты НЕ предлагаешь клубнику, если не спрашивают
 
-🎢 ПАРКИ РАЗВЛЕЧЕНИЙ:
-4. 🎡 Парк Малибу — ул. Школьная, 103 (вход свободный, аттракционы платные)
-5. 🎠 ночной клуб Монако — ул. Школьная, 103 (ресто-клуб)
+        ПРАВИЛА:
+        - Отвечай ТОЛЬКО на русском
+        - Будь полезным (2-4 предложения)
+        - Используй эмодзи 🍓🍫😊🏖️
+        - ВСЕГДА желай хорошего отдыха
+        - ЕСЛИ НЕ ЗНАЕШЬ ОТВЕТА — СКАЖИ: "Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞"
 
-💧 АКВАПАРКИ И ВОДОПАДЫ:
-6. 🌊 Аквапарк "Кокосовый Рай" — ул. Школьная, 103
-7. 💦 Гебиусские водопады — трасса М4 Дон, 1450 км (в сторону Краснодара), вход 400 ₽. 7 каскадных водопадов. ⚠️ ВНИМАНИЕ: сложные маршруты с крутыми скользкими лестницами. Не оставляйте детей без присмотра!
-8. 🏊 Большой аквапарк в Джубге — пос. Джубга, Новороссийское шоссе, 10а (15 км)
-
-🐊 ЗООПАРКИ И ОКЕАНАРИУМ:
-9. 🦁 Контактный зоопарк — ул. Школьная, 101
-10. 🐠 Океанариум — ул. Школьная, 62
-11. 🐊 Крокодиловая ферма — ул. Школьная, 62
-
-🏛️ ИСТОРИЧЕСКИЕ МЕСТА:
-12. 🏛️ Римская сторожевая башня — на горе Верблюд, перед кемпингом Утёс
-13. 🪦 Дольмен в Назаровой щели
-14. ⛪ Храм Святого Николая — ул. Ленина, 123
-
-🍽️ ГДЕ ВКУСНО И НЕДОРОГО ПОЕСТЬ:
-15. 🍲 Столовая "Архипка" — ул. Советская, 1а
-
-🏪 МАГАЗИНЫ:
-- 🛒 Магнит: ул. Ленина 106, 117, 126; Славянский пер. 5
-- 🛒 Пятёрочка: ул. Ленина 109 (круглосуточно), ул. Вишневая 31 (до 22:00)
-- 🛒 Красное и Белое: ул. Ленина 117
-- 🛒 Фикс Прайс: ул. Удалова 1, ул. Ленина 106, Славянский пер. 10а
-- 🛒 Алкотека: ул. Ленина 113
-
-ТВОЯ РОЛЬ:
-1. Ты работаешь в кафе, общаешься с гостями
-2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты знаешь ВСЁ о развлечениях, еде и магазинах в Архипо-Осиповке
-4. Ты дружелюбный и весёлый помощник
-5. Ты НЕ предлагаешь клубнику, если не спрашивают
-
-ПРАВИЛА:
-- Отвечай ТОЛЬКО на русском
-- Будь полезным (2-4 предложения)
-- Используй эмодзи 🍓🍫😊🌊🏖️
-- ВСЕГДА желай хорошего отдыха
-
-ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню, акциях и отдыхе в Архипо-Осиповке! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
+        ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню, акциях и отдыхе в Архипо-Осиповке! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
 
         // ================================================================
         // ===== ФУНКЦИИ БАРИСТЫ =====
@@ -2264,13 +2203,13 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                 
                 if (data.error) {
                     console.error('API Error:', data.error);
-                    return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
+                    return 'Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞';
                 }
                 
                 return data.choices[0].message.content;
             } catch (error) {
                 console.error('Network Error:', error);
-                return '🍓 Не удалось соединиться. Проверьте интернет.';
+                return 'Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞';
             }
         }
 
@@ -2287,6 +2226,268 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // ================================================================
+        // ===== ЧАТ ПОДДЕРЖКИ С БАРИСТОЙ =====
+        // ================================================================
+
+        // СТАНДАРТНЫЕ ОТВЕТЫ НА ЧАСТЫЕ ВОПРОСЫ
+        const SUPPORT_ANSWERS = {
+            'доставят заказ': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
+            'сколько ждать': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
+            'когда привезут': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
+            'отменить заказ': 'Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут после оформления)',
+            'как отменить': 'Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут после оформления)',
+            'как вы нас найдете': 'QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠',
+            'как найти': 'QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠',
+            'активный заказ': 'Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦',
+            'есть активный': 'Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦',
+            'доставка в другие': 'К сожалению, пока доставка только в бунгало на территории пляжа. Но мы работаем над тем, чтобы доставка осуществлялась по всему курортному посёлку! 🏖️',
+            'другие места': 'К сожалению, пока доставка только в бунгало на территории пляжа. Но мы работаем над тем, чтобы доставка осуществлялась по всему курортному посёлку! 🏖️',
+            'заказ в бунгало': 'Да! Доставляем прямо в ваше бунгало за 15-20 минут 🏖️ Никуда ходить не нужно!',
+            'доставка': 'Да! Доставляем прямо в ваше бунгало за 15-20 минут 🏖️ Никуда ходить не нужно!',
+            'оплата': 'Можно наличными, переводом или картой при получении 💳',
+            'как оплатить': 'Можно наличными, переводом или картой при получении 💳',
+            'скидка': 'При заказе 2+ стаканчиков — скидка 10% 🎉',
+            'акции': 'При заказе 2+ стаканчиков — скидка 10% 🎉'
+        };
+
+        // БЫСТРЫЕ ВОПРОСЫ ДЛЯ ЧАТА
+        const QUICK_QUESTIONS = [
+            '🕐 Когда доставят заказ?',
+            '❌ Как отменить заказ?',
+            '📍 Как вы нас найдете?',
+            '📦 Как сделать заказ, если есть активный?',
+            '🏖️ Доставляете ли в другие места?'
+        ];
+
+        // ФУНКЦИЯ ПОЛУЧЕНИЯ ОТВЕТА ОТ БАРИСТЫ ИЛИ ИЗ КЭША
+        async function getSupportResponse(question) {
+            const lowerQuestion = question.toLowerCase();
+            
+            // Проверяем стандартные ответы
+            for (const [key, answer] of Object.entries(SUPPORT_ANSWERS)) {
+                if (lowerQuestion.includes(key)) {
+                    return answer;
+                }
+            }
+            
+            // Если ответа нет — пробуем AI
+            try {
+                const response = await fetch('/api/barista', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: question,
+                        history: []
+                    })
+                });
+                const data = await response.json();
+                
+                if (data.error) {
+                    return 'Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞';
+                }
+                
+                return data.choices[0].message.content;
+            } catch (error) {
+                console.error('Ошибка AI:', error);
+                return 'Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞';
+            }
+        }
+
+        // ОТПРАВКА СООБЩЕНИЯ В ЧАТ ПОДДЕРЖКИ
+        async function sendSupportMessage() {
+            const input = document.getElementById('supportInput');
+            const messages = document.getElementById('supportMessages');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            // Добавляем сообщение пользователя
+            const userMsg = document.createElement('div');
+            userMsg.className = 'support-msg user';
+            userMsg.innerHTML = `${text} <span class="msg-time">${new Date().toLocaleTimeString()}</span>`;
+            messages.appendChild(userMsg);
+            messages.scrollTop = messages.scrollHeight;
+            
+            input.value = '';
+            
+            // Показываем индикатор печати
+            const typing = document.createElement('div');
+            typing.className = 'support-msg barista';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = `
+                <div class="msg-avatar">
+                    <span>🍓 Клубничный Бариста</span>
+                </div>
+                <span style="opacity:0.5;">печатает...</span>
+            `;
+            messages.appendChild(typing);
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Получаем ответ
+            const response = await getSupportResponse(text);
+            
+            // Убираем индикатор печати
+            document.getElementById('typingIndicator')?.remove();
+            
+            // Добавляем ответ Баристы
+            const baristaMsg = document.createElement('div');
+            baristaMsg.className = 'support-msg barista';
+            baristaMsg.innerHTML = `
+                <div class="msg-avatar">
+                    <span>🍓 Клубничный Бариста</span>
+                </div>
+                ${response} <span class="msg-time">${new Date().toLocaleTimeString()}</span>
+            `;
+            messages.appendChild(baristaMsg);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // БЫСТРЫЙ ВОПРОС
+        function quickQuestion(text) {
+            document.getElementById('supportInput').value = text;
+            sendSupportMessage();
+        }
+
+        // ОТКРЫТИЕ ЧАТА ПОДДЕРЖКИ
+        function openSupportChat() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            if (!name || !phone) {
+                showNotification('⚠️ Сначала введите имя и телефон!', 'error');
+                return;
+            }
+            
+            closeSupportChat();
+            
+            lastMessageTime = Date.now();
+            const overlay = document.createElement('div');
+            overlay.className = 'auth-modal-overlay open';
+            overlay.id = 'supportChatModal';
+            overlay.style.padding = '0';
+            overlay.style.background = 'transparent';
+            overlay.style.backdropFilter = 'none';
+            
+            overlay.innerHTML = `
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;background:#FFF5F5;max-width:480px;margin:0 auto;border-radius:0;position:relative;overflow:hidden;" onclick="event.stopPropagation()">
+                    <div class="support-chat-bg" style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none;">
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                        <span class="strawberry-bg">🍓</span>
+                    </div>
+                    
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(0,0,0,0.05);flex-shrink:0;background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);z-index:1;position:relative;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <i class="fas fa-headset" style="color:var(--primary);font-size:20px;"></i>
+                            <div>
+                                <div style="font-weight:700;font-size:16px;color:var(--text-dark);">🍓 Поддержка</div>
+                                <div style="font-size:12px;color:var(--text-muted);">Клубничный Бариста всегда на связи</div>
+                            </div>
+                        </div>
+                        <button onclick="closeSupportChat()" style="background:#F1F5F9;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-secondary);cursor:pointer;">✕</button>
+                    </div>
+                    
+                    <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;z-index:1;position:relative;background:transparent;">
+                        <div class="support-msg barista">
+                            <div class="msg-avatar">
+                                <span>🍓 Клубничный Бариста</span>
+                            </div>
+                            Привет! Я Клубничный Бариста 🍓<br>
+                            Я здесь, чтобы помочь вам с заказами, доставкой и любыми вопросами!<br>
+                            Спросите меня о чём угодно 😊
+                            <span class="msg-time">${new Date().toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-replies">
+                        ${QUICK_QUESTIONS.map(q => `
+                            <button onclick="quickQuestion('${q}')">${q}</button>
+                        `).join('')}
+                    </div>
+                    
+                    <div style="padding:12px 16px 16px;border-top:1px solid rgba(0,0,0,0.05);display:flex;gap:10px;flex-shrink:0;background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);z-index:1;position:relative;">
+                        <input type="text" id="supportInput" placeholder="Напишите сообщение..." style="flex:1;padding:12px 18px;border-radius:24px;border:2px solid #F1F5F9;font-size:14px;outline:none;background:#F8FAFC;font-family:var(--font-family);" onkeydown="if(event.key==='Enter') sendSupportMessage()">
+                        <button onclick="sendSupportMessage()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;padding:12px 20px;border-radius:50%;font-weight:600;cursor:pointer;font-family:var(--font-family);width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+            
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) closeSupportChat();
+            });
+            
+            startChatAutoUpdate(phone);
+        }
+
+        // ЗАКРЫТИЕ ЧАТА
+        function closeSupportChat() {
+            const modal = document.getElementById('supportChatModal');
+            if (modal) modal.remove();
+            document.body.style.overflow = '';
+            if (chatUpdateInterval) {
+                clearInterval(chatUpdateInterval);
+                chatUpdateInterval = null;
+            }
+        }
+
+        // АВТО-ОБНОВЛЕНИЕ
+        function startChatAutoUpdate(phone) {
+            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
+            chatUpdateInterval = setInterval(() => {
+                if (document.getElementById('supportChatModal')) {
+                    loadSupportMessages(phone);
+                } else {
+                    clearInterval(chatUpdateInterval);
+                    chatUpdateInterval = null;
+                }
+            }, 5000);
+        }
+
+        // ЗАГРУЗКА СООБЩЕНИЙ
+        async function loadSupportMessages(phone) {
+            try {
+                const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                const data = await res.json();
+                if (data.success) {
+                    renderSupportMessages(data.messages || []);
+                }
+            } catch (e) {}
+        }
+
+        // ОТОБРАЖЕНИЕ СООБЩЕНИЙ
+        function renderSupportMessages(messages) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            
+            if (!messages || messages.length === 0) {
+                return;
+            }
+            
+            messages.forEach(msg => {
+                if (msg.from === 'admin') {
+                    const div = document.createElement('div');
+                    div.className = 'support-msg barista';
+                    div.innerHTML = `
+                        <div class="msg-avatar">
+                            <span>🍓 Клубничный Бариста</span>
+                        </div>
+                        ${msg.text} <span class="msg-time">${new Date(msg.time).toLocaleTimeString()}</span>
+                    `;
+                    container.appendChild(div);
+                    container.scrollTop = container.scrollHeight;
+                }
+            });
         }
 
         // ================================================================
@@ -3339,34 +3540,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             document.body.style.overflow = '';
         }
 
-        function openSupportChat() {
-            // ... (стандартный код)
-        }
-
-        function closeSupportChat() {
-            // ... (стандартный код)
-        }
-
-        function openSupportChatWithOrder(orderId) {
-            // ... (стандартный код)
-        }
-
-        function loadSupportMessages(phone) {
-            // ... (стандартный код)
-        }
-
-        function renderSupportMessages(messages) {
-            // ... (стандартный код)
-        }
-
-        function startChatAutoUpdate(phone) {
-            // ... (стандартный код)
-        }
-
-        function sendSupportMessage() {
-            // ... (стандартный код)
-        }
-
         function switchSection(section) {
             document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
             document.getElementById('section-' + section).style.display = 'block';
@@ -3525,12 +3698,12 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
         init();
 
-        console.log('🍓 Strawberry in Chocolate - v14');
-        console.log('✅ Клубничный Бариста активирован!');
+        console.log('🍓 Strawberry in Chocolate - v15');
+        console.log('✅ Клубничный Бариста активирован в чате поддержки!');
         console.log('✅ Он знает всё о меню, ценах, акциях');
-        console.log('✅ Отвечает на вопросы о подарках');
-        console.log('✅ Знает развлечения Архипо-Осиповки');
-        console.log('✅ Не навязывает клубнику');
+        console.log('✅ Отвечает на частые вопросы');
+        console.log('✅ Если не знает — зовёт менеджера');
+        console.log('✅ Клубничный фон в чате');
     </script>
 </body>
 </html>
