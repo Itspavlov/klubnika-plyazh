@@ -715,12 +715,12 @@
             <div class="msg barista">
                 🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
                 Я знаю всё о нашем меню, ценах и акциях.<br>
-                Спроси меня о чём угодно! Я люблю шутить и общаться 🤗
+                Спроси меня о чём угодно! 😊
             </div>
         </div>
         <div class="barista-quick">
             <button onclick="quickQuestion('Что посоветуешь из еды?')">🍫 Что посоветуешь?</button>
-            <button onclick="quickQuestion('Расскажи шутку')">😂 Пошути</button>
+            <button onclick="quickQuestion('Как получить подарок?')">🎁 Как получить подарок?</button>
             <button onclick="quickQuestion('Как у тебя дела?')">👋 Как дела?</button>
             <button onclick="quickQuestion('Где киоск?')">📍 Где киоск?</button>
         </div>
@@ -735,12 +735,17 @@
     // ================================================================
     // ===== КОНСТАНТЫ =====
     // ================================================================
-    const MY_LOCATION = { lat: 44.358182, lng: 38.528738 };
+    // ДВА КИОСКА
+    const KIOSKS = [
+        { lat: 44.358182, lng: 38.528738, name: 'Киоск №1', desc: 'Напротив бетонного пирса' },
+        { lat: 44.358198, lng: 38.527699, name: 'Киоск №2', desc: 'Центральный вход на пляж' }
+    ];
+    const MY_LOCATION = KIOSKS[0];
 
     let userLocation = null;
     let mapInstance = null;
     let userPlacemark = null;
-    let kioskPlacemark = null;
+    let kioskPlacemarks = [];
     let giftId = null;
     let mapReady = false;
     let gpsLocked = false;
@@ -786,8 +791,7 @@
         const img = document.createElement('img');
         if (!id) { return ''; }
         const qrData = `gift-${id}`;
-// Вместо api.qrserver.com
-img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
         img.style.width = '100%';
         img.style.height = 'auto';
         return img.outerHTML;
@@ -979,8 +983,8 @@ img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encod
                 const messages = document.getElementById('baristaMessages');
                 messages.innerHTML += `
                     <div class="msg barista">
-                        🎯 Отлично! Я тебя нашёл!<br>
-                        Теперь я могу помочь тебе найти всё, что нужно! 😊
+                        🎯 Отлично! Я определил ваше местоположение!<br>
+                        Посмотрите на карту — киоски отмечены маркерами 🍓
                     </div>
                 `;
                 messages.scrollTop = messages.scrollHeight;
@@ -1056,27 +1060,31 @@ img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encod
                 });
                 mapReady = true;
 
-                kioskPlacemark = new ymaps.Placemark(
-                    [MY_LOCATION.lat, MY_LOCATION.lng],
-                    { 
-                        balloonContent: '🍓 Strawberry in Chocolate',
-                        hintContent: '🍓 Strawberry in Chocolate',
-                        iconCaption: '🍓 Клубника в шоколаде'
-                    },
-                    { 
-                        iconLayout: 'default#image',
-                        iconImageHref: 'images/kiosk-icon.png',
-                        iconImageSize: [50, 50],
-                        iconImageOffset: [-25, -50],
-                        iconCaptionMaxWidth: 150,
-                        iconCaptionFontSize: 12,
-                        iconCaptionFontWeight: 'bold',
-                        iconCaptionColor: '#1A1A2E',
-                        iconCaptionStrokeColor: 'rgba(255,255,255,0.8)',
-                        iconCaptionStrokeWidth: 3
-                    }
-                );
-                mapInstance.geoObjects.add(kioskPlacemark);
+                // ДОБАВЛЯЕМ ОБА КИОСКА
+                KIOSKS.forEach((kiosk, index) => {
+                    const placemark = new ymaps.Placemark(
+                        [kiosk.lat, kiosk.lng],
+                        { 
+                            balloonContent: `🍓 <strong>${kiosk.name}</strong><br>📍 ${kiosk.desc}`,
+                            hintContent: `🍓 ${kiosk.name}`,
+                            iconCaption: `🍓 ${kiosk.name}`
+                        },
+                        { 
+                            iconLayout: 'default#image',
+                            iconImageHref: 'images/kiosk-icon.png',
+                            iconImageSize: [45, 45],
+                            iconImageOffset: [-22, -45],
+                            iconCaptionMaxWidth: 120,
+                            iconCaptionFontSize: 10,
+                            iconCaptionFontWeight: 'bold',
+                            iconCaptionColor: '#1A1A2E',
+                            iconCaptionStrokeColor: 'rgba(255,255,255,0.9)',
+                            iconCaptionStrokeWidth: 2
+                        }
+                    );
+                    mapInstance.geoObjects.add(placemark);
+                    kioskPlacemarks.push(placemark);
+                });
 
                 const savedLat = localStorage.getItem('userLat');
                 const savedLng = localStorage.getItem('userLng');
@@ -1209,29 +1217,38 @@ ${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' 
 Акции:
 ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
+О ПРИЛОЖЕНИИ:
+- У нас ДВА КИОСКА на карте:
+  1. Напротив бетонного пирса (44.358182, 38.528738)
+  2. Центральный вход на пляж (44.358198, 38.527699)
+- Киоски отмечены на карте маркерами с картинками 🍓
+- Работаем: 9:00 — 1:00 (МСК)
+- Контакты: +7 962 855-72-63
+- Для заказа нужно: имя, телефон, номер бунгало
+- Подарок доступен только новым пользователям 🎁
+
 ТВОЯ РОЛЬ:
 1. Ты работаешь в кафе, общаешься с гостями
 2. Ты знаешь ВСЁ о меню, ценах, акциях
 3. Ты дружелюбный и весёлый помощник
 4. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
 5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
-6. Ты умеешь ШУТИТЬ и поднимать настроение
+6. Ты НЕ даёшь советы по развлечениям и местам в Архипо-Осиповке — у тебя нет достоверной информации
 
 ПРАВИЛА:
 - Отвечай ТОЛЬКО на русском
 - Будь коротким и полезным (2-4 предложения)
 - Используй эмодзи 🍓🍫😊🌊
 - НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
-- ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
+- ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ И НЕ ПРО ПРИЛОЖЕНИЕ — НЕ ПРЕДЛАГАЙ КЛУБНИКУ
 - ВСЕГДА желай хорошего отдыха, если прощаешься
-- ШУТИ, если чувствуешь настроение
 
-ПРИМЕРЫ ОТВЕТОВ:
-- "Как дела?" → "Отлично! Сегодня солнечно, море спокойное ☀️ А у вас как? Чем могу помочь?"
-- "Что посоветуешь из еды?" → "Однозначно Классику — это хит! 🍫 Или попробуйте клубнику в сливках 🤍"
-- "Расскажи шутку" → "Почему клубника не ходит в школу? Потому что её и так все любят! 🍓😂"
+ОТВЕТЫ НА ВОПРОСЫ:
+- "Как получить подарок?" → "Подойдите к любому отмеченному киоску на карте и покажите QR-код. Кнопка с QR-кодом — золотая, внизу экрана 🎁 Подарок доступен только новым пользователям!"
+- "Где киоск?" → "Посмотрите на карту — киоски отмечены маркерами 🍓 Нажмите кнопку 'Где я?', чтобы увидеть своё местоположение и сориентироваться."
+- "Где ваш киоск?" → "Посмотрите на карту — киоски отмечены маркерами 🍓 Нажмите кнопку 'Где я?', чтобы увидеть своё местоположение и сориентироваться."
 
-ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
+ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню и акциях! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
 
     let baristaHistory = [];
     let baristaWelcomeShown = false;
@@ -1330,8 +1347,8 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             messages.innerHTML += `
                 <div class="msg barista">
                     🍓 Привет! Я тут, чтобы помочь 😊<br>
-                    Можешь спросить меня о чём угодно — о погоде, о еде, о жизни...<br>
-                    Или просто поболтать! Я всегда рад компании 🤗
+                    Можешь спросить меня о меню, акциях или подарках!<br>
+                    Я всегда рад компании 🤗
                 </div>
             `;
             messages.scrollTop = messages.scrollHeight;
