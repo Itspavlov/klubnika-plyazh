@@ -4,3173 +4,1347 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🍓 Strawberry in Chocolate</title>
-    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
     <style>
         :root {
-            --primary: #FF4757;
-            --primary-dark: #E63946;
-            --primary-light: #FF6B81;
-            --accent: #FF8A80;
-            --gold: #FFB74D;
-            --gold-light: #FFE0B2;
-            --bg: #FFF5F5;
-            --card-bg: #FFFFFF;
-            --text-dark: #1A1A2E;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-            --radius-2xl: 24px;
-            --radius-xl: 20px;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            --tab-height: 80px;
+            --primary: #6C5CE7;
+            --primary-dark: #5A4BD1;
+            --primary-light: #A29BFE;
+            --accent: #FD79A8;
+            --bg-start: #FFF5F5;
+            --bg-end: #FFE8EC;
+            --card-bg: rgba(255,255,255,0.9);
+            --glass-border: rgba(0,0,0,0.08);
+            --text-primary: #1A1A2E;
+            --text-secondary: rgba(0,0,0,0.7);
+            --text-muted: rgba(0,0,0,0.4);
+            --radius: 16px;
+            --radius-sm: 10px;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EC 50%, #FFF0F0 100%);
+            background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
             min-height: 100vh;
-            padding: 0;
-            padding-bottom: calc(var(--tab-height) + 20px);
+            padding: 0 0 40px 0;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            background-attachment: fixed;
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
 
-        .app-container {
+        .menu-container {
             max-width: 480px;
             margin: 0 auto;
-            background: transparent;
-            border-radius: 0;
             padding: 16px 16px 20px;
-            box-shadow: none;
-            position: relative;
             min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            padding: 8px 0 16px;
-            position: relative;
+            padding: 12px 0 16px;
         }
-
         .header .logo-icon {
             font-size: 48px;
             display: block;
-            margin-bottom: 4px;
             animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.2));
+            filter: drop-shadow(0 4px 20px rgba(108,92,231,0.2));
         }
-
         .header-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             color: var(--primary);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 100px;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
-            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 6px;
         }
-
         .header h1 {
-            font-size: 28px;
-            color: var(--text-dark);
+            font-size: 24px;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-            margin-bottom: 4px;
-        }
-
-        .header h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, #6C5CE7 0%, #FD79A8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .header .subtitle {
             color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 400;
-            line-height: 1.5;
-            max-width: 320px;
-            margin: 0 auto;
-        }
-
-        .header .subtitle .delivery-time {
-            background: linear-gradient(135deg, #FFE8EC, #FFF0F0);
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-weight: 600;
-            color: var(--primary);
             font-size: 12px;
-            border: 1px solid rgba(255, 71, 87, 0.2);
         }
-
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
         }
 
-        .bungalo-display {
-            position: relative;
-            border-radius: var(--radius-2xl);
-            padding: 20px 20px;
-            margin-bottom: 16px;
-            text-align: center;
-            color: #FFFFFF;
+        .map-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, rgba(255, 71, 87, 0.7), rgba(230, 57, 70, 0.8));
+            border: 1px solid var(--glass-border);
+            margin-bottom: 12px;
         }
-
-        .bungalo-display .bg-strawberry {
-            position: absolute;
-            z-index: 1;
-            font-size: 60px;
-            opacity: 0.15;
-            animation: floatBg 8s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .bungalo-display .bg-strawberry:nth-child(1) {
-            top: 10%;
-            left: 5%;
-            animation-delay: 0s;
-        }
-
-        .bungalo-display .bg-strawberry:nth-child(2) {
-            bottom: 10%;
-            right: 5%;
-            animation-delay: 3s;
-            font-size: 40px;
-        }
-
-        @keyframes floatBg {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(10deg); }
-        }
-
-        .bungalo-display .label {
+        .map-card .map-container {
+            width: 100%;
+            height: 380px;
             position: relative;
-            z-index: 2;
-            font-size: 11px;
-            font-weight: 500;
-            opacity: 0.95;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            background: #f0f0f5;
         }
-
-        .bungalo-display .number {
-            position: relative;
-            z-index: 2;
-            font-size: 40px;
-            font-weight: 800;
-            margin: 4px 0;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+        .map-card .map-container #treasureMap {
+            width: 100%;
+            height: 100%;
         }
-
-        .bungalo-display .hint {
-            position: relative;
-            z-index: 2;
-            font-size: 12px;
-            opacity: 0.9;
-            font-weight: 400;
-            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .support-header {
+        .map-card .map-actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            gap: 8px;
-        }
-
-        .support-header .support-buttons {
-            display: flex;
-            gap: 8px;
-            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.5);
+            border-top: 1px solid var(--glass-border);
             flex-wrap: wrap;
         }
-
-        .support-btn {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 100px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-dark);
-            cursor: pointer;
-            font-family: var(--font-family);
+        .map-btn {
+            flex: 1;
+            min-width: 60px;
             display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: var(--transition);
-        }
-
-        .support-btn:active {
-            transform: scale(0.95);
-        }
-
-        .support-btn i {
-            font-size: 14px;
-        }
-
-        .support-btn .badge {
-            background: #EF4444;
-            color: #FFFFFF;
-            font-size: 10px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: none;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-        }
-
-        .support-btn .badge.show {
-            display: flex;
-        }
-
-        .support-call-btn {
-            background: linear-gradient(135deg, #4ADE80, #22C55E);
-            color: #FFFFFF;
-            border: none;
-            border-radius: 100px;
-            padding: 8px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
             gap: 6px;
-            transition: var(--transition);
-            box-shadow: 0 2px 10px rgba(74, 222, 128, 0.3);
-            text-decoration: none;
-        }
-
-        .support-call-btn:active {
-            transform: scale(0.95);
-        }
-
-        .support-call-btn i {
-            font-size: 14px;
-        }
-
-        .chips-nav {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            padding: 4px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .chips-nav .chip {
-            flex: 1;
-            padding: 10px 8px;
-            border-radius: var(--radius-lg);
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.7);
             color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
             font-family: var(--font-family);
-            display: flex;
+            transition: var(--transition);
+        }
+        .map-btn:active { transform: scale(0.97); }
+        .map-btn.location-btn {
+            background: rgba(108,92,231,0.1);
+            border-color: rgba(108,92,231,0.2);
+            color: var(--primary);
+        }
+
+        .distance-info {
+            display: none;
+            padding: 10px 14px;
+            background: rgba(108,92,231,0.05);
+            border-top: 1px solid var(--glass-border);
+            font-size: 12px;
+            color: var(--text-secondary);
+            gap: 12px;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            letter-spacing: -0.2px;
         }
-
-        .chips-nav .chip i {
-            font-size: 16px;
-        }
-
-        .chips-nav .chip.active {
-            background: #FFFFFF;
-            color: var(--primary);
-            font-weight: 600;
-            box-shadow: var(--shadow);
-        }
-
-        .chips-nav .chip.main-chip {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-        }
-
-        .chips-nav .chip.main-chip.active {
-            box-shadow: 0 6px 16px rgba(255, 71, 87, 0.4);
-            transform: scale(1.02);
-        }
-
-        .contact-section {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .contact-section .contact-label {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-dark);
-            margin-bottom: 10px;
+        .distance-info.show { display: flex; }
+        .distance-info .stat {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
-
-        .contact-section .contact-label i {
-            color: var(--primary);
-            font-size: 16px;
-        }
-
-        .contact-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .contact-row input {
-            flex: 1;
-            min-width: 100px;
-            padding: 12px 16px;
-            border: 2px solid #F1F5F9;
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            background: #FFFFFF;
-            outline: none;
-            transition: var(--transition);
-            color: var(--text-dark);
-            font-weight: 400;
-            font-family: var(--font-family);
-        }
-
-        .contact-row input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
-        }
-
-        .contact-row input::placeholder {
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .contact-row input.invalid {
-            border-color: #EF4444;
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
-        }
+        .distance-info .stat i { color: var(--primary); font-size: 14px; }
+        .distance-info .stat .value { color: #22C55E; font-weight: 700; font-size: 16px; }
+        .distance-info .stat .label { color: var(--text-muted); font-size: 11px; }
 
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
-
         .menu-item {
-            background: #FFFFFF;
-            border-radius: var(--radius-xl);
-            border: none;
-            transition: var(--transition);
-            position: relative;
-            cursor: pointer;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
+            position: relative;
+            transition: var(--transition);
         }
-
-        .menu-item:active {
-            transform: scale(0.97);
-            box-shadow: var(--shadow);
-        }
-
+        .menu-item:active { transform: scale(0.98); }
         .menu-item .item-image {
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
-            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
+            background: rgba(0,0,0,0.02);
         }
-
         .menu-item .item-content {
-            padding: 12px;
+            padding: 10px 12px 12px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-
         .menu-item .item-name {
-            font-size: 15px;
-            color: var(--text-dark);
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 4px;
-            letter-spacing: -0.2px;
-            line-height: 1.3;
+            color: var(--text-primary);
         }
-
         .menu-item .item-desc {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 400;
-            line-height: 1.4;
+            margin-bottom: 6px;
             flex: 1;
         }
-
         .menu-item .item-price {
-            color: var(--primary);
+            color: var(--accent);
             font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 16px;
         }
-
-        .menu-item .add-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-            align-self: flex-end;
-            margin-top: auto;
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .menu-item .add-btn:active {
-            transform: scale(0.9);
-            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.2);
-        }
-
-        .menu-item.unavailable {
-            opacity: 0.5;
-        }
-
         .menu-item .badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.95);
+            top: 8px;
+            left: 8px;
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: var(--primary);
-            font-size: 10px;
+            color: var(--accent);
+            font-size: 9px;
             font-weight: 600;
-            padding: 4px 10px;
+            padding: 2px 10px;
             border-radius: 100px;
-            z-index: 2;
-            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--glass-border);
+            z-index: 5;
         }
-
-        .drinks-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .drink-item {
-            display: flex;
-            align-items: center;
-            background: #FFFFFF;
-            padding: 14px 16px;
-            border-radius: var(--radius-lg);
-            border: none;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-            gap: 12px;
-        }
-
-        .drink-item:active {
-            transform: scale(0.98);
-        }
-
-        .drink-item .drink-icon {
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .drink-item .drink-info {
-            flex: 1;
-        }
-
-        .drink-item .drink-info h4 {
-            font-size: 15px;
-            color: var(--text-dark);
-            font-weight: 600;
-            letter-spacing: -0.2px;
-        }
-
-        .drink-item .drink-info .drink-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .drink-item .drink-price {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 16px;
-            margin-right: 8px;
-        }
-
-        .drink-add {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            transition: var(--transition);
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .drink-add:active {
-            transform: scale(0.9);
-        }
-
         .section-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            color: var(--text-dark);
-            margin: 0 0 16px 0;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
-            letter-spacing: -0.3px;
+            gap: 8px;
         }
-
         .section-title i {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--primary);
         }
-
-        .map-btn-top {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius-xl);
-            padding: 14px 18px;
-            margin-bottom: 16px;
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            width: 100%;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .map-btn-top:active {
-            transform: scale(0.98);
-            background: #FFFFFF;
-        }
-
-        .auth-modal-overlay,
-        .topping-modal-overlay,
-        .orders-modal-overlay,
-        .reviews-modal-overlay,
-        .review-modal-overlay,
-        .map-modal-overlay,
-        .image-modal-overlay,
-        .beach-restrict-modal,
-        .age-verify-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 500;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .auth-modal-overlay.open,
-        .topping-modal-overlay.open,
-        .orders-modal-overlay.open,
-        .reviews-modal-overlay.open,
-        .review-modal-overlay.open,
-        .map-modal-overlay.open,
-        .image-modal-overlay.open,
-        .beach-restrict-modal.open,
-        .age-verify-overlay.open {
-            display: flex;
-        }
-
-        .orders-modal-overlay.open,
-        .reviews-modal-overlay.open {
-            display: flex;
-            padding: 0;
-            background: #FFFFFF;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-        }
-
-        .orders-modal-content,
-        .reviews-modal-content {
-            width: 100%;
-            height: 100vh;
-            max-width: 100%;
-            border-radius: 0;
-            display: flex;
-            flex-direction: column;
-            background: #FFFFFF;
-            box-shadow: none;
-        }
-
-        .auth-modal-content,
-        .topping-modal-content,
-        .beach-restrict-content,
-        .review-modal-content,
-        .age-verify-content {
-            background: #FFFFFF;
-            border-radius: var(--radius-2xl);
-            max-width: 420px;
-            width: 100%;
-            padding: 28px 24px 24px;
-            position: relative;
-            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--shadow-lg);
-            max-height: 85vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        @keyframes modalPop {
-            from {
-                transform: scale(0.9) translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: #F8FAFC;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-close:active {
-            transform: scale(0.9);
-            background: #F1F5F9;
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-dark);
+        .footer {
             text-align: center;
-            letter-spacing: -0.3px;
-            margin-bottom: 8px;
-        }
-
-        .modal-subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-weight: 400;
-        }
-
-        .confirm-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            border-radius: var(--radius-lg);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
-            font-family: var(--font-family);
-            letter-spacing: -0.2px;
-        }
-
-        .confirm-btn:active {
-            transform: scale(0.97);
-        }
-
-        .confirm-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .auth-row {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .auth-row input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #F1F5F9;
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            background: #F8FAFC;
-            outline: none;
-            transition: var(--transition);
-            color: var(--text-dark);
-            font-weight: 400;
-            font-family: var(--font-family);
-        }
-
-        .auth-row input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
-        }
-
-        .auth-row input::placeholder {
+            padding: 20px 0 8px;
             color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .auth-row input.invalid {
-            border-color: #EF4444;
-            background: #FFF5F5;
-        }
-
-        .age-verify-overlay {
-            z-index: 600;
-        }
-
-        .age-warning-box {
-            background: #FFF8E1;
-            border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            margin: 16px 0;
-            text-align: left;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .age-warning-box span:first-child {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .age-warning-text {
-            font-size: 13px;
-            color: #E65100;
-            line-height: 1.5;
-        }
-
-        .age-checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 12px 16px;
-            background: #F8FAFC;
-            border-radius: var(--radius-md);
-            margin-bottom: 16px;
-            user-select: none;
-        }
-
-        .age-checkbox-label input {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--primary);
-            cursor: pointer;
-        }
-
-        .age-checkbox-label span {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .flying-strawberry {
-            position: fixed;
-            z-index: 9999;
-            pointer-events: none;
-            font-size: 32px;
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            filter: drop-shadow(0 4px 8px rgba(255, 71, 87, 0.4));
-        }
-
-        .cart-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 200;
-        }
-
-        .cart-overlay.open {
-            display: block;
-        }
-
-        .cart-modal {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #FFFFFF;
-            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-            max-height: 85vh;
-            z-index: 250;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        .cart-modal.open {
-            display: block;
-        }
-
-        .cart-modal .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 20px;
-            border-bottom: 1px solid #F1F5F9;
-        }
-
-        .cart-modal .modal-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-dark);
-            letter-spacing: -0.3px;
-        }
-
-        .cart-modal .cart-content {
-            padding: 16px 20px 20px;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #F1F5F9;
-        }
-
-        .cart-item .item-info-cart .item-name-cart {
-            font-weight: 600;
-            font-size: 15px;
-            color: var(--text-dark);
-        }
-
-        .cart-item .item-info-cart .item-price-cart {
-            font-weight: 500;
-            color: var(--primary);
-            font-size: 14px;
-        }
-
-        .cart-item .item-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .cart-item .item-actions button {
-            width: 28px;
-            height: 28px;
-            border: none;
-            border-radius: 50%;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-        }
-
-        .qty-btn-minus,
-        .qty-btn-remove {
-            background: #F1F5F9;
-            color: var(--text-secondary);
-        }
-
-        .qty-btn-plus {
-            background: var(--primary);
-            color: #FFFFFF;
-        }
-
-        .qty-number {
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--text-dark);
-            min-width: 24px;
-            text-align: center;
-        }
-
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 700;
-            font-size: 18px;
-            margin: 16px 0;
-            padding-top: 16px;
-            border-top: 1px solid #F1F5F9;
-            color: var(--text-dark);
-        }
-
-        .cart-total .total-price {
-            color: var(--primary);
-        }
-
-        .cart-empty {
-            color: var(--text-muted);
-            font-size: 15px;
-            text-align: center;
-            padding: 32px 0;
-        }
-
-        .payment-section {
-            background: #F8FAFC;
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .payment-title {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-dark);
-            margin-bottom: 12px;
-        }
-
-        .payment-options {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .payment-btn {
-            flex: 1;
-            min-width: 80px;
-            padding: 12px 8px;
-            border: 2px solid #F1F5F9;
-            border-radius: var(--radius-md);
-            background: #FFFFFF;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            text-align: center;
-        }
-
-        .payment-btn.active {
-            border-color: var(--primary);
-            background: #FFF5F5;
-        }
-
-        .payment-btn .payment-icon {
-            font-size: 22px;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .payment-btn .payment-name {
             font-size: 11px;
-            font-weight: 600;
-            color: var(--text-dark);
         }
-
-        .payment-info {
+        .footer .footer-phone {
+            display: inline-block;
+            margin-top: 4px;
             font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .bottom-tab-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, rgba(255, 71, 87, 0.15), rgba(255, 138, 128, 0.1));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 8px 0 20px;
-            z-index: 100;
-            max-width: 480px;
-            margin: 0 auto 8px;
-            box-shadow: 0 -4px 20px rgba(255, 71, 87, 0.05);
-            width: calc(100% - 16px);
-        }
-
-        .tab-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            padding: 4px 16px;
-            border: none;
-            background: none;
-            font-family: var(--font-family);
-            transition: all 0.2s ease;
-            position: relative;
-            gap: 4px;
-        }
-
-        .tab-item .tab-icon {
-            font-size: 22px;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-        }
-
-        .tab-item .tab-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .tab-item.active .tab-icon {
-            color: var(--primary);
-        }
-
-        .tab-item.active .tab-label {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .tab-item .tab-badge {
-            position: absolute;
-            top: 0px;
-            right: 8px;
-            background: var(--primary);
-            color: #FFFFFF;
-            font-size: 10px;
-            font-weight: 700;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
-        }
-
-        .tab-item .tab-badge.hidden {
-            display: none;
-        }
-
-        .tab-item .tab-total {
-            font-size: 10px;
             font-weight: 600;
             color: var(--primary);
-        }
-
-        .orders-fullscreen-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 18px 10px;
-            border-bottom: 1px solid #F1F5F9;
-            flex-shrink: 0;
-            background: #FFFFFF;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .orders-fullscreen-header h2 {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 0;
-        }
-
-        .orders-fullscreen-search {
-            padding: 14px 18px 14px;
-            border-bottom: 1px solid #F1F5F9;
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-            background: #FFFFFF;
-            position: sticky;
-            top: 48px;
-            z-index: 9;
-        }
-
-        .orders-fullscreen-search input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 2px solid #F1F5F9;
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            outline: none;
-            background: #F8FAFC;
-            font-family: var(--font-family);
-        }
-
-        .orders-fullscreen-search input:focus {
-            border-color: var(--primary);
-        }
-
-        .orders-fullscreen-search button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            padding: 10px 16px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
-            white-space: nowrap;
-        }
-
-        .orders-fullscreen-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 80px 16px 20px;
-            background: #F8FAFC;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .order-card-full {
-            background: #FFFFFF;
-            border-radius: var(--radius-lg);
-            padding: 14px;
-            margin-bottom: 10px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid #F1F5F9;
-        }
-
-        .order-card-full .order-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .order-card-full .order-id-block .order-id {
-            font-weight: 700;
-            font-size: 15px;
-            color: var(--text-dark);
-        }
-
-        .order-card-full .order-id-block .order-date {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .order-status-badge {
-            padding: 5px 12px;
-            border-radius: 100px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .status-waiting { background: #FFF8E1; color: #F59E0B; }
-        .status-done { background: #E8F5E9; color: #2E7D32; }
-        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
-
-        .order-items-list {
-            margin-bottom: 12px;
-        }
-
-        .order-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #F5F5F5;
-        }
-
-        .order-item-row:last-child {
-            border-bottom: none;
-        }
-
-        .order-item-row .item-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .order-item-row .item-icon {
-            font-size: 24px;
-        }
-
-        .order-item-row .item-details .item-name {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-dark);
-        }
-
-        .order-item-row .item-details .item-qty {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .order-item-row .item-total {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 14px;
-        }
-
-        .order-card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #F1F5F9;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .order-card-footer .footer-info {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .order-card-footer .footer-total {
-            font-weight: 700;
-            font-size: 18px;
-            color: var(--primary);
-        }
-
-        .order-card-footer .footer-actions {
-            display: flex;
-            gap: 6px;
-            width: 100%;
-            justify-content: flex-end;
-        }
-
-        .order-card-footer .footer-actions button {
-            padding: 8px 16px;
-            border-radius: 100px;
-            border: none;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            transition: var(--transition);
-        }
-
-        .btn-cancel-order {
-            background: #EF4444;
-            color: #FFFFFF;
-        }
-
-        .btn-review-order {
-            background: linear-gradient(135deg, #FFB300, #FF8F00);
-            color: #FFFFFF;
-        }
-
-        .notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1A1A2E;
-            color: #FFFFFF;
-            padding: 14px 24px;
-            border-radius: 100px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            max-width: 90%;
-            text-align: center;
-            font-weight: 500;
-            font-size: 14px;
-            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .notification.show {
-            display: block;
-        }
-
-        .notification.error {
-            background: #EF4444;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translate(-50%, -80px);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, 0);
-                opacity: 1;
-            }
-        }
-
-        .no-access-message {
-            text-align: center;
-            padding: 40px 24px;
-            background: #FFFFFF;
-            border-radius: var(--radius-2xl);
-            box-shadow: var(--shadow);
-        }
-
-        .no-access-icon {
-            font-size: 64px;
-            display: block;
-            margin-bottom: 16px;
-        }
-
-        .no-access-message h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 12px;
-        }
-
-        .no-access-message > p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-
-        .no-access-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .no-access-btn {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 16px 20px;
-            background: #FFFFFF;
-            border: 2px solid #F1F5F9;
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-family);
-            text-align: left;
-            width: 100%;
-        }
-
-        .no-access-btn:active {
-            border-color: var(--primary);
-            transform: scale(0.98);
-        }
-
-        .no-access-btn .btn-icon {
-            font-size: 32px;
-            width: 44px;
-            text-align: center;
-        }
-
-        .no-access-btn .btn-title {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--text-dark);
-        }
-
-        .no-access-btn .btn-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* ===== MAP MODAL ===== */
-        .map-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(12px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-        }
-        .map-modal-overlay.open { display: flex; }
-        .map-modal-content {
-            background: #FFFFFF;
-            border-radius: var(--radius-2xl);
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 24px;
-            position: relative;
-            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--shadow-lg);
-        }
-        .map-modal-content .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .map-modal-content .modal-header h2 { font-size: 18px; font-weight: 700; color: var(--text-dark); }
-        .map-modal-content .modal-close {
-            background: #F8FAFC;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 16px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-        .map-modal-content .map-container {
-            width: 100%;
-            height: 350px;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            background: #F1F5F9;
-            border: 1px solid #E5E7EB;
-            position: relative;
-        }
-        .map-modal-content .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .map-modal-content .order-info {
-            background: #F8FAFC;
-            border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            margin: 12px 0;
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-        .map-modal-content .order-info strong { color: var(--text-dark); }
-        .map-modal-content .order-info .highlight { color: var(--primary); font-weight: 700; }
-        .map-modal-content .action-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .map-modal-content .action-row .btn { flex: 1; justify-content: center; }
-
-        @media (max-width: 400px) {
-            .app-container {
-                padding: 12px 12px 16px;
-            }
-            .header h1 {
-                font-size: 24px;
-            }
-            .header .logo-icon {
-                font-size: 40px;
-            }
-            .menu-grid {
-                gap: 8px;
-            }
-            .menu-item .item-name {
-                font-size: 14px;
-            }
-            .menu-item .item-price {
-                font-size: 16px;
-            }
-            .menu-item .add-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-            .support-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 6px;
-            }
-            .support-header .support-buttons {
-                justify-content: center;
-            }
-            .support-call-btn {
-                justify-content: center;
-            }
-            .payment-options {
-                flex-wrap: wrap;
-            }
-            .payment-btn {
-                flex: 1 1 100%;
-            }
-            .map-modal-content .map-container { height: 280px; }
+            text-decoration: none;
         }
 
         @media (max-width: 340px) {
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-            .chips-nav .chip {
-                font-size: 11px;
-                padding: 8px 6px;
-            }
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(14px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 16px;
+            animation: fadeIn 0.4s ease;
+        }
+        .modal-overlay.open { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal {
+            background: #FFFFFF;
+            border-radius: var(--radius);
+            max-width: 320px;
+            width: 100%;
+            padding: 18px 14px 16px;
+            position: relative;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal .modal-image {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 4px;
+            display: block;
+            border: 2px solid rgba(255,215,0,0.15);
+        }
+        .modal .fallback-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .modal h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 2px;
+        }
+        .modal h2 span {
+            background: linear-gradient(135deg, #FFD700, #FF6B00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .modal p {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 2px;
+        }
+        .modal p strong {
+            color: #FFD700;
+        }
+        .modal .btn {
+            width:100%;
+            padding:10px;
+            border-radius:var(--radius-sm);
+            border:none;
+            font-size:14px;
+            font-weight:600;
+            cursor:pointer;
+            font-family:var(--font-family);
+            transition:0.2s;
+            margin-top:6px;
+        }
+        .modal .btn:active { transform:scale(0.97); }
+        .modal .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; }
+
+        .float-qr-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 16px;
+            z-index: 1500;
+            background: linear-gradient(135deg, #FFD700, #FF6B00);
+            color: #1A1A2E;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+            font-family: var(--font-family);
+            transition: var(--transition);
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        .float-qr-btn:active { transform: scale(0.95); }
+        .float-qr-btn i { font-size: 18px; }
+
+        .notification {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 100px;
+            z-index: 9999;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
+            font-size: 13px;
+            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: var(--font-family);
+            border: 1px solid var(--glass-border);
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="notification" id="notification"></div>
-    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-    <!-- ===== AUTH MODAL ===== -->
-    <div class="auth-modal-overlay" id="authModal">
-        <div class="auth-modal-content">
-            <button class="modal-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-user-circle" style="color: var(--primary);"></i> Ваши данные</div>
-            <div class="modal-subtitle">Чтобы мы могли связаться с вами</div>
-            <div class="auth-row">
-                <input type="text" id="authName" placeholder="Ваше имя">
-                <input type="tel" id="authPhone" placeholder="+7 999 123-45-67" oninput="validatePhoneInput(this)">
-            </div>
-            <button class="confirm-btn" id="authConfirmBtn" onclick="confirmAuth()"><i class="fas fa-check-circle"></i> Продолжить</button>
+<div class="menu-container">
+
+    <header class="header">
+        <span class="logo-icon">🍓</span>
+        <div class="header-badge"><i class="fas fa-gift"></i> Подарок для вас!</div>
+        <h1>Strawberry in Chocolate</h1>
+        <p class="subtitle">Найди киоск и получи подарок 🍓</p>
+    </header>
+
+    <!-- MAP -->
+    <div class="map-card">
+        <div class="map-container">
+            <div id="treasureMap"></div>
         </div>
-    </div>
-
-    <!-- ===== TOPPING MODAL ===== -->
-    <div class="topping-modal-overlay" id="toppingModal">
-        <div class="topping-modal-content">
-            <button class="modal-close" onclick="closeToppingModal()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-sparkles" style="color: var(--primary);"></i> Присыпка</div>
-            <div class="modal-subtitle">Выберите до 2 присыпок (бесплатно)</div>
-            <div class="modal-product" id="selectedProductDisplay" style="background:#F8FAFC;border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-                <span class="product-icon" id="productIcon" style="font-size:28px;"><i class="fas fa-chocolate-bar"></i></span>
-                <span class="product-name" id="productName" style="font-weight:600;color:var(--text-dark);">Классика</span>
-                <span class="product-price" id="productPrice" style="margin-left:auto;font-weight:700;color:var(--primary);">350 ₽</span>
-            </div>
-            <div id="selectedToppingsDisplay" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:32px;padding:4px;">
-                <span style="color:var(--text-muted);font-size:13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>
-            </div>
-            <div class="topping-options" id="toppingOptions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
-            <button class="confirm-btn" id="confirmToppingBtn" disabled><i class="fas fa-plus-circle"></i> Добавить в корзину</button>
-        </div>
-    </div>
-
-    <!-- ===== AGE VERIFY ===== -->
-    <div class="age-verify-overlay" id="ageVerifyModal">
-        <div class="age-verify-content">
-            <span style="font-size:48px;display:block;text-align:center;margin-bottom:12px;">🍺</span>
-            <div class="modal-title">Подтверждение возраста</div>
-            <div class="modal-subtitle" style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
-                Спиртные напитки отпускаются<br><strong>строго совершеннолетним</strong>
-            </div>
-            <div class="age-warning-box">
-                <span>⚠️</span>
-                <span class="age-warning-text">При получении заказа необходимо <strong>предъявить документ</strong>, удостоверяющий личность и возраст</span>
-            </div>
-            <label class="age-checkbox-label" onclick="toggleAgeCheckbox()">
-                <input type="checkbox" id="ageCheckbox"><span>Мне есть 18 лет</span>
-            </label>
-            <button class="confirm-btn" id="ageConfirmBtn" disabled onclick="confirmAge()"><i class="fas fa-check-circle"></i> Подтверждаю</button>
-            <button onclick="closeAgeVerify()" style="width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:14px;cursor:pointer;margin-top:8px;font-family:var(--font-family);">Отмена</button>
-        </div>
-    </div>
-
-    <!-- ===== ORDERS MODAL ===== -->
-    <div class="orders-modal-overlay" id="ordersModal">
-        <div class="orders-modal-content">
-            <div class="orders-fullscreen-header">
-                <h2><i class="fas fa-list-alt" style="color:var(--primary);margin-right:8px;"></i>Мои заказы</h2>
-                <button class="modal-close" onclick="closeOrdersModal()" style="position:static;"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="orders-fullscreen-search">
-                <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон" oninput="validatePhoneInput(this)">
-                <button onclick="loadMyOrders()"><i class="fas fa-search"></i> Показать</button>
-            </div>
-            <div class="orders-fullscreen-list" id="ordersContent">
-                <div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите телефон, чтобы увидеть заказы</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== REVIEWS MODAL ===== -->
-    <div class="reviews-modal-overlay" id="reviewsModal">
-        <div class="reviews-modal-content">
-            <div class="orders-fullscreen-header">
-                <h2><i class="fas fa-star" style="color:#FFB300;margin-right:8px;"></i>Отзывы</h2>
-                <button class="modal-close" onclick="closeReviewsModal()" style="position:static;"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="orders-fullscreen-list" id="reviewsModalList">
-                <div class="cart-empty"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>⭐ Пока нет отзывов. Будьте первым!</div>
-            </div>
-            <div style="padding:14px 20px;border-top:1px solid #F1F5F9;text-align:center;flex-shrink:0;background:#FFFFFF;">
-                <div style="font-size:14px;color:var(--text-secondary);"><i class="fas fa-heart" style="color:#E91E63;"></i> Спасибо, что выбираете нас! С вами мы становимся лучше!</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== REVIEW MODAL ===== -->
-    <div class="review-modal-overlay" id="reviewModal">
-        <div class="review-modal-content">
-            <button class="modal-close" onclick="closeReviewModal()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-star" style="color:#FFB300;"></i> Оцените заказ</div>
-            <div class="modal-subtitle">Спасибо, что выбрали нас! ❤️</div>
-            <div class="stars-row" id="starsRow" style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;">
-                <span class="star" data-value="1" onclick="setRating(1)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="2" onclick="setRating(2)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="3" onclick="setRating(3)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="4" onclick="setRating(4)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="5" onclick="setRating(5)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-            </div>
-            <textarea id="reviewText" placeholder="Расскажите о вашем впечатлении..." style="width:100%;padding:14px 16px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:15px;background:#F8FAFC;outline:none;font-family:var(--font-family);resize:vertical;min-height:100px;margin-bottom:16px;"></textarea>
-            <button class="confirm-btn" id="submitReviewBtn" disabled onclick="submitReview()"><i class="fas fa-paper-plane"></i> Отправить отзыв</button>
-        </div>
-    </div>
-
-    <!-- ===== IMAGE MODAL ===== -->
-    <div class="image-modal-overlay" id="imageModal" onclick="closeImageModal()" style="cursor:pointer;">
-        <div class="image-modal-content" style="max-width:90vw;max-height:90vh;border-radius:var(--radius-xl);overflow:hidden;position:relative;">
-            <button class="image-close" onclick="closeImageModal()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border:none;width:40px;height:40px;border-radius:50%;font-size:20px;color:#FFFFFF;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
-            <img id="modalImage" src="" alt="Увеличенное изображение" style="width:100%;height:auto;max-height:85vh;object-fit:contain;display:block;">
-            <div class="image-caption" id="imageCaption" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.8);font-size:13px;background:rgba(0,0,0,0.5);padding:6px 16px;border-radius:100px;backdrop-filter:blur(10px);">Клубника</div>
-        </div>
-    </div>
-
-    <!-- ===== BEACH RESTRICT ===== -->
-    <div class="beach-restrict-modal" id="beachRestrictModal">
-        <div class="beach-restrict-content">
-            <span class="restrict-icon" style="font-size:64px;display:block;text-align:center;margin-bottom:12px;">🏖️</span>
-            <h2 style="font-size:22px;font-weight:700;color:var(--text-dark);text-align:center;margin-bottom:12px;">Доступ только из бунгало!</h2>
-            <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;text-align:center;margin-bottom:20px;">
-                Для заказа клубники в шоколаде необходимо находиться в бунгало.<br>
-                Вы можете подойти к нашему киоску на пляже или вернуться в бунгало и отсканировать QR-код.
-            </p>
-            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
-                <button onclick="closeBeachRestrict(); openMap();" style="display:flex;align-items:center;gap:12px;padding:16px;border:2px solid #F1F5F9;border-radius:var(--radius-lg);background:#FFFFFF;cursor:pointer;font-family:var(--font-family);text-align:left;width:100%;transition:var(--transition);">
-                    <span style="font-size:28px;">📍</span>
-                    <span style="flex:1;"><span style="display:block;font-weight:600;color:var(--text-dark);">Найти киоск на пляже</span><span style="font-size:12px;color:var(--text-secondary);">Мы находимся в 100 метрах от бунгало</span></span>
-                    <i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
-                </button>
-                <button onclick="closeBeachRestrict(); showQRPrompt();" style="display:flex;align-items:center;gap:12px;padding:16px;border:2px solid #F1F5F9;border-radius:var(--radius-lg);background:#FFFFFF;cursor:pointer;font-family:var(--font-family);text-align:left;width:100%;transition:var(--transition);">
-                    <span style="font-size:28px;">🏠</span>
-                    <span style="flex:1;"><span style="display:block;font-weight:600;color:var(--text-dark);">Я в бунгало</span><span style="font-size:12px;color:var(--text-secondary);">Отсканируйте QR-код для заказа</span></span>
-                    <i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
-                </button>
-            </div>
-            <button onclick="closeBeachRestrict()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;border-radius:100px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font-family);box-shadow:0 4px 16px rgba(255,71,87,0.3);"><i class="fas fa-times"></i> Закрыть</button>
-        </div>
-    </div>
-
-    <!-- ===== MAP MODAL ===== -->
-    <div class="map-modal-overlay" id="mapModal" onclick="closeMap()">
-        <div class="map-modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeMap()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i> Наши киоски на карте</div>
-            <div class="map-container" style="border-radius:var(--radius-lg);overflow:hidden;margin-bottom:14px;">
-                <iframe id="mapIframe" src="" style="width:100%;height:300px;border:none;"></iframe>
-            </div>
-            <div style="background:#F8FAFC;padding:14px 16px;border-radius:var(--radius-lg);font-size:14px;color:var(--text-dark);line-height:1.6;">
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                    <div><i class="fas fa-location-dot" style="color:var(--primary);"></i> <strong>Киоск 1:</strong> Напротив бетонного пирса</div>
-                    <div><i class="fas fa-location-dot" style="color:var(--primary);"></i> <strong>Киоск 2:</strong> Центральный вход на пляж</div>
-                    <div><i class="fas fa-phone"></i> <strong>Телефон:</strong> <a href="tel:+79628557263" style="color:var(--primary);font-weight:600;text-decoration:none;">+7 962 855-72-63</a></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== APP CONTAINER ===== -->
-    <div class="app-container">
-
-        <div class="support-header">
-            <div class="support-buttons">
-                <button onclick="openSupportChat()" class="support-btn">
-                    <i class="fas fa-headset" style="color:var(--primary);"></i> Поддержка
-                    <span class="badge" id="supportBadge">!</span>
-                </button>
-                <button onclick="openReviewsModal()" class="support-btn">
-                    <i class="fas fa-star" style="color:#FFB300;"></i> Отзывы
-                    <span id="reviewsBadge" style="background:var(--primary);color:#FFFFFF;font-size:10px;min-width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;padding:0 4px;"><span id="reviewsCount">0</span></span>
-                </button>
-                <button onclick="openBarista()" class="support-btn" style="background:linear-gradient(135deg,#FD79A8,#6C5CE7);color:#FFFFFF;border:none;">
-                    <i class="fas fa-robot"></i> Бариста 🍓
-                </button>
-            </div>
-            <a href="tel:+79628557263" class="support-call-btn"><i class="fas fa-phone"></i> Позвонить</a>
-        </div>
-
-        <header class="header">
-            <span class="logo-icon">🍓</span>
-            <div class="header-badge"><i class="fas fa-water"></i> Доставка на пляж</div>
-            <h1><span class="highlight">Strawberry</span> <span style="color:var(--text-dark);"> in </span> <span style="color:var(--primary-dark);font-weight:800;">Chocolate</span></h1>
-            <p class="subtitle"><i class="fas fa-strawberry" style="color:var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты <span class="delivery-time">⏱️ за 15 минут!</span></p>
-        </header>
-
-        <div id="noAccessMode" style="display:none;">
-            <div class="no-access-message">
-                <span class="no-access-icon">🔒</span>
-                <h2>Доступ ограничен</h2>
-                <p>Заказ доступен только из бунгало или у нашего киоска</p>
-                <div class="no-access-options">
-                    <button class="no-access-btn" onclick="showQRPrompt()">
-                        <span class="btn-icon">🏠</span>
-                        <span class="btn-text"><span class="btn-title">Я в бунгало</span><span class="btn-desc">Отсканируйте QR-код в бунгало для заказа</span></span>
-                        <i class="fas fa-qrcode"></i>
-                    </button>
-                    <button class="no-access-btn" onclick="openBeachRestrict()">
-                        <span class="btn-icon">🏖️</span>
-                        <span class="btn-text"><span class="btn-title">Я на пляже</span><span class="btn-desc">Самовывоз из киоска (100 метров от вас)</span></span>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-secondary);">
-                    <span><i class="fas fa-clock" style="color:var(--primary);"></i> Работаем: <strong>9:00 — 1:00</strong></span>
-                    <span><i class="fas fa-location-dot" style="color:var(--primary);"></i> Киоски: <strong>на карте</strong></span>
-                </div>
-            </div>
-        </div>
-
-        <div id="techBreakMode" style="display:none;">
-            <div class="no-access-message">
-                <span class="no-access-icon">🔧</span>
-                <h2>Технический перерыв</h2>
-                <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">Мы обновляем меню и готовим для вас что-то вкусное!</p>
-                <p style="color:var(--text-muted);font-size:14px;">Скоро всё заработает, загляните через 5-10 минут</p>
-                <div style="background:#F8FAFC;border-radius:100px;padding:10px 20px;display:inline-block;margin:16px 0;font-weight:500;color:var(--text-dark);"><i class="fas fa-clock" style="color:var(--primary);"></i> ⏳ Скоро открываемся!</div>
-                <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;"><span><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i></span> Показать на карте <i class="fas fa-arrow-right" style="margin-left:auto;"></i></button>
-            </div>
-        </div>
-
-        <div id="closedMode" style="display:none;">
-            <div class="no-access-message">
-                <span class="no-access-icon">🔒</span>
-                <h2>Сейчас не принимаем заказы</h2>
-                <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong>.</p>
-                <p style="color:var(--text-muted);font-size:14px;" id="currentTimeDisplay">--:--</p>
-                <div style="background:#F8FAFC;border-radius:100px;padding:10px 20px;display:inline-block;margin:16px 0;font-weight:500;color:var(--text-dark);"><i class="fas fa-clock" style="color:var(--primary);"></i> График работы: <strong>9:00 — 1:00</strong></div>
-                <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;"><span><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i></span> Показать на карте <i class="fas fa-arrow-right" style="margin-left:auto;"></i></button>
-            </div>
-        </div>
-
-        <div id="bungaloMode">
-            <button class="map-btn-top" onclick="openMap()">
-                <span><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i></span> Показать на карте
-                <i class="fas fa-arrow-right" style="margin-left:auto;"></i>
+        <div class="map-actions">
+            <button class="map-btn location-btn" onclick="requestLocationOnClick()">
+                <i class="fas fa-location-dot"></i> Где я?
             </button>
-
-            <div id="pickupBannerContainer"></div>
-
-            <div class="bungalo-display">
-                <span class="bg-strawberry">🍓</span>
-                <span class="bg-strawberry">🍓</span>
-                <div class="label"><i class="fas fa-location-dot"></i> <span id="bungaloLabel">Ваше бунгало</span></div>
-                <div class="number" id="bungaloNumberDisplay">#7</div>
-                <div class="hint"><i class="fas fa-qrcode"></i> <span id="bungaloHint">Сканируйте QR-код в вашем бунгало</span></div>
-            </div>
-
-            <div class="contact-section">
-                <div class="contact-label"><i class="fas fa-phone"></i> Как с вами связаться? <small style="font-weight:400;color:var(--text-muted);margin-left:auto;">(если мы вас не найдем)</small></div>
-                <div class="contact-row">
-                    <input type="text" id="customerName" placeholder="Ваше имя">
-                    <input type="tel" id="customerPhone" placeholder="+7 999 123-45-67" oninput="validatePhoneInput(this)">
-                </div>
-            </div>
-
-            <div class="chips-nav">
-                <button class="chip" data-section="fruits" onclick="switchSection('fruits')"><i class="fas fa-apple-alt"></i>Больше фруктов</button>
-                <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')"><i class="fas fa-strawberry"></i> Клубника в Шоколаде</button>
-                <button class="chip" data-section="drinks" onclick="switchSection('drinks')"><i class="fas fa-mug-saucer"></i> Напитки перекус</button>
-            </div>
-
-            <div class="menu-section active" id="section-strawberry">
-                <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
-                <div class="menu-grid" id="strawberryGrid"></div>
-            </div>
-
-            <div class="menu-section" id="section-fruits" style="display:none;">
-                <div class="section-title"><i class="fas fa-apple-alt"></i> Свежие фрукты</div>
-                <div class="menu-grid" id="fruitsGrid"></div>
-            </div>
-
-            <div class="menu-section" id="section-drinks" style="display:none;">
-                <div class="section-title"><i class="fas fa-mug-saucer"></i> Напитки и перекус</div>
-                <div class="drinks-grid" id="drinksGrid"></div>
-            </div>
-
-            <div style="height:16px;"></div>
+        </div>
+        <div class="distance-info" id="distanceInfo">
+            <span class="stat">
+                <i class="fas fa-shoe-prints"></i>
+                <span class="value" id="stepsCount">0</span>
+                <span class="label">шагов до киоска 🍓</span>
+            </span>
+            <span class="stat">
+                <i class="fas fa-flag-checkered"></i>
+                <span class="value" id="distanceKm">0</span>
+                <span class="label">км</span>
+            </span>
         </div>
     </div>
 
-    <!-- ===== BOTTOM TAB BAR ===== -->
-    <div class="bottom-tab-bar" id="bottomTabBar">
-        <button class="tab-item active" id="tabMenu" onclick="switchTab('menu')">
-            <span class="tab-icon"><i class="fas fa-home"></i></span>
-            <span class="tab-label">Меню</span>
-        </button>
-        <button class="tab-item" id="tabOrders" onclick="openOrdersModal()">
-            <span class="tab-icon"><i class="fas fa-list-alt"></i></span>
-            <span class="tab-label">Заказы</span>
-            <span class="tab-badge hidden" id="tabOrdersBadge">0</span>
-        </button>
-        <button class="tab-item" id="tabCart" onclick="openCart()">
-            <span class="tab-icon"><i class="fas fa-shopping-cart"></i></span>
-            <span class="tab-label">Корзина</span>
-            <span class="tab-badge hidden" id="tabCartBadge">0</span>
-            <span class="tab-total" id="tabCartTotal">0 ₽</span>
+    <!-- MENU -->
+    <div class="menu-section active">
+        <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+        <div class="menu-grid" id="strawberryGrid"></div>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-heart" style="color: var(--accent);"></i> С любовью, Strawberry in Chocolate
+        <br><a href="tel:+79628557263" class="footer-phone"><i class="fas fa-phone"></i> +7 962 855-72-63</a>
+    </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="giftModal">
+    <div class="modal">
+        <img src="images/gift-free.jpg" alt="Подарок" class="modal-image" 
+             onerror="this.style.display='none';this.parentElement.querySelector('.fallback-icon').style.display='block'">
+        <span class="fallback-icon" style="display:none;">🍓</span>
+        <h2><span>Подарок!</span> 🎁</h2>
+        <p>
+            Для <strong>первых посетителей</strong> —<br>
+            <strong>мини-порция</strong> клубники в шоколаде 🍫
+        </p>
+        <p style="font-size:11px;color:var(--text-muted);">Покажи QR-код кассиру</p>
+        <button class="btn btn-primary" onclick="closeGiftModal()">
+            Спасибо, понятно! 🙌
         </button>
     </div>
+</div>
 
-    <!-- ===== CART MODAL ===== -->
-    <div class="cart-modal" id="cartModal">
-        <div class="modal-header">
-            <h2><i class="fas fa-shopping-cart" style="color:var(--primary);"></i> Корзина</h2>
-            <div style="display:flex;gap:12px;align-items:center;">
-                <button id="clearCart" style="background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:var(--font-family);"><i class="fas fa-trash-can"></i> Очистить</button>
-                <button onclick="closeCart()" style="background:#F1F5F9;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:var(--text-secondary);cursor:pointer;"><i class="fas fa-times"></i></button>
+<!-- FLOATING QR BUTTON -->
+<button class="float-qr-btn" id="floatQrBtn" onclick="openQrModal()">
+    <i class="fas fa-qrcode"></i> Мой QR-код
+</button>
+
+<!-- ============================================================ -->
+<!-- ===== КЛУБНИЧНЫЙ БАРИСТА (AI-ПОМОЩНИК) ===== -->
+<!-- ============================================================ -->
+
+<style>
+.barista-widget {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    z-index: 9998;
+    font-family: 'Inter', sans-serif;
+}
+
+.barista-toggle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 30px;
+    box-shadow: 0 4px 25px rgba(108,92,231,0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    animation: baristaPulse 2.5s infinite;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+.barista-toggle:active { transform: scale(0.92); }
+.barista-toggle .badge-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FF4757;
+    border: 2px solid #FFFFFF;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    animation: blinkBadge 1.2s infinite;
+}
+
+@keyframes baristaPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 25px rgba(108,92,231,0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 4px 40px rgba(108,92,231,0.6); }
+}
+@keyframes blinkBadge {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.barista-window {
+    position: absolute;
+    bottom: 78px;
+    right: 0;
+    width: 400px;
+    height: 550px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.barista-window.open { display: flex; }
+
+@keyframes slideUpChat {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.barista-header {
+    padding: 14px 18px;
+    background: rgba(108,92,231,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+.barista-header .info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.barista-header .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+.barista-header .name {
+    color: #1A1A2E;
+    font-weight: 700;
+    font-size: 15px;
+}
+.barista-header .status {
+    font-size: 11px;
+    color: #22C55E;
+}
+.barista-header .close-btn {
+    background: none;
+    border: none;
+    color: rgba(0,0,0,0.3);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: 0.2s;
+}
+.barista-header .close-btn:hover { color: #1A1A2E; }
+
+.barista-messages {
+    flex: 1;
+    padding: 16px 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.barista-messages .msg {
+    padding: 12px 16px;
+    border-radius: 14px;
+    max-width: 90%;
+    font-size: 14px;
+    line-height: 1.6;
+    animation: msgIn 0.3s ease;
+}
+@keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.barista-messages .msg.user {
+    background: rgba(108,92,231,0.12);
+    color: #1A1A2E;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.barista-messages .msg.barista {
+    background: rgba(0,0,0,0.04);
+    color: #1A1A2E;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.barista-messages .msg.barista .highlight {
+    color: #FD79A8;
+    font-weight: 600;
+}
+.barista-messages .msg.barista .price {
+    color: #22C55E;
+    font-weight: 700;
+}
+.barista-messages .msg.barista .joke {
+    display: inline-block;
+    background: rgba(253,121,168,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 4px;
+    font-size: 13px;
+    border: 1px solid rgba(253,121,168,0.1);
+}
+
+.barista-input {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.02);
+}
+.barista-input input {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #F8FAFC;
+    color: #1A1A2E;
+    outline: none;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: 0.2s;
+}
+.barista-input input::placeholder { color: rgba(0,0,0,0.3); }
+.barista-input input:focus { border-color: rgba(108,92,231,0.4); }
+.barista-input button {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #FD79A8, #6C5CE7);
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+.barista-input button:active { transform: scale(0.92); }
+
+.barista-quick {
+    display: flex;
+    gap: 6px;
+    padding: 8px 16px 12px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.02);
+}
+.barista-quick button {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: rgba(0,0,0,0.02);
+    color: rgba(0,0,0,0.5);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: 0.2s;
+}
+.barista-quick button:hover {
+    background: rgba(108,92,231,0.08);
+    color: #1A1A2E;
+    border-color: rgba(108,92,231,0.15);
+}
+.barista-quick button:active { transform: scale(0.95); }
+
+@media (max-width: 480px) {
+    .barista-window { width: 330px; right: -10px; height: 480px; }
+    .barista-widget { bottom: 80px; right: 14px; }
+    .barista-toggle { width: 56px; height: 56px; font-size: 26px; }
+}
+</style>
+
+<div class="barista-widget">
+    <div class="barista-toggle" onclick="toggleBarista()">
+        🍓
+        <span class="badge-dot">1</span>
+    </div>
+    <div class="barista-window" id="baristaWindow">
+        <div class="barista-header">
+            <div class="info">
+                <div class="avatar">🍓</div>
+                <div>
+                    <div class="name">Клубничный Бариста</div>
+                    <div class="status">🟢 Готов помочь</div>
+                </div>
+            </div>
+            <button class="close-btn" onclick="toggleBarista()">✕</button>
+        </div>
+        <div class="barista-messages" id="baristaMessages">
+            <div class="msg barista">
+                🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
+                Я знаю всё о нашем меню, ценах и акциях.<br>
+                Спроси меня о чём угодно! Я люблю шутить и общаться 🤗
             </div>
         </div>
-        <div class="cart-content">
-            <div id="cartItems"><div class="cart-empty"><i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i> Добавьте что-нибудь вкусное 😋</div></div>
-            <div class="payment-section" id="paymentSection">
-                <div class="payment-title"><i class="fas fa-credit-card" style="color:var(--primary);"></i> Способ оплаты</div>
-                <div class="payment-options">
-                    <button class="payment-btn active" data-method="cash" onclick="selectPayment('cash')"><span class="payment-icon">💵</span><span class="payment-name">Наличными</span></button>
-                    <button class="payment-btn" data-method="transfer" onclick="selectPayment('transfer')"><span class="payment-icon">📱</span><span class="payment-name">Переводом</span></button>
-                    <button class="payment-btn" data-method="card" onclick="selectPayment('card')"><span class="payment-icon">💳</span><span class="payment-name">Картой</span></button>
-                </div>
-                <div class="payment-info" id="paymentInfo">💡 Оплата наличными при получении</div>
-            </div>
-            <div class="cart-total"><span>Итого:</span><span class="total-price" id="cartTotal">0 ₽</span></div>
-            <button id="orderButton" class="confirm-btn" style="margin-top:8px;" disabled><i class="fas fa-check-circle"></i> Заказать</button>
+        <div class="barista-quick">
+            <button onclick="quickQuestion('Что посоветуешь из еды?')">🍫 Что посоветуешь?</button>
+            <button onclick="quickQuestion('Расскажи шутку')">😂 Пошути</button>
+            <button onclick="quickQuestion('Как у тебя дела?')">👋 Как дела?</button>
+            <button onclick="quickQuestion('Где киоск?')">📍 Где киоск?</button>
+        </div>
+        <div class="barista-input">
+            <input type="text" id="baristaInput" placeholder="Спросите меня..." onkeydown="if(event.key==='Enter') sendBaristaMessage()">
+            <button onclick="sendBaristaMessage()">➤</button>
         </div>
     </div>
+</div>
 
-    <!-- ===== BARISTA WIDGET ===== -->
-    <div id="baristaWidget" style="position:fixed;bottom:100px;right:20px;z-index:9999;display:none;">
-        <div id="baristaToggle" onclick="toggleBarista()" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FD79A8,#6C5CE7);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:30px;box-shadow:0 4px 25px rgba(108,92,231,0.4);transition:all 0.3s ease;position:relative;animation:baristaPulse 2.5s infinite;border:2px solid rgba(255,255,255,0.3);">
-            🍓
-            <span style="position:absolute;top:0;right:0;width:18px;height:18px;border-radius:50%;background:#FF4757;border:2px solid #FFFFFF;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;animation:blinkBadge 1.2s infinite;">1</span>
-        </div>
-        <div id="baristaWindow" style="position:absolute;bottom:78px;right:0;width:370px;height:500px;background:#FFFFFF;border-radius:20px;border:1px solid rgba(0,0,0,0.08);box-shadow:0 20px 60px rgba(0,0,0,0.15);display:none;flex-direction:column;overflow:hidden;animation:slideUpChat 0.35s cubic-bezier(0.34,1.56,0.64,1);">
-            <div style="padding:14px 18px;background:rgba(108,92,231,0.08);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(0,0,0,0.05);flex-shrink:0;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FD79A8,#6C5CE7);display:flex;align-items:center;justify-content:center;font-size:18px;">🍓</div>
-                    <div><div style="color:#1A1A2E;font-weight:700;font-size:15px;">Клубничный Бариста</div><div style="font-size:11px;color:#22C55E;">🟢 Готов помочь</div></div>
+<script>
+    // ================================================================
+    // ===== КОНСТАНТЫ =====
+    // ================================================================
+    const MY_LOCATION = { lat: 44.358182, lng: 38.528738 };
+
+    let userLocation = null;
+    let mapInstance = null;
+    let userPlacemark = null;
+    let kioskPlacemark = null;
+    let giftId = null;
+    let mapReady = false;
+    let gpsLocked = false;
+    let ymapsReady = false;
+    let giftCheckInterval = null;
+
+    // ================================================================
+    // ===== DOM REFS =====
+    // ================================================================
+    const $ = id => document.getElementById(id);
+
+    // ================================================================
+    // ===== MENU =====
+    // ================================================================
+    const MENU_ITEMS = [
+        { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, image: 'images/klassika.jpg', badge: '🔥 Хит' },
+        { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐' },
+        { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+        { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450, image: 'images/miks.jpg' },
+        { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450, image: 'images/banan.jpg' },
+        { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350, image: 'images/klubnika-bez-shokolada.jpg' }
+    ];
+
+    function renderMenu() {
+        const grid = $('strawberryGrid');
+        grid.innerHTML = MENU_ITEMS.map(item => `
+            <div class="menu-item">
+                ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+                <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23f0f0f5%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                <div class="item-content">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-desc">${item.desc}</div>
+                    <div class="item-price">${item.price} ₽</div>
                 </div>
-                <button onclick="toggleBarista()" style="background:none;border:none;color:rgba(0,0,0,0.3);font-size:20px;cursor:pointer;padding:4px 8px;">✕</button>
             </div>
-            <div id="baristaMessages" style="flex:1;padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;">
-                <div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;">
-                    🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
-                    Я знаю всё о нашем меню, ценах и акциях.<br>
-                    Спроси меня о чём угодно! 😊
+        `).join('');
+    }
+
+    // ================================================================
+    // ===== QR-КОД =====
+    // ================================================================
+    function generateGiftQR(id) {
+        const img = document.createElement('img');
+        if (!id) { return ''; }
+        const qrData = `gift-${id}`;
+// Вместо api.qrserver.com
+img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}&color=FF4757&bgcolor=FFFFFF`;
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        return img.outerHTML;
+    }
+
+    function openQrModal() {
+        if (!giftId) {
+            showNotification('❌ Подарок ещё не активирован');
+            return;
+        }
+        const qrHtml = generateGiftQR(giftId);
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay open';
+        modal.id = 'qrModal';
+        modal.innerHTML = `
+            <div class="modal" style="max-width:300px;padding:16px;">
+                <h2 style="font-size:16px;color:#1A1A2E;margin-bottom:4px;">🎫 Ваш QR-код</h2>
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Покажите кассиру</p>
+                <div style="background:#fff;border-radius:8px;padding:12px;max-width:160px;margin:0 auto;">
+                    ${qrHtml}
                 </div>
+                <button class="btn btn-primary" onclick="closeQrModal()" style="margin-top:10px;padding:8px;">
+                    Закрыть
+                </button>
             </div>
-            <div style="display:flex;gap:6px;padding:8px 16px 12px;flex-wrap:wrap;flex-shrink:0;background:rgba(0,0,0,0.02);">
-                <button onclick="quickQuestion('Что посоветуешь из еды?')" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(0,0,0,0.06);background:rgba(0,0,0,0.02);color:rgba(0,0,0,0.5);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;">🍫 Что посоветуешь?</button>
-                <button onclick="quickQuestion('Как получить подарок?')" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(0,0,0,0.06);background:rgba(0,0,0,0.02);color:rgba(0,0,0,0.5);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;">🎁 Как получить подарок?</button>
-                <button onclick="quickQuestion('Как у тебя дела?')" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(0,0,0,0.06);background:rgba(0,0,0,0.02);color:rgba(0,0,0,0.5);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;">👋 Как дела?</button>
-                <button onclick="quickQuestion('Где киоск?')" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(0,0,0,0.06);background:rgba(0,0,0,0.02);color:rgba(0,0,0,0.5);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;">📍 Где киоск?</button>
-            </div>
-            <div style="padding:12px 16px;border-top:1px solid rgba(0,0,0,0.05);display:flex;gap:10px;flex-shrink:0;background:rgba(0,0,0,0.02);">
-                <input type="text" id="baristaInput" placeholder="Спросите меня..." style="flex:1;padding:12px 18px;border-radius:24px;border:1px solid rgba(0,0,0,0.08);background:#F8FAFC;color:#1A1A2E;outline:none;font-size:14px;font-family:'Inter',sans-serif;" onkeydown="if(event.key==='Enter') sendBaristaMessage()">
-                <button onclick="sendBaristaMessage()" style="width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(135deg,#FD79A8,#6C5CE7);color:#fff;cursor:pointer;font-size:17px;">➤</button>
-            </div>
-        </div>
-    </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+    }
 
-    <script>
-        // ================================================================
-        // ===== КОНСТАНТЫ =====
-        // ================================================================
-        const SESSION_KEY = 'klubnika_session';
-        const AUTH_KEY = 'klubnika_auth';
-        const SUPPORT_PHONE = '+7 962 855-72-63';
-        const TRUST_KEY = 'strawberry_trust_shown';
+    function closeQrModal() {
+        const modal = document.getElementById('qrModal');
+        if (modal) modal.remove();
+        document.body.style.overflow = '';
+    }
 
-        // ДВА КИОСКА
-        const KIOSKS = [
-            { lat: 44.358193, lng: 38.528773, name: 'Киоск №1', desc: 'Напротив бетонного пирса' },
-            { lat: 44.358198, lng: 38.527699, name: 'Киоск №2', desc: 'Центральный вход на пляж' }
-        ];
+    // ================================================================
+    // ===== IP =====
+    // ================================================================
+    async function getUserIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch { return null; }
+    }
 
-        const MY_LOCATION = KIOSKS[0];
-
-        const WORK_HOURS = { start: 9, end: 30 };
-        const FORCE_WORKING_TIME = false;
-        let manualTime = null;
-
-        const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, volume: '300 мл', image: 'images/klassika.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', badgeColor: '#FFB74D' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, volume: '300 мл', image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', badgeColor: '#FF4757' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, volume: '300 мл', image: 'images/miks.jpg' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, volume: '300 мл', image: 'images/banan.jpg' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, volume: '300 мл', image: 'images/klubnika-bez-shokolada.jpg' }
-        ];
-
-        const FRUITS_ITEMS = [
-            { id: '11', name: 'Сладкий арбуз', desc: 'Сочный арбуз в стаканчике', price: 200, volume: '300 мл', image: 'images/watermelon.jpg', emoji: '🍉' },
-            { id: '12', name: 'Дыня', desc: 'Нежная дыня в стаканчике', price: 200, volume: '300 мл', image: 'images/melon.jpg', emoji: '🍈' },
-            { id: '13', name: 'Малина', desc: 'Свежая малина в стаканчике', price: 250, volume: '200 мл', image: 'images/raspberry.jpg', emoji: '🍓' },
-            { id: '14', name: 'Ежевика', desc: 'Сочная ежевика в стаканчике', price: 200, volume: '200 мл', image: 'images/blackberry.jpg', emoji: '🫐' },
-            { id: '15', name: 'Голубика', desc: 'Полезная голубика в стаканчике', price: 250, volume: '200 мл', image: 'images/blueberry.jpg', emoji: '🫐' }
-        ];
-
-        const DRINK_ITEMS = [
-            { id: '6', name: 'Лимонад', desc: 'Домашний лимонад, охлажденный', price: 150, image: 'images/limonad.webp', emoji: '🍋' },
-            { id: '7', name: 'Кока-Кола', desc: 'Охлажденная 0.33 л', price: 120, image: 'images/kola.jpg', emoji: '🥤' },
-            { id: '8', name: 'Пиво', desc: 'Охлажденное 0.5 л', price: 200, image: 'images/pivo.webp', emoji: '🍺', alcohol: true }
-        ];
-
-        const TOPPINGS = [
-            { id: 'none', name: 'Без присыпки', icon: 'fas fa-ban' },
-            { id: 'peanut', name: 'Крошка арахиса', icon: 'fas fa-seedling' },
-            { id: 'coconut', name: 'Кокосовая стружка', icon: 'fas fa-coconut' },
-            { id: 'oreo', name: 'Орео', icon: 'fas fa-cookie' },
-            { id: 'waffle', name: 'Вафельная крошка', icon: 'fas fa-crumb' }
-        ];
-
-        // ================================================================
-        // ===== СОСТОЯНИЕ =====
-        // ================================================================
-        const state = {
-            cart: [],
-            selectedProduct: null,
-            selectedToppings: [],
-            settings: { technicalBreak: false, menuItems: {} },
-            reviewRating: 0,
-            reviewOrderId: null,
-            bungalowNumber: null,
-            sessionExpiresAt: null,
-            userLocation: null
-        };
-
-        let selectedPayment = 'cash';
-        let pendingProduct = null;
-        let pendingAlcoholProduct = null;
-        let isPickupMode = false;
-        let currentReviews = [];
-        let chatUpdateInterval = null;
-        let notificationCheckInterval = null;
-        let lastMessageTime = 0;
-        let sessionTimerInterval = null;
-        let reviewCheckInterval = null;
-        let lastOrderCheckTime = Date.now();
-
-        // ================================================================
-        // ===== БАРИСТА (AI-ПОМОЩНИК) =====
-        // ================================================================
-        let baristaHistory = [];
-        let baristaWelcomeShown = false;
-        let isBaristaOpen = false;
-
-        const BARISTA_MENU = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, badge: '🔥 Хит' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, badge: '⭐' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, badge: '🔥 Хит' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400 },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320 },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250 }
-        ];
-
-        const BARISTA_PROMO = [
-            '🍓 При заказе 2+ стаканчиков — скидка 10%',
-            '🎁 Бесплатная мини-порция для первых посетителей',
-            '❤️ Для постоянных клиентов — подарок'
-        ];
-
-        const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
-
-        ТВОИ ДАННЫЕ:
-        Меню:
-        ${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
-
-        Акции:
-        ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
-
-        О ПРИЛОЖЕНИИ:
-        - Доставка: в бунгало на пляже, время доставки 15-20 минут
-        - Самовывоз: из киоска на пляже
-        - У нас ДВА КИОСКА:
-          1. Напротив бетонного пирса (44.358193, 38.528773)
-          2. Центральный вход на пляж (44.358198, 38.527699)
-        - Оплата: наличные, переводом, картой при получении
-        - Работаем: 9:00 — 1:00 (МСК)
-        - Контакты: +7 962 855-72-63
-        - В приложении есть: меню, корзина, заказы, отзывы, поддержка, карта
-        - Для заказа нужно: имя, телефон, номер бунгало
-        - Алкоголь (пиво) — только 18+
-        - Присыпки (арахис, кокос, орео, вафля) — бесплатно, до 2 видов
-        - Скидка 10% при заказе 2+ стаканчиков
-
-        ТВОЯ РОЛЬ:
-        1. Ты работаешь в кафе, общаешься с гостями
-        2. Ты знаешь ВСЁ о меню, ценах, акциях
-        3. Ты ЗНАЕШЬ ВСЁ о приложении, доставке, оплате, бунгало
-        4. Ты дружелюбный и весёлый помощник
-        5. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
-        6. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
-        7. Ты НЕ даёшь советы по развлечениям и местам в Архипо-Осиповке — у тебя нет достоверной информации
-
-        ПРАВИЛА:
-        - Отвечай ТОЛЬКО на русском
-        - Будь коротким и полезным (2-4 предложения)
-        - Используй эмодзи 🍓🍫😊🌊
-        - НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
-        - ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ И НЕ ПРО ПРИЛОЖЕНИЕ — НЕ ПРЕДЛАГАЙ КЛУБНИКУ
-        - ВСЕГДА желай хорошего отдыха, если прощаешься
-
-        ОТВЕТЫ НА ВОПРОСЫ:
-        - "Как получить подарок?" → "Подойдите к любому отмеченному киоску на карте и покажите QR-код. Кнопка с QR-кодом — золотая, внизу экрана 🎁 Подарок доступен только новым пользователям!"
-        - "Где киоск?" → "Нажмите на кнопку 'Показать на карте' под картой, там отмечены оба наших киоска с картинками 🍓"
-        - "Где ваш киоск?" → "Нажмите на кнопку 'Показать на карте' под картой, там отмечены оба наших киоска с картинками 🍓"
-
-        ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню и акциях!`;
-
-        // ================================================================
-        // ===== ФУНКЦИИ БАРИСТЫ =====
-        // ================================================================
-        function toggleBarista() {
-            const window = document.getElementById('baristaWindow');
-            const isOpen = window.style.display === 'flex';
-            window.style.display = isOpen ? 'none' : 'flex';
-            isBaristaOpen = !isOpen;
-            if (!isOpen) {
-                setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-            }
+    // ================================================================
+    // ===== ПРОВЕРКА СТАТУСА ПОДАРКА =====
+    // ================================================================
+    async function checkGiftStatus() {
+        const ip = await getUserIP();
+        if (!ip) {
+            console.log('❌ Не удалось определить IP');
+            return;
         }
-
-        function openBarista() {
-            document.getElementById('baristaWidget').style.display = 'block';
-            const window = document.getElementById('baristaWindow');
-            window.style.display = 'flex';
-            isBaristaOpen = true;
-            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-            if (!baristaWelcomeShown) {
-                baristaWelcomeShown = true;
-                setTimeout(() => {
-                    const messages = document.getElementById('baristaMessages');
-                    messages.innerHTML += `
-                        <div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;animation:msgIn 0.3s ease;">
-                            🍓 Привет! Я тут, чтобы помочь 😊<br>
-                            Можешь спросить меня о меню, акциях или подарках!<br>
-                            Я всегда рад компании 🤗
-                        </div>
-                    `;
-                    messages.scrollTop = messages.scrollHeight;
-                }, 500);
-            }
-        }
-
-        function quickQuestion(text) {
-            document.getElementById('baristaInput').value = text;
-            sendBaristaMessage();
-        }
-
-        async function sendBaristaMessage() {
-            const input = document.getElementById('baristaInput');
-            const messages = document.getElementById('baristaMessages');
-            const userText = input.value.trim();
-
-            if (!userText) return;
-
-            messages.innerHTML += `<div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(108,92,231,0.12);color:#1A1A2E;align-self:flex-end;border-bottom-right-radius:4px;animation:msgIn 0.3s ease;">${escapeHtmlBarista(userText)}</div>`;
-            baristaHistory.push({ role: 'user', content: userText });
-            input.value = '';
-            messages.scrollTop = messages.scrollHeight;
-
-            const loadingId = 'bloading-' + Date.now();
-            messages.innerHTML += `<div id="${loadingId}" style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;animation:msgIn 0.3s ease;">🤔 Думаю...</div>`;
-            messages.scrollTop = messages.scrollHeight;
-
-            try {
-                const response = await getBaristaResponse(userText);
-                document.getElementById(loadingId)?.remove();
-
-                const formatted = formatBaristaResponse(response);
-                messages.innerHTML += `<div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;animation:msgIn 0.3s ease;">${formatted}</div>`;
-                baristaHistory.push({ role: 'assistant', content: response });
-                messages.scrollTop = messages.scrollHeight;
-            } catch (error) {
-                document.getElementById(loadingId)?.remove();
-                messages.innerHTML += `<div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;animation:msgIn 0.3s ease;">🍓 Ой, что-то пошло не так! Попробуйте ещё раз.</div>`;
-                messages.scrollTop = messages.scrollHeight;
-                console.error('Barista Error:', error);
-            }
-        }
-
-        async function getBaristaResponse(userMessage) {
-            try {
-                const response = await fetch('/api/barista', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: userMessage,
-                        history: baristaHistory.slice(-10)
-                    })
-                });
-                const data = await response.json();
-
-                if (data.error) {
-                    console.error('API Error:', data.error);
-                    return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
-                }
-
-                return data.choices[0].message.content;
-            } catch (error) {
-                console.error('Network Error:', error);
-                return '🍓 Не удалось соединиться. Проверьте интернет.';
-            }
-        }
-
-        function formatBaristaResponse(text) {
-            text = text.replace(/(\d+)\s*₽/g, '<span style="color:#22C55E;font-weight:700;">$1 ₽</span>');
-            text = text.replace(/(скидка|бесплатн|подарок|акци|хит|улыб|смех)/gi, match => 
-                `<span style="color:#FD79A8;font-weight:600;">${match}</span>`
-            );
-            text = text.replace(/\n/g, '<br>');
-            return text;
-        }
-
-        function escapeHtmlBarista(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // ================================================================
-        // ===== ОСТАЛЬНЫЕ ФУНКЦИИ =====
-        // ================================================================
-
-        function openMap() {
-            closeBeachRestrict();
-            const mapModal = document.getElementById('mapModal');
-            const iframe = document.getElementById('mapIframe');
-
-            let pins = '';
-            KIOSKS.forEach((k, i) => {
-                pins += `&pt=${k.lng},${k.lat},flag${i + 1}`;
+        
+        try {
+            const res = await fetch('/api/gift/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip })
             });
-
-            const centerLat = (KIOSKS[0].lat + KIOSKS[1].lat) / 2;
-            const centerLng = (KIOSKS[0].lng + KIOSKS[1].lng) / 2;
-
-            iframe.src = `https://yandex.ru/map-widget/v1/?ll=${centerLng},${centerLat}&z=16${pins}`;
-            mapModal.classList.add('open');
-        }
-
-        function closeMap() {
-            document.getElementById('mapModal').classList.remove('open');
-        }
-
-        // ================================================================
-        // ===== ОСТАЛЬНЫЕ ФУНКЦИИ (КОРОТКО) =====
-        // ================================================================
-
-        function validatePhoneInput(input) {
-            let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
-            if (value.match(/^[7-8]\d{0,10}$/)) {
-                if (value.length === 11 && (value.startsWith('7') || value.startsWith('8'))) {
-                    input.classList.remove('invalid');
-                } else if (value.length > 0 && value.length < 11) {
-                    input.classList.remove('invalid');
-                }
-            } else if (value.length > 0) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
+            const data = await res.json();
+            
+            console.log('🎁 Статус подарка:', data);
+            
+            if (data.alreadyClaimed) {
+                console.log('✅ Подарок уже выдан');
+                return;
             }
-            input.value = value;
-        }
-
-        function isValidPhone(phone) {
-            const clean = phone.replace(/[\s\-\+\(\)]/g, '');
-            return /^[7-8]\d{10}$/.test(clean);
-        }
-
-        function showNotification(message, type = '') {
-            const notification = document.getElementById('notification');
-            notification.innerHTML = message;
-            notification.className = 'notification show';
-            if (type) notification.classList.add(type);
-            clearTimeout(notification._timeout);
-            notification._timeout = setTimeout(() => notification.classList.remove('show'), 3000);
-        }
-
-        function getSession() {
-            try {
-                const data = localStorage.getItem(SESSION_KEY);
-                if (!data) return null;
-                return JSON.parse(data);
-            } catch { return null; }
-        }
-
-        function saveSession(sessionData) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-        }
-
-        function clearSession() {
-            localStorage.removeItem(SESSION_KEY);
-            state.bungalowNumber = null;
-            state.sessionExpiresAt = null;
-            if (sessionTimerInterval) {
-                clearInterval(sessionTimerInterval);
-                sessionTimerInterval = null;
+            
+            if (data.hasGift) {
+                giftId = data.giftId;
+                showGiftModal();
+                $('floatQrBtn').style.display = 'flex';
+                console.log(`🎁 Подарок #${giftId} активен`);
+            } else if (data.canActivate) {
+                await activateGift(ip);
             }
+            
+        } catch(e) {
+            console.error('❌ Ошибка проверки подарка:', e);
         }
+    }
 
-        function getBungaloFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const b = urlParams.get('b');
-            if (b && !isNaN(b) && parseInt(b) > 0 && parseInt(b) <= 100) return parseInt(b);
-            return null;
-        }
-
-        function cleanURL() {
-            if (window.history && window.history.replaceState) {
-                window.history.replaceState({}, document.title, window.location.pathname);
+    // ================================================================
+    // ===== АКТИВАЦИЯ ПОДАРКА =====
+    // ================================================================
+    async function activateGift(ip) {
+        try {
+            const res = await fetch('/api/gift/activate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip })
+            });
+            const data = await res.json();
+            if (data.success) {
+                giftId = data.giftId;
+                showGiftModal();
+                $('floatQrBtn').style.display = 'flex';
+                console.log(`🎁 Создан новый подарок #${giftId}`);
             }
+        } catch(e) { 
+            console.error('Gift activate error:', e); 
         }
+    }
 
-        function saveUserAuth(name, phone) {
-            localStorage.setItem(AUTH_KEY, JSON.stringify({ name, phone }));
-        }
-
-        function getUserAuth() {
-            try {
-                const data = localStorage.getItem(AUTH_KEY);
-                return data ? JSON.parse(data) : null;
-            } catch { return null; }
-        }
-
-        async function checkSessionOnServer(bungalow) {
-            try {
-                const res = await fetch(`/api/check-session?b=${bungalow}`);
-                const data = await res.json();
-                return data;
-            } catch (e) {
-                console.error('Ошибка проверки сессии:', e);
-                return { valid: false, reason: 'error', message: 'Ошибка соединения' };
-            }
-        }
-
-        async function loadSettings() {
-            try {
-                const res = await fetch('/api/settings');
-                const data = await res.json();
-                state.settings = data;
-                return data;
-            } catch (e) { return null; }
-        }
-
-        function isWorkingTime() {
-            if (FORCE_WORKING_TIME) return true;
-            let now;
-            if (manualTime) {
-                now = new Date();
-                now.setHours(manualTime.hours, manualTime.minutes, 0, 0);
-            } else {
+    // ================================================================
+    // ===== ПЕРИОДИЧЕСКАЯ ПРОВЕРКА СТАТУСА ПОДАРКА =====
+    // ================================================================
+    function startGiftCheck() {
+        if (giftCheckInterval) clearInterval(giftCheckInterval);
+        giftCheckInterval = setInterval(async () => {
+            if (document.getElementById('giftModal').classList.contains('open')) {
+                const ip = await getUserIP();
+                if (!ip) return;
+                
                 try {
-                    const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
-                    now = new Date(mskTime);
-                } catch (e) {
-                    now = new Date();
-                }
-            }
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const currentMinutes = hours * 60 + minutes;
-            const startMinutes = WORK_HOURS.start * 60;
-            const endMinutes = WORK_HOURS.end * 60;
-            let normalizedCurrent = currentMinutes;
-            if (currentMinutes < startMinutes) {
-                normalizedCurrent = currentMinutes + 24 * 60;
-            }
-            return normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
-        }
-
-        function getCurrentMskTime() {
-            if (manualTime) {
-                const now = new Date();
-                now.setHours(manualTime.hours, manualTime.minutes);
-                return now;
-            }
-            try {
-                const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
-                return new Date(mskTime);
-            } catch (e) {
-                return new Date();
-            }
-        }
-
-        function formatTime(date) {
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
-            return `${hours}:${String(minutes).padStart(2, '0')}`;
-        }
-
-        function showNoAccess() {
-            document.getElementById('noAccessMode').style.display = 'block';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'none';
-        }
-
-        function showBungaloMode(bungalowNumber, expiresAt) {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'block';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'flex';
-
-            state.bungalowNumber = bungalowNumber;
-            isPickupMode = false;
-
-            const savedAuth = getUserAuth();
-            if (savedAuth) {
-                document.getElementById('customerName').value = savedAuth.name || '';
-                document.getElementById('customerPhone').value = savedAuth.phone || '';
-            }
-
-            if (bungalowNumber > 0) {
-                document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
-                document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
-                document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
-                document.getElementById('pickupBannerContainer').innerHTML = '';
-            }
-
-            loadSettings().then(settings => {
-                if (settings?.technicalBreak) { showTechBreak(); return; }
-                if (!isWorkingTime()) { showClosedMode(); return; }
-                renderMenu(settings || state.settings);
-                initCart();
-                loadReviews();
-                startReviewCheck();
-            });
-            setTimeout(updateOrdersBadge, 1000);
-
-            setTimeout(() => {
-                document.getElementById('baristaWidget').style.display = 'block';
-            }, 5000);
-        }
-
-        function showTechBreak() {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'none';
-            document.getElementById('techBreakMode').style.display = 'block';
-            document.getElementById('bottomTabBar').style.display = 'none';
-        }
-
-        function showClosedMode() {
-            document.getElementById('noAccessMode').style.display = 'none';
-            document.getElementById('bungaloMode').style.display = 'none';
-            document.getElementById('closedMode').style.display = 'block';
-            document.getElementById('techBreakMode').style.display = 'none';
-            document.getElementById('bottomTabBar').style.display = 'none';
-            document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-        }
-
-        function openBeachRestrict() {
-            document.getElementById('beachRestrictModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeBeachRestrict() {
-            document.getElementById('beachRestrictModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        document.getElementById('beachRestrictModal').addEventListener('click', function(e) {
-            if (e.target === this) closeBeachRestrict();
-        });
-
-        function toggleAgeCheckbox() {
-            const checkbox = document.getElementById('ageCheckbox');
-            checkbox.checked = !checkbox.checked;
-            document.getElementById('ageConfirmBtn').disabled = !checkbox.checked;
-        }
-
-        function openAgeVerify(product) {
-            pendingAlcoholProduct = product;
-            document.getElementById('ageCheckbox').checked = false;
-            document.getElementById('ageConfirmBtn').disabled = true;
-            document.getElementById('ageVerifyModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeAgeVerify() {
-            document.getElementById('ageVerifyModal').classList.remove('open');
-            document.body.style.overflow = '';
-            pendingAlcoholProduct = null;
-        }
-
-        function confirmAge() {
-            if (!document.getElementById('ageCheckbox').checked) return;
-            const product = pendingAlcoholProduct;
-            if (!product) {
-                closeAgeVerify();
-                return;
-            }
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            closeAgeVerify();
-            pendingAlcoholProduct = null;
-            if (!name || !phone || !isValidPhone(phone)) {
-                if (phone && !isValidPhone(phone)) {
-                    showNotification('⚠️ Введите корректный номер телефона!', 'error');
-                }
-                openAuthModal({ ...product, isAlcohol: true });
-                return;
-            }
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            addToCart({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                quantity: 1,
-                category: product.category || 'напиток',
-                topping: '',
-                toppingName: '',
-                isAlcohol: true
-            });
-            showNotification(`🍺 ${product.name} добавлен! Предъявите паспорт курьеру.`);
-            const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-            animateStrawberryToCart(fakeEvent);
-        }
-
-        document.getElementById('ageVerifyModal').addEventListener('click', function(e) {
-            if (e.target === this) closeAgeVerify();
-        });
-
-        function showQRPrompt() {
-            const overlay = document.createElement('div');
-            overlay.className = 'auth-modal-overlay open';
-            overlay.id = 'qrPromptOverlay';
-            overlay.innerHTML = `
-                <div class="auth-modal-content" onclick="event.stopPropagation()">
-                    <button class="modal-close" onclick="closeQRPrompt()"><i class="fas fa-times"></i></button>
-                    <div class="modal-title"><i class="fas fa-qrcode" style="color: var(--primary);"></i> Отсканируйте QR-код</div>
-                    <div class="modal-subtitle">QR-код находится в вашем бунгало</div>
-                    <div style="text-align:center;padding:20px;background:#F8FAFC;border-radius:var(--radius-lg);margin-bottom:16px;">
-                        <i class="fas fa-qrcode" style="font-size:80px;color:var(--primary);"></i>
-                    </div>
-                    <p style="text-align:center;color:var(--text-secondary);font-size:14px;margin-bottom:16px;">Наведите камеру на QR-код в бунгало</p>
-                    <button class="confirm-btn" onclick="closeQRPrompt()"><i class="fas fa-check"></i> Понятно</button>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            overlay.addEventListener('click', function(e) { if (e.target === this) closeQRPrompt(); });
-        }
-
-        function closeQRPrompt() {
-            const overlay = document.getElementById('qrPromptOverlay');
-            if (overlay) overlay.remove();
-        }
-
-        function renderMenu(settings) {
-            // ... (стандартный рендер меню)
-            // Здесь нужно добавить полный код renderMenu
-            // Для краткости оставлю заглушку, но он должен быть полным
-        }
-
-        function attachEvents() {
-            document.querySelectorAll('.add-btn:not([disabled])').forEach(btn => {
-                btn.removeEventListener('click', handleAddClick);
-                btn.addEventListener('click', handleAddClick);
-            });
-            document.querySelectorAll('.drink-add:not([disabled])').forEach(btn => {
-                btn.removeEventListener('click', handleDrinkAdd);
-                btn.addEventListener('click', handleDrinkAdd);
-            });
-        }
-
-        function handleAddClick(e) {
-            // ... (стандартный обработчик)
-        }
-
-        function handleDrinkAdd(e) {
-            // ... (стандартный обработчик)
-        }
-
-        function openAuthModal(product) {
-            pendingProduct = product;
-            const savedAuth = getUserAuth();
-            document.getElementById('authName').value = savedAuth ? savedAuth.name : '';
-            document.getElementById('authPhone').value = savedAuth ? savedAuth.phone : '';
-            document.getElementById('authModal').classList.add('open');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('open');
-            pendingProduct = null;
-        }
-
-        function confirmAuth() {
-            const name = document.getElementById('authName').value.trim();
-            const phone = document.getElementById('authPhone').value.trim();
-            if (!name) { showNotification('⚠️ Введите ваше имя!', 'error'); return; }
-            if (!phone) { showNotification('⚠️ Введите номер телефона!', 'error'); return; }
-            if (!isValidPhone(phone)) {
-                showNotification('⚠️ Неверный формат телефона! Пример: +7 999 123-45-67', 'error');
-                return;
-            }
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            document.getElementById('customerName').value = name;
-            document.getElementById('customerPhone').value = phoneClean;
-            saveUserAuth(name, phoneClean);
-            closeAuthModal();
-            if (pendingProduct) {
-                if (pendingProduct.isAlcohol) {
-                    addToCart({
-                        id: pendingProduct.id,
-                        name: pendingProduct.name,
-                        price: pendingProduct.price,
-                        quantity: 1,
-                        category: pendingProduct.category || 'напиток',
-                        topping: '',
-                        toppingName: '',
-                        isAlcohol: true
+                    const res = await fetch('/api/gift/status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ip })
                     });
-                    showNotification(`🍺 ${pendingProduct.name} добавлен! Предъявите паспорт курьеру.`);
-                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-                    animateStrawberryToCart(fakeEvent);
-                } else if (!pendingProduct.hasToppings) {
-                    addToCart({ id: pendingProduct.id, name: pendingProduct.name, price: pendingProduct.price, quantity: 1, category: pendingProduct.category, topping: '', toppingName: '' });
-                    showNotification(`✅ ${pendingProduct.name} добавлен!`);
-                    const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
-                    animateStrawberryToCart(fakeEvent);
-                } else {
-                    openToppingModal(pendingProduct);
-                }
-                pendingProduct = null;
-            }
-        }
-
-        document.getElementById('authModal').addEventListener('click', function(e) { if (e.target === this) closeAuthModal(); });
-
-        function openToppingModal(product) {
-            // ... (стандартный код)
-        }
-
-        function toggleTopping(toppingId) {
-            // ... (стандартный код)
-        }
-
-        function updateToppingUI() {
-            // ... (стандартный код)
-        }
-
-        function closeToppingModal() {
-            document.getElementById('toppingModal').classList.remove('open');
-            state.selectedProduct = null;
-            state.selectedToppings = [];
-        }
-
-        document.getElementById('toppingModal').addEventListener('click', function(e) { if (e.target === this) closeToppingModal(); });
-
-        document.getElementById('confirmToppingBtn').addEventListener('click', function() {
-            // ... (стандартный код)
-        });
-
-        function saveCart() {
-            try {
-                localStorage.setItem('strawberry_cart', JSON.stringify(state.cart));
-            } catch (e) {}
-        }
-
-        function loadCart() {
-            try {
-                const saved = localStorage.getItem('strawberry_cart');
-                if (saved) {
-                    state.cart = JSON.parse(saved);
-                    updateCart();
-                    return true;
-                }
-            } catch (e) {}
-            return false;
-        }
-
-        function clearSavedCart() {
-            localStorage.removeItem('strawberry_cart');
-        }
-
-        function addToCart(item) {
-            const existing = state.cart.find(c => c.id === item.id && c.topping === (item.topping || ''));
-            if (existing) {
-                existing.quantity += item.quantity || 1;
-            } else {
-                state.cart.push({ ...item, quantity: item.quantity || 1 });
-            }
-            saveCart();
-            updateCart();
-        }
-
-        function updateCart() {
-            const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tabCartBadge = document.getElementById('tabCartBadge');
-            const tabCartTotal = document.getElementById('tabCartTotal');
-            if (totalItems > 0) { tabCartBadge.textContent = totalItems; tabCartBadge.classList.remove('hidden'); } else { tabCartBadge.classList.add('hidden'); }
-            tabCartTotal.textContent = totalPrice + ' ₽';
-            document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
-
-            if (state.cart.length === 0) {
-                document.getElementById('cartItems').innerHTML = '<div class="cart-empty"><i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i> Добавьте что-нибудь вкусное 😋</div>';
-                document.getElementById('orderButton').disabled = true;
-            } else {
-                document.getElementById('cartItems').innerHTML = state.cart.map((item, index) => `
-                    <div class="cart-item" data-index="${index}">
-                        <div class="item-info-cart">
-                            <div class="item-name-cart">${item.name}${item.isAlcohol ? ' 🍺 18+' : ''}</div>
-                            <div class="item-price-cart">${item.price} ₽ × ${item.quantity}</div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="qty-btn-minus" onclick="changeQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
-                            <span class="qty-number">${item.quantity}</span>
-                            <button class="qty-btn-plus" onclick="changeQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
-                            <button class="qty-btn-remove" onclick="removeItem(${index})"><i class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                `).join('');
-                document.getElementById('orderButton').disabled = false;
-            }
-        }
-
-        function changeQuantity(index, delta) {
-            const item = state.cart[index];
-            if (!item) return;
-            const newQuantity = item.quantity + delta;
-            if (newQuantity <= 0) state.cart.splice(index, 1);
-            else item.quantity = newQuantity;
-            saveCart();
-            updateCart();
-        }
-
-        function removeItem(index) {
-            const item = state.cart[index];
-            if (!item) return;
-            if (confirm(`Удалить "${item.name}" из корзины?`)) {
-                state.cart.splice(index, 1);
-                saveCart();
-                updateCart();
-                showNotification(`🗑️ "${item.name}" удален`);
-            }
-        }
-
-        function openCart() {
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            document.getElementById('cartModal').classList.add('open');
-            document.getElementById('cartOverlay').classList.add('open');
-            document.getElementById('bottomTabBar').style.display = 'none';
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabCart').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeCart() {
-            document.getElementById('cartModal').classList.remove('open');
-            document.getElementById('cartOverlay').classList.remove('open');
-            document.getElementById('bottomTabBar').style.display = 'flex';
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabMenu').classList.add('active');
-            document.body.style.overflow = '';
-        }
-
-        function selectPayment(method) {
-            selectedPayment = method;
-            document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
-
-            const messages = {
-                cash: '💡 Оплата наличными при получении',
-                transfer: '💡 Перевод по номеру телефона при получении',
-                card: '💳 Оплата картой при получении (терминал)'
-            };
-            document.getElementById('paymentInfo').textContent = messages[method] || messages.cash;
-        }
-
-        async function submitOrder() {
-            showNotification('⏳ Функция заказа временно недоступна');
-        }
-
-        function openOrdersModal() {
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            if (!name || !phone) { showNotification('⚠️ Сначала введите имя и телефон!', 'error'); openAuthModal(null); return; }
-            const phoneClean = phone.replace(/[\s\-\+\(\)]/g, '');
-            document.getElementById('ordersModal').classList.add('open');
-            document.getElementById('ordersPhoneInput').value = phoneClean;
-            document.body.style.overflow = 'hidden';
-            loadMyOrders();
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabOrders').classList.add('active');
-        }
-
-        function closeOrdersModal() {
-            document.getElementById('ordersModal').classList.remove('open');
-            document.body.style.overflow = '';
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabMenu').classList.add('active');
-        }
-
-        function loadMyOrders() {
-            // ... (стандартный код)
-        }
-
-        function cancelMyOrder(orderId, phone) {
-            // ... (стандартный код)
-        }
-
-        function updateOrdersBadge() {
-            // ... (стандартный код)
-        }
-
-        async function loadReviews() {
-            try {
-                const res = await fetch('/api/reviews');
-                const data = await res.json();
-                currentReviews = data.reviews || [];
-                renderReviewsModal(currentReviews);
-                updateReviewsBadge();
-            } catch (e) {}
-        }
-
-        function renderReviewsModal(reviews) {
-            const list = document.getElementById('reviewsModalList');
-            if (!reviews || reviews.length === 0) {
-                list.innerHTML = '<div class="cart-empty"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i> ⭐ Пока нет отзывов. Будьте первым!</div>';
-                return;
-            }
-            const sorted = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            list.innerHTML = sorted.map(review => `
-                <div class="order-card-full">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="font-weight:600;color:var(--text-dark);">${review.name || 'Клиент'}</span>
-                        <span style="color:#FFB300;font-size:18px;">${'⭐'.repeat(review.rating || 5)}</span>
-                    </div>
-                    <div style="font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px;">${review.text || 'Без отзыва'}</div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-size:11px;color:var(--text-muted);">Заказ #${review.orderId || '---'}</span>
-                        <span style="font-size:11px;color:var(--text-muted);">${new Date(review.createdAt).toLocaleString('ru-RU')}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function updateReviewsBadge() {
-            const badge = document.getElementById('reviewsBadge');
-            const count = document.getElementById('reviewsCount');
-            if (currentReviews.length > 0) {
-                count.textContent = currentReviews.length;
-                badge.style.display = 'inline-flex';
-            } else {
-                badge.style.display = 'none';
-            }
-        }
-
-        function openReviewsModal() {
-            document.getElementById('reviewsModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-            loadReviews();
-        }
-
-        function closeReviewsModal() {
-            document.getElementById('reviewsModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        document.getElementById('reviewsModal').addEventListener('click', function(e) { if (e.target === this) closeReviewsModal(); });
-
-        function startReviewCheck() {
-            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-            reviewCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                try {
-                    const res = await fetch('/api/my-orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone }) });
                     const data = await res.json();
-                    if (data.success && data.orders) {
-                        const completedOrders = data.orders.filter(order =>
-                            order.status === 'выполнен' && !order.reviewed && new Date(order.createdAt).getTime() > lastOrderCheckTime
-                        );
-                        if (completedOrders.length > 0) {
-                            showNotification('🎉 Ваш заказ выполнен! Оцените качество обслуживания ⭐');
-                            setTimeout(() => { openReviewModal(completedOrders[0].id); }, 2000);
-                            lastOrderCheckTime = Date.now();
-                        }
+                    
+                    if (data.alreadyClaimed) {
+                        console.log('✅ Подарок выдан, закрываем окно');
+                        closeGiftModal();
+                        $('floatQrBtn').style.display = 'none';
+                        showNotification('🎉 Поздравляем! Подарок получен! 🍓');
+                        clearInterval(giftCheckInterval);
+                        giftCheckInterval = null;
                     }
-                } catch (e) {}
-            }, 10000);
+                } catch(e) {
+                    console.error('❌ Ошибка проверки:', e);
+                }
+            }
+        }, 10000);
+    }
+
+    // ================================================================
+    // ===== МОДАЛКА =====
+    // ================================================================
+    function showGiftModal() {
+        $('giftModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeGiftModal() {
+        $('giftModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ================================================================
+    // ===== ГЕОЛОКАЦИЯ =====
+    // ================================================================
+    function requestLocationOnClick() {
+        if (!navigator.geolocation) {
+            showNotification('❌ Браузер не поддерживает геолокацию');
+            return;
         }
 
-        function openReviewModal(orderId) {
-            state.reviewOrderId = orderId;
-            state.reviewRating = 0;
-            document.getElementById('reviewText').value = '';
-            document.querySelectorAll('#starsRow .star').forEach(el => el.style.color = '#E5E7EB');
-            document.getElementById('submitReviewBtn').disabled = true;
-            document.getElementById('reviewModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
+        showNotification('📍 Определение местоположения...');
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log('📍 Позиция получена:', position);
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                gpsLocked = true;
+                showNotification('✅ Местоположение определено');
+                updateUserMarker(userLocation.lat, userLocation.lng);
+                updateDistance();
+                
+                if (mapInstance) {
+                    mapInstance.setCenter([userLocation.lat, userLocation.lng], 19, { 
+                        duration: 800,
+                        checkZoomRange: true
+                    });
+                }
+                if (userPlacemark) userPlacemark.balloon.open();
+                
+                localStorage.setItem('userLat', userLocation.lat);
+                localStorage.setItem('userLng', userLocation.lng);
+                
+                const messages = document.getElementById('baristaMessages');
+                messages.innerHTML += `
+                    <div class="msg barista">
+                        🎯 Отлично! Я тебя нашёл!<br>
+                        Теперь я могу помочь тебе найти всё, что нужно! 😊
+                    </div>
+                `;
+                messages.scrollTop = messages.scrollHeight;
+            },
+            (error) => {
+                console.error('❌ Ошибка геолокации:', error.message);
+                let msg = '❌ Не удалось определить местоположение';
+                if (error.code === 1) msg = '❌ Разрешите доступ к геолокации в настройках Safari';
+                if (error.code === 2) msg = '❌ Сигнал GPS слабый, попробуйте выйти на улицу';
+                showNotification(msg);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 5000
+            }
+        );
+    }
+
+    // ================================================================
+    // ===== АВТОМАТИЧЕСКИЙ ЗАПРОС ГЕОЛОКАЦИИ =====
+    // ================================================================
+    function autoRequestLocation() {
+        if (!navigator.geolocation) {
+            console.log('❌ Браузер не поддерживает геолокацию');
+            return;
         }
 
-        function closeReviewModal() {
-            document.getElementById('reviewModal').classList.remove('open');
-            document.body.style.overflow = '';
-            startReviewCheck();
-        }
+        console.log('📍 Авто-запрос геолокации...');
 
-        function setRating(value) {
-            state.reviewRating = value;
-            document.querySelectorAll('#starsRow .star').forEach(el => {
-                el.style.color = parseInt(el.dataset.value) <= value ? '#FFB300' : '#E5E7EB';
-            });
-            document.getElementById('submitReviewBtn').disabled = false;
-        }
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log('📍 Позиция получена автоматически:', position);
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                gpsLocked = true;
+                updateUserMarker(userLocation.lat, userLocation.lng);
+                updateDistance();
+                
+                localStorage.setItem('userLat', userLocation.lat);
+                localStorage.setItem('userLng', userLocation.lng);
+                
+                console.log('✅ Местоположение автоматически определено');
+            },
+            (error) => {
+                console.log('⏳ Авто-запрос не удался, ждём ручного нажатия');
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 10000
+            }
+        );
+    }
 
-        async function submitReview() {
-            const text = document.getElementById('reviewText').value.trim();
-            if (state.reviewRating === 0) { showNotification('⚠️ Поставьте оценку!', 'error'); return; }
-            const name = document.getElementById('customerName').value.trim() || 'Клиент';
-            const phone = document.getElementById('customerPhone').value.trim();
-            const btn = document.getElementById('submitReviewBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
-            btn.disabled = true;
+    // ================================================================
+    // ===== КАРТА =====
+    // ================================================================
+    function initMap() {
+        if (typeof ymaps === 'undefined') { 
+            setTimeout(initMap, 1000); 
+            return; 
+        }
+        ymaps.ready(() => {
+            ymapsReady = true;
             try {
-                const res = await fetch('/api/review', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId: state.reviewOrderId, name, phone, rating: state.reviewRating, text })
+                mapInstance = new ymaps.Map('treasureMap', {
+                    center: [MY_LOCATION.lat, MY_LOCATION.lng],
+                    zoom: 17,
+                    controls: ['zoomControl', 'typeSelector']
                 });
-                const data = await res.json();
-                if (data.success) {
-                    showNotification('⭐ Спасибо за отзыв! ❤️');
-                    closeReviewModal();
-                    await loadReviews();
-                    lastOrderCheckTime = Date.now();
-                    startReviewCheck();
-                } else {
-                    showNotification('❌ ' + (data.error || 'Ошибка'), 'error');
-                }
-            } catch (e) {
-                showNotification('❌ Ошибка соединения', 'error');
-            } finally {
-                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить отзыв';
-                btn.disabled = false;
-            }
-        }
+                mapReady = true;
 
-        function openImageModal(src, caption) {
-            document.getElementById('modalImage').src = src;
-            document.getElementById('imageCaption').textContent = caption || 'Клубника';
-            document.getElementById('imageModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeImageModal() {
-            document.getElementById('imageModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        function openSupportChat() {
-            // ... (стандартный код)
-        }
-
-        function closeSupportChat() {
-            // ... (стандартный код)
-        }
-
-        function openSupportChatWithOrder(orderId) {
-            // ... (стандартный код)
-        }
-
-        function loadSupportMessages(phone) {
-            // ... (стандартный код)
-        }
-
-        function renderSupportMessages(messages) {
-            // ... (стандартный код)
-        }
-
-        function startChatAutoUpdate(phone) {
-            // ... (стандартный код)
-        }
-
-        function sendSupportMessage() {
-            // ... (стандартный код)
-        }
-
-        function switchSection(section) {
-            document.querySelectorAll('.menu-section').forEach(el => el.style.display = 'none');
-            document.getElementById('section-' + section).style.display = 'block';
-            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.chip[data-section="${section}"]`).classList.add('active');
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if (tab === 'menu') {
-                document.getElementById('tabMenu').classList.add('active');
-                closeCart();
-                closeOrdersModal();
-            }
-        }
-
-        function initCart() {
-            document.getElementById('clearCart').addEventListener('click', function() {
-                if (state.cart.length === 0) return;
-                if (!confirm('🗑️ Очистить всю корзину?')) return;
-                state.cart = [];
-                clearSavedCart();
-                updateCart();
-                showNotification('🗑️ Корзина очищена');
-            });
-            document.getElementById('orderButton').addEventListener('click', submitOrder);
-            updateCart();
-        }
-
-        function getUserLocation() {
-            return new Promise((resolve) => {
-                if (state.userLocation) {
-                    resolve(state.userLocation);
-                    return;
-                }
-                if (!navigator.geolocation) {
-                    console.warn('Геолокация не поддерживается браузером');
-                    resolve(null);
-                    return;
-                }
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        const location = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        state.userLocation = location;
-                        console.log('📍 Геолокация получена:', location.lat, location.lng);
-                        resolve(location);
+                kioskPlacemark = new ymaps.Placemark(
+                    [MY_LOCATION.lat, MY_LOCATION.lng],
+                    { 
+                        balloonContent: '🍓 Strawberry in Chocolate',
+                        hintContent: '🍓 Strawberry in Chocolate',
+                        iconCaption: '🍓 Клубника в шоколаде'
                     },
-                    function(error) {
-                        console.warn('⚠️ Ошибка геолокации:', error.message);
-                        resolve(null);
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
+                    { 
+                        iconLayout: 'default#image',
+                        iconImageHref: 'images/kiosk-icon.png',
+                        iconImageSize: [50, 50],
+                        iconImageOffset: [-25, -50],
+                        iconCaptionMaxWidth: 150,
+                        iconCaptionFontSize: 12,
+                        iconCaptionFontWeight: 'bold',
+                        iconCaptionColor: '#1A1A2E',
+                        iconCaptionStrokeColor: 'rgba(255,255,255,0.8)',
+                        iconCaptionStrokeWidth: 3
                     }
                 );
-            });
-        }
+                mapInstance.geoObjects.add(kioskPlacemark);
 
-        function startSessionCheck(bungalow) {
-            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
-            window._sessionCheckInterval = setInterval(async () => {
-                if (!state.bungalowNumber) { clearInterval(window._sessionCheckInterval); return; }
-                const check = await checkSessionOnServer(bungalow);
-                if (!check.valid) { clearInterval(window._sessionCheckInterval); showNoAccess(); clearSession(); showNotification('⏰ Сессия истекла!', 'error'); }
-            }, 10000);
-        }
-
-        function startNotificationCheck() {
-            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
-            notificationCheckInterval = setInterval(async () => {
-                const phone = document.getElementById('customerPhone').value.trim();
-                if (!phone) return;
-                try {
-                    const res = await fetch(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
-                    const data = await res.json();
-                    if (data.success && data.messages) {
-                        const messages = data.messages;
-                        if (!document.getElementById('supportChatModal')) {
-                            const unreadMessages = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime);
-                            if (unreadMessages.length > 0) {
-                                lastMessageTime = new Date(unreadMessages[unreadMessages.length - 1].time).getTime();
-                                showNotification(`💬 Новое сообщение от поддержки`);
-                            }
-                        }
-                    }
-                } catch (e) {}
-            }, 5000);
-        }
-
-        async function init() {
-            loadCart();
-            const existingSession = getSession();
-            const urlBungalo = getBungaloFromURL();
-
-            if (urlBungalo) {
-                const sessionCheck = await checkSessionOnServer(urlBungalo);
-                if (sessionCheck.valid) {
-                    cleanURL();
-                    const auth = getUserAuth();
-                    if (auth) {
-                        document.getElementById('customerName').value = auth.name || '';
-                        document.getElementById('customerPhone').value = auth.phone || '';
-                    }
-                    showBungaloMode(urlBungalo, sessionCheck.expiresAt);
-                    saveSession({ bungalow: urlBungalo, expiresAt: sessionCheck.expiresAt });
-                    startSessionCheck(urlBungalo);
-                    startNotificationCheck();
-                    startReviewCheck();
-                } else {
-                    showNoAccess();
-                    if (sessionCheck.reason === 'expired') {
-                        showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
-                        clearSession();
-                    }
+                const savedLat = localStorage.getItem('userLat');
+                const savedLng = localStorage.getItem('userLng');
+                if (savedLat && savedLng) {
+                    userLocation = {
+                        lat: parseFloat(savedLat),
+                        lng: parseFloat(savedLng)
+                    };
+                    gpsLocked = true;
+                    updateUserMarker(userLocation.lat, userLocation.lng);
+                    updateDistance();
+                    console.log('📍 Координаты восстановлены из localStorage');
                 }
-            } else if (existingSession && existingSession.bungalow > 0) {
-                const sessionCheck = await checkSessionOnServer(existingSession.bungalow);
-                if (sessionCheck.valid) {
-                    const auth = getUserAuth();
-                    if (auth) {
-                        document.getElementById('customerName').value = auth.name || '';
-                        document.getElementById('customerPhone').value = auth.phone || '';
-                    }
-                    showBungaloMode(existingSession.bungalow, sessionCheck.expiresAt);
-                    startSessionCheck(existingSession.bungalow);
-                    startNotificationCheck();
-                    startReviewCheck();
-                } else {
-                    showNoAccess();
-                    clearSession();
-                }
-            } else {
-                showNoAccess();
+
+                console.log('🗺️ Карта загружена!');
+            } catch(e) { 
+                console.error('Map error:', e);
+                setTimeout(initMap, 2000);
             }
+        });
+    }
 
-            setInterval(() => {
-                const timeDisplay = document.getElementById('currentTimeDisplay');
-                if (timeDisplay) timeDisplay.innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
-            }, 60000);
+    // ================================================================
+    // ===== GPS (ОБНОВЛЕНИЕ МАРКЕРА) =====
+    // ================================================================
+    function updateUserMarker(lat, lng) {
+        if (!mapInstance || !mapReady) return;
+        if (userPlacemark) mapInstance.geoObjects.remove(userPlacemark);
+        userPlacemark = new ymaps.Placemark(
+            [lat, lng],
+            { 
+                balloonContent: '🍓 Ты здесь!',
+                hintContent: 'Ваше местоположение'
+            },
+            { 
+                iconLayout: 'default#image', 
+                iconImageHref: 'https://emojicdn.elk.sh/🍓', 
+                iconImageSize: [36,36], 
+                iconImageOffset: [-18,-18] 
+            }
+        );
+        mapInstance.geoObjects.add(userPlacemark);
+    }
 
-            await loadReviews();
+    // ================================================================
+    // ===== РАССТОЯНИЕ ДО КИОСКА =====
+    // ================================================================
+    function updateDistance() {
+        if (!userLocation) return;
+        
+        const distance = getDistance(
+            userLocation.lat, userLocation.lng,
+            MY_LOCATION.lat, MY_LOCATION.lng
+        );
+        
+        const steps = Math.round(distance * 1000 / 0.75);
+        
+        const info = $('distanceInfo');
+        info.classList.add('show');
+        $('stepsCount').textContent = steps;
+        $('distanceKm').textContent = distance.toFixed(2);
+    }
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    // ================================================================
+    // ===== УВЕДОМЛЕНИЯ =====
+    // ================================================================
+    function showNotification(msg) {
+        const existing = document.querySelector('.notification');
+        if (existing) existing.remove();
+        const n = document.createElement('div');
+        n.className = 'notification';
+        n.textContent = msg;
+        document.body.appendChild(n);
+        setTimeout(() => {
+            n.style.opacity = '0';
+            n.style.transform = 'translateX(-50%) translateY(-20px)';
+            n.style.transition = 'all 0.3s ease';
+            setTimeout(() => n.remove(), 3000);
+        }, 3000);
+    }
+
+    // ================================================================
+    // ===== INIT =====
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        renderMenu();
+        setTimeout(initMap, 500);
+        setTimeout(checkGiftStatus, 1000);
+        setTimeout(startGiftCheck, 2000);
+        setTimeout(autoRequestLocation, 3000);
+        console.log('🍓 Страница загружена!');
+    });
+
+    // ================================================================
+    // ===== КЛУБНИЧНЫЙ БАРИСТА =====
+    // ================================================================
+
+    const BARISTA_MENU = [
+        { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 450, badge: '🔥 Хит' },
+        { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 450, badge: '⭐' },
+        { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 450, badge: '🔥 Хит' },
+        { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 450 },
+        { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 450 },
+        { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 350 }
+    ];
+
+    const BARISTA_PROMO = [
+        '🍓 При заказе 2+ стаканчиков — скидка 10%',
+        '🎁 Бесплатная мини-порция для первых посетителей',
+        '❤️ Для постоянных клиентов — подарок'
+    ];
+
+    const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
+
+ТВОИ ДАННЫЕ:
+Меню:
+${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
+
+Акции:
+${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
+
+ТВОЯ РОЛЬ:
+1. Ты работаешь в кафе, общаешься с гостями
+2. Ты знаешь ВСЁ о меню, ценах, акциях
+3. Ты дружелюбный и весёлый помощник
+4. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
+5. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
+6. Ты умеешь ШУТИТЬ и поднимать настроение
+
+ПРАВИЛА:
+- Отвечай ТОЛЬКО на русском
+- Будь коротким и полезным (2-4 предложения)
+- Используй эмодзи 🍓🍫😊🌊
+- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
+- ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ — НЕ ПРЕДЛАГАЙ ЕЁ
+- ВСЕГДА желай хорошего отдыха, если прощаешься
+- ШУТИ, если чувствуешь настроение
+
+ПРИМЕРЫ ОТВЕТОВ:
+- "Как дела?" → "Отлично! Сегодня солнечно, море спокойное ☀️ А у вас как? Чем могу помочь?"
+- "Что посоветуешь из еды?" → "Однозначно Классику — это хит! 🍫 Или попробуйте клубнику в сливках 🤍"
+- "Расскажи шутку" → "Почему клубника не ходит в школу? Потому что её и так все любят! 🍓😂"
+
+ГЛАВНОЕ: Ты — дружелюбный бариста, который умеет поддержать разговор и помочь с любым вопросом! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
+
+    let baristaHistory = [];
+    let baristaWelcomeShown = false;
+
+    function toggleBarista() {
+        const window = document.getElementById('baristaWindow');
+        const isOpen = window.classList.contains('open');
+        window.classList.toggle('open');
+        if (!isOpen) {
+            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // trustModal удалён
-        });
+    function quickQuestion(text) {
+        document.getElementById('baristaInput').value = text;
+        sendBaristaMessage();
+    }
 
-        window.addEventListener('beforeunload', function() {
-            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
-            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
-            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
-            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-        });
+    async function sendBaristaMessage() {
+        const input = document.getElementById('baristaInput');
+        const messages = document.getElementById('baristaMessages');
+        const userText = input.value.trim();
+        
+        if (!userText) return;
+        
+        messages.innerHTML += `<div class="msg user">${escapeHtmlBarista(userText)}</div>`;
+        baristaHistory.push({ role: 'user', content: userText });
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+        
+        const loadingId = 'bloading-' + Date.now();
+        messages.innerHTML += `<div class="msg barista" id="${loadingId}">🤔 Думаю...</div>`;
+        messages.scrollTop = messages.scrollHeight;
+        
+        try {
+            const response = await getBaristaResponse(userText);
+            document.getElementById(loadingId)?.remove();
+            
+            const formatted = formatBaristaResponse(response);
+            messages.innerHTML += `<div class="msg barista">${formatted}</div>`;
+            baristaHistory.push({ role: 'assistant', content: response });
+            messages.scrollTop = messages.scrollHeight;
+        } catch (error) {
+            document.getElementById(loadingId)?.remove();
+            messages.innerHTML += `<div class="msg barista">🍓 Ой, что-то пошло не так! Попробуйте ещё раз.</div>`;
+            messages.scrollTop = messages.scrollHeight;
+            console.error('Barista Error:', error);
+        }
+    }
 
-        init();
+    async function getBaristaResponse(userMessage) {
+        try {
+            const response = await fetch('/api/barista', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: userMessage,
+                    history: baristaHistory.slice(-10)
+                })
+            });
+            const data = await response.json();
+            
+            if (data.error) {
+                console.error('API Error:', data.error);
+                return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
+            }
+            
+            return data.choices[0].message.content;
+        } catch (error) {
+            console.error('Network Error:', error);
+            return '🍓 Не удалось соединиться. Проверьте интернет.';
+        }
+    }
 
-        console.log('🍓 Strawberry in Chocolate - v14');
-        console.log('✅ 2 киоска на карте');
-        console.log('✅ Клубничный Бариста активирован!');
-        console.log('✅ Он знает всё о меню, ценах, акциях');
-        console.log('✅ Отвечает на вопросы о подарках');
-        console.log('✅ Не даёт советы по Архипо-Осиповке');
-    </script>
+    function formatBaristaResponse(text) {
+        text = text.replace(/(\d+)\s*₽/g, '<span class="price">$1 ₽</span>');
+        text = text.replace(/(скидка|бесплатн|подарок|акци|хит|улыб|смех)/gi, match => 
+            `<span class="highlight">${match}</span>`
+        );
+        text = text.replace(/\n/g, '<br>');
+        return text;
+    }
+
+    function escapeHtmlBarista(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showBaristaWelcome() {
+        if (baristaWelcomeShown) return;
+        baristaWelcomeShown = true;
+        
+        setTimeout(() => {
+            const messages = document.getElementById('baristaMessages');
+            messages.innerHTML += `
+                <div class="msg barista">
+                    🍓 Привет! Я тут, чтобы помочь 😊<br>
+                    Можешь спросить меня о чём угодно — о погоде, о еде, о жизни...<br>
+                    Или просто поболтать! Я всегда рад компании 🤗
+                </div>
+            `;
+            messages.scrollTop = messages.scrollHeight;
+        }, 8000);
+    }
+
+    function startBarista() {
+        setTimeout(showBaristaWelcome, 2000);
+        console.log('🍓 Клубничный Бариста активирован!');
+    }
+
+    setTimeout(startBarista, 2500);
+</script>
+
 </body>
 </html>
