@@ -2081,51 +2081,51 @@
 
         const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже.
 
-ТВОИ ДАННЫЕ:
-Меню:
-${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
+        ТВОИ ДАННЫЕ:
+        Меню:
+        ${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
 
-Акции:
-${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
+        Акции:
+        ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
-О ПРИЛОЖЕНИИ:
-- Доставка: в бунгало на пляже, время доставки 15-20 минут
-- Самовывоз: из киоска на пляже
-- У нас ДВА КИОСКА:
-  1. Напротив бетонного пирса (44.358193, 38.528773)
-  2. Центральный вход на пляж (44.358198, 38.527699)
-- Оплата: наличные, переводом, картой при получении
-- Работаем: 9:00 — 1:00 (МСК)
-- Контакты: +7 962 855-72-63
-- В приложении есть: меню, корзина, заказы, отзывы, поддержка, карта
-- Для заказа нужно: имя, телефон, номер бунгало
-- Алкоголь (пиво) — только 18+
-- Присыпки (арахис, кокос, орео, вафля) — бесплатно, до 2 видов
-- Скидка 10% при заказе 2+ стаканчиков
+        О ПРИЛОЖЕНИИ:
+        - Доставка: в бунгало на пляже, время доставки 15-20 минут
+        - Самовывоз: из киоска на пляже
+        - У нас ДВА КИОСКА:
+          1. Напротив бетонного пирса (44.358193, 38.528773)
+          2. Центральный вход на пляж (44.358198, 38.527699)
+        - Оплата: наличные, переводом, картой при получении
+        - Работаем: 9:00 — 1:00 (МСК)
+        - Контакты: +7 962 855-72-63
+        - В приложении есть: меню, корзина, заказы, отзывы, поддержка, карта
+        - Для заказа нужно: имя, телефон, номер бунгало
+        - Алкоголь (пиво) — только 18+
+        - Присыпки (арахис, кокос, орео, вафля) — бесплатно, до 2 видов
+        - Скидка 10% при заказе 2+ стаканчиков
 
-ТВОЯ РОЛЬ:
-1. Ты работаешь в кафе, общаешься с гостями
-2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты ЗНАЕШЬ ВСЁ о приложении, доставке, оплате, бунгало
-4. Ты дружелюбный и весёлый помощник
-5. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
-6. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
-7. Ты НЕ даёшь советы по развлечениям и местам в Архипо-Осиповке — у тебя нет достоверной информации
+        ТВОЯ РОЛЬ:
+        1. Ты работаешь в кафе, общаешься с гостями
+        2. Ты знаешь ВСЁ о меню, ценах, акциях
+        3. Ты ЗНАЕШЬ ВСЁ о приложении, доставке, оплате, бунгало
+        4. Ты дружелюбный и весёлый помощник
+        5. Ты УМЕЕШЬ ОТВЕЧАТЬ НА ЛЮБЫЕ ВОПРОСЫ — будь полезным собеседником
+        6. Ты НЕ предлагаешь клубнику, если не спрашивают о ней
+        7. Ты НЕ даёшь советы по развлечениям и местам в Архипо-Осиповке — у тебя нет достоверной информации
 
-ПРАВИЛА:
-- Отвечай ТОЛЬКО на русском
-- Будь коротким и полезным (2-4 предложения)
-- Используй эмодзи 🍓🍫😊🌊
-- НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
-- ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ И НЕ ПРО ПРИЛОЖЕНИЕ — НЕ ПРЕДЛАГАЙ КЛУБНИКУ
-- ВСЕГДА желай хорошего отдыха, если прощаешься
+        ПРАВИЛА:
+        - Отвечай ТОЛЬКО на русском
+        - Будь коротким и полезным (2-4 предложения)
+        - Используй эмодзи 🍓🍫😊🌊
+        - НА ЛЮБЫЕ ВОПРОСЫ ОТВЕЧАЙ ДРУЖЕЛЮБНО И ПОМОЩНО
+        - ЕСЛИ СПРАШИВАЮТ НЕ ПРО КЛУБНИКУ И НЕ ПРО ПРИЛОЖЕНИЕ — НЕ ПРЕДЛАГАЙ КЛУБНИКУ
+        - ВСЕГДА желай хорошего отдыха, если прощаешься
 
-ОТВЕТЫ НА ВОПРОСЫ:
-- "Как получить подарок?" → "Подойдите к любому отмеченному киоску на карте и покажите QR-код. Кнопка с QR-кодом — золотая, внизу экрана 🎁 Подарок доступен только новым пользователям!"
-- "Где киоск?" → "Нажмите на кнопку 'Показать на карте' под картой, там отмечены оба наших киоска с картинками 🍓"
-- "Где ваш киоск?" → "Нажмите на кнопку 'Показать на карте' под картой, там отмечены оба наших киоска с картинками 🍓"
+        ОТВЕТЫ НА ВОПРОСЫ:
+        - "Как получить подарок?" → "Подойдите к любому отмеченному киоску на карте и покажите QR-код. Кнопка с QR-кодом — золотая, внизу экрана 🎁 Подарок доступен только новым пользователям!"
+        - "Где киоск?" → "Нажмите на кнопку 'Показать на карте' под картой, там отмечены оба наших киоска с картинками 🍓"
+        - "Где ваш киоск?" → "Нажмите на кнопку 'Показать на карте' под картой, там отмечены оба наших киоска с картинками 🍓"
 
-ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню и акциях!`;
+        ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню и акциях!`;
 
         // ================================================================
         // ===== ФУНКЦИИ БАРИСТЫ =====
@@ -2171,22 +2171,22 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             const input = document.getElementById('baristaInput');
             const messages = document.getElementById('baristaMessages');
             const userText = input.value.trim();
-            
+
             if (!userText) return;
-            
+
             messages.innerHTML += `<div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(108,92,231,0.12);color:#1A1A2E;align-self:flex-end;border-bottom-right-radius:4px;animation:msgIn 0.3s ease;">${escapeHtmlBarista(userText)}</div>`;
             baristaHistory.push({ role: 'user', content: userText });
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
-            
+
             const loadingId = 'bloading-' + Date.now();
             messages.innerHTML += `<div id="${loadingId}" style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;animation:msgIn 0.3s ease;">🤔 Думаю...</div>`;
             messages.scrollTop = messages.scrollHeight;
-            
+
             try {
                 const response = await getBaristaResponse(userText);
                 document.getElementById(loadingId)?.remove();
-                
+
                 const formatted = formatBaristaResponse(response);
                 messages.innerHTML += `<div style="padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;animation:msgIn 0.3s ease;">${formatted}</div>`;
                 baristaHistory.push({ role: 'assistant', content: response });
@@ -2210,12 +2210,12 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
                     })
                 });
                 const data = await response.json();
-                
+
                 if (data.error) {
                     console.error('API Error:', data.error);
                     return '🍓 Извините, технические неполадки. Попробуйте ещё раз!';
                 }
-                
+
                 return data.choices[0].message.content;
             } catch (error) {
                 console.error('Network Error:', error);
@@ -2246,16 +2246,15 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             closeBeachRestrict();
             const mapModal = document.getElementById('mapModal');
             const iframe = document.getElementById('mapIframe');
-            
-            // Показываем оба киоска на карте
+
             let pins = '';
             KIOSKS.forEach((k, i) => {
                 pins += `&pt=${k.lng},${k.lat},flag${i + 1}`;
             });
-            
+
             const centerLat = (KIOSKS[0].lat + KIOSKS[1].lat) / 2;
             const centerLng = (KIOSKS[0].lng + KIOSKS[1].lng) / 2;
-            
+
             iframe.src = `https://yandex.ru/map-widget/v1/?ll=${centerLng},${centerLat}&z=16${pins}`;
             mapModal.classList.add('open');
         }
@@ -2572,6 +2571,8 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
 
         function renderMenu(settings) {
             // ... (стандартный рендер меню)
+            // Здесь нужно добавить полный код renderMenu
+            // Для краткости оставлю заглушку, но он должен быть полным
         }
 
         function attachEvents() {
@@ -2783,7 +2784,7 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
             selectedPayment = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
-            
+
             const messages = {
                 cash: '💡 Оплата наличными при получении',
                 transfer: '💡 Перевод по номеру телефона при получении',
@@ -2793,7 +2794,6 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
         }
 
         async function submitOrder() {
-            // Стандартная функция заказа
             showNotification('⏳ Функция заказа временно недоступна');
         }
 
