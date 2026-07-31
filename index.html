@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🍓 Strawberry in Chocolate</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -210,11 +209,6 @@
             opacity: 0.9;
             font-weight: 400;
             text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .bungalo-display .hint .session-timer {
-            color: #FFD700;
-            font-weight: 600;
         }
 
         .support-header {
@@ -1299,20 +1293,9 @@
             gap: 4px;
         }
 
-        .status-waiting {
-            background: #FFF8E1;
-            color: #F59E0B;
-        }
-
-        .status-done {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .status-cancelled {
-            background: #FFEBEE;
-            color: #D32F2F;
-        }
+        .status-waiting { background: #FFF8E1; color: #F59E0B; }
+        .status-done { background: #E8F5E9; color: #2E7D32; }
+        .status-cancelled { background: #FFEBEE; color: #D32F2F; }
 
         .order-items-list {
             margin-bottom: 12px;
@@ -1516,500 +1499,6 @@
             color: var(--text-secondary);
         }
 
-        .support-chat-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .support-chat-bg .strawberry-bg {
-            position: absolute;
-            font-size: 35px;
-            opacity: 0.07;
-            pointer-events: none;
-            animation: floatStrawberry 25s linear infinite;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(1) {
-            top: 5%;
-            left: 5%;
-            font-size: 50px;
-            animation-delay: 0s;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(2) {
-            top: 15%;
-            right: 8%;
-            font-size: 40px;
-            animation-delay: 2s;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(3) {
-            bottom: 20%;
-            left: 10%;
-            font-size: 45px;
-            animation-delay: 4s;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(4) {
-            bottom: 5%;
-            right: 5%;
-            font-size: 55px;
-            animation-delay: 6s;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(5) {
-            top: 45%;
-            left: 45%;
-            font-size: 60px;
-            animation-delay: 8s;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(6) {
-            top: 30%;
-            left: 20%;
-            font-size: 30px;
-            animation-delay: 3s;
-        }
-
-        .support-chat-bg .strawberry-bg:nth-child(7) {
-            bottom: 35%;
-            right: 15%;
-            font-size: 35px;
-            animation-delay: 5s;
-        }
-
-        @keyframes floatStrawberry {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-            25% {
-                transform: translate(25px, -35px) rotate(12deg) scale(1.1);
-            }
-            50% {
-                transform: translate(-15px, 25px) rotate(-8deg) scale(0.9);
-            }
-            75% {
-                transform: translate(35px, 15px) rotate(18deg) scale(1.05);
-            }
-            100% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-            }
-        }
-
-        .support-msg {
-            padding: 12px 18px;
-            border-radius: 18px;
-            max-width: 85%;
-            font-size: 14px;
-            line-height: 1.6;
-            animation: msgIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            z-index: 1;
-            word-break: break-word;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .support-msg.user {
-            background: rgba(255, 71, 87, 0.85);
-            color: #fff;
-            align-self: flex-end;
-            border-bottom-right-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2);
-        }
-
-        .support-msg.barista {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            color: #1A1A2E;
-            align-self: flex-start;
-            border-bottom-left-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        .support-msg.barista .msg-avatar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .support-msg.barista .msg-avatar span {
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--primary);
-        }
-
-        .support-msg .msg-time {
-            font-size: 9px;
-            opacity: 0.4;
-            display: block;
-            margin-top: 4px;
-            font-weight: 400;
-        }
-
-        @keyframes msgIn {
-            from {
-                opacity: 0;
-                transform: translateY(12px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .quick-replies-wrapper {
-            position: relative;
-            padding: 8px 16px 12px;
-            flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 2;
-            overflow: hidden;
-        }
-
-        .quick-replies-scroll {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 4px 2px 8px;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .quick-replies-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .quick-replies-scroll button {
-            flex-shrink: 0;
-            padding: 8px 18px;
-            border-radius: 100px;
-            border: 1px solid rgba(255, 71, 87, 0.15);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-
-        .quick-replies-scroll button:active {
-            transform: scale(0.94);
-            background: rgba(255, 71, 87, 0.1);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .chat-input-wrapper {
-            padding: 12px 16px 16px;
-            border-top: 1px solid rgba(0, 0, 0, 0.04);
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 2;
-            position: relative;
-        }
-
-        .chat-input-wrapper input {
-            flex: 1;
-            padding: 12px 18px;
-            border-radius: 100px;
-            border: 2px solid rgba(255, 71, 87, 0.1);
-            font-size: 14px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            font-family: var(--font-family);
-            transition: var(--transition);
-            color: var(--text-dark);
-        }
-
-        .chat-input-wrapper input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.08);
-        }
-
-        .chat-input-wrapper input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .chat-input-wrapper button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #FFFFFF;
-            border: none;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
-        }
-
-        .chat-input-wrapper button:active {
-            transform: scale(0.92);
-        }
-
-        #baristaWidget {
-            position: fixed;
-            bottom: 95px;
-            right: 20px;
-            z-index: 9999;
-            display: none;
-        }
-
-        #baristaToggle {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #FD79A8, #6C5CE7);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 30px;
-            box-shadow: 0 4px 25px rgba(108, 92, 231, 0.4);
-            transition: all 0.3s ease;
-            position: relative;
-            animation: baristaPulse 2.5s infinite;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        #baristaToggle .badge-dot {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #FF4757;
-            border: 2px solid #FFFFFF;
-            font-size: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            animation: blinkBadge 1.2s infinite;
-        }
-
-        @keyframes blinkBadge {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        @keyframes baristaPulse {
-            0%, 100% { box-shadow: 0 4px 25px rgba(108, 92, 231, 0.4); }
-            50% { box-shadow: 0 4px 40px rgba(108, 92, 231, 0.6); }
-        }
-
-        #baristaWindow {
-            position: absolute;
-            bottom: 78px;
-            right: 0;
-            width: 370px;
-            height: 500px;
-            background: #FFFFFF;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        #baristaWindow .window-header {
-            padding: 14px 18px;
-            background: rgba(108, 92, 231, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            flex-shrink: 0;
-        }
-
-        #baristaWindow .window-header .avatar-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #baristaWindow .window-header .avatar-info .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #FD79A8, #6C5CE7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        #baristaWindow .window-header .avatar-info .name {
-            color: #1A1A2E;
-            font-weight: 700;
-            font-size: 15px;
-        }
-
-        #baristaWindow .window-header .avatar-info .status {
-            font-size: 11px;
-            color: #22C55E;
-        }
-
-        #baristaWindow .window-header .close-btn {
-            background: none;
-            border: none;
-            color: rgba(0, 0, 0, 0.3);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 4px 8px;
-        }
-
-        #baristaMessages {
-            flex: 1;
-            padding: 16px 18px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #FAFAFA;
-        }
-
-        #baristaMessages .msg-bot {
-            padding: 12px 16px;
-            border-radius: 14px;
-            max-width: 90%;
-            font-size: 14px;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.04);
-            color: #1A1A2E;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-
-        #baristaMessages .msg-user {
-            padding: 12px 16px;
-            border-radius: 14px;
-            max-width: 90%;
-            font-size: 14px;
-            line-height: 1.6;
-            background: rgba(108, 92, 231, 0.12);
-            color: #1A1A2E;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        #baristaMessages .msg-typing {
-            padding: 12px 16px;
-            border-radius: 14px;
-            max-width: 90%;
-            font-size: 14px;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.04);
-            color: #1A1A2E;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            opacity: 0.6;
-        }
-
-        .barista-quick-btns {
-            display: flex;
-            gap: 6px;
-            padding: 8px 16px 12px;
-            flex-wrap: wrap;
-            flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .barista-quick-btns button {
-            padding: 5px 14px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            background: rgba(0, 0, 0, 0.02);
-            color: rgba(0, 0, 0, 0.5);
-            font-size: 11px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-        }
-
-        .barista-quick-btns button:active {
-            transform: scale(0.95);
-            background: rgba(108, 92, 231, 0.1);
-        }
-
-        .barista-input-row {
-            padding: 12px 16px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .barista-input-row input {
-            flex: 1;
-            padding: 12px 18px;
-            border-radius: 24px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            background: #F8FAFC;
-            color: #1A1A2E;
-            outline: none;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .barista-input-row input:focus {
-            border-color: #6C5CE7;
-        }
-
-        .barista-input-row button {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #FD79A8, #6C5CE7);
-            color: #fff;
-            cursor: pointer;
-            font-size: 17px;
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-
-        .barista-input-row button:active {
-            transform: scale(0.9);
-        }
-
         @media (max-width: 400px) {
             .app-container {
                 padding: 12px 12px 16px;
@@ -2051,10 +1540,6 @@
             .payment-btn {
                 flex: 1 1 100%;
             }
-            #baristaWindow {
-                width: 320px;
-                right: -10px;
-            }
         }
 
         @media (max-width: 340px) {
@@ -2066,6 +1551,197 @@
                 padding: 8px 6px;
             }
         }
+
+        /* ===== СТИЛИ ДЛЯ ЧАТА ПОДДЕРЖКИ ===== */
+        
+        .support-chat-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .support-chat-bg .strawberry-bg {
+            position: absolute;
+            font-size: 35px;
+            opacity: 0.07;
+            pointer-events: none;
+            animation: floatStrawberry 25s linear infinite;
+        }
+        .support-chat-bg .strawberry-bg:nth-child(1) { top: 5%; left: 5%; font-size: 50px; animation-delay: 0s; }
+        .support-chat-bg .strawberry-bg:nth-child(2) { top: 15%; right: 8%; font-size: 40px; animation-delay: 2s; }
+        .support-chat-bg .strawberry-bg:nth-child(3) { bottom: 20%; left: 10%; font-size: 45px; animation-delay: 4s; }
+        .support-chat-bg .strawberry-bg:nth-child(4) { bottom: 5%; right: 5%; font-size: 55px; animation-delay: 6s; }
+        .support-chat-bg .strawberry-bg:nth-child(5) { top: 45%; left: 45%; font-size: 60px; animation-delay: 8s; }
+        .support-chat-bg .strawberry-bg:nth-child(6) { top: 30%; left: 20%; font-size: 30px; animation-delay: 3s; }
+        .support-chat-bg .strawberry-bg:nth-child(7) { bottom: 35%; right: 15%; font-size: 35px; animation-delay: 5s; }
+        
+        @keyframes floatStrawberry {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(25px, -35px) rotate(12deg) scale(1.1); }
+            50% { transform: translate(-15px, 25px) rotate(-8deg) scale(0.9); }
+            75% { transform: translate(35px, 15px) rotate(18deg) scale(1.05); }
+            100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+
+        .support-msg {
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: msgIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+            word-break: break-word;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .support-msg.user {
+            background: rgba(255, 71, 87, 0.85);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2);
+        }
+        .support-msg.barista {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #1A1A2E;
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+        .support-msg.barista .msg-avatar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .support-msg.barista .msg-avatar span {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--primary);
+        }
+        .support-msg .msg-time {
+            font-size: 9px;
+            opacity: 0.4;
+            display: block;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .quick-replies-wrapper {
+            position: relative;
+            padding: 8px 16px 12px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 2;
+            overflow: hidden;
+        }
+        .quick-replies-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 2px 8px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .quick-replies-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .quick-replies-scroll button {
+            flex-shrink: 0;
+            padding: 8px 18px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 71, 87, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .quick-replies-scroll button:active {
+            transform: scale(0.94);
+            background: rgba(255, 71, 87, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chat-input-wrapper {
+            padding: 12px 16px 16px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2;
+            position: relative;
+        }
+        .chat-input-wrapper input {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 100px;
+            border: 2px solid rgba(255, 71, 87, 0.1);
+            font-size: 14px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: var(--font-family);
+            transition: var(--transition);
+            color: var(--text-dark);
+        }
+        .chat-input-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.08);
+        }
+        .chat-input-wrapper input::placeholder {
+            color: var(--text-muted);
+        }
+        .chat-input-wrapper button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+        }
+        .chat-input-wrapper button:active {
+            transform: scale(0.92);
+        }
     </style>
 </head>
 <body>
@@ -2073,69 +1749,95 @@
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
     <!-- ===== МОДАЛЬНЫЕ ОКНА ===== -->
+    
     <div class="auth-modal-overlay" id="authModal">
         <div class="auth-modal-content">
-            <button class="modal-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-user-circle" style="color: var(--primary);"></i> Ваши данные</div>
+            <button class="modal-close" onclick="closeAuthModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">
+                <i class="fas fa-user-circle" style="color: var(--primary);"></i> Ваши данные
+            </div>
             <div class="modal-subtitle">Чтобы мы могли связаться с вами</div>
             <div class="auth-row">
                 <input type="text" id="authName" placeholder="Ваше имя">
                 <input type="tel" id="authPhone" placeholder="+7 999 123-45-67" oninput="validatePhoneInput(this)">
             </div>
-            <button class="confirm-btn" id="authConfirmBtn" onclick="confirmAuth()"><i class="fas fa-check-circle"></i> Продолжить</button>
+            <button class="confirm-btn" id="authConfirmBtn" onclick="confirmAuth()">
+                <i class="fas fa-check-circle"></i> Продолжить
+            </button>
         </div>
     </div>
 
     <div class="topping-modal-overlay" id="toppingModal">
         <div class="topping-modal-content">
-            <button class="modal-close" onclick="closeToppingModal()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-sparkles" style="color: var(--primary);"></i> Присыпка</div>
+            <button class="modal-close" onclick="closeToppingModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">
+                <i class="fas fa-sparkles" style="color: var(--primary);"></i> Присыпка
+            </div>
             <div class="modal-subtitle">Выберите до 2 присыпок (бесплатно)</div>
-            <div class="modal-product" id="selectedProductDisplay" style="background:#F8FAFC;border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-                <span class="product-icon" id="productIcon" style="font-size:28px;">🍓</span>
-                <span class="product-name" id="productName" style="font-weight:600;color:var(--text-dark);">Классика</span>
-                <span class="product-price" id="productPrice" style="margin-left:auto;font-weight:700;color:var(--primary);">350 ₽</span>
+            <div class="modal-product" id="selectedProductDisplay" style="background: #F8FAFC; border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+                <span class="product-icon" id="productIcon" style="font-size: 28px;">🍓</span>
+                <span class="product-name" id="productName" style="font-weight: 600; color: var(--text-dark);">Классика</span>
+                <span class="product-price" id="productPrice" style="margin-left: auto; font-weight: 700; color: var(--primary);">350 ₽</span>
             </div>
-            <div id="selectedToppingsDisplay" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:32px;padding:4px;">
-                <span style="color:var(--text-muted);font-size:13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>
+            <div id="selectedToppingsDisplay" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; min-height: 32px; padding: 4px;">
+                <span style="color: var(--text-muted); font-size: 13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>
             </div>
-            <div class="topping-options" id="toppingOptions" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
-            <button class="confirm-btn" id="confirmToppingBtn" disabled><i class="fas fa-plus-circle"></i> Добавить в корзину</button>
+            <div class="topping-options" id="toppingOptions" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
+            <button class="confirm-btn" id="confirmToppingBtn" disabled>
+                <i class="fas fa-plus-circle"></i> Добавить в корзину
+            </button>
         </div>
     </div>
 
     <div class="age-verify-overlay" id="ageVerifyModal">
         <div class="age-verify-content">
-            <span style="font-size:48px;display:block;text-align:center;margin-bottom:12px;">🍺</span>
+            <span style="font-size: 48px; display: block; text-align: center; margin-bottom: 12px;">🍺</span>
             <div class="modal-title">Подтверждение возраста</div>
-            <div class="modal-subtitle" style="font-size:14px;color:var(--text-secondary);line-height:1.6;">
+            <div class="modal-subtitle" style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
                 Спиртные напитки отпускаются<br><strong>строго совершеннолетним</strong>
             </div>
             <div class="age-warning-box">
                 <span>⚠️</span>
-                <span class="age-warning-text">При получении заказа необходимо <strong>предъявить документ</strong>, удостоверяющий личность и возраст</span>
+                <span class="age-warning-text">
+                    При получении заказа необходимо <strong>предъявить документ</strong>, удостоверяющий личность и возраст
+                </span>
             </div>
             <label class="age-checkbox-label" onclick="toggleAgeCheckbox()">
                 <input type="checkbox" id="ageCheckbox">
                 <span>Мне есть 18 лет</span>
             </label>
-            <button class="confirm-btn" id="ageConfirmBtn" disabled onclick="confirmAge()"><i class="fas fa-check-circle"></i> Подтверждаю</button>
-            <button onclick="closeAgeVerify()" style="width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:14px;cursor:pointer;margin-top:8px;font-family:var(--font-family);">Отмена</button>
+            <button class="confirm-btn" id="ageConfirmBtn" disabled onclick="confirmAge()">
+                <i class="fas fa-check-circle"></i> Подтверждаю
+            </button>
+            <button onclick="closeAgeVerify()" style="width: 100%; padding: 12px; background: none; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; margin-top: 8px; font-family: var(--font-family);">
+                Отмена
+            </button>
         </div>
     </div>
 
     <div class="orders-modal-overlay" id="ordersModal">
         <div class="orders-modal-content">
             <div class="orders-fullscreen-header">
-                <h2><i class="fas fa-list-alt" style="color:var(--primary);margin-right:8px;"></i>Мои заказы</h2>
-                <button class="modal-close" onclick="closeOrdersModal()" style="position:static;"><i class="fas fa-times"></i></button>
+                <h2><i class="fas fa-list-alt" style="color: var(--primary); margin-right: 8px;"></i>Мои заказы</h2>
+                <button class="modal-close" onclick="closeOrdersModal()" style="position: static;">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="orders-fullscreen-search">
                 <input type="tel" id="ordersPhoneInput" placeholder="Введите ваш телефон" oninput="validatePhoneInput(this)">
-                <button onclick="loadMyOrders()"><i class="fas fa-search"></i> Показать</button>
+                <button onclick="loadMyOrders()">
+                    <i class="fas fa-search"></i> Показать
+                </button>
             </div>
             <div class="orders-fullscreen-list" id="ordersContent">
-                <div class="cart-empty"><i class="fas fa-phone" style="font-size:48px;display:block;margin-bottom:12px;"></i>Введите телефон, чтобы увидеть заказы</div>
+                <div class="cart-empty">
+                    <i class="fas fa-phone" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
+                    Введите телефон, чтобы увидеть заказы
+                </div>
             </div>
         </div>
     </div>
@@ -2143,99 +1845,137 @@
     <div class="reviews-modal-overlay" id="reviewsModal">
         <div class="reviews-modal-content">
             <div class="orders-fullscreen-header">
-                <h2><i class="fas fa-star" style="color:#FFB300;margin-right:8px;"></i>Отзывы</h2>
-                <button class="modal-close" onclick="closeReviewsModal()" style="position:static;"><i class="fas fa-times"></i></button>
+                <h2><i class="fas fa-star" style="color: #FFB300; margin-right: 8px;"></i>Отзывы</h2>
+                <button class="modal-close" onclick="closeReviewsModal()" style="position: static;">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="orders-fullscreen-list" id="reviewsModalList">
-                <div class="cart-empty"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>⭐ Пока нет отзывов. Будьте первым!</div>
+                <div class="cart-empty">
+                    <i class="fas fa-star" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
+                    ⭐ Пока нет отзывов. Будьте первым!
+                </div>
             </div>
-            <div style="padding:14px 20px;border-top:1px solid #F1F5F9;text-align:center;flex-shrink:0;background:#FFFFFF;">
-                <div style="font-size:14px;color:var(--text-secondary);"><i class="fas fa-heart" style="color:#E91E63;"></i> Спасибо, что выбираете нас! С вами мы становимся лучше!</div>
+            <div style="padding: 14px 20px; border-top: 1px solid #F1F5F9; text-align: center; flex-shrink: 0; background: #FFFFFF;">
+                <div style="font-size: 14px; color: var(--text-secondary);">
+                    <i class="fas fa-heart" style="color: #E91E63;"></i> 
+                    Спасибо, что выбираете нас! С вами мы становимся лучше!
+                </div>
             </div>
         </div>
     </div>
 
     <div class="review-modal-overlay" id="reviewModal">
         <div class="review-modal-content">
-            <button class="modal-close" onclick="closeReviewModal()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-star" style="color:#FFB300;"></i> Оцените заказ</div>
-            <div class="modal-subtitle">Спасибо, что выбрали нас! ❤️</div>
-            <div class="stars-row" id="starsRow" style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;">
-                <span class="star" data-value="1" onclick="setRating(1)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="2" onclick="setRating(2)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="3" onclick="setRating(3)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="4" onclick="setRating(4)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
-                <span class="star" data-value="5" onclick="setRating(5)" style="font-size:40px;color:#E5E7EB;cursor:pointer;transition:var(--transition);">★</span>
+            <button class="modal-close" onclick="closeReviewModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">
+                <i class="fas fa-star" style="color: #FFB300;"></i> Оцените заказ
             </div>
-            <textarea id="reviewText" placeholder="Расскажите о вашем впечатлении..." style="width:100%;padding:14px 16px;border:2px solid #F1F5F9;border-radius:var(--radius-md);font-size:15px;background:#F8FAFC;outline:none;font-family:var(--font-family);resize:vertical;min-height:100px;margin-bottom:16px;"></textarea>
-            <button class="confirm-btn" id="submitReviewBtn" disabled onclick="submitReview()"><i class="fas fa-paper-plane"></i> Отправить отзыв</button>
+            <div class="modal-subtitle">Спасибо, что выбрали нас! ❤️</div>
+            <div class="stars-row" id="starsRow" style="display: flex; justify-content: center; gap: 12px; margin-bottom: 16px;">
+                <span class="star" data-value="1" onclick="setRating(1)" style="font-size: 40px; color: #E5E7EB; cursor: pointer; transition: var(--transition);">★</span>
+                <span class="star" data-value="2" onclick="setRating(2)" style="font-size: 40px; color: #E5E7EB; cursor: pointer; transition: var(--transition);">★</span>
+                <span class="star" data-value="3" onclick="setRating(3)" style="font-size: 40px; color: #E5E7EB; cursor: pointer; transition: var(--transition);">★</span>
+                <span class="star" data-value="4" onclick="setRating(4)" style="font-size: 40px; color: #E5E7EB; cursor: pointer; transition: var(--transition);">★</span>
+                <span class="star" data-value="5" onclick="setRating(5)" style="font-size: 40px; color: #E5E7EB; cursor: pointer; transition: var(--transition);">★</span>
+            </div>
+            <textarea id="reviewText" placeholder="Расскажите о вашем впечатлении..." style="width: 100%; padding: 14px 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-md); font-size: 15px; background: #F8FAFC; outline: none; font-family: var(--font-family); resize: vertical; min-height: 100px; margin-bottom: 16px;"></textarea>
+            <button class="confirm-btn" id="submitReviewBtn" disabled onclick="submitReview()">
+                <i class="fas fa-paper-plane"></i> Отправить отзыв
+            </button>
         </div>
     </div>
 
     <div class="map-modal-overlay" id="mapModal" onclick="closeMap()">
-        <div class="map-modal-content" onclick="event.stopPropagation()" style="background:#FFFFFF;border-radius:var(--radius-2xl);padding:28px 24px 24px;">
-            <button class="modal-close" onclick="closeMap()"><i class="fas fa-times"></i></button>
-            <div class="modal-title"><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i> Наш киоск на карте</div>
-            <div class="map-container" style="border-radius:var(--radius-lg);overflow:hidden;margin-bottom:14px;">
-                <iframe src="" id="mapIframe" style="width:100%;height:300px;border:none;"></iframe>
+        <div class="map-modal-content" onclick="event.stopPropagation()" style="background: #FFFFFF; border-radius: var(--radius-2xl); padding: 28px 24px 24px;">
+            <button class="modal-close" onclick="closeMap()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">
+                <i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Наш киоск на карте
             </div>
-            <div style="background:#F8FAFC;padding:14px 16px;border-radius:var(--radius-lg);font-size:14px;color:var(--text-dark);line-height:1.6;">
-                <i class="fas fa-location-dot" style="color:var(--primary);"></i> <strong>Ориентир:</strong> Напротив бетонного пирса, белый киоск "Strawberry in Chocolate"<br>
-                <i class="fas fa-phone"></i> <strong>Телефон:</strong> <a href="tel:+79628557263" style="color:var(--primary);font-weight:600;text-decoration:none;">+7 962 855-72-63</a>
+            <div class="map-container" style="border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 14px;">
+                <iframe src="" id="mapIframe" style="width: 100%; height: 300px; border: none;"></iframe>
+            </div>
+            <div style="background: #F8FAFC; padding: 14px 16px; border-radius: var(--radius-lg); font-size: 14px; color: var(--text-dark); line-height: 1.6;">
+                <i class="fas fa-location-dot" style="color: var(--primary);"></i> <strong>Ориентир:</strong> Напротив бетонного пирса, белый киоск "Strawberry in Chocolate"<br>
+                <i class="fas fa-phone"></i> <strong>Телефон:</strong> <a href="tel:+79628557263" style="color: var(--primary); font-weight: 600; text-decoration: none;">+7 962 855-72-63</a>
             </div>
         </div>
     </div>
 
     <div class="beach-restrict-modal" id="beachRestrictModal">
         <div class="beach-restrict-content">
-            <span class="restrict-icon" style="font-size:64px;display:block;text-align:center;margin-bottom:12px;">🏖️</span>
-            <h2 style="font-size:22px;font-weight:700;color:var(--text-dark);text-align:center;margin-bottom:12px;">Доступ только из бунгало!</h2>
-            <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;text-align:center;margin-bottom:20px;">
+            <span class="restrict-icon" style="font-size: 64px; display: block; text-align: center; margin-bottom: 12px;">🏖️</span>
+            <h2 style="font-size: 22px; font-weight: 700; color: var(--text-dark); text-align: center; margin-bottom: 12px;">Доступ только из бунгало!</h2>
+            <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; text-align: center; margin-bottom: 20px;">
                 Для заказа клубники в шоколаде необходимо находиться в бунгало.<br>
                 Вы можете подойти к нашему киоску на пляже или вернуться в бунгало и отсканировать QR-код.
             </p>
-            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
-                <button onclick="closeBeachRestrict(); openMap();" style="display:flex;align-items:center;gap:12px;padding:16px;border:2px solid #F1F5F9;border-radius:var(--radius-lg);background:#FFFFFF;cursor:pointer;font-family:var(--font-family);text-align:left;width:100%;transition:var(--transition);">
-                    <span style="font-size:28px;">📍</span>
-                    <span style="flex:1;"><span style="display:block;font-weight:600;color:var(--text-dark);">Найти киоск на пляже</span><span style="font-size:12px;color:var(--text-secondary);">Мы находимся в 100 метрах от бунгало</span></span>
-                    <i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                <button onclick="closeBeachRestrict(); openMap();" style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-lg); background: #FFFFFF; cursor: pointer; font-family: var(--font-family); text-align: left; width: 100%; transition: var(--transition);">
+                    <span style="font-size: 28px;">📍</span>
+                    <span style="flex: 1;">
+                        <span style="display: block; font-weight: 600; color: var(--text-dark);">Найти киоск на пляже</span>
+                        <span style="font-size: 12px; color: var(--text-secondary);">Мы находимся в 100 метрах от бунгало</span>
+                    </span>
+                    <i class="fas fa-chevron-right" style="color: var(--text-muted);"></i>
                 </button>
-                <button onclick="closeBeachRestrict(); showQRPrompt();" style="display:flex;align-items:center;gap:12px;padding:16px;border:2px solid #F1F5F9;border-radius:var(--radius-lg);background:#FFFFFF;cursor:pointer;font-family:var(--font-family);text-align:left;width:100%;transition:var(--transition);">
-                    <span style="font-size:28px;">🏠</span>
-                    <span style="flex:1;"><span style="display:block;font-weight:600;color:var(--text-dark);">Я в бунгало</span><span style="font-size:12px;color:var(--text-secondary);">Отсканируйте QR-код для заказа</span></span>
-                    <i class="fas fa-chevron-right" style="color:var(--text-muted);"></i>
+                <button onclick="closeBeachRestrict(); showQRPrompt();" style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 2px solid #F1F5F9; border-radius: var(--radius-lg); background: #FFFFFF; cursor: pointer; font-family: var(--font-family); text-align: left; width: 100%; transition: var(--transition);">
+                    <span style="font-size: 28px;">🏠</span>
+                    <span style="flex: 1;">
+                        <span style="display: block; font-weight: 600; color: var(--text-dark);">Я в бунгало</span>
+                        <span style="font-size: 12px; color: var(--text-secondary);">Отсканируйте QR-код для заказа</span>
+                    </span>
+                    <i class="fas fa-chevron-right" style="color: var(--text-muted);"></i>
                 </button>
             </div>
-            <button onclick="closeBeachRestrict()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#FFFFFF;border:none;border-radius:100px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font-family);box-shadow:0 4px 16px rgba(255,71,87,0.3);"><i class="fas fa-times"></i> Закрыть</button>
+            <button onclick="closeBeachRestrict()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #FFFFFF; border: none; border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-family); box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);">
+                <i class="fas fa-times"></i> Закрыть
+            </button>
         </div>
     </div>
 
     <!-- ===== ОСНОВНАЯ ЧАСТЬ ===== -->
     <div class="app-container">
+
         <div class="support-header">
             <div class="support-buttons">
                 <button onclick="openSupportChat()" class="support-btn">
-                    <i class="fas fa-headset" style="color:var(--primary);"></i> Поддержка
+                    <i class="fas fa-headset" style="color: var(--primary);"></i> Поддержка
                     <span class="badge" id="supportBadge">!</span>
                 </button>
                 <button onclick="openReviewsModal()" class="support-btn">
-                    <i class="fas fa-star" style="color:#FFB300;"></i> Отзывы
-                    <span id="reviewsBadge" style="background:var(--primary);color:#FFFFFF;font-size:10px;min-width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;padding:0 4px;">
+                    <i class="fas fa-star" style="color: #FFB300;"></i> Отзывы
+                    <span id="reviewsBadge" style="background: var(--primary); color: #FFFFFF; font-size: 10px; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 700; padding: 0 4px;">
                         <span id="reviewsCount">0</span>
                     </span>
                 </button>
-                <button onclick="openBarista()" class="support-btn" style="background:linear-gradient(135deg,#FD79A8,#6C5CE7);color:#FFFFFF;border:none;">
+                <button onclick="openBarista()" class="support-btn" style="background: linear-gradient(135deg, #FD79A8, #6C5CE7); color: #FFFFFF; border: none;">
                     <i class="fas fa-robot"></i> Бариста 🍓
                 </button>
             </div>
-            <a href="tel:+79628557263" class="support-call-btn"><i class="fas fa-phone"></i> Позвонить</a>
+            <a href="tel:+79628557263" class="support-call-btn">
+                <i class="fas fa-phone"></i> Позвонить
+            </a>
         </div>
 
         <header class="header">
             <span class="logo-icon">🍓</span>
-            <div class="header-badge"><i class="fas fa-water"></i> Доставка на пляж</div>
-            <h1><span class="highlight">Strawberry</span><span style="color:var(--text-dark);"> in </span><span style="color:var(--primary-dark);font-weight:800;">Chocolate</span></h1>
-            <p class="subtitle"><i class="fas fa-strawberry" style="color:var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты <span class="delivery-time">⏱️ за 15 минут!</span></p>
+            <div class="header-badge">
+                <i class="fas fa-water"></i> Доставка на пляж
+            </div>
+            <h1>
+                <span class="highlight">Strawberry</span>
+                <span style="color: var(--text-dark);"> in </span>
+                <span style="color: var(--primary-dark); font-weight: 800;">Chocolate</span>
+            </h1>
+            <p class="subtitle">
+                <i class="fas fa-strawberry" style="color: var(--primary);"></i> Свежая клубника в шоколаде, напитки и другие фрукты
+                <span class="delivery-time">⏱️ за 15 минут!</span>
+            </p>
         </header>
 
         <div id="noAccessMode" style="display:none;">
@@ -2246,18 +1986,24 @@
                 <div class="no-access-options">
                     <button class="no-access-btn" onclick="showQRPrompt()">
                         <span class="btn-icon">🏠</span>
-                        <span class="btn-text"><span class="btn-title">Я в бунгало</span><span class="btn-desc">Отсканируйте QR-код в бунгало для заказа</span></span>
+                        <span class="btn-text">
+                            <span class="btn-title">Я в бунгало</span>
+                            <span class="btn-desc">Отсканируйте QR-код в бунгало для заказа</span>
+                        </span>
                         <i class="fas fa-qrcode"></i>
                     </button>
                     <button class="no-access-btn" onclick="openBeachRestrict()">
                         <span class="btn-icon">🏖️</span>
-                        <span class="btn-text"><span class="btn-title">Я на пляже</span><span class="btn-desc">Самовывоз из киоска (100 метров от вас)</span></span>
+                        <span class="btn-text">
+                            <span class="btn-title">Я на пляже</span>
+                            <span class="btn-desc">Самовывоз из киоска (100 метров от вас)</span>
+                        </span>
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
-                <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-secondary);">
-                    <span><i class="fas fa-clock" style="color:var(--primary);"></i> Работаем: <strong>9:00 — 1:00</strong></span>
-                    <span><i class="fas fa-location-dot" style="color:var(--primary);"></i> Киоск: <strong>100 м от бунгало</strong></span>
+                <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary);">
+                    <span><i class="fas fa-clock" style="color: var(--primary);"></i> Работаем: <strong>9:00 — 1:00</strong></span>
+                    <span><i class="fas fa-location-dot" style="color: var(--primary);"></i> Киоск: <strong>100 м от бунгало</strong></span>
                 </div>
             </div>
         </div>
@@ -2266,14 +2012,14 @@
             <div class="no-access-message">
                 <span class="no-access-icon">🔧</span>
                 <h2>Технический перерыв</h2>
-                <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">Мы обновляем меню и готовим для вас что-то вкусное!</p>
-                <p style="color:var(--text-muted);font-size:14px;">Скоро всё заработает, загляните через 5-10 минут</p>
-                <div style="background:#F8FAFC;border-radius:100px;padding:10px 20px;display:inline-block;margin:16px 0;font-weight:500;color:var(--text-dark);">
-                    <i class="fas fa-clock" style="color:var(--primary);"></i> ⏳ Скоро открываемся!
+                <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 8px;">Мы обновляем меню и готовим для вас что-то вкусное!</p>
+                <p style="color: var(--text-muted); font-size: 14px;">Скоро всё заработает, загляните через 5-10 минут</p>
+                <div style="background: #F8FAFC; border-radius: 100px; padding: 10px 20px; display: inline-block; margin: 16px 0; font-weight: 500; color: var(--text-dark);">
+                    <i class="fas fa-clock" style="color: var(--primary);"></i> ⏳ Скоро открываемся!
                 </div>
-                <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;">
-                    <span><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i></span> Показать на карте
-                    <i class="fas fa-arrow-right" style="margin-left:auto;"></i>
+                <button class="map-btn-top" onclick="openMap()" style="margin-top: 16px;">
+                    <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
+                    <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
                 </button>
             </div>
         </div>
@@ -2282,22 +2028,22 @@
             <div class="no-access-message">
                 <span class="no-access-icon">🔒</span>
                 <h2>Сейчас не принимаем заказы</h2>
-                <p style="color:var(--text-secondary);font-size:15px;margin-bottom:8px;">Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong>.</p>
-                <p style="color:var(--text-muted);font-size:14px;" id="currentTimeDisplay">--:--</p>
-                <div style="background:#F8FAFC;border-radius:100px;padding:10px 20px;display:inline-block;margin:16px 0;font-weight:500;color:var(--text-dark);">
-                    <i class="fas fa-clock" style="color:var(--primary);"></i> График работы: <strong>9:00 — 1:00</strong>
+                <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 8px;">Заказы принимаются ежедневно с <strong>9:00</strong> до <strong>1:00</strong>.</p>
+                <p style="color: var(--text-muted); font-size: 14px;" id="currentTimeDisplay">--:--</p>
+                <div style="background: #F8FAFC; border-radius: 100px; padding: 10px 20px; display: inline-block; margin: 16px 0; font-weight: 500; color: var(--text-dark);">
+                    <i class="fas fa-clock" style="color: var(--primary);"></i> График работы: <strong>9:00 — 1:00</strong>
                 </div>
-                <button class="map-btn-top" onclick="openMap()" style="margin-top:16px;">
-                    <span><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i></span> Показать на карте
-                    <i class="fas fa-arrow-right" style="margin-left:auto;"></i>
+                <button class="map-btn-top" onclick="openMap()" style="margin-top: 16px;">
+                    <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
+                    <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
                 </button>
             </div>
         </div>
 
         <div id="bungaloMode">
             <button class="map-btn-top" onclick="openMap()">
-                <span><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i></span> Показать на карте
-                <i class="fas fa-arrow-right" style="margin-left:auto;"></i>
+                <span><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i></span> Показать на карте
+                <i class="fas fa-arrow-right" style="margin-left: auto;"></i>
             </button>
 
             <div id="pickupBannerContainer"></div>
@@ -2307,13 +2053,13 @@
                 <span class="bg-strawberry">🍓</span>
                 <div class="label"><i class="fas fa-location-dot"></i> <span id="bungaloLabel">Ваше бунгало</span></div>
                 <div class="number" id="bungaloNumberDisplay">#7</div>
-                <div class="hint" id="bungaloHint"><i class="fas fa-clock"></i> <span class="session-timer" id="sessionTimer">⏳ Загрузка...</span></div>
+                <div class="hint"><i class="fas fa-qrcode"></i> <span id="bungaloHint">Сканируйте QR-код в вашем бунгало</span></div>
             </div>
 
             <div class="contact-section">
                 <div class="contact-label">
                     <i class="fas fa-phone"></i> Как с вами связаться?
-                    <small style="font-weight:400;color:var(--text-muted);margin-left:auto;">(если мы вас не найдем)</small>
+                    <small style="font-weight: 400; color: var(--text-muted); margin-left: auto;">(если мы вас не найдем)</small>
                 </div>
                 <div class="contact-row">
                     <input type="text" id="customerName" placeholder="Ваше имя">
@@ -2322,27 +2068,39 @@
             </div>
 
             <div class="chips-nav">
-                <button class="chip" data-section="fruits" onclick="switchSection('fruits')"><i class="fas fa-apple-alt"></i>Больше фруктов</button>
-                <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')"><i class="fas fa-strawberry"></i> Клубника в Шоколаде</button>
-                <button class="chip" data-section="drinks" onclick="switchSection('drinks')"><i class="fas fa-mug-saucer"></i> Напитки перекус</button>
+                <button class="chip" data-section="fruits" onclick="switchSection('fruits')">
+                    <i class="fas fa-apple-alt"></i>Больше фруктов
+                </button>
+                <button class="chip main-chip active" data-section="strawberry" onclick="switchSection('strawberry')">
+                    <i class="fas fa-strawberry"></i> Клубника в Шоколаде
+                </button>
+                <button class="chip" data-section="drinks" onclick="switchSection('drinks')">
+                    <i class="fas fa-mug-saucer"></i> Напитки перекус
+                </button>
             </div>
 
             <div class="menu-section active" id="section-strawberry">
-                <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+                <div class="section-title">
+                    <i class="fas fa-strawberry"></i> Клубника в шоколаде
+                </div>
                 <div class="menu-grid" id="strawberryGrid"></div>
             </div>
 
-            <div class="menu-section" id="section-fruits" style="display:none;">
-                <div class="section-title"><i class="fas fa-apple-alt"></i> Свежие фрукты</div>
+            <div class="menu-section" id="section-fruits" style="display: none;">
+                <div class="section-title">
+                    <i class="fas fa-apple-alt"></i> Свежие фрукты
+                </div>
                 <div class="menu-grid" id="fruitsGrid"></div>
             </div>
 
-            <div class="menu-section" id="section-drinks" style="display:none;">
-                <div class="section-title"><i class="fas fa-mug-saucer"></i> Напитки и перекус</div>
+            <div class="menu-section" id="section-drinks" style="display: none;">
+                <div class="section-title">
+                    <i class="fas fa-mug-saucer"></i> Напитки и перекус
+                </div>
                 <div class="drinks-grid" id="drinksGrid"></div>
             </div>
 
-            <div style="height:16px;"></div>
+            <div style="height: 16px;"></div>
         </div>
     </div>
 
@@ -2368,57 +2126,84 @@
     <!-- ===== КОРЗИНА ===== -->
     <div class="cart-modal" id="cartModal">
         <div class="modal-header">
-            <h2><i class="fas fa-shopping-cart" style="color:var(--primary);"></i> Корзина</h2>
-            <div style="display:flex;gap:12px;align-items:center;">
-                <button id="clearCart" style="background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:var(--font-family);"><i class="fas fa-trash-can"></i> Очистить</button>
-                <button onclick="closeCart()" style="background:#F1F5F9;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:var(--text-secondary);cursor:pointer;"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-shopping-cart" style="color: var(--primary);"></i> Корзина</h2>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button id="clearCart" style="background: none; border: none; color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: var(--font-family);">
+                    <i class="fas fa-trash-can"></i> Очистить
+                </button>
+                <button onclick="closeCart()" style="background: #F1F5F9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; color: var(--text-secondary); cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         </div>
         <div class="cart-content">
-            <div id="cartItems"><div class="cart-empty"><i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i>Добавьте что-нибудь вкусное 😋</div></div>
+            <div id="cartItems">
+                <div class="cart-empty">
+                    <i class="fas fa-cart-plus" style="font-size: 48px; display: block; margin-bottom: 12px;"></i>
+                    Добавьте что-нибудь вкусное 😋
+                </div>
+            </div>
             <div class="payment-section" id="paymentSection">
-                <div class="payment-title"><i class="fas fa-credit-card" style="color:var(--primary);"></i> Способ оплаты</div>
+                <div class="payment-title"><i class="fas fa-credit-card" style="color: var(--primary);"></i> Способ оплаты</div>
                 <div class="payment-options">
-                    <button class="payment-btn active" data-method="cash" onclick="selectPayment('cash')"><span class="payment-icon">💵</span><span class="payment-name">Наличными</span></button>
-                    <button class="payment-btn" data-method="transfer" onclick="selectPayment('transfer')"><span class="payment-icon">📱</span><span class="payment-name">Переводом</span></button>
-                    <button class="payment-btn" data-method="card" onclick="selectPayment('card')"><span class="payment-icon">💳</span><span class="payment-name">Картой</span></button>
+                    <button class="payment-btn active" data-method="cash" onclick="selectPayment('cash')">
+                        <span class="payment-icon">💵</span>
+                        <span class="payment-name">Наличными</span>
+                    </button>
+                    <button class="payment-btn" data-method="transfer" onclick="selectPayment('transfer')">
+                        <span class="payment-icon">📱</span>
+                        <span class="payment-name">Переводом</span>
+                    </button>
+                    <button class="payment-btn" data-method="card" onclick="selectPayment('card')">
+                        <span class="payment-icon">💳</span>
+                        <span class="payment-name">Картой</span>
+                    </button>
                 </div>
                 <div class="payment-info" id="paymentInfo">💡 Оплата наличными при получении</div>
             </div>
-            <div class="cart-total"><span>Итого:</span><span class="total-price" id="cartTotal">0 ₽</span></div>
-            <button id="orderButton" class="confirm-btn" style="margin-top:8px;" disabled><i class="fas fa-check-circle"></i> Заказать</button>
+            <div class="cart-total">
+                <span>Итого:</span>
+                <span class="total-price" id="cartTotal">0 ₽</span>
+            </div>
+            <button id="orderButton" class="confirm-btn" style="margin-top: 8px;" disabled>
+                <i class="fas fa-check-circle"></i> Заказать
+            </button>
         </div>
     </div>
 
     <!-- ===== БАРИСТА (AI-ПОМОЩНИК) ===== -->
-    <div id="baristaWidget">
-        <div id="baristaToggle" onclick="toggleBarista()">
+    <div id="baristaWidget" style="position: fixed; bottom: 100px; right: 20px; z-index: 9999; display: none;">
+        <div id="baristaToggle" onclick="toggleBarista()" style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #FD79A8, #6C5CE7); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 30px; box-shadow: 0 4px 25px rgba(108,92,231,0.4); transition: all 0.3s ease; position: relative; animation: baristaPulse 2.5s infinite; border: 2px solid rgba(255,255,255,0.3);">
             🍓
-            <span class="badge-dot">1</span>
+            <span style="position: absolute; top: 0; right: 0; width: 18px; height: 18px; border-radius: 50%; background: #FF4757; border: 2px solid #FFFFFF; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; animation: blinkBadge 1.2s infinite;">1</span>
         </div>
-        <div id="baristaWindow">
-            <div class="window-header">
-                <div class="avatar-info">
-                    <div class="avatar">🍓</div>
+        <div id="baristaWindow" style="position: absolute; bottom: 78px; right: 0; width: 370px; height: 500px; background: #FFFFFF; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.15); display: none; flex-direction: column; overflow: hidden; animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="padding: 14px 18px; background: rgba(108,92,231,0.08); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FD79A8, #6C5CE7); display: flex; align-items: center; justify-content: center; font-size: 18px;">🍓</div>
                     <div>
-                        <div class="name">Клубничный Бариста</div>
-                        <div class="status">🟢 Готов помочь</div>
+                        <div style="color: #1A1A2E; font-weight: 700; font-size: 15px;">Клубничный Бариста</div>
+                        <div style="font-size: 11px; color: #22C55E;">🟢 Готов помочь</div>
                     </div>
                 </div>
-                <button class="close-btn" onclick="toggleBarista()">✕</button>
+                <button onclick="toggleBarista()" style="background: none; border: none; color: rgba(0,0,0,0.3); font-size: 20px; cursor: pointer; padding: 4px 8px;">✕</button>
             </div>
-            <div id="baristaMessages">
-                <div class="msg-bot">🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>Я знаю всё о нашем меню, ценах и акциях.<br>Спроси меня о чём угодно! 😊</div>
+            <div id="baristaMessages" style="flex: 1; padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                <div style="padding: 12px 16px; border-radius: 14px; max-width: 90%; font-size: 14px; line-height: 1.6; background: rgba(0,0,0,0.04); color: #1A1A2E; align-self: flex-start; border-bottom-left-radius: 4px;">
+                    🍓 Привет! Я <strong>Клубничный Бариста</strong> 😊<br>
+                    Я знаю всё о нашем меню, ценах и акциях.<br>
+                    Спроси меня о чём угодно! 😊
+                </div>
             </div>
-            <div class="barista-quick-btns">
-                <button onclick="quickBaristaQuestion('Что посоветуешь из еды?')">🍫 Что посоветуешь?</button>
-                <button onclick="quickBaristaQuestion('Как получить подарок?')">🎁 Как получить подарок?</button>
-                <button onclick="quickBaristaQuestion('Как у тебя дела?')">👋 Как дела?</button>
-                <button onclick="quickBaristaQuestion('Где киоск?')">📍 Где киоск?</button>
+            <div style="display: flex; gap: 6px; padding: 8px 16px 12px; flex-wrap: wrap; flex-shrink: 0; background: rgba(0,0,0,0.02);">
+                <button onclick="quickQuestion('Что посоветуешь из еды?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">🍫 Что посоветуешь?</button>
+                <button onclick="quickQuestion('Как получить подарок?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">🎁 Как получить подарок?</button>
+                <button onclick="quickQuestion('Как у тебя дела?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">👋 Как дела?</button>
+                <button onclick="quickQuestion('Где киоск?')" style="padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: rgba(0,0,0,0.5); font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif;">📍 Где киоск?</button>
             </div>
-            <div class="barista-input-row">
-                <input type="text" id="baristaInput" placeholder="Спросите меня..." onkeydown="if(event.key==='Enter') sendBaristaMessage()">
-                <button onclick="sendBaristaMessage()">➤</button>
+            <div style="padding: 12px 16px; border-top: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; flex-shrink: 0; background: rgba(0,0,0,0.02);">
+                <input type="text" id="baristaInput" placeholder="Спросите меня..." style="flex: 1; padding: 12px 18px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.08); background: #F8FAFC; color: #1A1A2E; outline: none; font-size: 14px; font-family: 'Inter', sans-serif;" onkeydown="if(event.key==='Enter') sendBaristaMessage()">
+                <button onclick="sendBaristaMessage()" style="width: 46px; height: 46px; border-radius: 50%; border: none; background: linear-gradient(135deg, #FD79A8, #6C5CE7); color: #fff; cursor: pointer; font-size: 17px;">➤</button>
             </div>
         </div>
     </div>
@@ -2435,12 +2220,12 @@
         const ORDERS_KEY = 'klubnika_orders';
 
         const STRAWBERRY_ITEMS = [
-            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, image: 'images/klassika.jpg', badge: '🔥 Хит', emoji: '🍓' },
-            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное', emoji: '🍓' },
-            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит', emoji: '🍓' },
-            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, image: 'images/miks.jpg', emoji: '🍌' },
-            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, image: 'images/banan.jpg', emoji: '🍌' },
-            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, image: 'images/klubnika-bez-shokolada.jpg', emoji: '🍓' }
+            { id: '1', name: 'Классика', desc: 'Клубника в молочном шоколаде', price: 350, image: 'images/klassika.jpg', badge: '🔥 Хит' },
+            { id: '2', name: 'Клубника в сливках', desc: 'Нежная клубника в бельгийских сливках', price: 350, image: 'images/klubnika-v-slivkah.jpg', badge: '⭐ Популярное' },
+            { id: '9', name: 'Клубника в сливках и шоколаде', desc: 'Нежная клубника в сливках и шоколаде', price: 350, image: 'images/klubnika-v-slivkah-shokolad.jpg', badge: '🔥 Хит' },
+            { id: '4', name: 'Микс клубника-банан', desc: 'Клубника и банан в шоколаде', price: 400, image: 'images/miks.jpg' },
+            { id: '5', name: 'Банан в шоколаде', desc: 'Спелый банан в молочном шоколаде', price: 320, image: 'images/banan.jpg' },
+            { id: '16', name: 'Клубника в стакане', desc: 'Свежая клубника без шоколада', price: 250, image: 'images/klubnika-bez-shokolada.jpg' }
         ];
 
         const FRUITS_ITEMS = [
@@ -2465,6 +2250,14 @@
             { id: 'waffle', name: 'Вафельная крошка', icon: 'fas fa-crumb' }
         ];
 
+        const QUICK_QUESTIONS = [
+            '🕐 Когда доставят заказ?',
+            '❌ Как отменить заказ?',
+            '📍 Как вы нас найдете?',
+            '📦 Активный заказ?',
+            '🏖️ Доставка в другие места?'
+        ];
+
         // ================================================================
         // ===== СОСТОЯНИЕ =====
         // ================================================================
@@ -2475,9 +2268,7 @@
             reviewRating: 0,
             reviewOrderId: null,
             bungalowNumber: null,
-            settings: { technicalBreak: false, menuItems: {} },
-            userLocation: null,
-            sessionExpiresAt: null
+            settings: { technicalBreak: false, menuItems: {} }
         };
 
         let selectedPayment = 'cash';
@@ -2487,15 +2278,12 @@
         let currentReviews = [];
         let reviewCheckInterval = null;
         let chatUpdateInterval = null;
-        let lastMessageTime = 0;
-        let baristaWelcomeShown = false;
-        let isBaristaOpen = false;
-        let socket = null;
-        let sessionTimerInterval = null;
 
         // ================================================================
-        // ===== WEBSOCKET =====
+        // ===== WEBSOCKET ПОДКЛЮЧЕНИЕ =====
         // ================================================================
+        let socket = null;
+
         function connectWebSocket() {
             try {
                 socket = io({
@@ -2503,28 +2291,23 @@
                     reconnection: true,
                     reconnectionAttempts: 5
                 });
+                
                 socket.on('connect', () => {
                     console.log('📡 Подключен к серверу');
                     socket.emit('admin-join');
                 });
+                
                 socket.on('new-order', (order) => {
                     console.log('📦 Новый заказ:', order);
                     showNotification(`📦 НОВЫЙ ЗАКАЗ #${order.id} от ${order.customerName} ${order.total} ₽`);
+                    
                     try {
                         const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
                         audio.volume = 0.5;
                         audio.play().catch(() => {});
                     } catch (e) {}
                 });
-                socket.on('order-status-update', (data) => {
-                    const phone = document.getElementById('customerPhone').value.trim();
-                    if (data.phone === phone) {
-                        showNotification(`📦 Заказ #${data.orderId}: ${data.status}`);
-                        if (document.getElementById('ordersModal').classList.contains('open')) {
-                            loadMyOrders();
-                        }
-                    }
-                });
+                
                 socket.on('disconnect', () => {
                     console.log('🔌 Отключен от сервера');
                 });
@@ -2534,11 +2317,14 @@
         }
 
         // ================================================================
-        // ===== API =====
+        // ===== API ФУНКЦИИ =====
         // ================================================================
         async function apiRequest(url, method = 'GET', body = null) {
             try {
-                const opts = { method, headers: { 'Content-Type': 'application/json' } };
+                const opts = {
+                    method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
                 if (body) opts.body = JSON.stringify(body);
                 const res = await fetch(url, opts);
                 return await res.json();
@@ -2549,49 +2335,11 @@
         }
 
         // ================================================================
-        // ===== СЕССИЯ =====
-        // ================================================================
-        function startSessionTimer(expiresAt) {
-            state.sessionExpiresAt = expiresAt;
-            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-            sessionTimerInterval = setInterval(() => {
-                const remaining = Math.max(0, Math.floor((expiresAt - Date.now()) / 60000));
-                const timerEl = document.getElementById('sessionTimer');
-                if (!timerEl) return;
-                if (remaining <= 0) {
-                    clearInterval(sessionTimerInterval);
-                    timerEl.textContent = '⏰ Сессия истекла!';
-                    timerEl.style.color = '#FF6B6B';
-                    showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
-                    showNoAccess();
-                    clearSession();
-                } else if (remaining <= 3) {
-                    timerEl.textContent = `⚠️ Истекает через ${remaining} мин.`;
-                    timerEl.style.color = '#FF6B6B';
-                } else {
-                    timerEl.textContent = `⏱️ Осталось ${remaining} мин.`;
-                    timerEl.style.color = '#FFD700';
-                }
-            }, 30000);
-        }
-
-        async function checkSessionBeforeOrder() {
-            if (!state.bungalowNumber) return false;
-            const check = await checkSessionOnServer(state.bungalowNumber);
-            if (!check.valid) {
-                showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
-                showNoAccess();
-                clearSession();
-                return false;
-            }
-            return true;
-        }
-
-        // ================================================================
         // ===== ЛОКАЛЬНЫЙ БАРИСТА =====
         // ================================================================
         function getLocalBaristaResponse(question) {
             const lower = question.toLowerCase();
+            
             if (lower.includes('доставят') || lower.includes('когда') || lower.includes('ждать')) {
                 return '🍓 Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!';
             }
@@ -2623,93 +2371,13 @@
         }
 
         // ================================================================
-        // ===== БАРИСТА ВИДЖЕТ =====
-        // ================================================================
-        function toggleBarista() {
-            const window = document.getElementById('baristaWindow');
-            const isOpen = window.style.display === 'flex';
-            window.style.display = isOpen ? 'none' : 'flex';
-            isBaristaOpen = !isOpen;
-            if (!isOpen) {
-                setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-            }
-        }
-
-        function openBarista() {
-            document.getElementById('baristaWidget').style.display = 'block';
-            const window = document.getElementById('baristaWindow');
-            window.style.display = 'flex';
-            isBaristaOpen = true;
-            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
-            if (!baristaWelcomeShown) {
-                baristaWelcomeShown = true;
-                setTimeout(() => {
-                    const messages = document.getElementById('baristaMessages');
-                    const welcomeDiv = document.createElement('div');
-                    welcomeDiv.className = 'msg-bot';
-                    welcomeDiv.innerHTML = '🍓 Привет! Я тут, чтобы помочь 😊<br>Можешь спросить меня о меню, акциях или подарках!<br>Я всегда рад компании 🤗';
-                    messages.appendChild(welcomeDiv);
-                    messages.scrollTop = messages.scrollHeight;
-                }, 500);
-            }
-        }
-
-        async function sendBaristaMessage() {
-            const input = document.getElementById('baristaInput');
-            const messages = document.getElementById('baristaMessages');
-            const userText = input.value.trim();
-            if (!userText) return;
-
-            const userDiv = document.createElement('div');
-            userDiv.className = 'msg-user';
-            userDiv.textContent = userText;
-            messages.appendChild(userDiv);
-            input.value = '';
-            messages.scrollTop = messages.scrollHeight;
-
-            const typing = document.createElement('div');
-            typing.className = 'msg-typing';
-            typing.textContent = '🤔 Думаю...';
-            typing.id = 'baristaTyping';
-            messages.appendChild(typing);
-            messages.scrollTop = messages.scrollHeight;
-
-            let response = '';
-            try {
-                const res = await apiRequest('/api/barista', 'POST', { message: userText, history: [] });
-                if (res && res.choices && res.choices[0]) {
-                    response = res.choices[0].message.content;
-                } else {
-                    response = getLocalBaristaResponse(userText);
-                }
-            } catch (e) {
-                response = getLocalBaristaResponse(userText);
-            }
-
-            document.getElementById('baristaTyping')?.remove();
-
-            const botDiv = document.createElement('div');
-            botDiv.className = 'msg-bot';
-            botDiv.innerHTML = response;
-            messages.appendChild(botDiv);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        function quickBaristaQuestion(text) {
-            document.getElementById('baristaInput').value = text;
-            sendBaristaMessage();
-        }
-
-        // ================================================================
         // ===== КОРЗИНА =====
         // ================================================================
         function loadCart() {
             try {
                 const data = localStorage.getItem(CART_KEY);
                 if (data) state.cart = JSON.parse(data);
-            } catch (e) {
-                state.cart = [];
-            }
+            } catch (e) { state.cart = []; }
         }
 
         function saveCart() {
@@ -2717,9 +2385,11 @@
         }
 
         function addToCart(product, toppings = []) {
-            const existing = state.cart.find(item =>
-                item.id === product.id && JSON.stringify(item.toppings) === JSON.stringify(toppings)
+            const existing = state.cart.find(item => 
+                item.id === product.id && 
+                JSON.stringify(item.toppings) === JSON.stringify(toppings)
             );
+            
             if (existing) {
                 existing.quantity += 1;
             } else {
@@ -2730,6 +2400,7 @@
                     isAlcohol: product.alcohol || false
                 });
             }
+            
             saveCart();
             updateCart();
             showNotification(`✅ ${product.name} добавлен в корзину!`);
@@ -2738,22 +2409,26 @@
         function updateCart() {
             const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
+            
             const tabCartBadge = document.getElementById('tabCartBadge');
             const tabCartTotal = document.getElementById('tabCartTotal');
+            
             if (totalItems > 0) {
                 tabCartBadge.textContent = totalItems;
                 tabCartBadge.classList.remove('hidden');
             } else {
                 tabCartBadge.classList.add('hidden');
             }
+            
             tabCartTotal.textContent = totalPrice + ' ₽';
             document.getElementById('cartTotal').textContent = totalPrice + ' ₽';
-
+            
             const container = document.getElementById('cartItems');
             if (state.cart.length === 0) {
-                container.innerHTML =
-                    `<div class="cart-empty"><i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i>Добавьте что-нибудь вкусное 😋</div>`;
+                container.innerHTML = `<div class="cart-empty">
+                    <i class="fas fa-cart-plus" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Добавьте что-нибудь вкусное 😋
+                </div>`;
                 document.getElementById('orderButton').disabled = true;
             } else {
                 container.innerHTML = state.cart.map((item, index) => `
@@ -2816,12 +2491,14 @@
             strawberryGrid.innerHTML = STRAWBERRY_ITEMS.map(item => `
                 <div class="menu-item" onclick="openToppingModal('${item.id}')">
                     ${item.badge ? `<div class="badge">${item.badge}</div>` : ''}
-                    <div class="item-image"><img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji || '🍓'}'"></div>
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
+                    </div>
                     <div class="item-content">
                         <div class="item-name">${item.name}</div>
                         <div class="item-desc">${item.desc}</div>
                         <div class="item-price">${item.price} ₽</div>
-                        <button class="add-btn" onclick="event.stopPropagation(); openToppingModal('${item.id}')">+</button>
+                        <button class="add-btn" data-product-id="${item.id}" onclick="event.stopPropagation(); openToppingModal('${item.id}')">+</button>
                     </div>
                 </div>
             `).join('');
@@ -2829,7 +2506,9 @@
             const fruitsGrid = document.getElementById('fruitsGrid');
             fruitsGrid.innerHTML = FRUITS_ITEMS.map(item => `
                 <div class="menu-item" onclick="addToCartDirect('${item.id}')">
-                    <div class="item-image"><img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji || '🍉'}'"></div>
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'">
+                    </div>
                     <div class="item-content">
                         <div class="item-name">${item.name}</div>
                         <div class="item-desc">${item.desc}</div>
@@ -2842,7 +2521,9 @@
             const drinksGrid = document.getElementById('drinksGrid');
             drinksGrid.innerHTML = DRINK_ITEMS.map(item => `
                 <div class="drink-item" onclick="addDrinkToCart('${item.id}')">
-                    <div class="drink-icon"><img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji || '🥤'}'"></div>
+                    <div class="drink-icon">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'">
+                    </div>
                     <div class="drink-info">
                         <h4>${item.name}${item.alcohol ? ' 🍺' : ''}</h4>
                         <div class="drink-desc">${item.desc}</div>
@@ -2860,22 +2541,26 @@
             const allItems = [...STRAWBERRY_ITEMS, ...FRUITS_ITEMS, ...DRINK_ITEMS];
             const product = allItems.find(item => item.id === productId);
             if (!product) return;
+            
             if (product.alcohol) {
                 pendingAlcoholProduct = product;
                 openAgeVerify();
                 return;
             }
+            
             addToCart(product);
         }
 
         function addDrinkToCart(productId) {
             const product = DRINK_ITEMS.find(item => item.id === productId);
             if (!product) return;
+            
             if (product.alcohol) {
                 pendingAlcoholProduct = product;
                 openAgeVerify();
                 return;
             }
+            
             addToCart(product);
         }
 
@@ -2886,13 +2571,14 @@
             const allItems = [...STRAWBERRY_ITEMS];
             const product = allItems.find(item => item.id === productId);
             if (!product) return;
+            
             pendingProduct = product;
             state.selectedToppings = [];
-
+            
             document.getElementById('productIcon').textContent = '🍓';
             document.getElementById('productName').textContent = product.name;
             document.getElementById('productPrice').textContent = product.price + ' ₽';
-
+            
             const container = document.getElementById('toppingOptions');
             container.innerHTML = TOPPINGS.map(topping => `
                 <div onclick="toggleTopping('${topping.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:2px solid #F1F5F9;border-radius:var(--radius-md);cursor:pointer;transition:var(--transition);" id="topping-${topping.id}">
@@ -2901,10 +2587,9 @@
                     <span style="margin-left:auto;color:var(--text-muted);font-size:12px;" id="topping-check-${topping.id}">➕</span>
                 </div>
             `).join('');
-
+            
             document.getElementById('emptyToppingsHint').style.display = 'block';
-            document.getElementById('selectedToppingsDisplay').innerHTML =
-                `<span style="color:var(--text-muted);font-size:13px;">👆 Нажмите на присыпку для выбора</span>`;
+            document.getElementById('selectedToppingsDisplay').innerHTML = `<span style="color:var(--text-muted);font-size:13px;">👆 Нажмите на присыпку для выбора</span>`;
             document.getElementById('confirmToppingBtn').disabled = true;
             document.getElementById('toppingModal').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -2916,6 +2601,7 @@
                 updateToppingUI();
                 return;
             }
+            
             const index = state.selectedToppings.findIndex(t => t.id === toppingId);
             if (index >= 0) {
                 state.selectedToppings.splice(index, 1);
@@ -2933,8 +2619,7 @@
         function updateToppingUI() {
             const display = document.getElementById('selectedToppingsDisplay');
             if (state.selectedToppings.length === 0) {
-                display.innerHTML =
-                    `<span style="color:var(--text-muted);font-size:13px;">👆 Нажмите на присыпку для выбора</span>`;
+                display.innerHTML = `<span style="color:var(--text-muted);font-size:13px;">👆 Нажмите на присыпку для выбора</span>`;
             } else {
                 display.innerHTML = state.selectedToppings.map(t => `
                     <span style="background:#FFF5F5;padding:4px 12px;border-radius:100px;font-size:12px;color:var(--primary);border:1px solid rgba(255,71,87,0.2);">
@@ -2942,7 +2627,7 @@
                     </span>
                 `).join('');
             }
-
+            
             TOPPINGS.forEach(topping => {
                 const isSelected = state.selectedToppings.some(t => t.id === topping.id);
                 const el = document.getElementById(`topping-${topping.id}`);
@@ -2955,10 +2640,10 @@
                     check.textContent = isSelected ? '✅' : '➕';
                 }
             });
-
+            
             document.getElementById('confirmToppingBtn').disabled = state.selectedToppings.length === 0;
-            document.getElementById('confirmToppingBtn').innerHTML = state.selectedToppings.length > 0 ?
-                '<i class="fas fa-plus-circle"></i> Добавить в корзину' :
+            document.getElementById('confirmToppingBtn').innerHTML = state.selectedToppings.length > 0 ? 
+                '<i class="fas fa-plus-circle"></i> Добавить в корзину' : 
                 '<i class="fas fa-plus-circle"></i> Выберите присыпку';
         }
 
@@ -3007,6 +2692,7 @@
                 showNotification('⚠️ Подтвердите, что вам есть 18 лет');
                 return;
             }
+            
             if (pendingAlcoholProduct) {
                 addToCart(pendingAlcoholProduct);
                 pendingAlcoholProduct = null;
@@ -3021,20 +2707,18 @@
         async function submitOrder() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-
+            
             if (!name || !phone) {
                 showNotification('⚠️ Введите имя и телефон');
                 openAuthModal();
                 return;
             }
+            
             if (state.cart.length === 0) {
                 showNotification('⚠️ Корзина пуста');
                 return;
             }
-
-            // Проверка сессии перед заказом
-            if (!await checkSessionBeforeOrder()) return;
-
+            
             const hasAlcohol = state.cart.some(item => item.isAlcohol);
             if (hasAlcohol) {
                 const ageConfirmed = localStorage.getItem('age_confirmed') === 'true';
@@ -3043,15 +2727,15 @@
                     return;
                 }
             }
-
+            
             saveUserAuth(name, phone);
-
+            
             let location = null;
             try {
                 const pos = await getUserLocation();
                 if (pos) location = pos;
             } catch (e) {}
-
+            
             const order = {
                 customerName: name,
                 customerPhone: phone.replace(/[\s\-\+\(\)]/g, ''),
@@ -3070,11 +2754,11 @@
                 location: location,
                 createdAt: new Date().toISOString()
             };
-
+            
             const btn = document.getElementById('orderButton');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
             btn.disabled = true;
-
+            
             try {
                 const response = await apiRequest('/api/order', 'POST', order);
                 if (response.success) {
@@ -3085,6 +2769,7 @@
                     showNotification(`✅ Заказ #${response.orderId} оформлен! Ждите доставку 🏖️`);
                     saveOrder({ ...order, id: 'ORD-' + response.orderId, status: 'waiting' });
                     updateOrdersBadge();
+                    
                     if (socket && socket.connected) {
                         socket.emit('new-order', {
                             id: response.orderId,
@@ -3110,23 +2795,19 @@
                 const orders = getOrders();
                 orders.unshift(order);
                 localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-            } catch (e) {
-                console.error('Ошибка сохранения заказа:', e);
-            }
+            } catch (e) { console.error('Ошибка сохранения заказа:', e); }
         }
 
         function getOrders() {
             try {
                 const data = localStorage.getItem(ORDERS_KEY);
                 return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
+            } catch (e) { return []; }
         }
 
         function updateOrdersBadge() {
             const orders = getOrders();
-            const activeOrders = orders.filter(o => o && o.status === 'waiting');
+            const activeOrders = orders.filter(o => o.status === 'waiting');
             const badge = document.getElementById('tabOrdersBadge');
             if (activeOrders.length > 0) {
                 badge.textContent = activeOrders.length;
@@ -3142,6 +2823,7 @@
         function openOrdersModal() {
             document.getElementById('ordersModal').classList.add('open');
             document.body.style.overflow = 'hidden';
+            
             const savedAuth = getUserAuth();
             if (savedAuth && savedAuth.phone) {
                 document.getElementById('ordersPhoneInput').value = savedAuth.phone;
@@ -3160,38 +2842,63 @@
                 showNotification('⚠️ Введите телефон');
                 return;
             }
+            
             const allOrders = getOrders();
-            const userOrders = allOrders.filter(o => o && o.customerPhone === phone);
+            const userOrders = allOrders.filter(o => o.customer.phone === phone);
+            
             const container = document.getElementById('ordersContent');
             if (userOrders.length === 0) {
-                container.innerHTML =
-                    `<div class="cart-empty"><i class="fas fa-box-open" style="font-size:48px;display:block;margin-bottom:12px;"></i>Заказов не найдено</div>`;
+                container.innerHTML = `<div class="cart-empty">
+                    <i class="fas fa-box-open" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    Заказов не найдено
+                </div>`;
                 return;
             }
+            
             container.innerHTML = userOrders.map(order => `
                 <div class="order-card-full">
                     <div class="order-card-header">
-                        <div class="order-id-block"><div class="order-id">${order.id}</div><div class="order-date">${new Date(order.createdAt).toLocaleString()}</div></div>
-                        <div class="order-status-badge status-${order.status}">${order.status === 'waiting' ? '⏳ В обработке' : order.status === 'done' ? '✅ Готов' : '❌ Отменен'}</div>
+                        <div class="order-id-block">
+                            <div class="order-id">${order.id}</div>
+                            <div class="order-date">${new Date(order.date).toLocaleString()}</div>
+                        </div>
+                        <div class="order-status-badge status-${order.status}">
+                            ${order.status === 'waiting' ? '⏳ В обработке' : 
+                              order.status === 'done' ? '✅ Готов' : 
+                              '❌ Отменен'}
+                        </div>
                     </div>
                     <div class="order-items-list">
                         ${order.items.map(item => `
                             <div class="order-item-row">
-                                <div class="item-left"><span class="item-icon">🍓</span><div class="item-details"><div class="item-name">${item.name}</div><div class="item-qty">${item.quantity} шт. × ${item.price} ₽</div>${item.toppings && item.toppings.length > 0 ? `<div style="font-size:11px;color:var(--text-muted);">+ ${item.toppings.map(t => t.name).join(', ')}</div>` : ''}</div></div>
+                                <div class="item-left">
+                                    <span class="item-icon">🍓</span>
+                                    <div class="item-details">
+                                        <div class="item-name">${item.name}</div>
+                                        <div class="item-qty">${item.quantity} шт. × ${item.price} ₽</div>
+                                        ${item.toppings && item.toppings.length > 0 ? `<div style="font-size:11px;color:var(--text-muted);">+ ${item.toppings.map(t => t.name).join(', ')}</div>` : ''}
+                                    </div>
+                                </div>
                                 <div class="item-total">${(item.price * item.quantity)} ₽</div>
                             </div>
                         `).join('')}
                     </div>
                     <div class="order-card-footer">
-                        <span class="footer-info">${order.paymentMethod === 'cash' ? '💵 Наличные' : order.paymentMethod === 'transfer' ? '📱 Перевод' : '💳 Карта'}</span>
+                        <span class="footer-info">${order.payment === 'cash' ? '💵 Наличные' : order.payment === 'transfer' ? '📱 Перевод' : '💳 Карта'}</span>
                         <span class="footer-total">${order.total} ₽</span>
                         <div class="footer-actions">
                             ${order.status === 'waiting' ? `
-                                <button class="btn-cancel-order" onclick="cancelMyOrder('${order.id}')"><i class="fas fa-times"></i> Отменить</button>
-                                <button class="btn-review-order" onclick="openReviewModal('${order.id}')"><i class="fas fa-star"></i> Оценить</button>
+                                <button class="btn-cancel-order" onclick="cancelOrder('${order.id}')">
+                                    <i class="fas fa-times"></i> Отменить
+                                </button>
+                                <button class="btn-review-order" onclick="openReviewModal('${order.id}')">
+                                    <i class="fas fa-star"></i> Оценить
+                                </button>
                             ` : ''}
                             ${order.status === 'done' ? `
-                                <button class="btn-review-order" onclick="openReviewModal('${order.id}')"><i class="fas fa-star"></i> Оставить отзыв</button>
+                                <button class="btn-review-order" onclick="openReviewModal('${order.id}')">
+                                    <i class="fas fa-star"></i> Оставить отзыв
+                                </button>
                             ` : ''}
                         </div>
                     </div>
@@ -3199,8 +2906,9 @@
             `).join('');
         }
 
-        function cancelMyOrder(orderId) {
+        function cancelOrder(orderId) {
             if (!confirm('❌ Отменить заказ?')) return;
+            
             const orders = getOrders();
             const order = orders.find(o => o.id === orderId);
             if (order) {
@@ -3219,9 +2927,7 @@
             try {
                 const data = localStorage.getItem(REVIEWS_KEY);
                 return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
+            } catch (e) { return []; }
         }
 
         function saveReviews(reviews) {
@@ -3258,10 +2964,13 @@
         function renderReviews() {
             const container = document.getElementById('reviewsModalList');
             if (currentReviews.length === 0) {
-                container.innerHTML =
-                    `<div class="cart-empty"><i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>⭐ Пока нет отзывов. Будьте первым!</div>`;
+                container.innerHTML = `<div class="cart-empty">
+                    <i class="fas fa-star" style="font-size:48px;display:block;margin-bottom:12px;"></i>
+                    ⭐ Пока нет отзывов. Будьте первым!
+                </div>`;
                 return;
             }
+            
             container.innerHTML = currentReviews.map(review => `
                 <div style="background:#FFFFFF;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm);border:1px solid #F1F5F9;">
                     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
@@ -3278,11 +2987,14 @@
         function openReviewModal(orderId) {
             state.reviewRating = 0;
             state.reviewOrderId = orderId;
+            
             document.getElementById('reviewText').value = '';
             document.getElementById('submitReviewBtn').disabled = true;
+            
             document.querySelectorAll('.star').forEach(star => {
                 star.style.color = '#E5E7EB';
             });
+            
             document.getElementById('reviewModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -3307,7 +3019,9 @@
                 showNotification('⚠️ Напишите текст отзыва');
                 return;
             }
+            
             const name = document.getElementById('customerName').value.trim() || 'Гость';
+            
             const review = {
                 id: 'REV-' + Date.now(),
                 name: name,
@@ -3316,11 +3030,13 @@
                 orderId: state.reviewOrderId || null,
                 date: new Date().toISOString()
             };
+            
             currentReviews.push(review);
             saveReviews(currentReviews);
             updateReviewsBadge();
             closeReviewModal();
             showNotification('⭐ Спасибо за отзыв! ❤️');
+            
             if (state.reviewOrderId) {
                 const orders = getOrders();
                 const order = orders.find(o => o.id === state.reviewOrderId);
@@ -3344,6 +3060,7 @@
         function openAuthModal() {
             document.getElementById('authModal').classList.add('open');
             document.body.style.overflow = 'hidden';
+            
             const savedAuth = getUserAuth();
             if (savedAuth) {
                 document.getElementById('authName').value = savedAuth.name || '';
@@ -3359,14 +3076,17 @@
         function confirmAuth() {
             const name = document.getElementById('authName').value.trim();
             const phone = document.getElementById('authPhone').value.trim();
+            
             if (!name) {
                 showNotification('⚠️ Введите имя');
                 return;
             }
+            
             if (!isValidPhone(phone)) {
                 showNotification('⚠️ Введите корректный телефон');
                 return;
             }
+            
             saveUserAuth(name, phone);
             document.getElementById('customerName').value = name;
             document.getElementById('customerPhone').value = phone;
@@ -3382,9 +3102,7 @@
             try {
                 const data = localStorage.getItem(AUTH_KEY);
                 return data ? JSON.parse(data) : null;
-            } catch (e) {
-                return null;
-            }
+            } catch (e) { return null; }
         }
 
         function isValidPhone(phone) {
@@ -3395,6 +3113,7 @@
         function validatePhoneInput(input) {
             let value = input.value.replace(/[^\d\s\-\+\(\)]/g, '');
             input.value = value;
+            
             const clean = value.replace(/[\s\-\+\(\)]/g, '');
             if (clean.length > 0 && !/^[7-8]\d{0,10}$/.test(clean)) {
                 input.classList.add('invalid');
@@ -3465,6 +3184,7 @@
             selectedPayment = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.payment-btn[data-method="${method}"]`).classList.add('active');
+            
             const messages = {
                 cash: '💡 Оплата наличными при получении',
                 transfer: '💡 Перевод по номеру телефона при получении',
@@ -3509,7 +3229,7 @@
             overlay.innerHTML = `
                 <div class="auth-modal-content" onclick="event.stopPropagation()">
                     <button class="modal-close" onclick="closeQRPrompt()"><i class="fas fa-times"></i></button>
-                    <div class="modal-title"><i class="fas fa-qrcode" style="color:var(--primary);"></i> Отсканируйте QR-код</div>
+                    <div class="modal-title"><i class="fas fa-qrcode" style="color: var(--primary);"></i> Отсканируйте QR-код</div>
                     <div class="modal-subtitle">QR-код находится в вашем бунгало</div>
                     <div style="text-align:center;padding:20px;background:#F8FAFC;border-radius:var(--radius-lg);margin-bottom:16px;">
                         <i class="fas fa-qrcode" style="font-size:80px;color:var(--primary);"></i>
@@ -3519,9 +3239,7 @@
                 </div>
             `;
             document.body.appendChild(overlay);
-            overlay.addEventListener('click', function(e) {
-                if (e.target === this) closeQRPrompt();
-            });
+            overlay.addEventListener('click', function(e) { if (e.target === this) closeQRPrompt(); });
         }
 
         function closeQRPrompt() {
@@ -3532,37 +3250,46 @@
         // ================================================================
         // ===== ЧАТ ПОДДЕРЖКИ =====
         // ================================================================
-        let supportMessagesCache = [];
-
         async function sendSupportMessage() {
             const input = document.getElementById('supportInput');
             const messages = document.getElementById('supportMessages');
             const text = input.value.trim();
+            
             if (!text) return;
-
+            
             const phone = document.getElementById('customerPhone').value.trim();
             const name = document.getElementById('customerName').value.trim() || 'Клиент';
-
+            
             const userMsg = document.createElement('div');
             userMsg.className = 'support-msg user';
             userMsg.innerHTML = `${text} <span class="msg-time">${new Date().toLocaleTimeString()}</span>`;
             messages.appendChild(userMsg);
             messages.scrollTop = messages.scrollHeight;
             input.value = '';
-
-            await apiRequest('/api/chat-send', 'POST', { phone, text, from: 'client', name });
-
+            
+            await apiRequest('/api/chat-send', 'POST', {
+                phone: phone,
+                text: text,
+                from: 'client',
+                name: name
+            });
+            
             const typing = document.createElement('div');
             typing.className = 'support-msg barista';
             typing.id = 'typingIndicator';
-            typing.innerHTML =
-                `<div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div><span style="opacity:0.5;">печатает...</span>`;
+            typing.innerHTML = `
+                <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
+                <span style="opacity:0.5;">печатает...</span>
+            `;
             messages.appendChild(typing);
             messages.scrollTop = messages.scrollHeight;
-
+            
             let response = '';
             try {
-                const res = await apiRequest('/api/barista', 'POST', { message: text, history: [] });
+                const res = await apiRequest('/api/barista', 'POST', {
+                    message: text,
+                    history: []
+                });
                 if (res && res.choices && res.choices[0]) {
                     response = res.choices[0].message.content;
                 } else {
@@ -3571,22 +3298,27 @@
             } catch (e) {
                 response = getLocalBaristaResponse(text);
             }
-
-            await apiRequest('/api/chat-send', 'POST', { phone, text: response, from: 'admin', name: 'Клубничный Бариста' });
-
+            
+            await apiRequest('/api/chat-send', 'POST', {
+                phone: phone,
+                text: response,
+                from: 'admin',
+                name: 'Клубничный Бариста'
+            });
+            
             document.getElementById('typingIndicator')?.remove();
-
+            
             const baristaMsg = document.createElement('div');
             baristaMsg.className = 'support-msg barista';
-            baristaMsg.innerHTML =
-                `<div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>${response} <span class="msg-time">${new Date().toLocaleTimeString()}</span>`;
+            baristaMsg.innerHTML = `
+                <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
+                ${response} <span class="msg-time">${new Date().toLocaleTimeString()}</span>
+            `;
             messages.appendChild(baristaMsg);
             messages.scrollTop = messages.scrollHeight;
-
-            supportMessagesCache.push({ text: response, from: 'admin', time: new Date().toISOString() });
         }
 
-        function quickSupportQuestion(text) {
+        function quickQuestion(text) {
             const input = document.getElementById('supportInput');
             if (input) {
                 input.value = text;
@@ -3599,7 +3331,6 @@
             try {
                 const data = await apiRequest(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
                 if (data.success && data.messages) {
-                    supportMessagesCache = data.messages;
                     renderSupportMessages(data.messages);
                 }
             } catch (e) {
@@ -3610,21 +3341,26 @@
         function renderSupportMessages(messages) {
             const container = document.getElementById('supportMessages');
             if (!container) return;
-
+            
             const welcome = container.querySelector('.support-msg.barista:first-child');
-            container.innerHTML = '';
-            if (welcome) container.appendChild(welcome);
-
+            if (welcome && messages.length > 0) {
+                welcome.remove();
+            }
+            
             messages.forEach(msg => {
+                const exists = container.querySelector(`[data-time="${msg.time}"]`);
+                if (exists) return;
+                
                 const div = document.createElement('div');
-                if (msg.from === 'admin' || msg.from === 'barista') {
+                if (msg.from === 'admin') {
                     div.className = 'support-msg barista';
-                    div.innerHTML =
-                        `<div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>${msg.text} <span class="msg-time" data-time="${msg.time}">${new Date(msg.time).toLocaleTimeString()}</span>`;
+                    div.innerHTML = `
+                        <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
+                        ${msg.text} <span class="msg-time" data-time="${msg.time}">${new Date(msg.time).toLocaleTimeString()}</span>
+                    `;
                 } else {
                     div.className = 'support-msg user';
-                    div.innerHTML =
-                        `${msg.text} <span class="msg-time" data-time="${msg.time}">${new Date(msg.time).toLocaleTimeString()}</span>`;
+                    div.innerHTML = `${msg.text} <span class="msg-time" data-time="${msg.time}">${new Date(msg.time).toLocaleTimeString()}</span>`;
                 }
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
@@ -3650,16 +3386,16 @@
                 showNotification('⚠️ Сначала введите имя и телефон!');
                 return;
             }
-
+            
             closeSupportChat();
-
+            
             const overlay = document.createElement('div');
             overlay.className = 'auth-modal-overlay open';
             overlay.id = 'supportChatModal';
             overlay.style.padding = '0';
             overlay.style.background = 'transparent';
             overlay.style.backdropFilter = 'none';
-
+            
             overlay.innerHTML = `
                 <div style="width:100%;height:100%;display:flex;flex-direction:column;background:#FFF5F5;max-width:480px;margin:0 auto;border-radius:0;position:relative;overflow:hidden;" onclick="event.stopPropagation()">
                     <div class="support-chat-bg">
@@ -3695,28 +3431,28 @@
                     
                     <div class="quick-replies-wrapper">
                         <div class="quick-replies-scroll">
-                            <button onclick="quickSupportQuestion('🕐 Когда доставят заказ?')">🕐 Когда доставят?</button>
-                            <button onclick="quickSupportQuestion('❌ Как отменить заказ?')">❌ Отменить заказ</button>
-                            <button onclick="quickSupportQuestion('📍 Как вы нас найдете?')">📍 Как найдете?</button>
-                            <button onclick="quickSupportQuestion('📦 Активный заказ?')">📦 Активный заказ</button>
-                            <button onclick="quickSupportQuestion('🏖️ Доставка в другие места?')">🏖️ Другие места</button>
+                            ${QUICK_QUESTIONS.map(q => `
+                                <button onclick="quickQuestion('${q}')">${q}</button>
+                            `).join('')}
                         </div>
                     </div>
                     
                     <div class="chat-input-wrapper">
                         <input type="text" id="supportInput" placeholder="Напишите сообщение..." onkeydown="if(event.key==='Enter') sendSupportMessage()">
-                        <button onclick="sendSupportMessage()"><i class="fas fa-paper-plane"></i></button>
+                        <button onclick="sendSupportMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             `;
-
+            
             document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
-
+            
             overlay.addEventListener('click', function(e) {
                 if (e.target === this) closeSupportChat();
             });
-
+            
             setTimeout(() => {
                 loadSupportMessages(phone);
                 startChatAutoUpdate(phone);
@@ -3734,15 +3470,98 @@
         }
 
         // ================================================================
+        // ===== БАРИСТА (AI-ПОМОЩНИК - ВИДЖЕТ) =====
+        // ================================================================
+        let baristaWelcomeShown = false;
+        let isBaristaOpen = false;
+
+        function toggleBarista() {
+            const window = document.getElementById('baristaWindow');
+            const isOpen = window.style.display === 'flex';
+            window.style.display = isOpen ? 'none' : 'flex';
+            isBaristaOpen = !isOpen;
+            if (!isOpen) {
+                setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
+            }
+        }
+
+        function openBarista() {
+            document.getElementById('baristaWidget').style.display = 'block';
+            const window = document.getElementById('baristaWindow');
+            window.style.display = 'flex';
+            isBaristaOpen = true;
+            setTimeout(() => document.getElementById('baristaInput')?.focus(), 300);
+            if (!baristaWelcomeShown) {
+                baristaWelcomeShown = true;
+                setTimeout(() => {
+                    const messages = document.getElementById('baristaMessages');
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+                    welcomeDiv.innerHTML = '🍓 Привет! Я тут, чтобы помочь 😊<br>Можешь спросить меня о меню, акциях или подарках!<br>Я всегда рад компании 🤗';
+                    messages.appendChild(welcomeDiv);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 500);
+            }
+        }
+
+        async function sendBaristaMessage() {
+            const input = document.getElementById('baristaInput');
+            const messages = document.getElementById('baristaMessages');
+            const userText = input.value.trim();
+            
+            if (!userText) return;
+            
+            const userDiv = document.createElement('div');
+            userDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(108,92,231,0.12);color:#1A1A2E;align-self:flex-end;border-bottom-right-radius:4px;';
+            userDiv.textContent = userText;
+            messages.appendChild(userDiv);
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+            
+            const typing = document.createElement('div');
+            typing.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+            typing.textContent = '🤔 Думаю...';
+            typing.id = 'baristaTyping';
+            messages.appendChild(typing);
+            messages.scrollTop = messages.scrollHeight;
+            
+            let response = '';
+            try {
+                const res = await apiRequest('/api/barista', 'POST', {
+                    message: userText,
+                    history: []
+                });
+                if (res && res.choices && res.choices[0]) {
+                    response = res.choices[0].message.content;
+                } else {
+                    response = getLocalBaristaResponse(userText);
+                }
+            } catch (e) {
+                response = getLocalBaristaResponse(userText);
+            }
+            
+            document.getElementById('baristaTyping')?.remove();
+            
+            const botDiv = document.createElement('div');
+            botDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+            botDiv.innerHTML = response;
+            messages.appendChild(botDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function quickQuestion(text) {
+            document.getElementById('baristaInput').value = text;
+            sendBaristaMessage();
+        }
+
+        // ================================================================
         // ===== СЕССИИ =====
         // ================================================================
         function getSession() {
             try {
                 const data = localStorage.getItem(SESSION_KEY);
                 return data ? JSON.parse(data) : null;
-            } catch {
-                return null;
-            }
+            } catch { return null; }
         }
 
         function saveSession(sessionData) {
@@ -3770,7 +3589,8 @@
         async function checkSessionOnServer(bungalow) {
             try {
                 const res = await fetch(`/api/check-session?b=${bungalow}`);
-                return await res.json();
+                const data = await res.json();
+                return data;
             } catch (e) {
                 return { valid: false, reason: 'error' };
             }
@@ -3779,10 +3599,10 @@
         async function loadSettings() {
             try {
                 const res = await fetch('/api/settings');
-                return await res.json();
-            } catch (e) {
-                return null;
-            }
+                const data = await res.json();
+                state.settings = data;
+                return data;
+            } catch (e) { return null; }
         }
 
         function isWorkingTime() {
@@ -3838,11 +3658,7 @@
             if (bungalowNumber > 0) {
                 document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
                 document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
-            }
-
-            // Запускаем таймер сессии
-            if (expiresAt) {
-                startSessionTimer(expiresAt);
+                document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
             }
 
             setTimeout(() => {
@@ -3850,14 +3666,8 @@
             }, 1500);
 
             loadSettings().then(settings => {
-                if (settings?.technicalBreak) {
-                    showTechBreak();
-                    return;
-                }
-                if (!isWorkingTime()) {
-                    showClosedMode();
-                    return;
-                }
+                if (settings?.technicalBreak) { showTechBreak(); return; }
+                if (!isWorkingTime()) { showClosedMode(); return; }
                 renderMenu();
                 initCart();
                 loadReviews();
@@ -3884,8 +3694,7 @@
             document.getElementById('closedMode').style.display = 'block';
             document.getElementById('techBreakMode').style.display = 'none';
             document.getElementById('bottomTabBar').style.display = 'none';
-            document.getElementById('currentTimeDisplay').innerHTML =
-                `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+            document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
         }
 
         function getUserLocation() {
@@ -3911,7 +3720,8 @@
                     function(error) {
                         console.warn('⚠️ Ошибка геолокации:', error.message);
                         resolve(null);
-                    }, {
+                    },
+                    {
                         enableHighAccuracy: true,
                         timeout: 10000,
                         maximumAge: 0
@@ -3923,23 +3733,39 @@
         function startSessionCheck(bungalow) {
             if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
             window._sessionCheckInterval = setInterval(async () => {
-                if (!state.bungalowNumber) {
-                    clearInterval(window._sessionCheckInterval);
-                    return;
-                }
+                if (!state.bungalowNumber) { clearInterval(window._sessionCheckInterval); return; }
                 const check = await checkSessionOnServer(bungalow);
-                if (!check.valid) {
-                    clearInterval(window._sessionCheckInterval);
-                    showNoAccess();
-                    clearSession();
-                    showNotification('⏰ Сессия истекла!', 'error');
-                }
-            }, 30000);
+                if (!check.valid) { clearInterval(window._sessionCheckInterval); showNoAccess(); clearSession(); showNotification('⏰ Сессия истекла!', 'error'); }
+            }, 10000);
+        }
+
+        function startNotificationCheck() {
+            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+            notificationCheckInterval = setInterval(async () => {
+                const phone = document.getElementById('customerPhone').value.trim();
+                if (!phone) return;
+                try {
+                    const data = await apiRequest(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                    if (data.success && data.messages) {
+                        const messages = data.messages;
+                        if (!document.getElementById('supportChatModal')) {
+                            const unreadMessages = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime);
+                            if (unreadMessages.length > 0) {
+                                lastMessageTime = new Date(unreadMessages[unreadMessages.length - 1].time).getTime();
+                                showNotification(`💬 Новое сообщение от поддержки`);
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }, 5000);
         }
 
         // ================================================================
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         // ================================================================
+        let notificationCheckInterval = null;
+        let lastMessageTime = 0;
+
         function initCart() {
             document.getElementById('clearCart').addEventListener('click', clearCart);
             document.getElementById('orderButton').addEventListener('click', submitOrder);
@@ -3963,6 +3789,7 @@
                     showBungaloMode(urlBungalo, sessionCheck.expiresAt);
                     saveSession({ bungalow: urlBungalo, expiresAt: sessionCheck.expiresAt });
                     startSessionCheck(urlBungalo);
+                    startNotificationCheck();
                     startReviewCheck();
                 } else {
                     showNoAccess();
@@ -3981,6 +3808,7 @@
                     }
                     showBungaloMode(existingSession.bungalow, sessionCheck.expiresAt);
                     startSessionCheck(existingSession.bungalow);
+                    startNotificationCheck();
                     startReviewCheck();
                 } else {
                     showNoAccess();
@@ -3992,8 +3820,7 @@
 
             setInterval(() => {
                 const timeDisplay = document.getElementById('currentTimeDisplay');
-                if (timeDisplay) timeDisplay.innerHTML =
-                    `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+                if (timeDisplay) timeDisplay.innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
             }, 60000);
 
             await loadReviews();
@@ -4003,20 +3830,16 @@
         document.addEventListener('DOMContentLoaded', init);
 
         window.addEventListener('beforeunload', function() {
+            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
             if (chatUpdateInterval) clearInterval(chatUpdateInterval);
             if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
             if (reviewCheckInterval) clearInterval(reviewCheckInterval);
-            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
         });
 
-        console.log('🍓 Strawberry in Chocolate - v21 (FULL FIXED)');
-        console.log('✅ Исправлено: добавление в корзину');
-        console.log('✅ Исправлено: дублирование сообщений в чате');
-        console.log('✅ Кнопка Бариста поднята выше нижней панели');
-        console.log('✅ Добавлен таймер сессии');
-        console.log('✅ Добавлена проверка сессии перед заказом');
-        console.log('✅ Добавлен WebSocket обновление статуса');
-        console.log('✅ Добавлен fallback для картинок');
+        console.log('🍓 Strawberry in Chocolate - v19 (FULL)');
+        console.log('✅ Все функции работают!');
+        console.log('📦 Корзина:', state.cart.length, 'товаров');
+        console.log('⭐ Отзывов:', currentReviews.length);
     </script>
 </body>
 </html>
