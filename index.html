@@ -2208,8 +2208,7 @@
         </div>
     </div>
 
-    <!-- ===== ЧАТ ПОДДЕРЖКИ (создается динамически) ===== -->
-
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
         // ================================================================
         // ===== КОНСТАНТЫ =====
@@ -2251,6 +2250,14 @@
             { id: 'waffle', name: 'Вафельная крошка', icon: 'fas fa-crumb' }
         ];
 
+        const QUICK_QUESTIONS = [
+            '🕐 Когда доставят заказ?',
+            '❌ Как отменить заказ?',
+            '📍 Как вы нас найдете?',
+            '📦 Активный заказ?',
+            '🏖️ Доставка в другие места?'
+        ];
+
         // ================================================================
         // ===== СОСТОЯНИЕ =====
         // ================================================================
@@ -2260,7 +2267,8 @@
             selectedToppings: [],
             reviewRating: 0,
             reviewOrderId: null,
-            bungalowNumber: null
+            bungalowNumber: null,
+            settings: { technicalBreak: false, menuItems: {} }
         };
 
         let selectedPayment = 'cash';
@@ -2269,6 +2277,98 @@
         let isPickupMode = false;
         let currentReviews = [];
         let reviewCheckInterval = null;
+        let chatUpdateInterval = null;
+
+        // ================================================================
+        // ===== WEBSOCKET ПОДКЛЮЧЕНИЕ =====
+        // ================================================================
+        let socket = null;
+
+        function connectWebSocket() {
+            try {
+                socket = io({
+                    transports: ['websocket', 'polling'],
+                    reconnection: true,
+                    reconnectionAttempts: 5
+                });
+                
+                socket.on('connect', () => {
+                    console.log('📡 Подключен к серверу');
+                    socket.emit('admin-join');
+                });
+                
+                socket.on('new-order', (order) => {
+                    console.log('📦 Новый заказ:', order);
+                    showNotification(`📦 НОВЫЙ ЗАКАЗ #${order.id} от ${order.customerName} ${order.total} ₽`);
+                    
+                    try {
+                        const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
+                        audio.volume = 0.5;
+                        audio.play().catch(() => {});
+                    } catch (e) {}
+                });
+                
+                socket.on('disconnect', () => {
+                    console.log('🔌 Отключен от сервера');
+                });
+            } catch (e) {
+                console.warn('⚠️ WebSocket не доступен');
+            }
+        }
+
+        // ================================================================
+        // ===== API ФУНКЦИИ =====
+        // ================================================================
+        async function apiRequest(url, method = 'GET', body = null) {
+            try {
+                const opts = {
+                    method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                if (body) opts.body = JSON.stringify(body);
+                const res = await fetch(url, opts);
+                return await res.json();
+            } catch (e) {
+                console.error('API Error:', e);
+                return { success: false, error: 'Ошибка соединения' };
+            }
+        }
+
+        // ================================================================
+        // ===== ЛОКАЛЬНЫЙ БАРИСТА =====
+        // ================================================================
+        function getLocalBaristaResponse(question) {
+            const lower = question.toLowerCase();
+            
+            if (lower.includes('доставят') || lower.includes('когда') || lower.includes('ждать')) {
+                return '🍓 Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!';
+            }
+            if (lower.includes('отменить') || lower.includes('отмена')) {
+                return '❌ Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут)';
+            }
+            if (lower.includes('найдете') || lower.includes('найти') || lower.includes('где')) {
+                return '📍 QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠';
+            }
+            if (lower.includes('активный') || lower.includes('новый заказ')) {
+                return '📦 Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦';
+            }
+            if (lower.includes('другие места') || lower.includes('в другие')) {
+                return '🏖️ К сожалению, пока доставка только в бунгало. Но мы работаем над расширением!';
+            }
+            if (lower.includes('совет') || lower.includes('посовет') || lower.includes('что взять')) {
+                return '🍓 Самая популярная позиция — <strong>Классика</strong> (клубника в молочном шоколаде) всего 350 ₽!<br>А если любите сливки, попробуйте <strong>Клубнику в сливках</strong> 😋';
+            }
+            if (lower.includes('подарок') || lower.includes('акци')) {
+                return '🎁 У нас есть акции:<br>• При заказе 2+ стаканчиков — скидка 10%<br>• Бесплатная мини-порция для первых посетителей<br>• Для постоянных клиентов — подарок!';
+            }
+            if (lower.includes('дела') || lower.includes('как ты')) {
+                return '🍓 У меня всё отлично! Спасибо что спросили 😊<br>Сегодня отличная погода, много гостей, все довольны! А как ваш отдых? 🏖️';
+            }
+            if (lower.includes('цена') || lower.includes('сколько') || lower.includes('стоит')) {
+                return '🍓 Цены на клубнику в шоколаде:<br>• Классика — 350 ₽<br>• Клубника в сливках — 350 ₽<br>• Микс клубника-банан — 400 ₽<br>• Банан в шоколаде — 320 ₽<br>• Клубника в стакане (без шоколада) — 250 ₽';
+            }
+            return '🍓 Отличный вопрос! 😊<br>Я бы посоветовал посмотреть наше меню — там есть и классика, и фрукты, и напитки.<br>А если хотите, могу помочь выбрать! Что вас интересует?';
+        }
 
         // ================================================================
         // ===== КОРЗИНА =====
@@ -2387,7 +2487,6 @@
         // ===== ОТОБРАЖЕНИЕ МЕНЮ =====
         // ================================================================
         function renderMenu() {
-            // Клубника
             const strawberryGrid = document.getElementById('strawberryGrid');
             strawberryGrid.innerHTML = STRAWBERRY_ITEMS.map(item => `
                 <div class="menu-item" onclick="openToppingModal('${item.id}')">
@@ -2404,7 +2503,6 @@
                 </div>
             `).join('');
 
-            // Фрукты
             const fruitsGrid = document.getElementById('fruitsGrid');
             fruitsGrid.innerHTML = FRUITS_ITEMS.map(item => `
                 <div class="menu-item" onclick="addToCartDirect('${item.id}')">
@@ -2420,7 +2518,6 @@
                 </div>
             `).join('');
 
-            // Напитки
             const drinksGrid = document.getElementById('drinksGrid');
             drinksGrid.innerHTML = DRINK_ITEMS.map(item => `
                 <div class="drink-item" onclick="addDrinkToCart('${item.id}')">
@@ -2492,10 +2589,8 @@
             `).join('');
             
             document.getElementById('emptyToppingsHint').style.display = 'block';
-            document.getElementById('selectedToppingsDisplay').innerHTML = `<span style="color:var(--text-muted);font-size:13px;" id="emptyToppingsHint">👆 Нажмите на присыпку для выбора</span>`;
+            document.getElementById('selectedToppingsDisplay').innerHTML = `<span style="color:var(--text-muted);font-size:13px;">👆 Нажмите на присыпку для выбора</span>`;
             document.getElementById('confirmToppingBtn').disabled = true;
-            document.getElementById('confirmToppingBtn').innerHTML = '<i class="fas fa-plus-circle"></i> Добавить в корзину';
-            
             document.getElementById('toppingModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -2624,7 +2719,6 @@
                 return;
             }
             
-            // Проверяем наличие алкоголя
             const hasAlcohol = state.cart.some(item => item.isAlcohol);
             if (hasAlcohol) {
                 const ageConfirmed = localStorage.getItem('age_confirmed') === 'true';
@@ -2634,14 +2728,18 @@
                 }
             }
             
-            // Сохраняем данные пользователя
             saveUserAuth(name, phone);
             
-            // Формируем заказ
+            let location = null;
+            try {
+                const pos = await getUserLocation();
+                if (pos) location = pos;
+            } catch (e) {}
+            
             const order = {
-                id: 'ORD-' + Date.now(),
-                date: new Date().toISOString(),
-                customer: { name, phone },
+                customerName: name,
+                customerPhone: phone.replace(/[\s\-\+\(\)]/g, ''),
+                bungalow: state.bungalowNumber || null,
                 items: state.cart.map(item => ({
                     id: item.id,
                     name: item.name,
@@ -2651,40 +2749,44 @@
                     isAlcohol: item.isAlcohol || false
                 })),
                 total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                payment: selectedPayment,
-                bungalow: state.bungalowNumber || 'не указан',
-                status: 'waiting',
-                createdAt: Date.now()
+                paymentMethod: selectedPayment,
+                paymentLabel: document.querySelector('.payment-btn.active .payment-name')?.textContent || 'Наличными',
+                location: location,
+                createdAt: new Date().toISOString()
             };
             
-            // Отправляем заказ на сервер
+            const btn = document.getElementById('orderButton');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+            btn.disabled = true;
+            
             try {
-                const response = await fetch('/api/orders', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(order)
-                });
-                const data = await response.json();
-                if (data.success) {
+                const response = await apiRequest('/api/order', 'POST', order);
+                if (response.success) {
                     state.cart = [];
                     saveCart();
                     updateCart();
                     closeCart();
-                    showNotification('✅ Заказ оформлен! Ждите доставку 🏖️');
-                    saveOrder(order);
+                    showNotification(`✅ Заказ #${response.orderId} оформлен! Ждите доставку 🏖️`);
+                    saveOrder({ ...order, id: 'ORD-' + response.orderId, status: 'waiting' });
                     updateOrdersBadge();
+                    
+                    if (socket && socket.connected) {
+                        socket.emit('new-order', {
+                            id: response.orderId,
+                            customerName: name,
+                            total: order.total,
+                            bungalow: state.bungalowNumber
+                        });
+                    }
                 } else {
-                    showNotification('❌ Ошибка при оформлении заказа');
+                    showNotification('❌ ' + (response.error || 'Ошибка оформления заказа'));
                 }
             } catch (e) {
-                // Если сервер недоступен, сохраняем локально
-                state.cart = [];
-                saveCart();
-                updateCart();
-                closeCart();
-                saveOrder(order);
-                showNotification('✅ Заказ сохранен локально! 🏖️');
-                updateOrdersBadge();
+                showNotification('❌ Ошибка соединения с сервером');
+                console.error('Order error:', e);
+            } finally {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Заказать';
+                btn.disabled = false;
             }
         }
 
@@ -2693,18 +2795,14 @@
                 const orders = getOrders();
                 orders.unshift(order);
                 localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-            } catch (e) {
-                console.error('Ошибка сохранения заказа:', e);
-            }
+            } catch (e) { console.error('Ошибка сохранения заказа:', e); }
         }
 
         function getOrders() {
             try {
                 const data = localStorage.getItem(ORDERS_KEY);
                 return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
+            } catch (e) { return []; }
         }
 
         function updateOrdersBadge() {
@@ -2829,9 +2927,7 @@
             try {
                 const data = localStorage.getItem(REVIEWS_KEY);
                 return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
+            } catch (e) { return []; }
         }
 
         function saveReviews(reviews) {
@@ -3006,9 +3102,7 @@
             try {
                 const data = localStorage.getItem(AUTH_KEY);
                 return data ? JSON.parse(data) : null;
-            } catch (e) {
-                return null;
-            }
+            } catch (e) { return null; }
         }
 
         function isValidPhone(phone) {
@@ -3156,57 +3250,6 @@
         // ================================================================
         // ===== ЧАТ ПОДДЕРЖКИ =====
         // ================================================================
-        const QUICK_QUESTIONS = [
-            '🕐 Когда доставят заказ?',
-            '❌ Как отменить заказ?',
-            '📍 Как вы нас найдете?',
-            '📦 Активный заказ?',
-            '🏖️ Доставка в другие места?'
-        ];
-
-        // ===== ЛОКАЛЬНЫЙ БАРИСТА (ОТВЕЧАЕТ В ЧАТЕ) =====
-        function getLocalBaristaResponse(question) {
-            const lower = question.toLowerCase();
-            
-            if (lower.includes('доставят') || lower.includes('когда') || lower.includes('ждать')) {
-                return '🍓 Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!';
-            }
-            
-            if (lower.includes('отменить') || lower.includes('отмена')) {
-                return '❌ Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут после оформления)';
-            }
-            
-            if (lower.includes('найдете') || lower.includes('найти') || lower.includes('где')) {
-                return '📍 QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠';
-            }
-            
-            if (lower.includes('активный') || lower.includes('новый заказ')) {
-                return '📦 Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦';
-            }
-            
-            if (lower.includes('другие места') || lower.includes('в другие')) {
-                return '🏖️ К сожалению, пока доставка только в бунгало. Но мы работаем над расширением по всему курортному посёлку!';
-            }
-            
-            if (lower.includes('совет') || lower.includes('посовет') || lower.includes('что взять')) {
-                return '🍓 Самая популярная позиция — <strong>Классика</strong> (клубника в молочном шоколаде) всего 350 ₽!<br>А если любите сливки, попробуйте <strong>Клубнику в сливках</strong> 😋';
-            }
-            
-            if (lower.includes('подарок') || lower.includes('акци')) {
-                return '🎁 У нас есть акции:<br>• При заказе 2+ стаканчиков — скидка 10%<br>• Бесплатная мини-порция для первых посетителей<br>• Для постоянных клиентов — подарок!';
-            }
-            
-            if (lower.includes('дела') || lower.includes('как ты')) {
-                return '🍓 У меня всё отлично! Спасибо что спросили 😊<br>Сегодня отличная погода, много гостей, все довольны! А как ваш отдых? 🏖️';
-            }
-            
-            if (lower.includes('цена') || lower.includes('сколько') || lower.includes('стоит')) {
-                return '🍓 Цены на клубнику в шоколаде:<br>• Классика — 350 ₽<br>• Клубника в сливках — 350 ₽<br>• Микс клубника-банан — 400 ₽<br>• Банан в шоколаде — 320 ₽<br>• Клубника в стакане (без шоколада) — 250 ₽';
-            }
-            
-            return '🍓 Отличный вопрос! 😊<br>Я бы посоветовал посмотреть наше меню — там есть и классика, и фрукты, и напитки.<br>А если хотите, могу помочь выбрать! Что вас интересует?';
-        }
-
         async function sendSupportMessage() {
             const input = document.getElementById('supportInput');
             const messages = document.getElementById('supportMessages');
@@ -3214,58 +3257,61 @@
             
             if (!text) return;
             
-            // Добавляем сообщение пользователя
+            const phone = document.getElementById('customerPhone').value.trim();
+            const name = document.getElementById('customerName').value.trim() || 'Клиент';
+            
             const userMsg = document.createElement('div');
             userMsg.className = 'support-msg user';
             userMsg.innerHTML = `${text} <span class="msg-time">${new Date().toLocaleTimeString()}</span>`;
             messages.appendChild(userMsg);
             messages.scrollTop = messages.scrollHeight;
-            
             input.value = '';
             
-            // Индикатор печати
+            await apiRequest('/api/chat-send', 'POST', {
+                phone: phone,
+                text: text,
+                from: 'client',
+                name: name
+            });
+            
             const typing = document.createElement('div');
             typing.className = 'support-msg barista';
             typing.id = 'typingIndicator';
             typing.innerHTML = `
-                <div class="msg-avatar">
-                    <span>🍓 Клубничный Бариста</span>
-                </div>
+                <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
                 <span style="opacity:0.5;">печатает...</span>
             `;
             messages.appendChild(typing);
             messages.scrollTop = messages.scrollHeight;
             
-            // Получаем ответ (сначала пробуем AI, если нет — локальный)
             let response = '';
             try {
-                const res = await fetch('/api/barista', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: text,
-                        history: []
-                    })
+                const res = await apiRequest('/api/barista', 'POST', {
+                    message: text,
+                    history: []
                 });
-                const data = await res.json();
-                if (data && data.choices && data.choices[0]) {
-                    response = data.choices[0].message.content;
+                if (res && res.choices && res.choices[0]) {
+                    response = res.choices[0].message.content;
                 } else {
                     response = getLocalBaristaResponse(text);
                 }
             } catch (e) {
-                console.warn('AI недоступен, используем локального баристу');
                 response = getLocalBaristaResponse(text);
             }
+            
+            await apiRequest('/api/chat-send', 'POST', {
+                phone: phone,
+                text: response,
+                from: 'admin',
+                name: 'Клубничный Бариста'
+            });
             
             document.getElementById('typingIndicator')?.remove();
             
             const baristaMsg = document.createElement('div');
             baristaMsg.className = 'support-msg barista';
             baristaMsg.innerHTML = `
-                <div class="msg-avatar">
-                    <span>🍓 Клубничный Бариста</span>
-                </div>
+                <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
                 ${response} <span class="msg-time">${new Date().toLocaleTimeString()}</span>
             `;
             messages.appendChild(baristaMsg);
@@ -3278,6 +3324,59 @@
                 input.value = text;
                 sendSupportMessage();
             }
+        }
+
+        async function loadSupportMessages(phone) {
+            if (!phone) return;
+            try {
+                const data = await apiRequest(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                if (data.success && data.messages) {
+                    renderSupportMessages(data.messages);
+                }
+            } catch (e) {
+                console.warn('Ошибка загрузки сообщений:', e);
+            }
+        }
+
+        function renderSupportMessages(messages) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            
+            const welcome = container.querySelector('.support-msg.barista:first-child');
+            if (welcome && messages.length > 0) {
+                welcome.remove();
+            }
+            
+            messages.forEach(msg => {
+                const exists = container.querySelector(`[data-time="${msg.time}"]`);
+                if (exists) return;
+                
+                const div = document.createElement('div');
+                if (msg.from === 'admin') {
+                    div.className = 'support-msg barista';
+                    div.innerHTML = `
+                        <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
+                        ${msg.text} <span class="msg-time" data-time="${msg.time}">${new Date(msg.time).toLocaleTimeString()}</span>
+                    `;
+                } else {
+                    div.className = 'support-msg user';
+                    div.innerHTML = `${msg.text} <span class="msg-time" data-time="${msg.time}">${new Date(msg.time).toLocaleTimeString()}</span>`;
+                }
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        function startChatAutoUpdate(phone) {
+            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
+            chatUpdateInterval = setInterval(() => {
+                if (document.getElementById('supportChatModal')) {
+                    loadSupportMessages(phone);
+                } else {
+                    clearInterval(chatUpdateInterval);
+                    chatUpdateInterval = null;
+                }
+            }, 5000);
         }
 
         function openSupportChat() {
@@ -3322,9 +3421,7 @@
                     
                     <div id="supportMessages" style="flex:1;padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;z-index:1;position:relative;background:transparent;">
                         <div class="support-msg barista">
-                            <div class="msg-avatar">
-                                <span>🍓 Клубничный Бариста</span>
-                            </div>
+                            <div class="msg-avatar"><span>🍓 Клубничный Бариста</span></div>
                             Привет! Я Клубничный Бариста 🍓<br>
                             Я здесь, чтобы помочь вам с заказами, доставкой и любыми вопросами!<br>
                             Спросите меня о чём угодно 😊
@@ -3355,16 +3452,25 @@
             overlay.addEventListener('click', function(e) {
                 if (e.target === this) closeSupportChat();
             });
+            
+            setTimeout(() => {
+                loadSupportMessages(phone);
+                startChatAutoUpdate(phone);
+            }, 500);
         }
 
         function closeSupportChat() {
             const modal = document.getElementById('supportChatModal');
             if (modal) modal.remove();
             document.body.style.overflow = '';
+            if (chatUpdateInterval) {
+                clearInterval(chatUpdateInterval);
+                chatUpdateInterval = null;
+            }
         }
 
         // ================================================================
-        // ===== БАРИСТА (AI-ПОМОЩНИК - виджет) =====
+        // ===== БАРИСТА (AI-ПОМОЩНИК - ВИДЖЕТ) =====
         // ================================================================
         let baristaWelcomeShown = false;
         let isBaristaOpen = false;
@@ -3412,7 +3518,6 @@
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
             
-            // Индикатор печати
             const typing = document.createElement('div');
             typing.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
             typing.textContent = '🤔 Думаю...';
@@ -3420,25 +3525,18 @@
             messages.appendChild(typing);
             messages.scrollTop = messages.scrollHeight;
             
-            // Получаем ответ
             let response = '';
             try {
-                const res = await fetch('/api/barista', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: userText,
-                        history: []
-                    })
+                const res = await apiRequest('/api/barista', 'POST', {
+                    message: userText,
+                    history: []
                 });
-                const data = await res.json();
-                if (data && data.choices && data.choices[0]) {
-                    response = data.choices[0].message.content;
+                if (res && res.choices && res.choices[0]) {
+                    response = res.choices[0].message.content;
                 } else {
                     response = getLocalBaristaResponse(userText);
                 }
             } catch (e) {
-                console.warn('AI недоступен, используем локального баристу');
                 response = getLocalBaristaResponse(userText);
             }
             
@@ -3457,52 +3555,291 @@
         }
 
         // ================================================================
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        // ===== СЕССИИ =====
         // ================================================================
-        function init() {
-            loadCart();
-            renderMenu();
-            
+        function getSession() {
+            try {
+                const data = localStorage.getItem(SESSION_KEY);
+                return data ? JSON.parse(data) : null;
+            } catch { return null; }
+        }
+
+        function saveSession(sessionData) {
+            localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+        }
+
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+            state.bungalowNumber = null;
+        }
+
+        function getBungaloFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const b = urlParams.get('b');
+            if (b && !isNaN(b) && parseInt(b) > 0 && parseInt(b) <= 100) return parseInt(b);
+            return null;
+        }
+
+        function cleanURL() {
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+        async function checkSessionOnServer(bungalow) {
+            try {
+                const res = await fetch(`/api/check-session?b=${bungalow}`);
+                const data = await res.json();
+                return data;
+            } catch (e) {
+                return { valid: false, reason: 'error' };
+            }
+        }
+
+        async function loadSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                state.settings = data;
+                return data;
+            } catch (e) { return null; }
+        }
+
+        function isWorkingTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentMinutes = hours * 60 + minutes;
+            const startMinutes = 9 * 60;
+            const endMinutes = 30 * 60;
+            let normalizedCurrent = currentMinutes < startMinutes ? currentMinutes + 24 * 60 : currentMinutes;
+            return normalizedCurrent >= startMinutes && normalizedCurrent < endMinutes;
+        }
+
+        function getCurrentMskTime() {
+            try {
+                const mskTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+                return new Date(mskTime);
+            } catch (e) {
+                return new Date();
+            }
+        }
+
+        function formatTime(date) {
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            return `${hours}:${String(minutes).padStart(2, '0')}`;
+        }
+
+        function showNoAccess() {
+            document.getElementById('noAccessMode').style.display = 'block';
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'none';
+        }
+
+        function showBungaloMode(bungalowNumber, expiresAt) {
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'block';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'flex';
+
+            state.bungalowNumber = bungalowNumber;
+            isPickupMode = false;
+
             const savedAuth = getUserAuth();
             if (savedAuth) {
                 document.getElementById('customerName').value = savedAuth.name || '';
                 document.getElementById('customerPhone').value = savedAuth.phone || '';
             }
-            
-            loadReviews();
-            updateCart();
-            updateOrdersBadge();
-            
-            document.getElementById('clearCart').addEventListener('click', clearCart);
-            document.getElementById('orderButton').addEventListener('click', submitOrder);
-            
-            document.getElementById('cartOverlay').addEventListener('click', closeCart);
-            document.getElementById('confirmToppingBtn').addEventListener('click', confirmTopping);
-            document.getElementById('ageConfirmBtn').addEventListener('click', confirmAge);
-            document.getElementById('submitReviewBtn').addEventListener('click', submitReview);
-            
-            // Закрытие модальных окон по клику на оверлей
-            document.querySelectorAll('.auth-modal-overlay, .topping-modal-overlay, .age-verify-overlay, .review-modal-overlay, .map-modal-overlay, .beach-restrict-modal, .orders-modal-overlay, .reviews-modal-overlay').forEach(el => {
-                el.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        this.classList.remove('open');
-                        document.body.style.overflow = '';
-                    }
-                });
+
+            if (bungalowNumber > 0) {
+                document.getElementById('bungaloLabel').textContent = 'Ваше бунгало';
+                document.getElementById('bungaloNumberDisplay').textContent = `#${bungalowNumber}`;
+                document.getElementById('bungaloHint').innerHTML = '<i class="fas fa-qrcode"></i> QR-код в вашем бунгало';
+            }
+
+            setTimeout(() => {
+                getUserLocation();
+            }, 1500);
+
+            loadSettings().then(settings => {
+                if (settings?.technicalBreak) { showTechBreak(); return; }
+                if (!isWorkingTime()) { showClosedMode(); return; }
+                renderMenu();
+                initCart();
+                loadReviews();
+                startReviewCheck();
             });
-            
-            // Показываем бариста через 3 секунды
+            setTimeout(updateOrdersBadge, 1000);
+
             setTimeout(() => {
                 document.getElementById('baristaWidget').style.display = 'block';
-            }, 3000);
-            
-            console.log('🍓 Strawberry in Chocolate - v18 (FULL)');
-            console.log('✅ Все функции работают!');
-            console.log('📦 Корзина:', state.cart.length, 'товаров');
-            console.log('⭐ Отзывов:', currentReviews.length);
+            }, 5000);
+        }
+
+        function showTechBreak() {
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('closedMode').style.display = 'none';
+            document.getElementById('techBreakMode').style.display = 'block';
+            document.getElementById('bottomTabBar').style.display = 'none';
+        }
+
+        function showClosedMode() {
+            document.getElementById('noAccessMode').style.display = 'none';
+            document.getElementById('bungaloMode').style.display = 'none';
+            document.getElementById('closedMode').style.display = 'block';
+            document.getElementById('techBreakMode').style.display = 'none';
+            document.getElementById('bottomTabBar').style.display = 'none';
+            document.getElementById('currentTimeDisplay').innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+        }
+
+        function getUserLocation() {
+            return new Promise((resolve) => {
+                if (state.userLocation) {
+                    resolve(state.userLocation);
+                    return;
+                }
+                if (!navigator.geolocation) {
+                    resolve(null);
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const location = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        state.userLocation = location;
+                        console.log('📍 Геолокация получена:', location.lat, location.lng);
+                        resolve(location);
+                    },
+                    function(error) {
+                        console.warn('⚠️ Ошибка геолокации:', error.message);
+                        resolve(null);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
+
+        function startSessionCheck(bungalow) {
+            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
+            window._sessionCheckInterval = setInterval(async () => {
+                if (!state.bungalowNumber) { clearInterval(window._sessionCheckInterval); return; }
+                const check = await checkSessionOnServer(bungalow);
+                if (!check.valid) { clearInterval(window._sessionCheckInterval); showNoAccess(); clearSession(); showNotification('⏰ Сессия истекла!', 'error'); }
+            }, 10000);
+        }
+
+        function startNotificationCheck() {
+            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+            notificationCheckInterval = setInterval(async () => {
+                const phone = document.getElementById('customerPhone').value.trim();
+                if (!phone) return;
+                try {
+                    const data = await apiRequest(`/api/chat-messages?phone=${encodeURIComponent(phone)}`);
+                    if (data.success && data.messages) {
+                        const messages = data.messages;
+                        if (!document.getElementById('supportChatModal')) {
+                            const unreadMessages = messages.filter(msg => msg.from === 'admin' && new Date(msg.time).getTime() > lastMessageTime);
+                            if (unreadMessages.length > 0) {
+                                lastMessageTime = new Date(unreadMessages[unreadMessages.length - 1].time).getTime();
+                                showNotification(`💬 Новое сообщение от поддержки`);
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }, 5000);
+        }
+
+        // ================================================================
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        // ================================================================
+        let notificationCheckInterval = null;
+        let lastMessageTime = 0;
+
+        function initCart() {
+            document.getElementById('clearCart').addEventListener('click', clearCart);
+            document.getElementById('orderButton').addEventListener('click', submitOrder);
+            updateCart();
+        }
+
+        async function init() {
+            loadCart();
+            const existingSession = getSession();
+            const urlBungalo = getBungaloFromURL();
+
+            if (urlBungalo) {
+                const sessionCheck = await checkSessionOnServer(urlBungalo);
+                if (sessionCheck.valid) {
+                    cleanURL();
+                    const auth = getUserAuth();
+                    if (auth) {
+                        document.getElementById('customerName').value = auth.name || '';
+                        document.getElementById('customerPhone').value = auth.phone || '';
+                    }
+                    showBungaloMode(urlBungalo, sessionCheck.expiresAt);
+                    saveSession({ bungalow: urlBungalo, expiresAt: sessionCheck.expiresAt });
+                    startSessionCheck(urlBungalo);
+                    startNotificationCheck();
+                    startReviewCheck();
+                } else {
+                    showNoAccess();
+                    if (sessionCheck.reason === 'expired') {
+                        showNotification('⏰ Сессия истекла! Отсканируйте QR-код заново.', 'error');
+                        clearSession();
+                    }
+                }
+            } else if (existingSession && existingSession.bungalow > 0) {
+                const sessionCheck = await checkSessionOnServer(existingSession.bungalow);
+                if (sessionCheck.valid) {
+                    const auth = getUserAuth();
+                    if (auth) {
+                        document.getElementById('customerName').value = auth.name || '';
+                        document.getElementById('customerPhone').value = auth.phone || '';
+                    }
+                    showBungaloMode(existingSession.bungalow, sessionCheck.expiresAt);
+                    startSessionCheck(existingSession.bungalow);
+                    startNotificationCheck();
+                    startReviewCheck();
+                } else {
+                    showNoAccess();
+                    clearSession();
+                }
+            } else {
+                showNoAccess();
+            }
+
+            setInterval(() => {
+                const timeDisplay = document.getElementById('currentTimeDisplay');
+                if (timeDisplay) timeDisplay.innerHTML = `<i class="fas fa-clock"></i> Текущее время: <strong>${formatTime(getCurrentMskTime())}</strong>`;
+            }, 60000);
+
+            await loadReviews();
+            connectWebSocket();
         }
 
         document.addEventListener('DOMContentLoaded', init);
+
+        window.addEventListener('beforeunload', function() {
+            if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+            if (chatUpdateInterval) clearInterval(chatUpdateInterval);
+            if (window._sessionCheckInterval) clearInterval(window._sessionCheckInterval);
+            if (reviewCheckInterval) clearInterval(reviewCheckInterval);
+        });
+
+        console.log('🍓 Strawberry in Chocolate - v19 (FULL)');
+        console.log('✅ Все функции работают!');
+        console.log('📦 Корзина:', state.cart.length, 'товаров');
+        console.log('⭐ Отзывов:', currentReviews.length);
     </script>
 </body>
 </html>
