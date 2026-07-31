@@ -2807,7 +2807,7 @@
 
         function updateOrdersBadge() {
             const orders = getOrders();
-            const activeOrders = orders.filter(o => o.status === 'waiting');
+          const activeOrders = orders.filter(o => o && o.status === 'waiting');
             const badge = document.getElementById('tabOrdersBadge');
             if (activeOrders.length > 0) {
                 badge.textContent = activeOrders.length;
@@ -2844,7 +2844,7 @@
             }
             
             const allOrders = getOrders();
-            const userOrders = allOrders.filter(o => o.customer.phone === phone);
+            const userOrders = allOrders.filter(o => o && o.customer && o.customer.phone === phone);
             
             const container = document.getElementById('ordersContent');
             if (userOrders.length === 0) {
