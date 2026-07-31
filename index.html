@@ -441,6 +441,16 @@
             aspect-ratio: 1;
             object-fit: cover;
             background: linear-gradient(135deg, #FCE4EC, #FFF5F5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+        }
+
+        .menu-item .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .menu-item .item-content {
@@ -553,6 +563,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .drink-item .drink-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .drink-item .drink-info {
@@ -2193,7 +2209,6 @@
     </div>
 
     <!-- ===== ЧАТ ПОДДЕРЖКИ (создается динамически) ===== -->
-    <!-- Сюда вставляется через openSupportChat() -->
 
     <script>
         // ================================================================
@@ -2377,8 +2392,8 @@
             strawberryGrid.innerHTML = STRAWBERRY_ITEMS.map(item => `
                 <div class="menu-item" onclick="openToppingModal('${item.id}')">
                     ${item.badge ? `<div class="badge">${item.badge}</div>` : ''}
-                    <div class="item-image" style="display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#FCE4EC,#FFF5F5);">
-                        🍓
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
                     </div>
                     <div class="item-content">
                         <div class="item-name">${item.name}</div>
@@ -2393,8 +2408,8 @@
             const fruitsGrid = document.getElementById('fruitsGrid');
             fruitsGrid.innerHTML = FRUITS_ITEMS.map(item => `
                 <div class="menu-item" onclick="addToCartDirect('${item.id}')">
-                    <div class="item-image" style="display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#E8F5E9,#F1F8E9);">
-                        ${item.emoji}
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'">
                     </div>
                     <div class="item-content">
                         <div class="item-name">${item.name}</div>
@@ -2409,8 +2424,8 @@
             const drinksGrid = document.getElementById('drinksGrid');
             drinksGrid.innerHTML = DRINK_ITEMS.map(item => `
                 <div class="drink-item" onclick="addDrinkToCart('${item.id}')">
-                    <div class="drink-icon" style="font-size:28px;display:flex;align-items:center;justify-content:center;">
-                        ${item.emoji}
+                    <div class="drink-icon">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.textContent='${item.emoji}'">
                     </div>
                     <div class="drink-info">
                         <h4>${item.name}${item.alcohol ? ' 🍺' : ''}</h4>
@@ -2612,7 +2627,6 @@
             // Проверяем наличие алкоголя
             const hasAlcohol = state.cart.some(item => item.isAlcohol);
             if (hasAlcohol) {
-                // Проверяем, подтвержден ли возраст
                 const ageConfirmed = localStorage.getItem('age_confirmed') === 'true';
                 if (!ageConfirmed) {
                     openAgeVerify();
@@ -3150,26 +3164,47 @@
             '🏖️ Доставка в другие места?'
         ];
 
-        async function getSupportResponse(question) {
-            const lowerQuestion = question.toLowerCase();
+        // ===== ЛОКАЛЬНЫЙ БАРИСТА (ОТВЕЧАЕТ В ЧАТЕ) =====
+        function getLocalBaristaResponse(question) {
+            const lower = question.toLowerCase();
             
-            const answers = {
-                'доставят заказ': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
-                'сколько ждать': 'Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!',
-                'отменить заказ': 'Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут после оформления)',
-                'как отменить': 'Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут)',
-                'как вы нас найдете': 'QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠',
-                'активный заказ': 'Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦',
-                'доставка в другие': 'К сожалению, пока доставка только в бунгало. Но мы работаем над расширением по всему курортному посёлку! 🏖️'
-            };
-            
-            for (const [key, answer] of Object.entries(answers)) {
-                if (lowerQuestion.includes(key)) {
-                    return answer;
-                }
+            if (lower.includes('доставят') || lower.includes('когда') || lower.includes('ждать')) {
+                return '🍓 Извините, заказов много, мы стараемся для вас! Курьер уже спешит к вам 🏃‍♂️ Приносим свои извинения за ожидание!';
             }
             
-            return 'Я не уверен, сейчас позову менеджера! Он скоро свяжется с вами 📞';
+            if (lower.includes('отменить') || lower.includes('отмена')) {
+                return '❌ Зайдите в раздел "Заказы" в нижней панели и нажмите "Отменить заказ" (можно в первые 5 минут после оформления)';
+            }
+            
+            if (lower.includes('найдете') || lower.includes('найти') || lower.includes('где')) {
+                return '📍 QR-код привязан к вашему бунгало! Мы видим, где вы находитесь, и доставим заказ прямо к вам 🏠';
+            }
+            
+            if (lower.includes('активный') || lower.includes('новый заказ')) {
+                return '📦 Дождитесь завершения текущего заказа и сделайте новый! Активный заказ можно отследить в разделе "Заказы" 📦';
+            }
+            
+            if (lower.includes('другие места') || lower.includes('в другие')) {
+                return '🏖️ К сожалению, пока доставка только в бунгало. Но мы работаем над расширением по всему курортному посёлку!';
+            }
+            
+            if (lower.includes('совет') || lower.includes('посовет') || lower.includes('что взять')) {
+                return '🍓 Самая популярная позиция — <strong>Классика</strong> (клубника в молочном шоколаде) всего 350 ₽!<br>А если любите сливки, попробуйте <strong>Клубнику в сливках</strong> 😋';
+            }
+            
+            if (lower.includes('подарок') || lower.includes('акци')) {
+                return '🎁 У нас есть акции:<br>• При заказе 2+ стаканчиков — скидка 10%<br>• Бесплатная мини-порция для первых посетителей<br>• Для постоянных клиентов — подарок!';
+            }
+            
+            if (lower.includes('дела') || lower.includes('как ты')) {
+                return '🍓 У меня всё отлично! Спасибо что спросили 😊<br>Сегодня отличная погода, много гостей, все довольны! А как ваш отдых? 🏖️';
+            }
+            
+            if (lower.includes('цена') || lower.includes('сколько') || lower.includes('стоит')) {
+                return '🍓 Цены на клубнику в шоколаде:<br>• Классика — 350 ₽<br>• Клубника в сливках — 350 ₽<br>• Микс клубника-банан — 400 ₽<br>• Банан в шоколаде — 320 ₽<br>• Клубника в стакане (без шоколада) — 250 ₽';
+            }
+            
+            return '🍓 Отличный вопрос! 😊<br>Я бы посоветовал посмотреть наше меню — там есть и классика, и фрукты, и напитки.<br>А если хотите, могу помочь выбрать! Что вас интересует?';
         }
 
         async function sendSupportMessage() {
@@ -3201,8 +3236,27 @@
             messages.appendChild(typing);
             messages.scrollTop = messages.scrollHeight;
             
-            // Получаем ответ
-            const response = await getSupportResponse(text);
+            // Получаем ответ (сначала пробуем AI, если нет — локальный)
+            let response = '';
+            try {
+                const res = await fetch('/api/barista', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: text,
+                        history: []
+                    })
+                });
+                const data = await res.json();
+                if (data && data.choices && data.choices[0]) {
+                    response = data.choices[0].message.content;
+                } else {
+                    response = getLocalBaristaResponse(text);
+                }
+            } catch (e) {
+                console.warn('AI недоступен, используем локального баристу');
+                response = getLocalBaristaResponse(text);
+            }
             
             document.getElementById('typingIndicator')?.remove();
             
@@ -3310,7 +3364,7 @@
         }
 
         // ================================================================
-        // ===== БАРИСТА (AI-ПОМОЩНИК) =====
+        // ===== БАРИСТА (AI-ПОМОЩНИК - виджет) =====
         // ================================================================
         let baristaWelcomeShown = false;
         let isBaristaOpen = false;
@@ -3366,43 +3420,35 @@
             messages.appendChild(typing);
             messages.scrollTop = messages.scrollHeight;
             
-            // Имитация ответа
-            setTimeout(() => {
-                document.getElementById('baristaTyping')?.remove();
-                
-                const response = getBaristaResponse(userText);
-                const botDiv = document.createElement('div');
-                botDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
-                botDiv.innerHTML = response;
-                messages.appendChild(botDiv);
-                messages.scrollTop = messages.scrollHeight;
-            }, 800 + Math.random() * 600);
-        }
-
-        function getBaristaResponse(text) {
-            const lower = text.toLowerCase();
-            
-            if (lower.includes('совет') || lower.includes('посовет') || lower.includes('что взять')) {
-                return '🍓 Самая популярная позиция — <strong>Классика</strong> (клубника в молочном шоколаде) всего 350 ₽!<br>А если любите сливки, попробуйте <strong>Клубнику в сливках</strong> 😋';
+            // Получаем ответ
+            let response = '';
+            try {
+                const res = await fetch('/api/barista', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: userText,
+                        history: []
+                    })
+                });
+                const data = await res.json();
+                if (data && data.choices && data.choices[0]) {
+                    response = data.choices[0].message.content;
+                } else {
+                    response = getLocalBaristaResponse(userText);
+                }
+            } catch (e) {
+                console.warn('AI недоступен, используем локального баристу');
+                response = getLocalBaristaResponse(userText);
             }
             
-            if (lower.includes('подарок') || lower.includes('акци')) {
-                return '🎁 У нас есть акции:<br>• При заказе 2+ стаканчиков — скидка 10%<br>• Бесплатная мини-порция для первых посетителей<br>• Для постоянных клиентов — подарок!';
-            }
+            document.getElementById('baristaTyping')?.remove();
             
-            if (lower.includes('дела') || lower.includes('как ты')) {
-                return '🍓 У меня всё отлично! Спасибо что спросили 😊<br>Сегодня отличная погода, много гостей, все довольны! А как ваш отдых? 🏖️';
-            }
-            
-            if (lower.includes('киоск') || lower.includes('где') || lower.includes('найти')) {
-                return '📍 Наш киоск находится напротив бетонного пирса, белый павильон "Strawberry in Chocolate".<br>Мы в 100 метрах от бунгало, всегда рады гостям! ☀️';
-            }
-            
-            if (lower.includes('цена') || lower.includes('сколько') || lower.includes('стоит')) {
-                return '🍓 Цены на клубнику в шоколаде:<br>• Классика — 350 ₽<br>• Клубника в сливках — 350 ₽<br>• Микс клубника-банан — 400 ₽<br>• Банан в шоколаде — 320 ₽<br>• Клубника в стакане (без шоколада) — 250 ₽';
-            }
-            
-            return '🍓 Отличный вопрос! 😊<br>Я бы посоветовал посмотреть наше меню — там есть и классика, и фрукты, и напитки.<br>А если хотите, могу помочь выбрать! Что вас интересует?';
+            const botDiv = document.createElement('div');
+            botDiv.style.cssText = 'padding:12px 16px;border-radius:14px;max-width:90%;font-size:14px;line-height:1.6;background:rgba(0,0,0,0.04);color:#1A1A2E;align-self:flex-start;border-bottom-left-radius:4px;';
+            botDiv.innerHTML = response;
+            messages.appendChild(botDiv);
+            messages.scrollTop = messages.scrollHeight;
         }
 
         function quickQuestion(text) {
@@ -3450,7 +3496,7 @@
                 document.getElementById('baristaWidget').style.display = 'block';
             }, 3000);
             
-            console.log('🍓 Strawberry in Chocolate - v17 (FULL)');
+            console.log('🍓 Strawberry in Chocolate - v18 (FULL)');
             console.log('✅ Все функции работают!');
             console.log('📦 Корзина:', state.cart.length, 'товаров');
             console.log('⭐ Отзывов:', currentReviews.length);
