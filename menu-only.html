@@ -52,36 +52,38 @@
             min-height: 100vh;
         }
 
-        /* HEADER — with animated cup */
+        /* HEADER — чистый, без серого фона */
         .header {
             text-align: center;
             padding: 8px 0 16px;
             position: relative;
         }
+        
         .header .logo-icon {
-            font-size: 64px;
             display: inline-block;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 12px;
             animation: floatCup 3.6s ease-in-out infinite;
             filter: drop-shadow(0 8px 28px rgba(90, 75, 209, 0.15));
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            padding: 8px 18px 8px 12px;
-            border-radius: 60px;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 12px;
-            line-height: 1;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #FFFFFF, #F6F4FC);
+            padding: 12px;
+            border: 2px solid rgba(90, 75, 209, 0.08);
+            transition: all 0.4s ease;
+        }
+        .header .logo-icon:hover {
+            transform: scale(1.04);
+            border-color: rgba(90, 75, 209, 0.15);
         }
         .header .logo-icon img {
-            width: 56px;
-            height: 56px;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             display: block;
-            border-radius: 30px;
+            border-radius: 50%;
         }
-        @keyframes floatCup {
-            0%, 100% { transform: translateY(0) rotate(-1deg); }
-            50% { transform: translateY(-8px) rotate(1deg); }
-        }
+        
         .header-badge {
             display: inline-flex;
             align-items: center;
@@ -129,7 +131,12 @@
             border: 1px solid var(--glass-border);
         }
 
-        /* MENU — now on top */
+        @keyframes floatCup {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        /* MENU */
         .section-title {
             font-size: 18px;
             font-weight: 700;
@@ -216,7 +223,7 @@
             letter-spacing: 0.3px;
         }
 
-        /* MAP CARD — now below menu */
+        /* MAP CARD */
         .map-card {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -489,7 +496,7 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
-        /* BARISTA WIDGET - refined */
+        /* BARISTA WIDGET */
         .barista-widget {
             position: fixed;
             bottom: 100px;
@@ -743,7 +750,7 @@
 
     <header class="header">
         <span class="logo-icon">
-            <img src="images/gift-freeberry.jpg" alt="Стаканчик" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
+            <img src="images/gift-freeberry.jpg" alt="Клубника в шоколаде" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
         </span>
         <div class="header-badge"><i class="fas fa-gift"></i> Подарок для вас!</div>
         <h1>Strawberry in Chocolate</h1>
@@ -751,13 +758,13 @@
         <p class="subtitle">Найди киоск и получи подарок 🍓</p>
     </header>
 
-    <!-- MENU — now on top -->
+    <!-- MENU -->
     <div class="menu-section active">
         <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
         <div class="menu-grid" id="strawberryGrid"></div>
     </div>
 
-    <!-- MAP — now below menu -->
+    <!-- MAP -->
     <div class="map-card">
         <div class="map-container">
             <div id="treasureMap"></div>
@@ -867,6 +874,8 @@
     let gpsLocked = false;
     let ymapsReady = false;
     let giftCheckInterval = null;
+    let baristaHistory = [];
+    let baristaWelcomeShown = false;
 
     const $ = id => document.getElementById(id);
 
@@ -1269,19 +1278,7 @@
     }
 
     // ================================================================
-    // ===== INIT =====
-    // ================================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        renderMenu();
-        setTimeout(initMap, 500);
-        setTimeout(checkGiftStatus, 1000);
-        setTimeout(startGiftCheck, 2000);
-        setTimeout(autoRequestLocation, 3000);
-        console.log('🍓 Страница загружена!');
-    });
-
-    // ================================================================
-    // ===== КЛУБНИЧНЫЙ БАРИСТА =====
+    // ===== BARISTA (AI-ПОМОЩНИК) =====
     // ================================================================
 
     const BARISTA_MENU = [
@@ -1298,79 +1295,6 @@
         '🎁 Бесплатная мини-порция для первых посетителей',
         '❤️ Для постоянных клиентов — подарок'
     ];
-
-    const BARISTA_SYSTEM_PROMPT = `Ты — Клубничный Бариста 🍓 в кафе "Strawberry in Chocolate" на пляже. Ты знаешь ВСЁ о курорте Архипо-Осиповка и всегда готов помочь гостям с выбором развлечений!
-
-ТВОИ ДАННЫЕ:
-Меню:
-${BARISTA_MENU.map(i => `- ${i.name}: ${i.price} ₽ (${i.desc})${i.badge ? ' ' + i.badge : ''}`).join('\n')}
-
-Акции:
-${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
-
-О ПРИЛОЖЕНИИ:
-- У нас ДВА КИОСКА на карте:
-  1. Напротив бетонного пирса (44.358182, 38.528738)
-  2. Центральный вход на пляж (44.358198, 38.527699)
-- Работаем: 9:00 — 1:00 (МСК)
-- Контакты: +7 962 855-72-63
-- Подарок ТОЛЬКО НОВЫМ ПОСЕТИТЕЛЯМ 🎁
-
-РАЗВЛЕЧЕНИЯ В АРХИПО-ОСИПОВКЕ:
-
-🏛️ МУЗЕИ:
-1. 🍷 Музей Хлеба и Вина — ул. Пограничная, 13а
-2. 🚀 Музей космонавтов — ул. Школьная, 60
-
-🐬 ДЕЛЬФИНАРИЙ:
-3. 🐬 Архипо-Осиповский дельфинарий — ул. Школьная, 30
-
-🎢 ПАРКИ РАЗВЛЕЧЕНИЙ:
-4. 🎡 Парк Малибу — ул. Школьная, 103 (вход свободный, аттракционы платные)
-5. 🎠 Парк Монако — ул. Школьная, 103 (ресто-клуб)
-
-💧 АКВАПАРКИ И ВОДОПАДЫ:
-6. 🌊 Аквапарк "Кокосовый Рай" — ул. Школьная, 103
-7. 💦 Гебиусские водопады — трасса М4 Дон, 1450 км (в сторону Краснодара), вход 400 ₽. 7 каскадных водопадов на реке Тешебс (от 3 до 17 метров). ⚠️ ВНИМАНИЕ: сложные маршруты с крутыми скользкими лестницами. Не оставляйте детей без присмотра! У 3-го водопада — чистый родник с питьевой водой.
-8. 🏊 Большой аквапарк в Джубге — пос. Джубга, Новороссийское шоссе, 10а (15 км от Архипо-Осиповки)
-
-🐊 ЗООПАРКИ И ОКЕАНАРИУМ:
-9. 🦁 Контактный зоопарк — ул. Школьная, 101 (обезьяны, еноты, сурикаты, крокодилы)
-10. 🐠 Океанариум — ул. Школьная, 62
-11. 🐊 Крокодиловая ферма — ул. Школьная, 62
-
-🏛️ ИСТОРИЧЕСКИЕ МЕСТА:
-12. 🏛️ Римская сторожевая башня — на горе Верблюд, перед кемпингом Утёс
-13. 🪦 Дольмен в Назаровой щели — Назарова щель (вход со стороны трассы)
-14. ⛪ Храм Святого Николая — ул. Ленина, 123
-
-🍽️ ГДЕ ВКУСНО И НЕДОРОГО ПОЕСТЬ:
-15. 🍲 Столовая "Архипка" — ул. Советская, 1а
-
-🏪 МАГАЗИНЫ:
-- 🛒 Магнит: ул. Ленина 106, 117, 126; Славянский пер. 5
-- 🛒 Пятёрочка: ул. Ленина 109 (круглосуточно), ул. Вишневая 31 (до 22:00)
-- 🛒 Красное и Белое: ул. Ленина 117
-- 🛒 Фикс Прайс: ул. Удалова 1, ул. Ленина 106, Славянский пер. 10а
-- 🛒 Алкотека: ул. Ленина 113
-
-ТВОЯ РОЛЬ:
-1. Ты работаешь в кафе, общаешься с гостями
-2. Ты знаешь ВСЁ о меню, ценах, акциях
-3. Ты знаешь ВСЁ о развлечениях, еде и магазинах в Архипо-Осиповке
-4. Ты дружелюбный и весёлый помощник
-5. Ты НЕ предлагаешь клубнику, если не спрашивают
-
-ПРАВИЛА:
-- Отвечай ТОЛЬКО на русском
-- Будь полезным (2-4 предложения)
-- Используй эмодзи 🍓🍫😊🌊🏖️
-- ВСЕГДА желай хорошего отдыха
-
-ГЛАВНОЕ: Ты — дружелюбный бариста, который помогает с вопросами о приложении, меню, акциях и отдыхе в Архипо-Осиповке! НЕ НАВЯЗЫВАЙ КЛУБНИКУ!`;
-
-    let baristaHistory = [];
-    let baristaWelcomeShown = false;
 
     function toggleBarista() {
         const window = document.getElementById('baristaWindow');
@@ -1474,12 +1398,19 @@ ${BARISTA_PROMO.map(p => `- ${p}`).join('\n')}
         }, 8000);
     }
 
-    function startBarista() {
-        setTimeout(showBaristaWelcome, 2000);
+    // ================================================================
+    // ===== INIT =====
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        renderMenu();
+        setTimeout(initMap, 500);
+        setTimeout(checkGiftStatus, 1000);
+        setTimeout(startGiftCheck, 2000);
+        setTimeout(autoRequestLocation, 3000);
+        setTimeout(showBaristaWelcome, 4000);
+        console.log('🍓 Страница загружена!');
         console.log('🍓 Клубничный Бариста активирован!');
-    }
-
-    setTimeout(startBarista, 2500);
+    });
 </script>
 
 </body>
