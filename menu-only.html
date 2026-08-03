@@ -9,19 +9,19 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7aafdf73-bf1e-4ec7-8d18-07b14be93c80&lang=ru_RU" type="text/javascript"></script>
     <style>
         :root {
-            --primary: #6C5CE7;
-            --primary-light: #A29BFE;
-            --primary-soft: #F0EDFF;
-            --accent: #FF8A9B;
-            --accent-soft: #FFF0F3;
-            --bg-body: #FCFAFE;
-            --bg-card: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(108, 92, 231, 0.10);
-            --text-primary: #2D2A3E;
-            --text-secondary: rgba(45, 42, 62, 0.7);
-            --text-muted: rgba(45, 42, 62, 0.4);
-            --shadow-card: 0 12px 40px rgba(108, 92, 231, 0.08);
-            --shadow-float: 0 8px 32px rgba(108, 92, 231, 0.12);
+            --primary: #5A4BD1;
+            --primary-light: #8B7EED;
+            --primary-soft: #EFECFF;
+            --accent: #E86A7A;
+            --accent-soft: #FFEFF1;
+            --bg-body: #F6F4FC;
+            --bg-card: rgba(255, 255, 255, 0.82);
+            --glass-border: rgba(90, 75, 209, 0.12);
+            --text-primary: #26233A;
+            --text-secondary: rgba(38, 35, 58, 0.7);
+            --text-muted: rgba(38, 35, 58, 0.45);
+            --shadow-card: 0 16px 48px rgba(90, 75, 209, 0.10);
+            --shadow-float: 0 12px 36px rgba(90, 75, 209, 0.15);
             --radius: 24px;
             --radius-sm: 14px;
             --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -48,31 +48,39 @@
         .menu-container {
             max-width: 480px;
             margin: 0 auto;
-            padding: 20px 16px 24px;
+            padding: 16px 16px 24px;
             min-height: 100vh;
         }
 
-        /* HEADER */
+        /* HEADER — with animated cup */
         .header {
             text-align: center;
-            padding: 8px 0 20px;
+            padding: 8px 0 16px;
             position: relative;
         }
         .header .logo-icon {
-            font-size: 56px;
+            font-size: 64px;
             display: inline-block;
-            animation: floatIcon 4s ease-in-out infinite;
-            filter: drop-shadow(0 8px 24px rgba(108, 92, 231, 0.12));
+            animation: floatCup 3.6s ease-in-out infinite;
+            filter: drop-shadow(0 8px 28px rgba(90, 75, 209, 0.15));
             background: var(--bg-card);
             backdrop-filter: blur(12px);
-            padding: 6px 16px 6px 10px;
+            padding: 8px 18px 8px 12px;
             border-radius: 60px;
             border: 1px solid var(--glass-border);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            line-height: 1;
         }
-        @keyframes floatIcon {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-6px) scale(1.02); }
+        .header .logo-icon img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            display: block;
+            border-radius: 30px;
+        }
+        @keyframes floatCup {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
         }
         .header-badge {
             display: inline-flex;
@@ -95,7 +103,7 @@
         .header h1 {
             font-size: 30px;
             font-weight: 800;
-            background: linear-gradient(145deg, #6C5CE7 0%, #FD79A8 100%);
+            background: linear-gradient(145deg, #5A4BD1 0%, #E86A7A 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -121,106 +129,7 @@
             border: 1px solid var(--glass-border);
         }
 
-        /* MAP CARD */
-        .map-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow-card);
-            margin-bottom: 20px;
-            transition: var(--transition);
-        }
-        .map-card:hover {
-            box-shadow: 0 16px 48px rgba(108, 92, 231, 0.10);
-        }
-        .map-card .map-container {
-            width: 100%;
-            height: 360px;
-            position: relative;
-            background: #F8F7FC;
-        }
-        .map-card .map-container #treasureMap {
-            width: 100%;
-            height: 100%;
-        }
-        .map-card .map-actions {
-            display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid var(--glass-border);
-            flex-wrap: wrap;
-        }
-        .map-btn {
-            flex: 1;
-            min-width: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.6);
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font);
-            transition: var(--transition);
-            backdrop-filter: blur(8px);
-        }
-        .map-btn:active { transform: scale(0.96); }
-        .map-btn.location-btn {
-            background: var(--primary-soft);
-            border-color: rgba(108, 92, 231, 0.15);
-            color: var(--primary);
-        }
-        .map-btn.location-btn i {
-            font-size: 14px;
-        }
-
-        .distance-info {
-            display: none;
-            padding: 12px 16px;
-            background: rgba(108, 92, 231, 0.04);
-            border-top: 1px solid var(--glass-border);
-            font-size: 12px;
-            color: var(--text-secondary);
-            gap: 16px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-        }
-        .distance-info.show { display: flex; }
-        .distance-info .stat {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-card);
-            padding: 4px 14px 4px 10px;
-            border-radius: 100px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(8px);
-        }
-        .distance-info .stat i {
-            color: var(--primary);
-            font-size: 14px;
-            opacity: 0.7;
-        }
-        .distance-info .stat .value {
-            color: #22C55E;
-            font-weight: 700;
-            font-size: 16px;
-        }
-        .distance-info .stat .label {
-            color: var(--text-muted);
-            font-size: 11px;
-        }
-
-        /* MENU SECTION */
+        /* MENU — now on top */
         .section-title {
             font-size: 18px;
             font-weight: 700;
@@ -242,6 +151,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 14px;
+            margin-bottom: 24px;
         }
         .menu-item {
             background: var(--bg-card);
@@ -257,7 +167,7 @@
         }
         .menu-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(108, 92, 231, 0.08);
+            box-shadow: 0 12px 32px rgba(90, 75, 209, 0.08);
         }
         .menu-item:active { transform: scale(0.97); }
         .menu-item .item-image {
@@ -306,14 +216,113 @@
             letter-spacing: 0.3px;
         }
 
+        /* MAP CARD — now below menu */
+        .map-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-card);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        .map-card:hover {
+            box-shadow: 0 16px 48px rgba(90, 75, 209, 0.10);
+        }
+        .map-card .map-container {
+            width: 100%;
+            height: 340px;
+            position: relative;
+            background: #F0EEF7;
+        }
+        .map-card .map-container #treasureMap {
+            width: 100%;
+            height: 100%;
+        }
+        .map-card .map-actions {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid var(--glass-border);
+            flex-wrap: wrap;
+        }
+        .map-btn {
+            flex: 1;
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+        }
+        .map-btn:active { transform: scale(0.96); }
+        .map-btn.location-btn {
+            background: var(--primary-soft);
+            border-color: rgba(90, 75, 209, 0.2);
+            color: var(--primary);
+        }
+        .map-btn.location-btn i {
+            font-size: 14px;
+        }
+
+        .distance-info {
+            display: none;
+            padding: 12px 16px;
+            background: rgba(90, 75, 209, 0.04);
+            border-top: 1px solid var(--glass-border);
+            font-size: 12px;
+            color: var(--text-secondary);
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+        .distance-info.show { display: flex; }
+        .distance-info .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            padding: 4px 14px 4px 10px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(8px);
+        }
+        .distance-info .stat i {
+            color: var(--primary);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        .distance-info .stat .value {
+            color: #22C55E;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .distance-info .stat .label {
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
         /* FOOTER */
         .footer {
             text-align: center;
-            padding: 28px 0 8px;
+            padding: 24px 0 8px;
             color: var(--text-muted);
             font-size: 12px;
             border-top: 1px solid var(--glass-border);
-            margin-top: 20px;
+            margin-top: 12px;
         }
         .footer i {
             color: var(--accent);
@@ -347,8 +356,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(45, 42, 62, 0.25);
-            backdrop-filter: blur(16px);
+            background: rgba(38, 35, 58, 0.30);
+            backdrop-filter: blur(18px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -425,7 +434,7 @@
         .modal .btn-primary {
             background: linear-gradient(145deg, var(--primary), var(--primary-light));
             color: #fff;
-            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.25);
+            box-shadow: 0 4px 16px rgba(90, 75, 209, 0.25);
         }
 
         /* FLOAT QR */
@@ -460,7 +469,7 @@
             top: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(45, 42, 62, 0.88);
+            background: rgba(38, 35, 58, 0.88);
             backdrop-filter: blur(20px);
             color: #fff;
             padding: 12px 24px;
@@ -493,18 +502,18 @@
             width: 64px;
             height: 64px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #FD79A8, #6C5CE7);
+            background: linear-gradient(145deg, #E86A7A, #5A4BD1);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             font-size: 30px;
-            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.30);
+            box-shadow: 0 8px 32px rgba(90, 75, 209, 0.30);
             transition: all 0.3s ease;
             position: relative;
             animation: pulseGlow 2.8s infinite;
-            border: 2px solid rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(8px);
         }
         .barista-toggle:active { transform: scale(0.92); }
@@ -527,8 +536,8 @@
         }
 
         @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px rgba(108, 92, 231, 0.30); }
-            50% { transform: scale(1.04); box-shadow: 0 8px 48px rgba(108, 92, 231, 0.45); }
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px rgba(90, 75, 209, 0.30); }
+            50% { transform: scale(1.04); box-shadow: 0 8px 48px rgba(90, 75, 209, 0.45); }
         }
         @keyframes blinkBadge {
             0%, 100% { opacity: 1; }
@@ -559,7 +568,7 @@
 
         .barista-header {
             padding: 16px 20px;
-            background: rgba(108, 92, 231, 0.06);
+            background: rgba(90, 75, 209, 0.06);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -575,7 +584,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #FD79A8, #6C5CE7);
+            background: linear-gradient(145deg, #E86A7A, #5A4BD1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -610,7 +619,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            background: #FCFAFE;
+            background: #F8F6FC;
         }
         .barista-messages .msg {
             padding: 12px 16px;
@@ -653,7 +662,7 @@
             border-radius: 20px;
             margin-top: 4px;
             font-size: 13px;
-            border: 1px solid rgba(253, 121, 168, 0.08);
+            border: 1px solid rgba(232, 106, 122, 0.08);
         }
 
         .barista-input {
@@ -669,7 +678,7 @@
             padding: 12px 18px;
             border-radius: 30px;
             border: 1px solid rgba(0, 0, 0, 0.06);
-            background: #F8F7FC;
+            background: #F8F6FC;
             color: var(--text-primary);
             outline: none;
             font-size: 14px;
@@ -683,13 +692,13 @@
             height: 48px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(145deg, #FD79A8, #6C5CE7);
+            background: linear-gradient(145deg, #E86A7A, #5A4BD1);
             color: #fff;
             cursor: pointer;
             font-size: 18px;
             transition: 0.2s;
             flex-shrink: 0;
-            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.15);
+            box-shadow: 0 4px 16px rgba(90, 75, 209, 0.15);
         }
         .barista-input button:active { transform: scale(0.92); }
 
@@ -699,7 +708,7 @@
             padding: 6px 16px 12px;
             flex-wrap: wrap;
             flex-shrink: 0;
-            background: #FCFAFE;
+            background: #F8F6FC;
             border-top: 1px solid rgba(0, 0, 0, 0.03);
         }
         .barista-quick button {
@@ -733,14 +742,22 @@
 <div class="menu-container">
 
     <header class="header">
-        <span class="logo-icon">🍓</span>
+        <span class="logo-icon">
+            <img src="images/gift-freeberry.jpg" alt="Стаканчик" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
+        </span>
         <div class="header-badge"><i class="fas fa-gift"></i> Подарок для вас!</div>
         <h1>Strawberry in Chocolate</h1>
         <div class="header-sub">🍓 Клубника в шоколаде</div>
         <p class="subtitle">Найди киоск и получи подарок 🍓</p>
     </header>
 
-    <!-- MAP -->
+    <!-- MENU — now on top -->
+    <div class="menu-section active">
+        <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
+        <div class="menu-grid" id="strawberryGrid"></div>
+    </div>
+
+    <!-- MAP — now below menu -->
     <div class="map-card">
         <div class="map-container">
             <div id="treasureMap"></div>
@@ -764,12 +781,6 @@
         </div>
     </div>
 
-    <!-- MENU -->
-    <div class="menu-section active">
-        <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
-        <div class="menu-grid" id="strawberryGrid"></div>
-    </div>
-
     <div class="footer">
         <i class="fas fa-heart" style="color: var(--accent);"></i> С любовью, Strawberry in Chocolate
         <br><a href="tel:+79628557263" class="footer-phone"><i class="fas fa-phone"></i> +7 962 855-72-63</a>
@@ -780,7 +791,7 @@
 <!-- MODAL -->
 <div class="modal-overlay" id="giftModal">
     <div class="modal">
-        <img src="images/gift-free.jpg" alt="Подарок" class="modal-image" 
+        <img src="images/gift-freeberry.jpg" alt="Подарок" class="modal-image" 
              onerror="this.style.display='none';this.parentElement.querySelector('.fallback-icon').style.display='block'">
         <span class="fallback-icon" style="display:none;">🍓</span>
         <h2><span>Подарок!</span> 🎁</h2>
@@ -800,7 +811,7 @@
     <i class="fas fa-qrcode"></i> Мой QR-код
 </button>
 
-<!-- ===== BARISTA WIDGET ===== -->
+<!-- BARISTA WIDGET -->
 <div class="barista-widget">
     <div class="barista-toggle" onclick="toggleBarista()">
         🍓
@@ -876,7 +887,7 @@
         grid.innerHTML = MENU_ITEMS.map(item => `
             <div class="menu-item">
                 ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
-                <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23f0edff%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
+                <img src="${item.image}" class="item-image" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23efecff%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E🍓%3C/text%3E%3C/svg%3E'">
                 <div class="item-content">
                     <div class="item-name">${item.name}</div>
                     <div class="item-desc">${item.desc}</div>
@@ -893,7 +904,7 @@
         const img = document.createElement('img');
         if (!id) { return ''; }
         const qrData = `gift-${id}`;
-        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}&color=FF8A9B&bgcolor=FFFFFF`;
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}&color=E86A7A&bgcolor=FFFFFF`;
         img.style.width = '100%';
         img.style.height = 'auto';
         return img.outerHTML;
@@ -1166,7 +1177,7 @@
                             iconCaptionMaxWidth: 120,
                             iconCaptionFontSize: 10,
                             iconCaptionFontWeight: 'bold',
-                            iconCaptionColor: '#2D2A3E',
+                            iconCaptionColor: '#26233A',
                             iconCaptionStrokeColor: 'rgba(255,255,255,0.9)',
                             iconCaptionStrokeWidth: 2
                         }
