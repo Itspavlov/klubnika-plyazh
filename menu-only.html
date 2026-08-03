@@ -52,19 +52,19 @@
             min-height: 100vh;
         }
 
-        /* HEADER — чистый, без серого фона */
+        /* HEADER — чистый, без серого фона, уменьшен отступ сверху */
         .header {
             text-align: center;
-            padding: 8px 0 16px;
+            padding: 4px 0 12px;
             position: relative;
         }
 
-        /* Логотип — увеличен на 50% (было 120px, стало 180px) и наклонён */
+        /* Логотип — увеличен ещё на 50% (было 180px, стало 270px) и опущен ниже */
         .header .logo-icon {
             display: inline-block;
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 12px;
+            width: 270px;
+            height: 270px;
+            margin: -20px auto 0 auto;
             animation: floatCup 3.6s ease-in-out infinite;
             filter: drop-shadow(0 8px 28px rgba(90, 75, 209, 0.15));
             background: transparent !important;
@@ -73,7 +73,7 @@
             border-radius: 0 !important;
             overflow: visible !important;
             line-height: 0;
-            transform: rotate(-8deg); /* Наклон влево */
+            transform: rotate(-8deg);
             transition: transform 0.3s ease;
         }
         .header .logo-icon:hover {
@@ -102,7 +102,7 @@
             padding: 6px 18px;
             border-radius: 100px;
             border: 1px solid var(--glass-border);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             letter-spacing: 0.3px;
         }
         .header-badge i {
@@ -117,6 +117,7 @@
             background-clip: text;
             margin-bottom: 2px;
             letter-spacing: -0.5px;
+            margin-top: -20px;
         }
         .header .header-sub {
             font-size: 15px;
@@ -363,8 +364,12 @@
 
         @media (max-width: 480px) {
             .header .logo-icon {
-                width: 140px;
-                height: 140px;
+                width: 200px;
+                height: 200px;
+            }
+            .header h1 {
+                margin-top: -8px;
+                font-size: 26px;
             }
         }
 
@@ -761,7 +766,7 @@
 
 <div class="menu-container">
 
-    <!-- ===== HEADER — ЛОГОТИП УВЕЛИЧЕН НА 50% И НАКЛОНЁН ===== -->
+    <!-- ===== HEADER — ЛОГОТИП УВЕЛИЧЕН, ОПУЩЕН, ОТСТУП УМЕНЬШЕН ===== -->
     <header class="header">
         <div class="logo-icon">
             <img src="images/gift-freeberry.png" alt="Клубника в шоколаде" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
