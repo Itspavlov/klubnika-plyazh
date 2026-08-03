@@ -52,38 +52,39 @@
             min-height: 100vh;
         }
 
-        /* HEADER — чистый, без серого фона */
+        /* HEADER — чистый, прозрачный фон */
         .header {
             text-align: center;
             padding: 8px 0 16px;
             position: relative;
         }
-        
+
+        /* Логотип — полностью прозрачный, без фона и рамок */
         .header .logo-icon {
             display: inline-block;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 12px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 12px;
             animation: floatCup 3.6s ease-in-out infinite;
             filter: drop-shadow(0 8px 28px rgba(90, 75, 209, 0.15));
-            border-radius: 50%;
-            background: linear-gradient(145deg, #FFFFFF, #F6F4FC);
-            padding: 12px;
-            border: 2px solid rgba(90, 75, 209, 0.08);
-            transition: all 0.4s ease;
-        }
-        .header .logo-icon:hover {
-            transform: scale(1.04);
-            border-color: rgba(90, 75, 209, 0.15);
+            background: transparent !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            overflow: visible !important;
+            line-height: 0;
         }
         .header .logo-icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
-            border-radius: 50%;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
         }
-        
+
         .header-badge {
             display: inline-flex;
             align-items: center;
@@ -748,15 +749,17 @@
 
 <div class="menu-container">
 
-  <header class="header" style="text-align:center;padding:8px 0 16px;">
-    <div style="display:inline-block;width:120px;height:120px;margin-bottom:12px;animation:floatCup 3.6s ease-in-out infinite;filter:drop-shadow(0 8px 28px rgba(90,75,209,0.15));background:transparent;padding:0;border:none;border-radius:0;overflow:visible;line-height:0;">
-        <img src="images/gift-freeberry.jpg" alt="Клубника в шоколаде" style="width:100%;height:100%;object-fit:contain;display:block;background:transparent;border-radius:0;border:none;box-shadow:none;">
-    </div>
-    <div class="header-badge"><i class="fas fa-gift"></i> Подарок для вас!</div>
-    <h1>Strawberry in Chocolate</h1>
-    <div class="header-sub">🍓 Клубника в шоколаде</div>
-    <p class="subtitle">Найди киоск и получи подарок 🍓</p>
-</header>
+    <!-- ===== HEADER — ЛОГОТИП ПРОЗРАЧНЫЙ ===== -->
+    <header class="header">
+        <div class="logo-icon">
+            <img src="images/gift-freeberry.png" alt="Клубника в шоколаде" onerror="this.style.display='none';this.parentElement.textContent='🍓'">
+        </div>
+        <div class="header-badge"><i class="fas fa-gift"></i> Подарок для вас!</div>
+        <h1>Strawberry in Chocolate</h1>
+        <div class="header-sub">🍓 Клубника в шоколаде</div>
+        <p class="subtitle">Найди киоск и получи подарок 🍓</p>
+    </header>
+
     <!-- MENU -->
     <div class="menu-section active">
         <div class="section-title"><i class="fas fa-strawberry"></i> Клубника в шоколаде</div>
@@ -797,7 +800,7 @@
 <!-- MODAL -->
 <div class="modal-overlay" id="giftModal">
     <div class="modal">
-        <img src="images/gift-freeberry.png"> alt="Подарок" class="modal-image" 
+        <img src="images/gift-freeberry.png" alt="Подарок" class="modal-image" 
              onerror="this.style.display='none';this.parentElement.querySelector('.fallback-icon').style.display='block'">
         <span class="fallback-icon" style="display:none;">🍓</span>
         <h2><span>Подарок!</span> 🎁</h2>
